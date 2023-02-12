@@ -1,0 +1,30 @@
+.container {
+  gap: var(--dms-gap);
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.content {
+  overflow: hidden;
+  height: 100%;
+}
+
+.box {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: var(--dms-padding);
+}
+
+.layout {
+  width: 100%;
+  height: 100%;
+}
+
+.resize {
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+
+  cursor: se-resize;
+}

@@ -1,0 +1,11 @@
+.container {
+  cursor: pointer;
+}
+
+.light svg {
+  fill: var(--dms-light);
+}
+
+.icon .icon {
+  width: 40px;
+}

@@ -1,0 +1,13 @@
+.container {
+  width: 100%;
+}
+
+.error {
+  color: var(--dms-text);
+  font-size: 0.9rem;
+  padding: calc(var(--dms-padding) / 2);
+  text-align: center;
+  font-style: italic;
+  border: 1px solid var(--dms-warning-light);
+  border-radius: var(--dms-border-radius);
+}

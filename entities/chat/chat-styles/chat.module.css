@@ -1,0 +1,13 @@
+.messages {
+  padding: calc(var(--dms-padding) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--dms-gap) / 2);
+  font-size: 0.8em;
+  overflow-x: hidden;
+}
+
+.noMessage {
+  text-align: center;
+  font-style: italic;
+}

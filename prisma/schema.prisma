@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Profile {
+  free
+  premium
+  all_star
+}
+
+enum ChronicleStatus {
+  draft
+  published
+}
+
+model User {
+  id                   String              @id @default(uuid())
+  twitch_id            String              @unique
+  profile              Profile             @default(free)
+  login                String
+  channel              String
+  token_profile        String?             @db.LongText
+  updatedAt            DateTime            @updatedAt
+  current_channel      String
+  createdAt            DateTime            @default(now()) @db.Timestamp(6)
+  broadcasts           Broadcast[]
+  broadcasts_on_editor EditorOnBroadcast[]
+  medias               MediaOnUser[]
+  chronicles           Chronicle[]
+  chatMessages         ChatMessage[]
+  layouts              Layout[]
+}
+
+model Broadcast {
+  id                     String                   @id @default(uuid())
+  user_id                String
+  owner                  User                     @relation(fields: [user_id], references: [id])
+  editors                EditorOnBroadcast[]
+  title                  String
+  description            String?                  @db.LongText
+  logo                   String?
+  prefix                 String                   @unique @db.VarChar(30)
+  admin                  String                   @unique @db.VarChar(255)
+  editor                 String                   @unique @db.VarChar(255)
+  //reader is use for the slider and the reader
+  reader                 String                   @unique @db.VarChar(255)
+  started_at             DateTime                 @db.Timestamp(6)
+  ended_at               DateTime                 @db.Timestamp(6)
+  createdAt              DateTime                 @default(now()) @db.Timestamp(6)
+  episodes               Episode[]
+  ChatMessageOnBroadcast ChatMessageOnBroadcast[]
+}
+
+model EditorOnBroadcast {
+  id           String    @id @default(uuid())
+  user_id      String
+  editor       User      @relation(fields: [user_id], references: [id])
+  broadcast_id String
+  broadcast    Broadcast @relation(fields: [broadcast_id], references: [id])
+  createdAt    DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model Episode {
+  id                   String                 @id @default(uuid())
+  broadcast_id         String
+  broadcast            Broadcast              @relation(fields: [broadcast_id], references: [id])
+  title                String
+  description          String?                @db.LongText
+  broadcast_at         DateTime               @db.Timestamp(6)
+  started_at           DateTime               @db.Timestamp(6)
+  ended_at             DateTime               @db.Timestamp(6)
+  createdAt            DateTime               @default(now()) @db.Timestamp(6)
+  Chronicle            Chronicle[]
+  ChatMessageOnEpisode ChatMessageOnEpisode[]
+}
+
+model Chronicle {
+  id         String          @id @default(uuid())
+  editor_id  String?
+  editor     User?           @relation(fields: [editor_id], references: [id])
+  episode_id String?
+  episode    Episode?        @relation(fields: [episode_id], references: [id])
+  title      String
+  position   Int
+  text       String?         @db.LongText
+  status     ChronicleStatus @default(draft)
+
+  createdAt              DateTime                 @default(now()) @db.Timestamp(6)
+  ChatMessageOnChronicle ChatMessageOnChronicle[]
+}
+
+model Media {
+  id          String        @id @default(uuid())
+  source      String
+  name        String
+  type        String
+  url         String
+  createdAt   DateTime      @default(now()) @db.Timestamp(6)
+  MediaOnUser MediaOnUser[]
+}
+
+model MediaOnUser {
+  id        String   @id @default(uuid())
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+  media_id  String
+  media     Media    @relation(fields: [media_id], references: [id])
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+}
+
+model ChatMessage {
+  id                     String                   @id @default(uuid())
+  user_id                String
+  user                   User                     @relation(fields: [user_id], references: [id])
+  message                String
+  createdAt              DateTime                 @default(now()) @db.Timestamp(6)
+  ChatMessageOnChronicle ChatMessageOnChronicle[]
+  ChatMessageOnEpisode   ChatMessageOnEpisode[]
+  ChatMessageOnBroadcast ChatMessageOnBroadcast[]
+}
+
+model ChatMessageOnChronicle {
+  id              String      @id @default(uuid())
+  chronicle_id    String
+  chronicle       Chronicle   @relation(fields: [chronicle_id], references: [id])
+  chat_message_id String
+  chat_message    ChatMessage @relation(fields: [chat_message_id], references: [id])
+  createdAt       DateTime    @default(now()) @db.Timestamp(6)
+}
+
+model ChatMessageOnEpisode {
+  id              String      @id @default(uuid())
+  episode_id      String
+  episode         Episode     @relation(fields: [episode_id], references: [id])
+  chat_message_id String
+  chat_message    ChatMessage @relation(fields: [chat_message_id], references: [id])
+  createdAt       DateTime    @default(now()) @db.Timestamp(6)
+}
+
+model ChatMessageOnBroadcast {
+  id              String      @id @default(uuid())
+  broadcast_id    String
+  broadcast       Broadcast   @relation(fields: [broadcast_id], references: [id])
+  chat_message_id String
+  chat_message    ChatMessage @relation(fields: [chat_message_id], references: [id])
+  createdAt       DateTime    @default(now()) @db.Timestamp(6)
+}
+
+model Layout {
+  id        String   @id @default(uuid())
+  name      String
+  layout    Json
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  current   Boolean  @default(false)
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+}

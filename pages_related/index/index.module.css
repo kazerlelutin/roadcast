@@ -1,0 +1,34 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  height: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.read {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.read h2 {
+  max-width: 75%;
+  font-size: var(--dms-font-size-xxl);
+  font-weight: bold;
+}
+
+.read p {
+  font-size: var(--dms-font-size-lg);
+  color: var(--dms-highlight);
+}
+
+:is(body[data-color-scheme='light']) .read p {
+  color: var(--dms-highlight-dark);
+}

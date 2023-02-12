@@ -1,0 +1,7 @@
+.send {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--dms-gap) / 2);
+  justify-content: center;
+  height: 100%;
+}

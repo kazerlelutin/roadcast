@@ -1,0 +1,6 @@
+.box {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: var(--dms-padding);
+  position: relative;
+}
