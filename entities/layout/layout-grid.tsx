@@ -20,7 +20,9 @@ export const LayoutGrid: React.FC = () => {
       isResizable={true}
       isDraggable={true}
       resizeHandles={['se']}
-      onLayoutChange={(layout) => post({ layout, id: userLayout.id })}
+      onLayoutChange={(layout) =>{
+        if(userLayout?.id) post({ layout, id: userLayout.id })
+      }}
       layouts={{
         lg: layout,
         md: layout,

@@ -19,6 +19,8 @@ async function layout_update(
   if (!layout) return response.status(400).json({ error: 'no layout' })
   const { layout: newLayout, id } = JSON.parse(request.body)
 
+  if(!newLayout || !id) return response.status(400).json({ error: 'no layout' })
+  
   await prisma.layout.update({
     where: {
       id: id,

@@ -5,6 +5,8 @@ import { usePost } from '../../hooks/post.hook'
 import { getCookie } from '../../utils/get_cookie'
 import { COOKIE_NAME } from '../../utils/set-cookie'
 import { ILayout } from '../layout/layout'
+import { MiniLoader } from '../../components/mini-loader/mini-loader'
+import { useRouter } from 'next/router'
 
 // INTERFACES ---------------------------------------------------------------
 interface SessionProviderProps {
@@ -51,11 +53,18 @@ export enum SessionRoutes {
 export const SessionProvider: React.FC<SessionProviderProps> = ({
   children,
 }) => {
-  const { data, post } = usePost<ISession>(SessionRoutes.login)
+  const router = useRouter()
+  const { data, post, error } = usePost<ISession>(SessionRoutes.login)
 
   useEffect(() => {
     post({ token: getCookie(COOKIE_NAME) })
   }, [])
+
+  useEffect(() => {
+    if (error) {
+      router.push('/')
+    }
+  }, [error])
 
   return (
     <SessionContext.Provider value={data}>
