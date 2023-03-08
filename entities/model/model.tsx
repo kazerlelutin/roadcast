@@ -34,7 +34,7 @@ export enum ModelRoutes {
   findOne = 'model/one',
   findMany = 'model/all',
   create = 'model/create',
-  uodate = 'model/update',
+  update = 'model/update',
 }
 
 // HOOK --------------------------------------------------------------------

@@ -36,24 +36,24 @@ model User {
 }
 
 model Broadcast {
-  id                     String                   @id @default(uuid())
-  user_id                String
-  owner                  User                     @relation(fields: [user_id], references: [id])
-  title                  String
-  description            String?                  @db.LongText
-  logo                   String?
-  prefix                 String                   @unique @db.VarChar(30)
-  admin                  String                   @unique @db.VarChar(255)
-  editor                 String                   @unique @db.VarChar(255)
+  id           String                   @id @default(uuid())
+  user_id      String
+  owner        User                     @relation(fields: [user_id], references: [id])
+  title        String
+  description  String?                  @db.LongText
+  logo         String?
+  prefix       String                   @unique @db.VarChar(30)
+  admin        String                   @unique @db.VarChar(255)
+  editor       String                   @unique @db.VarChar(255)
   //reader is use for the slider and the reader
-  reader                 String                   @unique @db.VarChar(255)
-  started_at             DateTime                 @db.Timestamp(6)
-  ended_at               DateTime                 @db.Timestamp(6)
-  createdAt              DateTime                 @default(now()) @db.Timestamp(6)
-  ChatMessageOnBroadcast ChatMessageOnBroadcast[]
-  chronicles             Chronicle[]
-  Editor                 Editor[]
-  tags                   TagOnBroadcast[]
+  reader       String                   @unique @db.VarChar(255)
+  started_at   DateTime?                @db.Timestamp(6)
+  ended_at     DateTime?                @db.Timestamp(6)
+  createdAt    DateTime                 @default(now()) @db.Timestamp(6)
+  chatMessages ChatMessageOnBroadcast[]
+  chronicles   Chronicle[]
+  Editor       Editor[]
+  tags         TagOnBroadcast[]
 }
 
 model Tag {
@@ -114,7 +114,7 @@ model Media {
   type       String
   url        String
   createdAt  DateTime           @default(now()) @db.Timestamp(6)
-  medias     MediaOnUser[]
+  users      MediaOnUser[]
   chronicles MediaOnChronicle[]
   tags       TagOnMedia[]
 }

@@ -13,6 +13,7 @@ import { ChannelContext } from '../channel/channel'
 import styles from './chat-styles/chat.module.css'
 import { ChatMessage } from './chat-message'
 import { useTranslate } from '../../hooks/translate.hook'
+import { NoMessage } from '../../ui/no-message/no-message'
 
 // INTERFACES_______________________________________________________________
 export interface ChatMsg {
@@ -146,11 +147,9 @@ export const Chat: FC = () => {
     }
   }, [ref, messages])
 
+  if (messages.length === 0) return <NoMessage message={t('noMessage')} />
   return (
     <div className={styles.messages} ref={ref}>
-      {messages.length === 0 && (
-        <div className={styles.noMessage}>{t('noMessage')}</div>
-      )}
       {messages.map((msg) => (
         <ChatMessage {...msg} key={msg.message} />
       ))}

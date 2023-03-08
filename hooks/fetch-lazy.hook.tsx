@@ -11,7 +11,7 @@ export interface Error {
   }
 }
 export type FetchResult<T> = {
-  refetch: (newBody?: object) => void
+  getData: (newBody?: object) => void
   reSync: (newBody?: object) => void
   data: T
   error: Error
@@ -21,7 +21,8 @@ export type FetchResult<T> = {
 
 export function useLazyFetch<T>(
   url: string,
-  body: object = {}
+  body: object = {},
+  callback?: (data: T) => void
 ): FetchResult<T> {
   const [data, setData] = useState<T>(),
     [error, setError] = useState<Error>(),
@@ -51,6 +52,8 @@ export function useLazyFetch<T>(
       })
 
       const resJson = await res.json()
+      console.log('resJson', resJson)
+      callback?.(resJson)
       setData(resJson)
       if (res.status !== 200) {
         setError(resJson)
@@ -73,7 +76,7 @@ export function useLazyFetch<T>(
   }, [abort])
 
   return {
-    refetch: (newBody?: object) => handleFetch(newBody),
+    getData: (newBody?: object) => handleFetch(newBody),
     //Resync not trigger Loading
     reSync: (newBody?: object) => handleFetch(newBody || undefined, true),
     data,

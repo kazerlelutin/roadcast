@@ -1,34 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
 import { createContext, useContext, useState, useEffect } from 'react'
+import { useLazyFetch } from '../../hooks/fetch-lazy.hook'
 import { useFetch } from '../../hooks/fetch.hook'
 import { usePost } from '../../hooks/post.hook'
 import { TEntity } from '../../types/entity.type'
 import { NavigationPages } from '../navigation/navigation'
-
-//TODO Faire pour les broadcasts un contexte qui contient les broadcasts et un contexte qui contient le broadcast en cours
-
-/**
- * peut être pas besoin de context pour les broadcasts, juste un hook qui récupère les broadcasts et un hook qui récupère le broadcast en cours
- */
 
 // INTERFACES ----------------------------------------------------------------
 interface BroadcastProviderProps {
   children: React.ReactNode
 }
 
-export enum BroadcastProfile {
-  admin = 'admin',
-  editor = 'editor',
-  reader = 'reader',
-}
-
-interface IBroadcast {
+export interface IBroadcast {
   id: string
   user_id: string
   title: string
-  description: string
-  logo: string
+  description?: string
+  logo?: string
   prefix: string
   admin: string
   editor: string
@@ -36,7 +25,6 @@ interface IBroadcast {
   started_at: Date
   ended_at: Date
   createdAt: Date
-  profile: BroadcastProfile
 }
 
 // CONTEXT ------------------------------------------------------------------
@@ -54,7 +42,6 @@ export const BroadcastInitialValue: IBroadcast = {
   started_at: new Date(),
   ended_at: new Date(),
   createdAt: new Date(),
-  profile: BroadcastProfile.admin,
 }
 
 export const BroadcastContext = createContext<TEntity<IBroadcast>>([
@@ -66,20 +53,17 @@ export const BroadcastContext = createContext<TEntity<IBroadcast>>([
 
 export enum BroadcastRoutes {
   findMany = 'broadcast/all',
-  findOne = 'broadcast',
+  findOne = 'broadcast/findone',
   create = 'broadcast/create',
+  update = 'broadcast/update',
 }
 
 // HOOK ---------------------------------------------------------------------
 export const useBroadcast = () => {
   const router = useRouter()
-  const [broadcast, setBroadcast] = useContext(BroadcastContext)
-  const { data } = useFetch<IBroadcast>(BroadcastRoutes.findMany)
-  const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
+  const [broadcast] = useContext(BroadcastContext)
 
-  useEffect(() => {
-    if (data) setBroadcast(data)
-  }, [data])
+  const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
 
   const createBroadcast = async (title: string) => {
     const newBroadcast = await create({ title })
@@ -89,6 +73,7 @@ export const useBroadcast = () => {
         query: {
           id: newBroadcast.id,
           page: NavigationPages.broadcast,
+          admin: newBroadcast.admin,
         },
       })
     }
@@ -101,7 +86,21 @@ export const useBroadcast = () => {
 export const BroadcastProvider: React.FC<BroadcastProviderProps> = ({
   children,
 }) => {
+  const router = useRouter()
   const ctx = useState<IBroadcast>(BroadcastInitialValue)
+
+  const { data, refetch } = useFetch<IBroadcast>(BroadcastRoutes.findOne, {
+    admin: router.query?.admin,
+    editor: router.query?.editor,
+    viewer: router.query?.viewer,
+  })
+
+  useEffect(() => {
+    if (data) ctx[1](data)
+  }, [data])
+  useEffect(() => {
+    refetch()
+  }, [router.query])
 
   return (
     <BroadcastContext.Provider value={ctx}>

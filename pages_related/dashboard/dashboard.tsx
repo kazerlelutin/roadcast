@@ -7,6 +7,8 @@ import { LayoutProvider } from '../../entities/layout/layout'
 import { LayoutGrid } from '../../entities/layout/layout-grid'
 import { ChannelProvider } from '../../entities/channel/channel'
 import { ChatProvider } from '../../entities/chat/chat'
+import { NavigationProvider } from '../../entities/navigation/navigation'
+import { BroadcastProvider } from '../../entities/broadcast/broadcast'
 
 export const DashboardComp: React.FC = () => {
   return (
@@ -25,7 +27,11 @@ export const Dashboard: React.FC = () => {
       <LayoutProvider>
         <ChannelProvider>
           <ChatProvider>
-            <DashboardComp />
+            <NavigationProvider>
+              <BroadcastProvider>
+                <DashboardComp />
+              </BroadcastProvider>
+            </NavigationProvider>
           </ChatProvider>
         </ChannelProvider>
       </LayoutProvider>

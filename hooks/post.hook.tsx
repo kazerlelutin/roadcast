@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from 'react'
 import { MiniLoaderContext } from '../components/mini-loader/mini-loader'
 import { SessionContext } from '../entities/session/session'
 
@@ -10,7 +11,10 @@ interface Error {
   }
 }
 
-export function usePost<T>(url: string): {
+export function usePost<T>(
+  url: string,
+  callBack?: (value: T) => void
+): {
   loading: boolean
   error: Error
   data: T
@@ -48,6 +52,10 @@ export function usePost<T>(url: string): {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (callBack && data) callBack(data)
+  }, [data])
 
   return {
     post: (body?: object, newUrl?: string) => handlePost(body, newUrl),

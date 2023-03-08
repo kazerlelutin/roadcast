@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { createContext, useState, useEffect } from 'react'
 import { TEntity } from '../../types/entity.type'
+import { BroadcastCreate } from '../broadcast/broadcast-create'
 
 // INTERFACES ---------------------------------------------------------------
 export enum NavigationPages {
@@ -29,9 +30,8 @@ export const NavigationMain: React.FC = () => {
   const router = useRouter()
   const page = router?.query?.page as NavigationPages
 
-  if (page === NavigationPages.home) return <p>TEST</p>
   if (page === NavigationPages.broadcast) return <p>broadcast</p>
-  return <p>404</p>
+  return <BroadcastCreate />
 }
 
 // CONTEXT ------------------------------------------------------------------
