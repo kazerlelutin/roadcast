@@ -10,6 +10,7 @@ import {
 } from './chronicle'
 import { usePost } from '../../hooks/post.hook'
 import { BroadcastContext } from '../broadcast/broadcast'
+import { useGetMyLocalId } from '../../hooks/get-my-local-id.hook'
 
 interface IChronicleThreeLineDrop {
   position: number
@@ -19,13 +20,14 @@ export const ChronicleThreeLineDrop: React.FC<IChronicleThreeLineDrop> = ({
   position,
 }) => {
   const [isDragging] = useContext(ChronicleThreeContext)
+  const myLocalId = useGetMyLocalId()
   const [broadcast] = useContext(BroadcastContext)
   const [chronicles, setChronicles] = useContext(ChroniclesContext)
   const { post } = usePost<IChronicle[]>(ChronicleRoutes.position)
   const [_collectedProps, drop] = useDrop(() => ({
     accept: EDropZone.CHRONICLE,
     drop: async (item: { id: string }) => {
-      post({ position, id: item.id, editor: broadcast.editor })
+      post({ position, id: item.id, editor: broadcast.editor, myLocalId })
       const newChronicles = [...chronicles]
       setChronicles(
         newChronicles

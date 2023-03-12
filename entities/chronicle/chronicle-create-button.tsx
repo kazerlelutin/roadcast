@@ -4,6 +4,7 @@ import { usePost } from '../../hooks/post.hook'
 import { ChronicleRoutes, ChroniclesContext, IChronicle } from './chronicle'
 import { useContext } from 'react'
 import { BroadcastContext } from '../broadcast/broadcast'
+import { useGetMyLocalId } from '../../hooks/get-my-local-id.hook'
 
 interface ChronicleCreatebuttonProps {
   position: number
@@ -17,6 +18,7 @@ export const ChronicleCreatebutton: React.FC<ChronicleCreatebuttonProps> = ({
       en: 'Add a chronicle',
     },
   })
+  const myLocalId = useGetMyLocalId()
   const [broadcast] = useContext(BroadcastContext)
   const [_chronicles, setChronicles] = useContext(ChroniclesContext)
   const { post } = usePost<IChronicle[]>(ChronicleRoutes.create, (data) => {
@@ -25,7 +27,9 @@ export const ChronicleCreatebutton: React.FC<ChronicleCreatebuttonProps> = ({
 
   //send editor because editor is available in broadcast context for admin and editor
   return (
-    <Button onClick={() => post({ editor: broadcast.editor, position })}>
+    <Button
+      onClick={() => post({ editor: broadcast.editor, position, myLocalId })}
+    >
       {t('create')}
     </Button>
   )

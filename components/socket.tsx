@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react'
 import io from 'socket.io-client'
-import { BroadcastContext } from '../entities/broadcast/broadcast'
 import { SessionContext } from '../entities/session/session'
 import { URL_LIVE } from '../utils/constants'
 import { useRouter } from 'next/router'
+import { useGetMyLocalId } from '../hooks/get-my-local-id.hook'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -35,6 +35,7 @@ export const useSocketTrigger = (
   action: (msg: unknown) => void
 ) => {
   const message = useContext(SocketContext)
+  const myLocalId = useGetMyLocalId()
   useEffect(() => {
     if (message && message?.type == type) {
       action(message?.message)
@@ -46,13 +47,20 @@ export const useSocketTrigger = (
 
 export const useSocket = () => {
   const session = useContext(SessionContext)
+  const myLocalId = useGetMyLocalId()
   const router = useRouter()
   const [message, setMessage] = useState<{
     type: TriggerTypes | undefined
     message: unknown
   }>()
 
-  const cbSocket = (data: { type: TriggerTypes; message: unknown }) => {
+  const cbSocket = (data: {
+    type: TriggerTypes
+    message: unknown
+    id?: string
+  }) => {
+    //It's my own message
+    if (data?.id && myLocalId === data?.id) return
     setMessage(data)
     setTimeout(() => setMessage(undefined), 400)
   }

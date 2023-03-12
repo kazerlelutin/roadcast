@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react'
+import { useSocket } from '../socket'
 import { SocketContext } from './socket.context'
-import { useSocket } from './socket.hook'
 
 interface SocketProviderProps {
   children: ReactNode

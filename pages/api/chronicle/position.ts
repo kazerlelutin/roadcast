@@ -7,7 +7,7 @@ export default async function chronicle_position(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  const { editor, position, id } = JSON.parse(request.body)
+  const { editor, position, id, myLocalId } = JSON.parse(request.body)
 
   if (!editor && !position && !id)
     return response.status(401).json({ error: 'Unauthorized' })
@@ -49,6 +49,7 @@ export default async function chronicle_position(
 
   trigger(broadcast.id, {
     message: 'refresh',
+    id: myLocalId,
     type: TriggerTypes.BROADCAST,
   })
 

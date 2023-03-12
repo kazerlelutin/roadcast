@@ -7,7 +7,9 @@ export default function useLocalState<T>(
   const ls = (): T => {
       if (typeof window !== 'undefined') {
         const ls = localStorage.getItem(nameOfState)
-        return ls ? JSON.parse(ls) : initialState
+        if (ls) return JSON.parse(ls)
+        localStorage.setItem(nameOfState, JSON.stringify(initialState))
+        return initialState
       } else {
         return initialState
       }

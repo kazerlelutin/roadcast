@@ -6,6 +6,7 @@ export const trigger = async (
   body: {
     type: TriggerTypes
     message: unknown
+    id?: string
   }
 ) => {
   fetch(URL_LIVE + '/trigger', {

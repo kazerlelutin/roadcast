@@ -1,11 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { TriggerTypes } from '../../../components/socket'
 import { prisma } from '../../../db/db'
+import { trigger } from '../../../services/trigger'
 
 export default async function chronicle_create(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  const { editor, position } = JSON.parse(request.body)
+  const { editor, position, myLocalId } = JSON.parse(request.body)
 
   if (!editor && !position)
     return response.status(401).json({ error: 'Unauthorized' })
@@ -40,6 +42,12 @@ export default async function chronicle_create(
       position: position,
       title: 'Untitled',
     },
+  })
+
+  trigger(broadcast.id, {
+    message: 'refresh',
+    id: myLocalId,
+    type: TriggerTypes.BROADCAST,
   })
 
   return response.status(200).json(
