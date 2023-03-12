@@ -8,6 +8,7 @@
   --dms-card: #394264;
   --dms-card-dark: #363f61;
   --dms-text: #fff;
+  --dms-text-invert: #ffffff;
   --dms-highlight: #11a8ab;
   --dms-highlight-dark: #0a888a;
   --dms-warning: #cc324b;
@@ -80,7 +81,9 @@ body[data-color-scheme='light'] {
   --dms-bg: #f7f6f3;
   --dms-bg-dark: #bec0c7;
   --dms-text: #121523;
+  --dms-text-invert: #fff;
   --dms-highlight-dark: #015657;
+  --dms-light: #d97f0a;
 
   --dms-card-bg: #50597b;
   --dms-card: #d4dadd;

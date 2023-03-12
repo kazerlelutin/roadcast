@@ -40,6 +40,13 @@ export interface ILayout {
   layout: ILayoutGrid[]
 }
 
+export interface LayoutContextProps {
+  layout: ILayout
+  setLayout: (layout: ILayout) => void
+  layoutIsDraggable: boolean
+  setLayoutIsDraggable: (disabledDrag: boolean) => void
+}
+
 export const layoutInitialValue: ILayout = {
   id: '',
   user_id: '',
@@ -48,10 +55,12 @@ export const layoutInitialValue: ILayout = {
 }
 
 // CONTEXT ------------------------------------------------------------------
-export const LayoutContext = createContext<TEntity<ILayout>>([
-  layoutInitialValue,
-  () => {},
-])
+export const LayoutContext = createContext<LayoutContextProps>({
+  layout: layoutInitialValue,
+  setLayout: () => {},
+  layoutIsDraggable: false,
+  setLayoutIsDraggable: () => {},
+})
 
 // ROUTES -------------------------------------------------------------------
 
@@ -67,7 +76,8 @@ export enum LayoutRoutes {
 
 export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const session = useContext(SessionContext)
-  const value = useState<ILayout>(layoutInitialValue)
+  const [layout, setLayout] = useState<ILayout>(layoutInitialValue)
+  const [layoutIsDraggable, setLayoutIsDraggable] = useState(false)
 
   //TODO, créer un hook pour charger le layout soit de la session, soit du localStorage, soit du defaultLayout
 
@@ -76,14 +86,18 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
       session &&
       session.layouts &&
       session.layouts.length > 0 &&
-      !value[0]?.id
+      !layout?.id
     ) {
       //setLayout(session.layouts[0])
-      value[1](session.layouts[0])
+      setLayout(session.layouts[0])
     }
   }, [session])
 
   return (
-    <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>
+    <LayoutContext.Provider
+      value={{ layout, setLayout, layoutIsDraggable, setLayoutIsDraggable }}
+    >
+      {children}
+    </LayoutContext.Provider>
   )
 }

@@ -6,6 +6,8 @@ import { useTranslate } from '../../hooks/translate.hook'
 import tmi from 'tmi.js'
 import { ChatContext } from './chat'
 import { ChannelContext } from '../channel/channel'
+import { SessionContext } from '../session/session'
+import { NoMessage } from '../../ui/no-message/no-message'
 
 // INTERFACES_______________________________________________________________
 export interface ChatFormResult {
@@ -37,7 +39,16 @@ export const useChatForm = (): ChatFormResult => {
 
 // COMPONENT_______________________________________________________________
 export const ChatForm: FC = () => {
+  const session = useContext(SessionContext)
   const { value, handleSubmit, setValue, text } = useChatForm()
+  const t = useTranslate({
+    needLogged: {
+      fr: 'Vous devez être connecté pour envoyer un message sur le chat Twitch',
+      en: 'You need to be logged in to chat',
+    },
+  })
+
+  if (!session.id) return <NoMessage message={t('needLogged')} />
 
   return (
     <form

@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import { createContext, useContext, useState, useEffect } from 'react'
-import { useLazyFetch } from '../../hooks/fetch-lazy.hook'
+import { createContext, useState, useEffect } from 'react'
 import { useFetch } from '../../hooks/fetch.hook'
 import { usePost } from '../../hooks/post.hook'
 import { TEntity } from '../../types/entity.type'
 import { NavigationPages } from '../navigation/navigation'
+import { IChronicle } from '../chronicle/chronicle'
+import { TriggerTypes, useSocketTrigger } from '../../components/socket'
 
 // INTERFACES ----------------------------------------------------------------
 interface BroadcastProviderProps {
@@ -25,6 +26,7 @@ export interface IBroadcast {
   started_at: Date
   ended_at: Date
   createdAt: Date
+  chronicles: IChronicle[]
 }
 
 // CONTEXT ------------------------------------------------------------------
@@ -42,6 +44,7 @@ export const BroadcastInitialValue: IBroadcast = {
   started_at: new Date(),
   ended_at: new Date(),
   createdAt: new Date(),
+  chronicles: [],
 }
 
 export const BroadcastContext = createContext<TEntity<IBroadcast>>([
@@ -61,7 +64,6 @@ export enum BroadcastRoutes {
 // HOOK ---------------------------------------------------------------------
 export const useBroadcast = () => {
   const router = useRouter()
-  const [broadcast] = useContext(BroadcastContext)
 
   const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
 
@@ -79,7 +81,7 @@ export const useBroadcast = () => {
     }
   }
 
-  return { broadcast, createBroadcast }
+  return { createBroadcast }
 }
 
 // PROVIDER -----------------------------------------------------------------
@@ -89,18 +91,35 @@ export const BroadcastProvider: React.FC<BroadcastProviderProps> = ({
   const router = useRouter()
   const ctx = useState<IBroadcast>(BroadcastInitialValue)
 
-  const { data, refetch } = useFetch<IBroadcast>(BroadcastRoutes.findOne, {
-    admin: router.query?.admin,
-    editor: router.query?.editor,
-    viewer: router.query?.viewer,
-  })
+  const { data, refetch } = useFetch<IBroadcast>(
+    BroadcastRoutes.findOne,
+    {
+      admin: router.query?.admin,
+      editor: router.query?.editor,
+      viewer: router.query?.viewer,
+    },
+    ctx[1]
+  )
 
+  //update context if data is fetched, clean context if no admin, editor or viewer key
   useEffect(() => {
     if (data) ctx[1](data)
   }, [data])
   useEffect(() => {
-    refetch()
+    const { admin, editor, viewer } = router.query
+
+    //clean state if no admin, editor or viewer key
+    if (admin || editor || viewer) {
+      refetch()
+    } else {
+      ctx[1](BroadcastInitialValue)
+    }
   }, [router.query])
+
+  useSocketTrigger(TriggerTypes.BROADCAST, (message: string) => {
+    //TODO Demande de refresh le contexte
+    // if (message === 'refresh') refetch()
+  })
 
   return (
     <BroadcastContext.Provider value={ctx}>

@@ -1,15 +1,12 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '../../ui/button/button'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Flex } from '../../ui/flex/flex'
-import { usePost } from '../../hooks/post.hook'
-import { BroadcastRoutes, IBroadcast, useBroadcast } from './broadcast'
-import { useRouter } from 'next/router'
+import { useBroadcast } from './broadcast'
 
 export const BroadcastCreateForm: React.FC = () => {
   const [title, setTitle] = useState('')
   const { createBroadcast } = useBroadcast()
-  const router = useRouter()
   const t = useTranslate({
     createBroadcast: {
       fr: 'Créer un fil rouge',

@@ -50,6 +50,7 @@ model Broadcast {
   started_at   DateTime?                @db.Timestamp(6)
   ended_at     DateTime?                @db.Timestamp(6)
   createdAt    DateTime                 @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime                 @updatedAt
   chatMessages ChatMessageOnBroadcast[]
   chronicles   Chronicle[]
   Editor       Editor[]

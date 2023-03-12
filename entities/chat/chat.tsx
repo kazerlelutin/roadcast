@@ -137,9 +137,15 @@ export const useChat = (): ChatResults => {
 // VIEW_______________________________________________________________
 
 export const Chat: FC = () => {
+  const session = useContext(SessionContext)
   const ref = useRef(null)
   const { messages } = useChat()
-  const t = useTranslate()
+  const t = useTranslate({
+    needLogged: {
+      fr: 'Vous devez être connecté pour voir le chat Twitch',
+      en: 'You need to be logged to see the Twitch chat',
+    },
+  })
 
   useEffect(() => {
     if (ref?.current) {
@@ -147,6 +153,7 @@ export const Chat: FC = () => {
     }
   }, [ref, messages])
 
+  if (!session.id) return <NoMessage message={t('needLogged')} />
   if (messages.length === 0) return <NoMessage message={t('noMessage')} />
   return (
     <div className={styles.messages} ref={ref}>

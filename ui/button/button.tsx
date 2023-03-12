@@ -4,7 +4,7 @@ import styles from './button.module.css'
 interface ButtonProps {
   children: ReactNode
   onClick?: () => void
-  variant?: 'normal' | 'twitch'
+  variant?: 'normal' | 'twitch' | 'red'
   type?: 'button' | 'submit' | 'reset'
   loading?: boolean
 }

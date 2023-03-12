@@ -9,6 +9,8 @@ import { ChannelProvider } from '../../entities/channel/channel'
 import { ChatProvider } from '../../entities/chat/chat'
 import { NavigationProvider } from '../../entities/navigation/navigation'
 import { BroadcastProvider } from '../../entities/broadcast/broadcast'
+import { ChroniclesProvider } from '../../entities/chronicle/chronicle'
+import { SocketProvider } from '../../components/socket'
 
 export const DashboardComp: React.FC = () => {
   return (
@@ -24,17 +26,21 @@ export const DashboardComp: React.FC = () => {
 export const Dashboard: React.FC = () => {
   return (
     <SessionProvider>
-      <LayoutProvider>
-        <ChannelProvider>
-          <ChatProvider>
-            <NavigationProvider>
-              <BroadcastProvider>
-                <DashboardComp />
-              </BroadcastProvider>
-            </NavigationProvider>
-          </ChatProvider>
-        </ChannelProvider>
-      </LayoutProvider>
+      <SocketProvider>
+        <LayoutProvider>
+          <ChannelProvider>
+            <ChatProvider>
+              <NavigationProvider>
+                <BroadcastProvider>
+                  <ChroniclesProvider>
+                    <DashboardComp />
+                  </ChroniclesProvider>
+                </BroadcastProvider>
+              </NavigationProvider>
+            </ChatProvider>
+          </ChannelProvider>
+        </LayoutProvider>
+      </SocketProvider>
     </SessionProvider>
   )
 }

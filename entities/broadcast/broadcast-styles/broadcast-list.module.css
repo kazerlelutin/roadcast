@@ -1,0 +1,13 @@
+.title {
+  position: sticky;
+  top: 0;
+  background: var(--dms-bg);
+  padding: var(--dms-padding);
+  text-align: center;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dms-gap);
+}

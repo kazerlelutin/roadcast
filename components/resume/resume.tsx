@@ -29,6 +29,8 @@ export const Resume: FC = () => {
           <StringEditor
             defaultValue={broadcast.title}
             link={BroadcastRoutes.update}
+            //only admin can edit the title
+            id={broadcast.admin}
             name="title"
             callback={(newTitle) => {
               setBroadcast({ ...broadcast, title: newTitle })
@@ -36,6 +38,7 @@ export const Resume: FC = () => {
           />
         </LabelBox>
       )}
+      <p>Le filtre des editors est ici</p>
     </Col>
   )
 }

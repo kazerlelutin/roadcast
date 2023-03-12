@@ -61,7 +61,8 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
   }, [])
 
   useEffect(() => {
-    if (error) {
+    const { id, admin, editor, reader } = router.query
+    if (error && !id && (!admin || !editor || !reader)) {
       router.push('/')
     }
   }, [error])

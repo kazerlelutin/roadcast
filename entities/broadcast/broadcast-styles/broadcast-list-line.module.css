@@ -1,0 +1,8 @@
+.container {
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.container:hover {
+  color: var(--dms-light);
+}

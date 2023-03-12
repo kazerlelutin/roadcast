@@ -10,6 +10,7 @@ interface StringEditorProps {
   name: string
   link: string
   callback?: (value: string) => void
+  id?: string
 }
 
 export const StringEditor: FC<StringEditorProps> = ({
@@ -17,6 +18,7 @@ export const StringEditor: FC<StringEditorProps> = ({
   name,
   link,
   callback,
+  id,
 }) => {
   const { post, data } = usePost<string>(link)
   const [value, setValue] = useState<string>(defaultValue)
@@ -27,7 +29,7 @@ export const StringEditor: FC<StringEditorProps> = ({
   }, [defaultValue])
 
   const handleSubmit = () => {
-    if (value !== defaultValue) post({ [name]: value })
+    if (value !== defaultValue) post({ [name]: value, id })
     setOnEdit(false)
   }
 

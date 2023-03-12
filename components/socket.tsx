@@ -8,16 +8,18 @@ import {
   useState,
 } from 'react'
 import io from 'socket.io-client'
+import { BroadcastContext } from '../entities/broadcast/broadcast'
 import { SessionContext } from '../entities/session/session'
 import { URL_LIVE } from '../utils/constants'
+import { useRouter } from 'next/router'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
   children: ReactNode
 }
-
 export enum TriggerTypes {
-  public = 'public-roadcast',
+  CHRONICLE = 'chronicle',
+  BROADCAST = 'broadcast',
 }
 
 // CONTEXT ------------------------------------------------------------------
@@ -29,11 +31,10 @@ export const SocketContext = createContext({
 // HOOKS --------------------------------------------------------------------
 
 export const useSocketTrigger = (
-  type: string,
+  type: TriggerTypes,
   action: (msg: unknown) => void
 ) => {
   const message = useContext(SocketContext)
-
   useEffect(() => {
     if (message && message?.type == type) {
       action(message?.message)
@@ -45,6 +46,7 @@ export const useSocketTrigger = (
 
 export const useSocket = () => {
   const session = useContext(SessionContext)
+  const router = useRouter()
   const [message, setMessage] = useState<{
     type: TriggerTypes | undefined
     message: unknown
@@ -57,12 +59,12 @@ export const useSocket = () => {
 
   useEffect(() => {
     const socket = io(URL_LIVE)
-    if (session) {
-      socket.on('connect', () => {
-        socket.on(session.id + '-roadcast', cbSocket)
-        socket.on(TriggerTypes.public, cbSocket)
-      })
-    }
+    const { id } = router.query
+    socket.on('connect', () => {
+      socket.on('roadcast-public', cbSocket)
+      if (session) socket.on('roadcast-' + session.twitch_id, cbSocket)
+      socket.on('roadcast-' + id, cbSocket)
+    })
 
     return () => {
       socket?.disconnect()

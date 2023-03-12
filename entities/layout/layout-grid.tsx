@@ -11,17 +11,17 @@ import { Gridbox } from '../../ui/grid-box/grid-box'
 
 export const LayoutGrid: React.FC = () => {
   const { post } = usePost(LayoutRoutes.update)
-  const [userLayout] = useContext(LayoutContext)
+  const { layout: userLayout, layoutIsDraggable } = useContext(LayoutContext)
   const { layout } = userLayout
 
   return (
     <ResponsiveGridLayout
       className="layout"
-      isResizable={true}
-      isDraggable={true}
+      isResizable={layoutIsDraggable}
+      isDraggable={layoutIsDraggable}
       resizeHandles={['se']}
-      onLayoutChange={(layout) =>{
-        if(userLayout?.id) post({ layout, id: userLayout.id })
+      onLayoutChange={(layout) => {
+        if (userLayout?.id) post({ layout, id: userLayout.id })
       }}
       layouts={{
         lg: layout,

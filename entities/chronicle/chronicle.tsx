@@ -1,0 +1,103 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ReactNode, useContext, useEffect, useState } from 'react'
+import { createContext } from 'react'
+import { TEntity } from '../../types/entity.type'
+import { BroadcastContext } from '../broadcast/broadcast'
+
+// INTERFACES ---------------------------------------------------------------
+
+export enum ChronicleStatus {
+  draft = 'draft',
+  published = 'published',
+  read = 'read',
+}
+
+export interface IChronicle {
+  id: string
+  broadcast_id: string
+  title: string
+  position: number
+  text?: string
+  status: ChronicleStatus
+  createdAt: Date
+  //TODO type this
+  chatMessages: any[]
+  //TODO type this
+  medias: any[]
+  //TODO type this
+  editor: any
+}
+
+interface ChronicleProviderProps {
+  children: ReactNode
+  chronicle: IChronicle
+}
+
+interface ChroniclesProviderProps {
+  children: ReactNode
+}
+
+// CONTEXTS ------------------------------------------------------------------
+
+export const ChroniclesContext = createContext<TEntity<IChronicle[]>>(null)
+
+export const ChronicleContext = createContext<TEntity<IChronicle>>(null)
+
+export const ChronicleThreeContext = createContext<TEntity<boolean>>(null)
+
+// PROVIDERS -----------------------------------------------------------------
+
+export const ChronicleProvider: React.FC<ChronicleProviderProps> = ({
+  children,
+  chronicle,
+}) => {
+  const value = useState<IChronicle>(chronicle)
+
+  return (
+    <ChronicleContext.Provider value={value}>
+      {children}
+    </ChronicleContext.Provider>
+  )
+}
+
+export const ChroniclesProvider: React.FC<ChroniclesProviderProps> = ({
+  children,
+}) => {
+  const [broadcast] = useContext(BroadcastContext)
+  const value = useState<IChronicle[]>(
+    broadcast?.chronicles?.sort((a, b) => a.position - b.position) || []
+  )
+
+  useEffect(() => {
+    if (!broadcast.id) return
+    value[1](broadcast.chronicles.sort((a, b) => a.position - b.position))
+  }, [broadcast])
+
+  return (
+    <ChroniclesContext.Provider value={value}>
+      {children}
+    </ChroniclesContext.Provider>
+  )
+}
+
+export const ChronicleThreeProvider: React.FC<ChroniclesProviderProps> = ({
+  children,
+}) => {
+  const value = useState<boolean>(false)
+  return (
+    <ChronicleThreeContext.Provider value={value}>
+      {children}
+    </ChronicleThreeContext.Provider>
+  )
+}
+
+// ROUTES -------------------------------------------------------------------
+
+export enum ChronicleRoutes {
+  delete = 'chronicle/delete',
+  findOne = 'chronicle/one',
+  findMany = 'chronicle/all',
+  create = 'chronicle/create',
+  update = 'chronicle/update',
+  position = 'chronicle/position',
+}

@@ -19,7 +19,11 @@ export type FetchResult<T> = {
   localLoading: boolean
 }
 
-export function useFetch<T>(url: string, body: object = {}): FetchResult<T> {
+export function useFetch<T>(
+  url: string,
+  body: object = {},
+  callback?: (value: T) => void
+): FetchResult<T> {
   const [data, setData] = useState<T>(),
     [error, setError] = useState<Error>(),
     [inProgress, setInProgress] = useState<boolean>(false),
