@@ -24,13 +24,15 @@ export const ChronicleThreeLineDrop: React.FC<IChronicleThreeLineDrop> = ({
   const [broadcast] = useContext(BroadcastContext)
   const [chronicles, setChronicles] = useContext(ChroniclesContext)
   const { post } = usePost<IChronicle[]>(ChronicleRoutes.position)
-  const [_collectedProps, drop] = useDrop(() => ({
+  const [collectedProps, drop] = useDrop(() => ({
     accept: EDropZone.CHRONICLE,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
     drop: async (item: { id: string }) => {
       post({ position, id: item.id, editor: broadcast.editor, myLocalId })
-      const newChronicles = [...chronicles]
       setChronicles(
-        newChronicles
+        chronicles
           .map((chronicle) => {
             if (chronicle.id === item.id) {
               chronicle.position = position
@@ -43,6 +45,11 @@ export const ChronicleThreeLineDrop: React.FC<IChronicleThreeLineDrop> = ({
   }))
 
   return (
-    <div className={styles.container} ref={drop} data-active={isDragging} />
+    <div
+      className={styles.container}
+      ref={drop}
+      data-active={isDragging}
+      data-hover={collectedProps?.isOver}
+    />
   )
 }

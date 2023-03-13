@@ -8,6 +8,7 @@ interface FlexProps {
   wrap?: boolean
   spaceBetween?: boolean
   smallGap?: boolean
+  alignItemCenter?: boolean
 }
 export const Flex: FC<FlexProps> = (props) => (
   <div

@@ -1,3 +1,7 @@
+.container {
+  font-size: var(--dms-font-size-md);
+}
+
 .grab {
   cursor: grab;
   cursor: -webkit-grab;

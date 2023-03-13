@@ -23,3 +23,7 @@
 .reverse {
   flex-direction: column-reverse;
 }
+
+.alignItemCenter {
+  align-items: center;
+}

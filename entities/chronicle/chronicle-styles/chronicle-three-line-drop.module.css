@@ -8,3 +8,8 @@
   height: 25px;
   border: 2px dashed var(--dms-bg-dark);
 }
+
+.container[data-hover='true'] {
+  height: 30px;
+  border: 2px dashed var(--dms-highlight);
+}

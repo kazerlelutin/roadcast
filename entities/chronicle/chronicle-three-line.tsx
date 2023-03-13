@@ -29,7 +29,7 @@ export const ChronicleThreeLine: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.dragZone} ref={drag}>
-        <Flex>
+        <Flex alignItemCenter>
           <div className={styles.grab}>
             <GrabIcon />
           </div>

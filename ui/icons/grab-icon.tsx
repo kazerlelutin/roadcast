@@ -3,7 +3,7 @@ import { FC } from 'react'
 export const GrabIcon: FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 448 512"
+    viewBox="0 0 448 500"
     className="icon"
   >
     {

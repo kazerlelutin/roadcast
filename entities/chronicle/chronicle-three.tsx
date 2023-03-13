@@ -8,7 +8,6 @@ import {
   ChroniclesContext,
   ChronicleThreeProvider,
 } from './chronicle'
-import styles from './chronicle-styles/chronicle-three.module.css'
 import { ChronicleThreeLine } from './chronicle-three-line'
 import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
 
@@ -27,7 +26,7 @@ export const ChronicleThreeComp: React.FC = () => {
 
   return (
     <Col>
-      <ChronicleThreeLineDrop position={0} />
+      {chronicles.length > 0 && <ChronicleThreeLineDrop position={0} />}
       {chronicles.map((chronicle) => (
         <ChronicleProvider chronicle={chronicle} key={chronicle.id}>
           <ChronicleThreeLine />
