@@ -7,3 +7,8 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
 }
+
+.title,
+a.title {
+  color: var(--dms-text);
+}

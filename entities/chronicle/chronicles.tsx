@@ -1,9 +1,15 @@
-import { ChroniclesContext } from './chronicle'
+import {
+  ChronicleProvider,
+  ChroniclesContext,
+  ChronicleRefreshButtonContext,
+} from './chronicle'
 import { useContext } from 'react'
 import { BroadcastContext } from '../broadcast/broadcast'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Col } from '../../ui/col/col'
 import { ChronicleCreatebutton } from './chronicle-create-button'
+import { ChronicleForm } from './chronicle-form'
+import { ChronicleRefreshButton } from './chronicle-refresh-button'
 
 export const Chronicles: React.FC = () => {
   const [broadcast] = useContext(BroadcastContext)
@@ -27,7 +33,8 @@ export const Chronicles: React.FC = () => {
     )
 
   return (
-    <Col>
+    <Col padding>
+      <ChronicleRefreshButton />
       {chronicles.map((chronicle) => (
         <Col key={chronicle.id}>
           <Col center>
@@ -35,7 +42,11 @@ export const Chronicles: React.FC = () => {
               position={chronicle.position - 1 < 0 ? 0 : chronicle.position - 1}
             />
           </Col>
-          <p>{chronicle.title}</p>
+          <ChronicleProvider chronicle={chronicle}>
+            <div id={chronicle.id}>
+              <ChronicleForm />
+            </div>
+          </ChronicleProvider>
         </Col>
       ))}
       <Col center>

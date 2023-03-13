@@ -50,7 +50,7 @@ export default async function chronicle_position(
   trigger(broadcast.id, {
     message: 'refresh',
     id: myLocalId,
-    type: TriggerTypes.BROADCAST,
+    type: TriggerTypes.CHRONICLE,
   })
 
   return response.status(200).json(

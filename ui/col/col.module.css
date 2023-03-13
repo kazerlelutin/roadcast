@@ -23,3 +23,7 @@
 .smallGap {
   gap: calc(var(--dms-gap) / 2);
 }
+
+.padding {
+  padding: var(--dms-padding);
+}

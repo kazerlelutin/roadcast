@@ -8,6 +8,7 @@ interface ColProps {
   smallGap?: boolean
   left?: boolean
   right?: boolean
+  padding?: boolean
 }
 
 export const Col: FC<ColProps> = (props) => (

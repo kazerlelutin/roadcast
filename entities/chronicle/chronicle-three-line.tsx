@@ -33,7 +33,9 @@ export const ChronicleThreeLine: React.FC = () => {
           <div className={styles.grab}>
             <GrabIcon />
           </div>
-          <div className={styles.title}>{chronicle.title}</div>
+          <a className={styles.title} href={`#${chronicle.id}`}>
+            {chronicle.title}
+          </a>
         </Flex>
         {isDragging && !collected.isDragging && (
           <ChronicleThreeLineDrop position={chronicle.position + 1} />

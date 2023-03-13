@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
+import { TriggerTypes, useSocketTrigger } from '../../components/socket'
 import { TEntity } from '../../types/entity.type'
 import { BroadcastContext } from '../broadcast/broadcast'
 
@@ -45,6 +46,9 @@ export const ChronicleContext = createContext<TEntity<IChronicle>>(null)
 
 export const ChronicleThreeContext = createContext<TEntity<boolean>>(null)
 
+export const ChronicleRefreshButtonContext =
+  createContext<TEntity<boolean>>(null)
+
 // PROVIDERS -----------------------------------------------------------------
 
 export const ChronicleProvider: React.FC<ChronicleProviderProps> = ({
@@ -64,6 +68,9 @@ export const ChroniclesProvider: React.FC<ChroniclesProviderProps> = ({
   children,
 }) => {
   const [broadcast] = useContext(BroadcastContext)
+  const [_displayButton, setDisplayButton] = useContext(
+    ChronicleRefreshButtonContext
+  )
   const value = useState<IChronicle[]>(
     broadcast?.chronicles?.sort((a, b) => a.position - b.position) || []
   )
@@ -72,6 +79,10 @@ export const ChroniclesProvider: React.FC<ChroniclesProviderProps> = ({
     if (!broadcast.id) return
     value[1](broadcast.chronicles.sort((a, b) => a.position - b.position))
   }, [broadcast])
+
+  useSocketTrigger(TriggerTypes.CHRONICLE, () => {
+    setDisplayButton(true)
+  })
 
   return (
     <ChroniclesContext.Provider value={value}>
@@ -88,6 +99,17 @@ export const ChronicleThreeProvider: React.FC<ChroniclesProviderProps> = ({
     <ChronicleThreeContext.Provider value={value}>
       {children}
     </ChronicleThreeContext.Provider>
+  )
+}
+
+export const ChronicleRefreshButtonProvider: React.FC<
+  ChroniclesProviderProps
+> = ({ children }) => {
+  const value = useState<boolean>(false)
+  return (
+    <ChronicleRefreshButtonContext.Provider value={value}>
+      {children}
+    </ChronicleRefreshButtonContext.Provider>
   )
 }
 

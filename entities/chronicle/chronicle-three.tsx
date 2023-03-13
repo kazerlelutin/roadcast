@@ -8,6 +8,7 @@ import {
   ChroniclesContext,
   ChronicleThreeProvider,
 } from './chronicle'
+import { ChronicleRefreshButton } from './chronicle-refresh-button'
 import { ChronicleThreeLine } from './chronicle-three-line'
 import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
 
@@ -26,6 +27,7 @@ export const ChronicleThreeComp: React.FC = () => {
 
   return (
     <Col>
+      <ChronicleRefreshButton />
       {chronicles.length > 0 && <ChronicleThreeLineDrop position={0} />}
       {chronicles.map((chronicle) => (
         <ChronicleProvider chronicle={chronicle} key={chronicle.id}>

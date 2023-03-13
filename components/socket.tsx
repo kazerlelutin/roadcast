@@ -35,7 +35,6 @@ export const useSocketTrigger = (
   action: (msg: unknown) => void
 ) => {
   const message = useContext(SocketContext)
-  const myLocalId = useGetMyLocalId()
   useEffect(() => {
     if (message && message?.type == type) {
       action(message?.message)

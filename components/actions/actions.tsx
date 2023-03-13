@@ -25,6 +25,7 @@ export const Actions: React.FC = () => {
       >
         {t(layoutIsDraggable ? 'lockLayout' : 'unlockLayout')}
       </Button>
+      <p>Mode Lecture / modification</p>
     </Col>
   )
 }

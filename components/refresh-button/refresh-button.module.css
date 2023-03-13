@@ -1,0 +1,44 @@
+.box {
+  position: sticky;
+  top: 5px;
+  right: 5px;
+}
+
+.container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  gap: var(--dms-gap-sm);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: var(--dms-warning);
+  border: none;
+  border-radius: 5px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.icon svg {
+  animation: turnIcon 2s linear infinite;
+  width: 15px;
+  height: 15px;
+  transform-origin: center center;
+  fill: white;
+}
+
+@keyframes turnIcon {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
