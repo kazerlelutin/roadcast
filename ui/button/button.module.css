@@ -1,0 +1,32 @@
+.button {
+  outline: none;
+  border: 1px solid var(--dms-text);
+  text-transform: uppercase;
+  background: none;
+  padding: 10px;
+  color: var(--dms-text);
+  font-size: var(--dms-font-size-s);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.button[data-variant='normal'] {
+  background: var(--dms-info-light);
+  border-color: var(--dms-info);
+  color: var(--dms-text-invert);
+}
+
+.button[data-variant='twitch'] {
+  background: var(--twitch-primary);
+  color: var(--dms-text-invert);
+}
+
+.button[data-variant='red'] {
+  background: var(--dms-warning);
+  color: var(--dms-text-invert);
+}
+
+.button:disabled {
+  opacity: 0.5;
+}

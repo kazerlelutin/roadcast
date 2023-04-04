@@ -1,0 +1,16 @@
+.container {
+  border: 1px solid var(--dms-bg-dark);
+  border-radius: var(--dms-border-radius);
+  padding: var(--dms-padding-sm);
+}
+
+.editor {
+  max-width: 50%;
+}
+
+.buttons {
+  padding: var(--dms-padding);
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
+}

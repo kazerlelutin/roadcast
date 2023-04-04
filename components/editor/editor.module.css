@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dms-padding);
+}
+
+.menu {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dms-gap) var(--dms-gap-lg);
+  border-bottom: 1px solid var(--dms-highlight-dark);
+  padding: var(--dms-padding);
+  z-index: 2;
+  background: var(--dms-bg-dark);
+  transition: 200ms ease-in-out;
+}
+
+.menu button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--dms-text);
+  border-radius: var(--dms-border-radius);
+  padding: var(--dms-padding-sm);
+  border: 1px solid var(--dms-card);
+}
+
+.section {
+  display: flex;
+  gap: var(--dms-gap-sm);
+}

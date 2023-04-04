@@ -1,0 +1,40 @@
+.button {
+  padding: var(--dms-padding-lg) var(--dms-padding-xl);
+  border-radius: 50px;
+  background: var(--twitch-primary);
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+a.button,
+a.button:visited {
+  color: white;
+}
+
+.button:hover {
+  border-radius: 0;
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+.button:hover .text {
+  transform: scale(0.95);
+}
+
+.connect {
+  font-size: var(--dms-font-size);
+  text-align: center;
+}
+
+.text {
+  font-size: var(--dms-font-size-lg);
+  font-weight: bold;
+  transition: 200ms ease-in-out;
+}
+
+.description {
+  font-size: var(--dms-font-size-md);
+  max-width: 200px;
+  text-align: center;
+}
