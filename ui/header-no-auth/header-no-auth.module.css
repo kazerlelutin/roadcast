@@ -1,0 +1,14 @@
+.container {
+  padding: var(--dms-padding);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+  gap: var(--dms-gap);
+}

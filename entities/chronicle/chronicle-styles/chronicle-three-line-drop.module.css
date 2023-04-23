@@ -1,0 +1,15 @@
+.container {
+  height: 0;
+  border: 2px solid transparent;
+  transition: 200ms ease-in-out;
+}
+
+.container[data-active='true'] {
+  height: 25px;
+  border: 2px dashed var(--dms-bg-dark);
+}
+
+.container[data-hover='true'] {
+  height: 30px;
+  border: 2px dashed var(--dms-highlight);
+}

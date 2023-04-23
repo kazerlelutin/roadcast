@@ -1,0 +1,9 @@
+.container {
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  font-size: var(--dms-font-size);
+}
+
+.container:hover {
+  color: var(--dms-light);
+}

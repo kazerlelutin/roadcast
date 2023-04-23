@@ -1,0 +1,15 @@
+.container {
+  padding: var(--dms-padding);
+  transition: 200ms ease-in-out;
+}
+
+.container:hover,
+.containerEdit {
+  background: var(--dms-bg-dark);
+  border-radius: var(--dms-border-radius);
+  padding: var(--dms-padding);
+}
+
+.icon {
+  cursor: pointer;
+}

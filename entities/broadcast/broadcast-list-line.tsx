@@ -1,0 +1,44 @@
+import { useRouter } from 'next/router'
+import { IBroadcast } from './broadcast'
+import styles from './broadcast-styles/broadcast-list-line.module.css'
+
+interface BroadcastListLineProps {
+  broadcast: IBroadcast
+}
+
+export const BroadcastListLine: React.FC<BroadcastListLineProps> = ({
+  broadcast,
+}) => {
+  const router = useRouter()
+
+  const handleClick = () => {
+    const query: {
+      id: string
+      page: string
+      admin?: string
+      editor?: string
+      reader?: string
+    } = {
+      id: broadcast.id,
+      page: 'broadcast',
+    }
+    if (broadcast.editor) {
+      query.editor = broadcast.editor
+    }
+
+    if (broadcast.reader) {
+      query.reader = broadcast.reader
+    }
+
+    router.push({
+      pathname: '/editor/' + broadcast.editor,
+      query,
+    })
+  }
+
+  return (
+    <li className={styles.container} onClick={handleClick}>
+      {broadcast.title}
+    </li>
+  )
+}

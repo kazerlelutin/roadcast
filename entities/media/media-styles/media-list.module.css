@@ -1,0 +1,26 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--dms-gap-sm);
+  justify-content: center;
+  cursor: pointer;
+  padding: var(--dms-padding);
+}
+
+.container span {
+  height: 100%;
+}
+
+.container img,
+.container video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.label {
+  font-size: var(--dms-font-size-sm);
+  color: var(--dms-text);
+  text-align: center;
+}
