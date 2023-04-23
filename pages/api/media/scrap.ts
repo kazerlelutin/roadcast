@@ -77,6 +77,7 @@ async function media_scrap(
       const isShortLink = shortLinkRgx.test(link)
       const parsedLink = queryString.parseUrl(link)
       const videoId = (parsedLink?.query?.v as string) || ''
+      const time = (parsedLink?.query?.t as string) || '0'
 
       //IF Youtube Video, it's a single media
       const media = await prisma.media.create({
@@ -88,7 +89,7 @@ async function media_scrap(
           cover: cover?.content || '',
           url: `https://youtube.com/watch?v=${
             isShortLink ? link.split('/').at(-1) : videoId
-          }`,
+          }&t=${time}`,
           chronicle_id: chronicleId,
         },
       })
