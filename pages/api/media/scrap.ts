@@ -6,6 +6,7 @@ import { MetaHTMLAttributes } from 'react'
 import queryString from 'query-string'
 import { trigger } from '../../../services/trigger'
 import { TriggerTypes } from '../../../components/socket'
+import { prisma } from '../../../db/db'
 
 async function media_scrap(
   request: NextApiRequest,
