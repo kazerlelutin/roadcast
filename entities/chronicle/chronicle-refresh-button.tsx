@@ -19,9 +19,8 @@ export const ChronicleRefreshButton: React.FC = () => {
     <RefreshButton
       url={ChronicleRoutes.findMany}
       body={{ reader: broadcast.reader }}
-      callback={(value: IChronicle[]) => {
-        setChronicles(value)
-        setDisplayButton(false)
+      callback={() => {
+        window.location.reload()
       }}
     />
   ) : (

@@ -56,6 +56,9 @@ export default async function chronicle_create(
       where: {
         broadcast_id: broadcast.id,
       },
+      include: {
+        medias: true,
+      },
       orderBy: {
         position: 'asc',
       },
