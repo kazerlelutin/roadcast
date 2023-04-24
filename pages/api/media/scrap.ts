@@ -42,19 +42,16 @@ async function media_scrap(
       return response.status(400).send({ message: 'Error while fetching' })
 
     const dom = new JSDOM(resText)
-    const isYouTubeLinkRgx =
-      /https:\/\/www\.(youtube\.com|youtu\.be)\/watch\?v=([a-zA-Z0-9_-]+)/
+    const isYouTubeLinkRgx = /(youtube\.com|youtu\.be)/
 
     const isYouTubeLink = isYouTubeLinkRgx.test(link)
+
     // Manipulate the DOM _______________________________________________________
 
     const cover = dom.window.document.querySelector(
       'meta[property="og:image"]'
     ) as MetaHTMLAttributes<{ value: string }> | null
     const title = dom.window.document.querySelector('title')?.textContent
-
-    const imgs = Array.from(dom.window.document.querySelectorAll('img'))
-    const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
     // treat link image  ______________________________________________________
     if (res.headers.get('content-type').match(/image/g)) {
@@ -74,8 +71,8 @@ async function media_scrap(
     }
     // treat Youtube videos ______________________________________________________
     if (isYouTubeLink) {
-      const shortLinkRgx = /https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/
-      const isShortLink = shortLinkRgx.test(link)
+      const shortLinkRgx = /youtu\.be/
+      const isShortLink = link.match(shortLinkRgx)
       const parsedLink = queryString.parseUrl(link)
       const videoId = (parsedLink?.query?.v as string) || ''
       const time = (parsedLink?.query?.t as string) || '0'
@@ -97,6 +94,9 @@ async function media_scrap(
 
       medias.push(media)
     }
+
+    const imgs = Array.from(dom.window.document.querySelectorAll('img'))
+    const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
     trigger(broadcast.reader, {
       message: chronicleId,
