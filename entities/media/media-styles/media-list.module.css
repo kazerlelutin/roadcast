@@ -6,10 +6,6 @@
   justify-content: center;
   cursor: pointer;
   padding: var(--dms-padding);
-}
-
-.container {
-  padding: var(--dms-padding) 0;
   transition: 300ms ease-in-out;
 }
 
