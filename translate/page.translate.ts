@@ -4,7 +4,7 @@ const pageTranslate = {
     en: 'Manage and share your drivers',
   },
   appSummary: {
-    fr: 'Vous pouvez rédiger des conducteurs et les partager avec vos chroniqueurs, diffuser des medias sur votre live, et bien plus encore.',
+    fr: 'Vous pouvez rédiger des conducteurs et les partager avec vos chroniqueurs, diffuser des médias sur votre live, et bien plus encore.',
     en: 'You can write drivers and share them with your reporters, broadcast media on your live, and much more.',
   },
   connectWith: {
