@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,11 +15,11 @@ enum ChronicleStatus {
 
 model Broadcast {
   id         String      @id @default(uuid())
-  title      String
-  prefix     String      @unique @db.VarChar(30)
-  editor     String      @unique @db.VarChar(255)
+  title      String      @db.Text
+  prefix     String      @unique @db.Uuid
+  editor     String      @unique @db.Text
   //reader is use for the slider and the reader
-  reader     String      @unique @db.VarChar(255)
+  reader     String      @unique @db.Text
   started_at DateTime?   @db.Timestamp(6)
   ended_at   DateTime?   @db.Timestamp(6)
   createdAt  DateTime    @default(now()) @db.Timestamp(6)
@@ -30,46 +30,46 @@ model Broadcast {
 
 model Editor {
   id           String      @id @default(uuid())
-  name         String
+  name         String      @db.Text
   broadcast    Broadcast   @relation(fields: [broadcast_id], references: [id])
-  broadcast_id String
+  broadcast_id String      @db.Text
   createdAt    DateTime    @default(now()) @db.Timestamp(6)
   chronicles   Chronicle[]
 }
 
 model Chronicle {
   id           String          @id @default(uuid())
-  broadcast_id String?
+  broadcast_id String?         @db.Text
   broadcast    Broadcast?      @relation(fields: [broadcast_id], references: [id])
-  title        String
+  title        String          @db.Text
   position     Int
-  text         String?         @db.LongText
+  text         String?         @db.Text
   status       ChronicleStatus @default(draft)
   createdAt    DateTime        @default(now()) @db.Timestamp(6)
   updatedAt    DateTime        @updatedAt
   medias       Media[]
   editor       Editor?         @relation(fields: [editorId], references: [id])
-  editorId     String?
+  editorId     String?         @db.Text
 }
 
 model Media {
   id           String    @id @default(uuid())
-  source       String
-  name         String
-  type         String
-  url          String
-  cover        String?
+  source       String    @db.Text
+  name         String    @db.Text
+  type         String    @db.Text
+  url          String    @db.Text
+  cover        String?   @db.Text
   size         Int       @default(0)
   createdAt    DateTime  @default(now()) @db.Timestamp(6)
-  chronicle_id String
+  chronicle_id String    @db.Text
   chronicle    Chronicle @relation(fields: [chronicle_id], references: [id])
 }
 
 model Layout {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @db.Text
   layout    Json
   createdAt DateTime @default(now()) @db.Timestamp(6)
   current   Boolean  @default(false)
-  user_id   String
+  user_id   String   @db.Text
 }
