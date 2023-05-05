@@ -65,7 +65,9 @@ export const useSocket = () => {
   }
 
   useEffect(() => {
-    const socket = io(URL_LIVE)
+    const socket = io(URL_LIVE, {
+      transports: ['websocket', 'polling', 'flashsocket'],
+    })
     socket.on('connect', () => {
       socket.on('roadcast-public', cbSocket)
       if (router.query?.editor)

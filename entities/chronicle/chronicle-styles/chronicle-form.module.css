@@ -2,6 +2,8 @@
   border: 1px solid var(--dms-bg-dark);
   border-radius: var(--dms-border-radius);
   padding: var(--dms-padding-sm);
+  overflow: auto;
+  margin-bottom: var(--dms-padding);
 }
 
 .editor {
