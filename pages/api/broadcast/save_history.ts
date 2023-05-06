@@ -8,8 +8,7 @@ async function broadcast_save_history(
   response: NextApiResponse,
   infos: BroadcastCtx
 ) {
-  const { myLocalId } = infos
-  const { reader } = JSON.parse(request.body)
+  const { myLocalId, reader } = infos
   const broadcast = await prisma.broadcast.findFirst({
     where: {
       reader,
