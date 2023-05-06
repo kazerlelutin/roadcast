@@ -1,22 +1,30 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../db/db'
+import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
+import { BroadcastCtx } from '../../../types/broadcast-ctx'
 
-export default async function broadcast_all(
-  request: NextApiRequest,
-  response: NextApiResponse
+async function broadcast_all(
+  _request: NextApiRequest,
+  response: NextApiResponse,
+  infos: BroadcastCtx
 ) {
-  const { ids } = JSON.parse(request.body)
-
-  const broadcasts = await prisma.broadcast.findMany({
+  const history = await prisma.userBroadcastHistory.findMany({
     where: {
-      editor: {
-        in: ids,
-      },
+      user_id: infos.myLocalId,
     },
-    orderBy: {
-      updatedAt: 'desc',
+    select: {
+      broadcast: {
+        select: {
+          editor: true,
+          title: true,
+        },
+      },
     },
   })
 
-  return response.status(200).json(broadcasts)
+  return response.status(200).json(history.map((h) => h.broadcast))
 }
+const helper = (request: NextApiRequest, response: NextApiResponse) =>
+  broadcastMiddleWare(request, response, broadcast_all)
+
+export default helper

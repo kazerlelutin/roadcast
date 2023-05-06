@@ -8,6 +8,7 @@
   padding: var(--dms-padding-sm);
   border-radius: var(--dms-border-radius);
   height: 100%;
+  overflow: hidden;
 }
 
 .container img,

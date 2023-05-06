@@ -1,4 +1,3 @@
-import { useBroadcastLocalSave } from '../../hooks/broadcast-local-save.hook'
 import { useFetch } from '../../hooks/fetch.hook'
 import { useTranslate } from '../../hooks/translate.hook'
 import { BroadcastRoutes, IBroadcast } from './broadcast'
@@ -6,12 +5,8 @@ import { BroadcastListLine } from './broadcast-list-line'
 import styles from './broadcast-styles/broadcast-list.module.css'
 
 export const BroadcastList = () => {
-  const { savedBroadcasts } = useBroadcastLocalSave()
   const { data: broadcasts, loading } = useFetch<IBroadcast[]>(
-    BroadcastRoutes.findMany,
-    {
-      ids: savedBroadcasts.map((b) => b.editor),
-    }
+    BroadcastRoutes.findMany
   )
 
   const t = useTranslate({

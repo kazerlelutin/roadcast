@@ -10,6 +10,7 @@ import { MediaList } from '../media/media-list'
 import { Label } from '../../ui/label/label'
 import { Col } from '../../ui/col/col'
 import { Flex } from '../../ui/flex/flex'
+import { LinkPreview } from '../../components/link-preview/link-preview'
 
 export const ChronicleRead: React.FC = () => {
   const [currentChronicle] = useContext(ChronicleToScreenContext)
@@ -42,14 +43,15 @@ export const ChronicleRead: React.FC = () => {
 
         <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
         {chronicle.source && (
-          <Flex center>
-            <Label>{t('source')}</Label>
+          <Col center>
+            <h3>{t('source')}</h3>
+            <LinkPreview url={chronicle.source} />
             <input
               value={chronicle.source}
               readOnly={true}
               className={styles.source}
             />
-          </Flex>
+          </Col>
         )}
       </div>
       <MediaList />

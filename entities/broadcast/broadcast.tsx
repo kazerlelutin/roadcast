@@ -69,6 +69,7 @@ export enum BroadcastRoutes {
   findOne = 'broadcast/findone',
   create = 'broadcast/create',
   update = 'broadcast/update',
+  saveHistory = 'broadcast/save_history',
 }
 
 // HOOK ---------------------------------------------------------------------

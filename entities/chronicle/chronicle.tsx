@@ -144,4 +144,5 @@ export enum ChronicleRoutes {
   updateTitle = 'chronicle/update_title',
   updateSource = 'chronicle/update_source',
   position = 'chronicle/position',
+  previewSource = 'chronicle/preview_source',
 }
