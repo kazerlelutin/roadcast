@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import '../styles/editor.css'
+import { Analytics } from '@vercel/analytics/react'
 import { MiniLoaderProvider } from '../components/mini-loader/mini-loader'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }) {
           </Head>
           <div id="fullscreen-popin" />
           <Component {...pageProps} />
+          <Analytics />
         </FullscreenPopinProvider>
       </MiniLoaderProvider>
     </DndProvider>
