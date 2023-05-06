@@ -70,11 +70,6 @@ async function chronicle_delete(
     id: myLocalId,
   })
 
-  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
-    message: 'refresh',
-    id: myLocalId,
-  })
-
   return response.status(200).json(
     await prisma.chronicle.findMany({
       where: {

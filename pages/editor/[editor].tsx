@@ -30,11 +30,11 @@ export default function EditorPage({
   title: string
 }) {
   return (
-    <SocketProvider>
-      <ChronicleToScreenProvider>
-        <BroadcastReadModeProvider>
-          <BroadcastFocusModeProvider>
-            <BroadcastProvider broadcast={JSON.parse(broadcast)}>
+    <ChronicleToScreenProvider>
+      <BroadcastReadModeProvider>
+        <BroadcastFocusModeProvider>
+          <BroadcastProvider broadcast={JSON.parse(broadcast)}>
+            <SocketProvider>
               <ChronicleRefreshButtonProvider>
                 <ChroniclesProvider>
                   <EditorsProvider>
@@ -45,11 +45,11 @@ export default function EditorPage({
                   </EditorsProvider>
                 </ChroniclesProvider>
               </ChronicleRefreshButtonProvider>
-            </BroadcastProvider>
-          </BroadcastFocusModeProvider>
-        </BroadcastReadModeProvider>
-      </ChronicleToScreenProvider>
-    </SocketProvider>
+            </SocketProvider>
+          </BroadcastProvider>
+        </BroadcastFocusModeProvider>
+      </BroadcastReadModeProvider>
+    </ChronicleToScreenProvider>
   )
 }
 

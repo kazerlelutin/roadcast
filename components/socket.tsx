@@ -7,10 +7,11 @@ import {
   createContext,
   useState,
 } from 'react'
-import { PUSHER_API_ID, PUSHER_KEY, PUSHER_REGION } from '../utils/constants'
+import { PUSHER_KEY } from '../utils/constants'
 import { useRouter } from 'next/router'
 import { useGetMyLocalId } from '../hooks/get-my-local-id.hook'
 import Pusher from 'pusher-js'
+import { BroadcastContext } from '../entities/broadcast/broadcast'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -36,6 +37,7 @@ export const useSocketTrigger = (
   action: (msg: unknown) => void
 ) => {
   const message = useContext(SocketContext)
+
   useEffect(() => {
     if (message && message?.type == type) {
       action(message?.message)
@@ -47,6 +49,7 @@ export const useSocketTrigger = (
 
 export const useSocket = () => {
   const myLocalId = useGetMyLocalId()
+  const [broadcast] = useContext(BroadcastContext)
   const router = useRouter()
   const [message, setMessage] = useState<{
     type: TriggerTypes | undefined
@@ -69,12 +72,7 @@ export const useSocket = () => {
       cluster: 'eu',
     })
 
-    const editorChannel = router.query.editor
-      ? pusher.subscribe(router.query.editor as string)
-      : undefined
-    const readerChannel = router.query.reader
-      ? pusher.subscribe(router.query.reader as string)
-      : undefined
+    const channel = pusher.subscribe(broadcast.reader as string)
     const events = [
       TriggerTypes?.BROADCAST,
       TriggerTypes?.CHRONICLE,
@@ -82,8 +80,7 @@ export const useSocket = () => {
       TriggerTypes?.SLIDER,
     ]
     events.forEach((event) => {
-      if (editorChannel) editorChannel.bind(event, cbSocket)
-      if (readerChannel) readerChannel.bind(event, cbSocket)
+      channel.bind(event, cbSocket)
     })
   }, [router.query])
 
