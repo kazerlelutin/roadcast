@@ -7,9 +7,12 @@ import {
 import { useTranslate } from '../../hooks/translate.hook'
 import { Button } from '../../ui/button/button'
 import { Col } from '../../ui/col/col'
+import { MiniLoaderContext } from '../mini-loader/mini-loader'
+import { Flex } from '../../ui/flex/flex'
 
 export const Actions: React.FC = () => {
   // const { layoutIsDraggable, setLayoutIsDraggable } = useContext(LayoutContext)
+  const [loading] = useContext(MiniLoaderContext)
   const [readMode, setReadMode] = useContext(BroadcastReadModeContext)
   const [focusMode, setFocusMode] = useContext(BroadcastFocusContext)
   const t = useTranslate({
@@ -40,7 +43,7 @@ export const Actions: React.FC = () => {
   })
 
   return (
-    <Col padding>
+    <Flex wrap>
       {/**  
       <Button
         onClick={() => setLayoutIsDraggable(!layoutIsDraggable)}
@@ -50,6 +53,7 @@ export const Actions: React.FC = () => {
       </Button> 
       */}
       <Button
+        loading={loading}
         onClick={() => setReadMode(!readMode)}
         variant={readMode ? 'red' : 'normal'}
       >
@@ -57,12 +61,13 @@ export const Actions: React.FC = () => {
       </Button>
       {readMode && (
         <Button
+          loading={loading}
           onClick={() => setFocusMode(!focusMode)}
           variant={focusMode ? 'red' : 'normal'}
         >
           {t(focusMode ? 'normalMode' : 'FocusMode')}
         </Button>
       )}
-    </Col>
+    </Flex>
   )
 }

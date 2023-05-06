@@ -19,7 +19,7 @@ export interface IChronicle {
   title: string
   position: number
   text?: string
-  source?: string
+  source: string
   status: ChronicleStatus
   createdAt: Date
   updatedAt: Date

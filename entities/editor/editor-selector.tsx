@@ -10,7 +10,7 @@ import { useState } from 'react'
 
 export const EditorSelector: React.FC = () => {
   const [broadcast] = useContext(BroadcastContext)
-  const [chronicle] = useContext(ChronicleContext)
+  const [chronicle, setChronicle] = useContext(ChronicleContext)
   const { getData } = useSimpleFetch()
   const t = useTranslate({
     SelectEditor: {
@@ -62,6 +62,7 @@ export const EditorSelector: React.FC = () => {
       value: newEditor.id,
       label: newEditor.name,
     })
+    setChronicle({ ...chronicle, editor: newEditor })
     setChronicles(
       chronicles.map((chro) =>
         chro.id === chronicle.id ? { ...chro, editor: newEditor } : chro
