@@ -1,19 +1,26 @@
+import Pusher from 'pusher'
 import { TriggerTypes } from '../components/socket'
-import { URL_LIVE } from '../utils/constants'
+import {
+  PUSHER_API_ID,
+  PUSHER_KEY,
+  PUSHER_REGION,
+  PUSHER_SECRET,
+} from '../utils/constants'
 
 export const trigger = async (
   room: string,
+  type: TriggerTypes,
   body: {
-    type: TriggerTypes
     message: unknown
     id?: string
   }
 ) => {
-  fetch(URL_LIVE + '/trigger', {
-    method: 'POST',
-    body: JSON.stringify({
-      room,
-      body,
-    }),
+  const pusher = new Pusher({
+    appId: PUSHER_API_ID,
+    key: PUSHER_KEY,
+    secret: PUSHER_SECRET,
+    cluster: PUSHER_REGION,
+    useTLS: true,
   })
+  pusher.trigger(room, type, { ...body, type })
 }

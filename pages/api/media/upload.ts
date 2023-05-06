@@ -80,16 +80,14 @@ async function media_upload(
     },
   })
 
-  trigger(broadcast.reader, {
+  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: fields.chronicleId,
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
-  trigger(broadcast.editor, {
+  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
   return response.status(200).send({ media, quota: globalSize })

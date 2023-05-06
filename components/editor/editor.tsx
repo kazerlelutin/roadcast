@@ -188,7 +188,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleBold().run()}
               className={editor.isActive('bold') ? 'is-active' : ''}
             >
-              {t('bold')}
+              <b>{t('bold')}</b>
             </button>
             <button
               type="button"
@@ -196,7 +196,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleItalic().run()}
               className={editor.isActive('italic') ? 'is-active' : ''}
             >
-              {t('italic')}
+              <i>{t('italic')}</i>
             </button>
             <button
               type="button"
@@ -204,7 +204,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleStrike().run()}
               className={editor.isActive('strike') ? 'is-active' : ''}
             >
-              {t('strike')}
+              <s>{t('strike')}</s>
             </button>
           </div>
 

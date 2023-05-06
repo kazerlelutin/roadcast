@@ -98,16 +98,14 @@ async function media_scrap(
     const imgs = Array.from(dom.window.document.querySelectorAll('img'))
     const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
-    trigger(broadcast.reader, {
+    trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
       message: chronicleId,
       id: myLocalId,
-      type: TriggerTypes.CHRONICLE,
     })
 
-    trigger(broadcast.editor, {
+    trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
       message: 'refresh',
       id: myLocalId,
-      type: TriggerTypes.CHRONICLE,
     })
   } catch (e) {
     return response.status(400).send({ message: 'Error while fetching' })

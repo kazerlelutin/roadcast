@@ -7,10 +7,10 @@ import {
   createContext,
   useState,
 } from 'react'
-import io from 'socket.io-client'
-import { URL_LIVE } from '../utils/constants'
+import { PUSHER_API_ID, PUSHER_KEY, PUSHER_REGION } from '../utils/constants'
 import { useRouter } from 'next/router'
 import { useGetMyLocalId } from '../hooks/get-my-local-id.hook'
+import Pusher from 'pusher-js'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -65,20 +65,26 @@ export const useSocket = () => {
   }
 
   useEffect(() => {
-    const socket = io(URL_LIVE, {
-      transports: ['websocket', 'polling', 'flashsocket'],
-    })
-    socket.on('connect', () => {
-      socket.on('roadcast-public', cbSocket)
-      if (router.query?.editor)
-        socket.on('roadcast-' + router.query.editor, cbSocket)
-      if (router.query?.reader)
-        socket.on('roadcast-' + router.query.reader, cbSocket)
+    const pusher = new Pusher(PUSHER_KEY, {
+      cluster: 'eu',
     })
 
-    return () => {
-      socket?.disconnect()
-    }
+    const editorChannel = router.query.editor
+      ? pusher.subscribe(router.query.editor as string)
+      : undefined
+    const readerChannel = router.query.reader
+      ? pusher.subscribe(router.query.reader as string)
+      : undefined
+    const events = [
+      TriggerTypes?.BROADCAST,
+      TriggerTypes?.CHRONICLE,
+      TriggerTypes?.MEDIA,
+      TriggerTypes?.SLIDER,
+    ]
+    events.forEach((event) => {
+      if (editorChannel) editorChannel.bind(event, cbSocket)
+      if (readerChannel) readerChannel.bind(event, cbSocket)
+    })
   }, [router.query])
 
   return message

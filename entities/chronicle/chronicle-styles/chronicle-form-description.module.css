@@ -8,6 +8,7 @@
   background: var(--dms-bg-dark);
   border-radius: var(--dms-border-radius);
   padding: var(--dms-padding);
+  margin-bottom: var(--dms-padding);
 }
 
 .icon {
