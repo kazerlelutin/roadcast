@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useTranslate } from '../../hooks/translate.hook'
 import styles from './kofi-button.module.css'
+import va from '@vercel/analytics'
 
 export default function KofiButton() {
   const t = useTranslate({
@@ -11,6 +12,9 @@ export default function KofiButton() {
   })
   return (
     <a
+      onClick={() => {
+        va.track('kofiButton')
+      }}
       className={styles.coffe}
       href="https://ko-fi.com/kazerlelutin"
       target="_blank"

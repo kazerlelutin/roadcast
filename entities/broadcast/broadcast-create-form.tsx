@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '../../ui/button/button'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Flex } from '../../ui/flex/flex'
+import va from '@vercel/analytics'
 import { useBroadcast } from './broadcast'
 
 export const BroadcastCreateForm: React.FC = () => {
@@ -22,6 +23,7 @@ export const BroadcastCreateForm: React.FC = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault()
+        va.track('createBroadcast')
         createBroadcast(title)
       }}
     >
