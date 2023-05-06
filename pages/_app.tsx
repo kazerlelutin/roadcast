@@ -17,7 +17,7 @@ Router.events.on('routeChangeError', () => NProgress.done())
 
 export default function App({ Component, pageProps }) {
   const router = useRouter()
-  const baseUrl = 'https://roadcast.fr/'
+  const baseUrl = 'https://roadcast.app/'
   const t = useTranslate({
     title: {
       fr: '📡 ROADCAST',
@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }) {
             <meta name="twitter:site" content={baseUrl} />
             <meta name="twitter:title" content={t('title')} />
             <meta name="twitter:description" content={t('appSummary')} />
-            <meta name="twitter:image" content={`${baseUrl}preview.webp`} />
+            <meta name="twitter:image" content={`${baseUrl}preview.jpg`} />
             <meta name="twitter:url" content={`${baseUrl}${router.asPath}`} />
           </Head>
           <div id="fullscreen-popin" />
