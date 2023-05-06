@@ -1,33 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useContext, useEffect } from 'react'
-import useLocalState from './local-state.hook'
-import { BroadcastContext } from '../entities/broadcast/broadcast'
+import {
+  BroadcastContext,
+  BroadcastRoutes,
+} from '../entities/broadcast/broadcast'
+import { usePost } from './post.hook'
 
-interface BroadcastLocalSave {
-  editor: string
-  name: string
-}
 export const useBroadcastLocalSave = () => {
   const [broadcast] = useContext(BroadcastContext)
-  const stateKey = 'roadcast-broadcast-local-save'
-  const [state, setState] = useLocalState<BroadcastLocalSave[]>([], stateKey)
-  const syncBroadcast = useCallback(() => {
-    if (!broadcast) return
-    const isExist = state.find((item) => item.editor === broadcast.editor)
-    if (isExist) return
-    const newState = [
-      ...state,
-      { editor: broadcast.editor, name: broadcast.title },
-    ]
-
-    setState(newState)
-  }, [state, setState, broadcast])
+  const { post } = usePost(BroadcastRoutes.saveHistory)
 
   useEffect(() => {
-    syncBroadcast()
-  }, [syncBroadcast])
+    post()
+  }, [])
 
   return {
-    savedBroadcasts: state,
-    syncBroadcast,
+    post,
   }
 }

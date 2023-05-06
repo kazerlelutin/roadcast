@@ -14,18 +14,19 @@ enum ChronicleStatus {
 }
 
 model Broadcast {
-  id         String      @id @default(uuid())
-  title      String      @db.Text
-  prefix     String      @unique @db.Uuid
-  editor     String      @unique @db.Text
+  id         String                 @id @default(uuid())
+  title      String                 @db.Text
+  prefix     String                 @unique @db.Uuid
+  editor     String                 @unique @db.Text
   //reader is use for the slider and the reader
-  reader     String      @unique @db.Text
-  started_at DateTime?   @db.Timestamp(6)
-  ended_at   DateTime?   @db.Timestamp(6)
-  createdAt  DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt  DateTime    @updatedAt
+  reader     String                 @unique @db.Text
+  started_at DateTime?              @db.Timestamp(6)
+  ended_at   DateTime?              @db.Timestamp(6)
+  createdAt  DateTime               @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime               @updatedAt
   chronicles Chronicle[]
   editors    Editor[]
+  History    UserBroadcastHistory[]
 }
 
 model Editor {
@@ -73,4 +74,12 @@ model Layout {
   createdAt DateTime @default(now()) @db.Timestamp(6)
   current   Boolean  @default(false)
   user_id   String   @db.Text
+}
+
+model UserBroadcastHistory {
+  id           String    @id @default(uuid())
+  broadcast_id String    @db.Text
+  broadcast    Broadcast @relation(fields: [broadcast_id], references: [id])
+  createdAt    DateTime  @default(now()) @db.Timestamp(6)
+  user_id      String    @db.Text
 }
