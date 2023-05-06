@@ -43,7 +43,7 @@ export const Actions: React.FC = () => {
   })
 
   return (
-    <Flex wrap>
+    <Flex>
       {/**  
       <Button
         onClick={() => setLayoutIsDraggable(!layoutIsDraggable)}

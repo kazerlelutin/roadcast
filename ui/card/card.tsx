@@ -22,7 +22,7 @@ export const Card: FC<CardProps> = ({
       {(title || onClose) && (
         <div className={styles.title}>
           <Flex spaceBetween>
-            {title && title}
+            {title && <div className={styles.titleText}>{title}</div>}
             {onClose && (
               <div className={styles.close} onClick={onClose}>
                 <CloseIcon />

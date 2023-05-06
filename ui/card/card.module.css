@@ -18,6 +18,10 @@
   font-weight: bold;
 }
 
+.titleText {
+  width: 500px;
+}
+
 .close svg {
   cursor: pointer;
   fill: var(--dms-bg);
