@@ -14,10 +14,13 @@ import { ChronicleDeleteButton } from './chronicle-delete-button'
 import { MediaList } from '../media/media-list'
 import { MediaAddForm } from '../media/media-add-form'
 import { Flex } from '../../ui/flex/flex'
+import { Label } from '../../ui/label/label'
+import { useTranslate } from '../../hooks/translate.hook'
 
 export const ChronicleForm: React.FC = () => {
   const [chronicles, setChronicles] = useContext(ChroniclesContext)
   const [chronicle] = useContext(ChronicleContext)
+  const t = useTranslate()
 
   return (
     <ChronicleWrapper>
@@ -38,9 +41,26 @@ export const ChronicleForm: React.FC = () => {
             }}
             link={ChronicleRoutes.updateTitle}
           />
+          <Label>{t('editor')}</Label>
           <div className={styles.editor}>
             <EditorSelector />
           </div>
+          <Label>{t('source')}</Label>
+          <StringEditor
+            name="source"
+            id={chronicle.id}
+            defaultValue={chronicle.source}
+            callback={(value) => {
+              setChronicles(
+                chronicles.map((chronicleEl) => {
+                  if (chronicleEl.id === chronicle.id)
+                    chronicleEl.source = value
+                  return chronicleEl
+                })
+              )
+            }}
+            link={ChronicleRoutes.updateSource}
+          />
           <ChronicleFormDescription />
           <MediaList />
         </Col>

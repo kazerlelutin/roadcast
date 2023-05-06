@@ -130,6 +130,14 @@ const pageTranslate = {
     fr: 'Sélectionnez une chronique',
     en: 'Select a chronicle',
   },
+  source: {
+    en: 'Source',
+    fr: 'Source',
+  },
+  editor: {
+    en: 'Editor',
+    fr: 'Chroniqueur',
+  },
 }
 
 export default pageTranslate

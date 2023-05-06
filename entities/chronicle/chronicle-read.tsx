@@ -7,6 +7,9 @@ import styles from './chronicle-styles/chronicle-read.module.css'
 import { ChronicleWrapper } from './chronicle-wrapper'
 import { BroadcastFocusContext } from '../broadcast/broadcast'
 import { MediaList } from '../media/media-list'
+import { Label } from '../../ui/label/label'
+import { Col } from '../../ui/col/col'
+import { Flex } from '../../ui/flex/flex'
 
 export const ChronicleRead: React.FC = () => {
   const [currentChronicle] = useContext(ChronicleToScreenContext)
@@ -32,10 +35,22 @@ export const ChronicleRead: React.FC = () => {
             {getReadTime(getTextInHtml(chronicle.text))}
           </span>
         </h2>
+
         <p className={styles.editor}>
           {chronicle?.editor?.name || t('noEditor')}
         </p>
+
         <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
+        {chronicle.source && (
+          <Flex center>
+            <Label>{t('source')}</Label>
+            <input
+              value={chronicle.source}
+              readOnly={true}
+              className={styles.source}
+            />
+          </Flex>
+        )}
       </div>
       <MediaList />
     </ChronicleWrapper>
