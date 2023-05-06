@@ -14,7 +14,7 @@ export const ChronicleFormDescription: React.FC = () => {
   const [chronicle, setChronicle] = useContext(ChronicleContext)
   const [text, setText] = useState<string>(chronicle.text || '')
   const [isReadMode] = useContext(BroadcastReadModeContext)
-  const debouncedValue = useDebounce<string>(text, 5000)
+  const debouncedValue = useDebounce<string>(text, 2500)
   const { post } = usePost(ChronicleRoutes.updateDesc, (value: IChronicle) => {
     setChronicle({ ...value })
   })
