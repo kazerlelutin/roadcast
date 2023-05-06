@@ -36,16 +36,14 @@ async function media_delete(
     },
   })
 
-  trigger(broadcast.reader, {
+  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: chronicleId,
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
-  trigger(broadcast.editor, {
+  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
   return response.status(200).json({ message: 'ok' })

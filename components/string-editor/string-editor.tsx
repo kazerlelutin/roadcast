@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './string-editor.module.css'
-import { FC, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { usePost } from '../../hooks/post.hook'
-import { CheckIcon } from '../../ui/icons/check-icon'
-import { EditIcon } from '../../ui/icons/edit-icon'
+import { useDebounce } from '../../hooks/debounce.hook'
+import { BroadcastReadModeContext } from '../../entities/broadcast/broadcast'
 
 interface StringEditorProps {
   defaultValue: string
@@ -24,21 +24,20 @@ export const StringEditor: FC<StringEditorProps> = ({
 }) => {
   const { post, data } = usePost<string>(link)
   const [value, setValue] = useState<string>(defaultValue)
-  const [onEdit, setOnEdit] = useState<boolean>(false)
+  const [isReadMode] = useContext(BroadcastReadModeContext)
+  const debouncedValue = useDebounce<string>(value, 2000)
 
   useEffect(() => {
     if (value !== defaultValue) setValue(defaultValue)
   }, [defaultValue])
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (value !== defaultValue)
-      post({
-        [name]: value,
-        id,
-      })
-    setOnEdit(false)
-  }
+  useEffect(() => {
+    if (isReadMode || debouncedValue === defaultValue) return
+    post({
+      [name]: value,
+      id,
+    })
+  }, [debouncedValue])
 
   useEffect(() => {
     if (data && data !== value && data?.[name]) {
@@ -47,25 +46,15 @@ export const StringEditor: FC<StringEditorProps> = ({
     }
   }, [data])
 
-  return (
-    <form className={styles.container} onSubmit={handleSubmit}>
-      <input
-        data-size={fontSize}
-        disabled={!onEdit}
-        className={styles.input}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+  if (isReadMode) return <div className={styles.input}>{value}</div>
 
-      {onEdit ? (
-        <button type="submit" className={styles.icon}>
-          <CheckIcon />
-        </button>
-      ) : (
-        <div onClick={() => setOnEdit(true)} className={styles.icon}>
-          <EditIcon />
-        </div>
-      )}
-    </form>
+  return (
+    <input
+      data-size={fontSize}
+      disabled={isReadMode}
+      className={styles.input}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
   )
 }

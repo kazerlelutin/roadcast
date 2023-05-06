@@ -40,16 +40,14 @@ async function editor_update(
     },
   })
 
-  trigger(reader, {
+  trigger(reader, TriggerTypes.CHRONICLE, {
     message: chronicleId,
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
-  trigger(editor, {
+  trigger(editor, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
-    type: TriggerTypes.CHRONICLE,
   })
 
   return response.status(200).json(chronicle.editor)

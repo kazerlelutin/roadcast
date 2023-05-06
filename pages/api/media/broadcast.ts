@@ -12,10 +12,9 @@ async function media_broadcast(
   const { media, myLocalId } = JSON.parse(request.body)
   const { reader } = infos
 
-  trigger(reader, {
+  trigger(reader, TriggerTypes.SLIDER, {
     message: media,
     id: myLocalId,
-    type: TriggerTypes.SLIDER,
   })
 
   return response.status(200).json({ message: 'ok' })
