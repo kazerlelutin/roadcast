@@ -42,11 +42,6 @@ async function chronicle_desc(
     id: myLocalId,
   })
 
-  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
-    message: 'refresh',
-    id: myLocalId,
-  })
-
   return response.status(200).json(
     await prisma.chronicle.findUnique({
       where: { id: chronicleId },

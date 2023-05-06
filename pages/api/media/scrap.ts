@@ -102,11 +102,6 @@ async function media_scrap(
       message: chronicleId,
       id: myLocalId,
     })
-
-    trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
-      message: 'refresh',
-      id: myLocalId,
-    })
   } catch (e) {
     return response.status(400).send({ message: 'Error while fetching' })
   }

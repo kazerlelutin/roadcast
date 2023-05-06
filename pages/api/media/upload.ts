@@ -85,11 +85,6 @@ async function media_upload(
     id: myLocalId,
   })
 
-  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
-    message: 'refresh',
-    id: myLocalId,
-  })
-
   return response.status(200).send({ media, quota: globalSize })
 }
 

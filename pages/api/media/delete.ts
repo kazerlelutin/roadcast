@@ -41,11 +41,6 @@ async function media_delete(
     id: myLocalId,
   })
 
-  trigger(broadcast.editor, TriggerTypes.CHRONICLE, {
-    message: 'refresh',
-    id: myLocalId,
-  })
-
   return response.status(200).json({ message: 'ok' })
 }
 
