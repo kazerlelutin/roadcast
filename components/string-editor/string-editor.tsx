@@ -25,7 +25,7 @@ export const StringEditor: FC<StringEditorProps> = ({
   const { post, data } = usePost<string>(link)
   const [value, setValue] = useState<string>(defaultValue)
   const [isReadMode] = useContext(BroadcastReadModeContext)
-  const debouncedValue = useDebounce<string>(value, 2000)
+  const debouncedValue = useDebounce<string>(value, 1000)
 
   useEffect(() => {
     if (value !== defaultValue) setValue(defaultValue)
