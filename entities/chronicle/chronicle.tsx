@@ -19,6 +19,7 @@ export interface IChronicle {
   title: string
   position: number
   text?: string
+  source?: string
   status: ChronicleStatus
   createdAt: Date
   updatedAt: Date
@@ -141,5 +142,6 @@ export enum ChronicleRoutes {
   create = 'chronicle/create',
   updateDesc = 'chronicle/update_desc',
   updateTitle = 'chronicle/update_title',
+  updateSource = 'chronicle/update_source',
   position = 'chronicle/position',
 }

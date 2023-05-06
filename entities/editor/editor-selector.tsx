@@ -15,11 +15,11 @@ export const EditorSelector: React.FC = () => {
   const t = useTranslate({
     SelectEditor: {
       en: 'Select an editor',
-      fr: 'Sélectionnez un éditeur',
+      fr: 'Sélectionnez un chroniqueur',
     },
     noEditor: {
       en: 'No editor',
-      fr: 'Aucun éditeur',
+      fr: 'Aucun chroniqueur',
     },
     create: {
       en: 'Create',
