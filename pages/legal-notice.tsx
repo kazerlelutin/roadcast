@@ -1,5 +1,14 @@
-import { LegalNotice } from '../pages_related/legal-notice/legal-notice'
+import dynamic from 'next/dynamic'
 
+const LegalNotice = dynamic(
+  () =>
+    import('../pages_related/legal-notice/legal-notice').then(
+      (comp) => comp.LegalNotice
+    ),
+  {
+    ssr: false,
+  }
+)
 export default function LegalNoticePage() {
   return <LegalNotice />
 }
