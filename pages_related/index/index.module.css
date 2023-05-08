@@ -1,6 +1,7 @@
 .container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr auto;
   height: 100%;
   gap: var(--dms-gap-xl);
 }
@@ -35,4 +36,8 @@
 
 :is(body[data-color-scheme='light']) .read p {
   color: var(--dms-highlight-dark);
+}
+
+.footer {
+  grid-column: 1/3;
 }

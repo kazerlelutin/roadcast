@@ -10,6 +10,7 @@ import { FullscreenPopinProvider } from '../ui/fullscreen-popin/fullscreen-popin
 import { useTranslate } from '../hooks/translate.hook'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { CookieConsent } from '../components/cookie-consent/cookie-consent'
 
 NProgress.configure({ showSpinner: false, easing: 'ease', speed: 500 })
 Router.events.on('routeChangeStart', () => NProgress.start())
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }) {
             />
           </Head>
           <div id="fullscreen-popin" />
+          <CookieConsent />
           <Component {...pageProps} />
           <Analytics />
         </FullscreenPopinProvider>
