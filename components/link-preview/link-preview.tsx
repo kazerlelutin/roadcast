@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from 'react'
 import styles from './link-preview.module.css'
 import { useFetch } from '../../hooks/fetch.hook'
 import { ChronicleRoutes } from '../../entities/chronicle/chronicle'

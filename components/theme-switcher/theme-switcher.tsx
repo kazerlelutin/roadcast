@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import useLocalState from '../../hooks/local-state.hook'
 import { LightIcon } from '../../ui/icons/light-icon'
 import { LightOpenIcon } from '../../ui/icons/light-open-icon'

@@ -29,13 +29,13 @@
   width: 20px;
 }
 
-.card[data-strech='true'],
-.card[data-strech='true'] .main {
+.card[data-stretch='true'],
+.card[data-stretch='true'] .main {
   height: 100%;
   overflow: hidden;
 }
 
-.card[data-strech='true'] .main {
+.card[data-stretch='true'] .main {
   height: calc(100% - var(--dms-padding) * 4);
   position: relative;
   margin-bottom: var(--dms-padding);

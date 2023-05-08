@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../../ui/button/button'
 import { useTranslate } from '../../hooks/translate.hook'
-import { Col } from '../../ui/col/col'
 import styles from './button-auto-confirm.module.css'
 
 interface ButtonAutoConfirmProps {

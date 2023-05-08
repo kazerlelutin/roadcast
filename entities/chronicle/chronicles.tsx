@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { BroadcastReadModeContext } from '../broadcast/broadcast'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Col } from '../../ui/col/col'
-import { ChronicleCreatebutton } from './chronicle-create-button'
+import { ChronicleCreateButton } from './chronicle-create-button'
 import { ChronicleForm } from './chronicle-form'
 import { ChronicleRefreshButton } from './chronicle-refresh-button'
 import { ChronicleRead } from './chronicle-read'
@@ -29,7 +29,7 @@ export const Chronicles: React.FC = () => {
         <Col key={`${chronicle.id}-${chronicle.updatedAt}`}>
           {!readMode && (
             <Col center>
-              <ChronicleCreatebutton
+              <ChronicleCreateButton
                 position={chronicle.position - 1 < 0 ? 0 : chronicle.position}
               />
             </Col>
@@ -45,7 +45,7 @@ export const Chronicles: React.FC = () => {
       ))}
       {!readMode && (
         <Col center>
-          <ChronicleCreatebutton position={lastPosition} />
+          <ChronicleCreateButton position={lastPosition} />
         </Col>
       )}
     </Col>

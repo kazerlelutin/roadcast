@@ -6,10 +6,11 @@ import { useContext } from 'react'
 import { BroadcastContext } from '../broadcast/broadcast'
 import { useGetMyLocalId } from '../../hooks/get-my-local-id.hook'
 
-interface ChronicleCreatebuttonProps {
+interface ChronicleCreateButtonProps {
   position: number
 }
-export const ChronicleCreatebutton: React.FC<ChronicleCreatebuttonProps> = ({
+
+export const ChronicleCreateButton: React.FC<ChronicleCreateButtonProps> = ({
   position,
 }) => {
   const t = useTranslate({

@@ -55,11 +55,8 @@ export const ChronicleForm: React.FC = () => {
               setChronicle({ ...chronicle, source: value })
               setChronicles([
                 ...chronicles.map((chronicleEl) => {
-                  console.log(chronicleEl)
                   if (chronicleEl.id === chronicle.id)
                     chronicleEl.source = value
-
-                  console.log(chronicleEl)
                   return chronicleEl
                 }),
               ])

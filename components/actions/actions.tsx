@@ -3,27 +3,16 @@ import {
   BroadcastReadModeContext,
   BroadcastFocusContext,
 } from '../../entities/broadcast/broadcast'
-// import { LayoutContext } from '../../entities/layout/layout'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Button } from '../../ui/button/button'
-import { Col } from '../../ui/col/col'
 import { MiniLoaderContext } from '../mini-loader/mini-loader'
 import { Flex } from '../../ui/flex/flex'
 
 export const Actions: React.FC = () => {
-  // const { layoutIsDraggable, setLayoutIsDraggable } = useContext(LayoutContext)
   const [loading] = useContext(MiniLoaderContext)
   const [readMode, setReadMode] = useContext(BroadcastReadModeContext)
   const [focusMode, setFocusMode] = useContext(BroadcastFocusContext)
   const t = useTranslate({
-    lockLayout: {
-      en: 'Lock layout',
-      fr: 'Verrouiller le layout',
-    },
-    unlockLayout: {
-      en: 'Unlock layout',
-      fr: 'Déverrouiller le layout',
-    },
     editMode: {
       en: 'Edit mode',
       fr: 'Mode édition',
@@ -44,14 +33,6 @@ export const Actions: React.FC = () => {
 
   return (
     <Flex>
-      {/**  
-      <Button
-        onClick={() => setLayoutIsDraggable(!layoutIsDraggable)}
-        variant={layoutIsDraggable ? 'red' : 'normal'}
-      >
-        {t(layoutIsDraggable ? 'lockLayout' : 'unlockLayout')}
-      </Button> 
-      */}
       <Button
         loading={loading}
         onClick={() => setReadMode(!readMode)}

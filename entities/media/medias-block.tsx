@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react'
-import { useTranslate } from '../../hooks/translate.hook'
 import { Col } from '../../ui/col/col'
 import { MediaProvider, MediasContext } from './media'
 import { getResume } from '../../utils/get-resume'
@@ -7,24 +6,14 @@ import {
   ChronicleToScreenContext,
   ChroniclesContext,
 } from '../chronicle/chronicle'
-import { useRouter } from 'next/router'
 import { MediaAddForm } from './media-add-form'
 import { MediaWithControls } from './media-with-controls'
 import styles from './media-styles/media-block.module.css'
 
 export const MediasBlock: React.FC = () => {
-  const t = useTranslate({
-    noChronicleSelect: {
-      en: 'Select chronicle to see medias',
-      fr: 'Sélectionnez un chronique pour voir les médias',
-    },
-  })
-  const router = useRouter()
   const [medias] = useContext(MediasContext)
   const [chronicles] = useContext(ChroniclesContext)
-  const [currentChronicleId, setCurrentChronicleId] = useContext(
-    ChronicleToScreenContext
-  )
+  const [currentChronicleId] = useContext(ChronicleToScreenContext)
   const currentChronicle = useMemo(() => {
     if (!currentChronicleId) return null
     const chronicle = chronicles.find((c) => c.id === currentChronicleId)
@@ -33,14 +22,6 @@ export const MediasBlock: React.FC = () => {
       label: chronicle.title,
     }
   }, [currentChronicleId, chronicles])
-
-  const handleChangeCurrentChronicle = (option: {
-    label: string
-    value: string
-  }) => {
-    setCurrentChronicleId(option.value)
-    router.push(`#${option.value}`)
-  }
 
   return (
     <Col>
