@@ -11,7 +11,8 @@
   flex-wrap: wrap;
   gap: var(--dms-gap) var(--dms-gap);
   border-bottom: 1px solid var(--dms-highlight-dark);
-  padding: var(--dms-padding-sm);
+  padding: var(--dms-padding-sm) var(--dms-padding-sm) var(--dms-padding)
+    var(--dms-padding-sm);
   z-index: 2;
   background: var(--dms-bg-dark);
   transition: 200ms ease-in-out;
@@ -25,6 +26,7 @@
   border-radius: var(--dms-border-radius);
   padding: var(--dms-padding-sm);
   border: 1px solid var(--dms-card);
+  min-width: 25px;
   transition: 200ms ease-in-out;
 }
 
@@ -36,4 +38,14 @@
 .section {
   display: flex;
   gap: var(--dms-gap-sm);
+}
+
+.icon svg {
+  width: 12px;
+  fill: white;
+  transition: 200ms ease-in-out;
+}
+
+.icon:hover svg {
+  fill: var(--dms-bg-dark);
 }

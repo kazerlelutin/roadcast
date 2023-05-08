@@ -3,6 +3,16 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
 import { useTranslate } from '../../hooks/translate.hook'
+import { ParagraphIcon } from '../../ui/icons/paragraph-icon'
+import { BulletListIcon } from '../../ui/icons/bullet-list-icon'
+import { OrderListIcon } from '../../ui/icons/order-list-icon'
+import { QuoteIcon } from '../../ui/icons/quote-icon'
+import { UndoIcon } from '../../ui/icons/undo-icon'
+import { RedoIcon } from '../../ui/icons/redo-icon'
+import { CodeIcon } from '../../ui/icons/code-icon'
+import { CodeBlockIcon } from '../../ui/icons/code-block-icon'
+import { HorizontalRuleIcon } from '../../ui/icons/horizontal-rule'
+import { ReturnIcon } from '../../ui/icons/return-icon'
 
 interface EditorProps {
   onChange: (value: string) => void
@@ -10,136 +20,7 @@ interface EditorProps {
 }
 
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
-  const t = useTranslate({
-    bold: {
-      en: 'bold',
-      fr: 'gras',
-    },
-    italic: {
-      en: 'italic',
-      fr: 'italique',
-    },
-    strike: {
-      en: 'strike',
-      fr: 'barré',
-    },
-    code: {
-      en: 'code',
-      fr: 'code',
-    },
-    clearMarks: {
-      en: 'clear marks',
-      fr: 'effacer les marques',
-    },
-    clearNodes: {
-      en: 'clear nodes',
-      fr: 'effacer les noeuds',
-    },
-    paragraph: {
-      en: 'paragraph',
-      fr: 'paragraphe',
-    },
-    heading: {
-      en: 'heading',
-      fr: 'titre',
-    },
-    blockquote: {
-      en: 'blockquote',
-      fr: 'citation',
-    },
-    codeBlock: {
-      en: 'code block',
-      fr: 'bloc de code',
-    },
-    bulletList: {
-      en: 'bullet list',
-      fr: 'liste à puces',
-    },
-    orderedList: {
-      en: 'ordered list',
-      fr: 'liste ordonnée',
-    },
-    todoList: {
-      en: 'todo list',
-      fr: 'liste à faire',
-    },
-    horizontalRule: {
-      en: 'horizontal rule',
-      fr: 'ligne horizontale',
-    },
-    link: {
-      en: 'link',
-      fr: 'lien',
-    },
-    image: {
-      en: 'image',
-      fr: 'image',
-    },
-    table: {
-      en: 'table',
-      fr: 'tableau',
-    },
-    tableCell: {
-      en: 'table cell',
-      fr: 'cellule de tableau',
-    },
-    tableHeader: {
-      en: 'table header',
-      fr: 'en-tête de tableau',
-    },
-    tableRow: {
-      en: 'table row',
-      fr: 'ligne de tableau',
-    },
-    hardBreak: {
-      en: 'hard break',
-      fr: 'saut de ligne',
-    },
-    history: {
-      en: 'history',
-      fr: 'historique',
-    },
-    undo: {
-      en: 'undo',
-      fr: 'annuler',
-    },
-    redo: {
-      en: 'redo',
-      fr: 'rétablir',
-    },
-    clearHistory: {
-      en: 'clear history',
-      fr: 'effacer l’historique',
-    },
-    text: {
-      en: 'text',
-      fr: 'texte',
-    },
-    heading1: {
-      en: 'heading 1',
-      fr: 'titre 1',
-    },
-    heading2: {
-      en: 'heading 2',
-      fr: 'titre 2',
-    },
-    heading3: {
-      en: 'heading 3',
-      fr: 'titre 3',
-    },
-    heading4: {
-      en: 'heading 4',
-      fr: 'titre 4',
-    },
-    heading5: {
-      en: 'heading 5',
-      fr: 'titre 5',
-    },
-    heading6: {
-      en: 'heading 6',
-      fr: 'titre 6',
-    },
-  })
+  const t = useTranslate({})
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -171,14 +52,18 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               onClick={() => editor.chain().focus().undo().run()}
               disabled={!editor.can().chain().focus().undo().run()}
             >
-              {t('undo')}
+              <div className={styles.icon}>
+                <UndoIcon />
+              </div>
             </button>
             <button
               type="button"
               onClick={() => editor.chain().focus().redo().run()}
               disabled={!editor.can().chain().focus().redo().run()}
             >
-              {t('redo')}
+              <div className={styles.icon}>
+                <RedoIcon />
+              </div>
             </button>
           </div>
           <div className={styles.section}>
@@ -188,7 +73,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleBold().run()}
               className={editor.isActive('bold') ? 'is-active' : ''}
             >
-              <b>{t('bold')}</b>
+              <b>B</b>
             </button>
             <button
               type="button"
@@ -196,7 +81,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleItalic().run()}
               className={editor.isActive('italic') ? 'is-active' : ''}
             >
-              <i>{t('italic')}</i>
+              <i>i</i>
             </button>
             <button
               type="button"
@@ -204,10 +89,26 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleStrike().run()}
               className={editor.isActive('strike') ? 'is-active' : ''}
             >
-              <s>{t('strike')}</s>
+              <s>S</s>
+            </button>
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().toggleStrike().run()}
+              disabled={!editor.can().chain().focus().toggleStrike().run()}
+              className={editor.isActive('underline') ? 'is-active' : ''}
+            >
+              <u>U</u>
             </button>
           </div>
-
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setParagraph().run()}
+            className={editor.isActive('paragraph') ? 'is-active' : ''}
+          >
+            <div className={styles.icon}>
+              <ParagraphIcon />
+            </div>
+          </button>
           <div className={styles.section}>
             <button
               type="button"
@@ -218,7 +119,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 1 }) ? 'is-active' : ''
               }
             >
-              {t('heading1')}
+              <b>H1</b>
             </button>
             <button
               type="button"
@@ -229,7 +130,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 2 }) ? 'is-active' : ''
               }
             >
-              {t('heading2')}
+              <b>H2</b>
             </button>
             <button
               type="button"
@@ -240,7 +141,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 3 }) ? 'is-active' : ''
               }
             >
-              {t('heading3')}
+              <b>H3</b>
             </button>
             <button
               type="button"
@@ -251,7 +152,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 4 }) ? 'is-active' : ''
               }
             >
-              {t('heading4')}
+              <b>H4</b>
             </button>
             <button
               type="button"
@@ -262,7 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 5 }) ? 'is-active' : ''
               }
             >
-              {t('heading5')}
+              <b>H5</b>
             </button>
             <button
               type="button"
@@ -273,38 +174,36 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
                 editor.isActive('heading', { level: 6 }) ? 'is-active' : ''
               }
             >
-              {t('heading6')}
+              <b>H6</b>
             </button>
           </div>
 
           <div className={styles.section}>
             <button
               type="button"
-              onClick={() => editor.chain().focus().setParagraph().run()}
-              className={editor.isActive('paragraph') ? 'is-active' : ''}
-            >
-              {t('paragraph')}
-            </button>
-
-            <button
-              type="button"
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               className={editor.isActive('bulletList') ? 'is-active' : ''}
             >
-              {t('bulletList')}
+              <div className={styles.icon}>
+                <BulletListIcon />
+              </div>
             </button>
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
               className={editor.isActive('orderedList') ? 'is-active' : ''}
             >
-              {t('orderedList')}
+              <div className={styles.icon}>
+                <OrderListIcon />
+              </div>
             </button>
             <button
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
               className={editor.isActive('blockquote') ? 'is-active' : ''}
             >
-              {t('blockquote')}
+              <div className={styles.icon}>
+                <QuoteIcon />
+              </div>
             </button>
           </div>
           <div className={styles.section}>
@@ -314,14 +213,18 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               disabled={!editor.can().chain().focus().toggleCode().run()}
               className={editor.isActive('code') ? 'is-active' : ''}
             >
-              code
+              <div className={styles.icon}>
+                <CodeIcon />
+              </div>
             </button>
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               className={editor.isActive('codeBlock') ? 'is-active' : ''}
             >
-              {t('codeBlock')}
+              <div className={styles.icon}>
+                <CodeBlockIcon />
+              </div>
             </button>
           </div>
 
@@ -330,13 +233,17 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               type="button"
               onClick={() => editor.chain().focus().setHorizontalRule().run()}
             >
-              {t('horizontalRule')}
+              <div className={styles.icon}>
+                <HorizontalRuleIcon />
+              </div>
             </button>
             <button
               type="button"
               onClick={() => editor.chain().focus().setHardBreak().run()}
             >
-              {t('hardBreak')}
+              <div className={styles.icon}>
+                <ReturnIcon />
+              </div>
             </button>
           </div>
         </div>
