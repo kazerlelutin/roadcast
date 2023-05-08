@@ -4,6 +4,7 @@ import style from './index.module.css'
 import { BroadcastCreateForm } from '../../entities/broadcast/broadcast-create-form'
 import { BroadcastList } from '../../entities/broadcast/broadcast-list'
 import { Gridbox } from '../../ui/grid-box/grid-box'
+import { Footer } from '../../components/footer/footer'
 
 export default function Index() {
   const t = useTranslate()
@@ -21,6 +22,9 @@ export default function Index() {
         <div className={style.read}>
           <h2>{t('titleAccueil')}</h2>
           <p>{t('appSummary')}</p>
+        </div>
+        <div className={style.footer}>
+          <Footer />
         </div>
       </div>
     </BasicLayout>

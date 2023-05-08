@@ -1,0 +1,7 @@
+.container {
+  max-width: 500px;
+  margin-bottom: var(--dms-padding-lg);
+}
+.container p {
+  margin-bottom: var(--dms-padding);
+}

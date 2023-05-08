@@ -138,6 +138,19 @@ const pageTranslate = {
     en: 'Editor',
     fr: 'Chroniqueur',
   },
+
+  about: {
+    fr: 'À propos',
+    en: 'About',
+  },
+  legalNotice: {
+    fr: 'Mentions légales',
+    en: 'Legal notice',
+  },
+  contact: {
+    fr: 'Contact',
+    en: 'Contact',
+  },
 }
 
 export default pageTranslate
