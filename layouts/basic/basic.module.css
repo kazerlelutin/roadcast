@@ -14,7 +14,13 @@
   top: 0;
   right: 0;
   left: 0;
-  bottom: 0;
+  bottom: 45px;
   overflow-y: auto;
   padding: var(--dms-gap);
+}
+
+@media screen and (min-width: 600px) {
+  .main {
+    bottom: 0px;
+  }
 }

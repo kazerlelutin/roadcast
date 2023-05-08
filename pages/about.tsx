@@ -1,4 +1,11 @@
-import { About } from '../pages_related/about/about'
+import dynamic from 'next/dynamic'
+
+const About = dynamic(
+  () => import('../pages_related/about/about').then((comp) => comp.About),
+  {
+    ssr: false,
+  }
+)
 
 export default function AboutPage() {
   return <About />
