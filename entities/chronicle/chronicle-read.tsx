@@ -7,9 +7,7 @@ import styles from './chronicle-styles/chronicle-read.module.css'
 import { ChronicleWrapper } from './chronicle-wrapper'
 import { BroadcastFocusContext } from '../broadcast/broadcast'
 import { MediaList } from '../media/media-list'
-import { Label } from '../../ui/label/label'
 import { Col } from '../../ui/col/col'
-import { Flex } from '../../ui/flex/flex'
 import { LinkPreview } from '../../components/link-preview/link-preview'
 
 export const ChronicleRead: React.FC = () => {

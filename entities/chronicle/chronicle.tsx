@@ -4,6 +4,7 @@ import { createContext } from 'react'
 import { TriggerTypes, useSocketTrigger } from '../../components/socket'
 import { TEntity } from '../../types/entity.type'
 import { BroadcastContext } from '../broadcast/broadcast'
+import { IMedia } from '../media/media'
 
 // INTERFACES ---------------------------------------------------------------
 
@@ -23,8 +24,7 @@ export interface IChronicle {
   status: ChronicleStatus
   createdAt: Date
   updatedAt: Date
-  //TODO type this
-  medias: any[]
+  medias: IMedia[]
   editor: any
 }
 

@@ -7,7 +7,7 @@ interface CardProps {
   children: ReactNode
   type?: 'classic' | 'highlight' | 'warning' | 'info'
   title?: string | ReactElement
-  strech?: boolean
+  stretch?: boolean
   onClose?: () => void
 }
 export const Card: FC<CardProps> = ({
@@ -15,10 +15,10 @@ export const Card: FC<CardProps> = ({
   type,
   title,
   onClose,
-  strech,
+  stretch,
 }) => {
   return (
-    <div className={styles.card} data-type={type} data-strech={strech}>
+    <div className={styles.card} data-type={type} data-stretch={stretch}>
       {(title || onClose) && (
         <div className={styles.title}>
           <Flex spaceBetween>
