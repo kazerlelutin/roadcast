@@ -2,7 +2,6 @@ import styles from './editor.module.css'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
-import { useTranslate } from '../../hooks/translate.hook'
 import { ParagraphIcon } from '../../ui/icons/paragraph-icon'
 import { BulletListIcon } from '../../ui/icons/bullet-list-icon'
 import { OrderListIcon } from '../../ui/icons/order-list-icon'
@@ -20,7 +19,6 @@ interface EditorProps {
 }
 
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
-  const t = useTranslate({})
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
