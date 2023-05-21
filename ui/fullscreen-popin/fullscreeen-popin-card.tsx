@@ -16,7 +16,7 @@ export const FullScreenPopinCard: FC<FullScreenPopinCardProps> = ({
   return (
     isOpen && (
       <div className={styles.container}>
-        <div className={styles.content}>
+        <div className={styles.modale}>
           <Card title={title} onClose={() => setIsOpen(false)} type="classic">
             {children}
           </Card>
