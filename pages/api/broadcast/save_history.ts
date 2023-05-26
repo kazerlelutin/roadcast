@@ -4,7 +4,7 @@ import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
 
 async function broadcast_save_history(
-  request: NextApiRequest,
+  _request: NextApiRequest,
   response: NextApiResponse,
   infos: BroadcastCtx
 ) {

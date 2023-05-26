@@ -13,7 +13,7 @@ async function chronicle_source(
   const { editor, myLocalId } = infos
   const { source, id: chronicleId } = JSON.parse(request.body)
 
-  if (!editor && !source && chronicleId)
+  if (!editor && chronicleId)
     return response.status(401).json({ error: 'Unauthorized' })
 
   const broadcast = await prisma.broadcast.findUnique({
