@@ -22,10 +22,13 @@ export const StringEditor: FC<StringEditorProps> = ({
   id,
   fontSize = 'normal',
 }) => {
-  const { post, data } = usePost<string>(link)
+  const { post } = usePost<string>(link, (data) => {
+    setValue(data?.[name])
+    callback?.(data?.[name])
+  })
   const [value, setValue] = useState<string>(defaultValue)
   const [isReadMode] = useContext(BroadcastReadModeContext)
-  const debouncedValue = useDebounce<string>(value, 300)
+  const debouncedValue = useDebounce<string>(value, 500)
 
   useEffect(() => {
     if (value !== defaultValue) setValue(defaultValue)
@@ -38,13 +41,6 @@ export const StringEditor: FC<StringEditorProps> = ({
       id,
     })
   }, [debouncedValue])
-
-  useEffect(() => {
-    if (data && data !== value && data?.[name]) {
-      setValue(data[name])
-      callback?.(data[name])
-    }
-  }, [data])
 
   if (isReadMode) return <div className={styles.input}>{value}</div>
 

@@ -40,7 +40,7 @@ export const ChronicleRead: React.FC = () => {
         </p>
 
         <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
-        {chronicle.source && (
+        {chronicle.source && chronicle.source.match(/http/) && (
           <Col center>
             <h3>{t('source')}</h3>
             <LinkPreview url={chronicle.source} />
