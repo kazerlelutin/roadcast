@@ -1,33 +1,28 @@
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Button } from '../../ui/button/button'
 import { Col } from '../../ui/col/col'
 import { Info } from '../../ui/info/info'
-import { ChronicleContext } from '../chronicle/chronicle'
-import { BroadcastContext } from '../broadcast/broadcast'
-import { FullscreenPopinContext } from '../../ui/fullscreen-popin/fullscreen-popin.context'
+import { useChronicles } from '../chronicle/chronicle'
+import { useBroadcast } from '../broadcast/broadcast'
 import { usePost } from '../../hooks/post.hook'
 import { IMedia, MediaRoutes } from './media'
+import { useFullscreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
 
 export const MediaAddOnline: React.FC = () => {
   const [link, setLink] = useState<string>('')
-  const [{ id, editor }] = useContext(BroadcastContext)
-  const [chronicle, setChronicle] = useContext(ChronicleContext)
-  const [_isOpen, setIsOpen] = useContext(FullscreenPopinContext)
+  const { id, editor } = useBroadcast()
+  const { chronicle, addMedia } = useChronicles()
+  const { closeModale } = useFullscreenPopin()
 
   const { post, loading, data } = usePost<IMedia[]>(
     MediaRoutes.scrap,
     (medias) => {
       if (medias.length === 1) {
-        setChronicle({
-          ...chronicle,
-          medias: [...chronicle.medias, medias[0]],
-        })
-        setIsOpen(false)
-
+        addMedia(medias[0])
+        closeModale()
         return
       }
-      //TODO
     }
   )
 
@@ -57,21 +52,13 @@ export const MediaAddOnline: React.FC = () => {
     })
   }
 
-  //TODO
-  /**
-   * - On scrap
-   * - on remplace le form par le selecteur de media
-   * - on sélectionne les médias
-   * - on renvoi le tableau de médias si un seul média, on renvoi le média et on sauvegarde
-   *
-   */
   return (
     <Col>
       <h2>{t('addTitle')}</h2>
       <Info>{t('addMediaOnlineInfo')}</Info>
 
       {data ? (
-        <p>ICI on selectionne les data, un comp à part</p>
+        <p>Scrapping function is not available</p>
       ) : (
         <input
           onChange={(e) => setLink(e.target.value)}

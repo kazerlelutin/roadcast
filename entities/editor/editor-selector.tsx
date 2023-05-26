@@ -1,32 +1,18 @@
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import { useContext } from 'react'
 import { EditorRoutes, IEditor } from './editor'
 import reactSelectStyle from '../../styles/reactSelectStyle'
 import { useTranslate } from '../../hooks/translate.hook'
-import { BroadcastContext } from '../broadcast/broadcast'
+import { useBroadcast } from '../broadcast/broadcast'
 import { useSimpleFetch } from '../../hooks/simple-fetch.hook'
-import { ChronicleContext, ChroniclesContext } from '../chronicle/chronicle'
+import { IChronicle, useChronicles } from '../chronicle/chronicle'
 import { useState } from 'react'
 
 export const EditorSelector: React.FC = () => {
-  const [broadcast] = useContext(BroadcastContext)
-  const [chronicle, setChronicle] = useContext(ChronicleContext)
+  const t = useTranslate()
+  const { broadcast } = useBroadcast()
+  const { chronicle, updateChronicleField } = useChronicles()
   const { getData } = useSimpleFetch()
-  const t = useTranslate({
-    SelectEditor: {
-      en: 'Select an editor',
-      fr: 'Sélectionnez un chroniqueur',
-    },
-    noEditor: {
-      en: 'No editor',
-      fr: 'Aucun chroniqueur',
-    },
-    create: {
-      en: 'Create',
-      fr: 'Créer',
-    },
-  })
-  const [chronicles, setChronicles] = useContext(ChroniclesContext)
+
   const [value, setValue] = useState<{ label: string; value: string }>(
     chronicle?.editor
       ? {
@@ -62,12 +48,7 @@ export const EditorSelector: React.FC = () => {
       value: newEditor.id,
       label: newEditor.name,
     })
-    setChronicle({ ...chronicle, editor: newEditor })
-    setChronicles(
-      chronicles.map((chro) =>
-        chro.id === chronicle.id ? { ...chro, editor: newEditor } : chro
-      )
-    )
+    updateChronicleField<IChronicle['editor']>('editor', newEditor)
   }
 
   const updateEditor = async (id: string) => {
@@ -80,11 +61,7 @@ export const EditorSelector: React.FC = () => {
       value: newEditor.id,
       label: newEditor.name,
     })
-    setChronicles([
-      ...chronicles.map((chro) =>
-        chro.id === chronicle.id ? { ...chro, editor: newEditor } : chro
-      ),
-    ])
+    updateChronicleField<IChronicle['editor']>('editor', newEditor)
   }
 
   return (

@@ -4,9 +4,9 @@ import { EDropZone } from '../../types/drop-zone'
 import { useContext } from 'react'
 import {
   ChronicleRoutes,
-  ChronicleThreeContext,
   ChroniclesContext,
   IChronicle,
+  useThreeChronicle,
 } from './chronicle'
 import { usePost } from '../../hooks/post.hook'
 
@@ -17,26 +17,16 @@ interface IChronicleThreeLineDrop {
 export const ChronicleThreeLineDrop: React.FC<IChronicleThreeLineDrop> = ({
   position,
 }) => {
-  const [isDragging] = useContext(ChronicleThreeContext)
-  const [chronicles, setChronicles] = useContext(ChroniclesContext)
+  const { isDragging, updateThree } = useThreeChronicle()
   const { post } = usePost<IChronicle[]>(ChronicleRoutes.position)
   const [collectedProps, drop] = useDrop(() => ({
     accept: EDropZone.CHRONICLE,
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
-    drop: async (item: { id: string }) => {
-      post({ position, id: item.id })
-      setChronicles(
-        chronicles
-          .map((chronicle) => {
-            if (chronicle.id === item.id) {
-              chronicle.position = position
-            } else if (chronicle.position >= position) chronicle.position += 1
-            return chronicle
-          })
-          .sort((a, b) => a.position - b.position)
-      )
+    drop: async ({ id }: { id: string }) => {
+      post({ position, id })
+      updateThree(id, position)
     },
   }))
 

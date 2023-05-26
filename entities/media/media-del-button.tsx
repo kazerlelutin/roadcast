@@ -1,18 +1,14 @@
-import { useContext } from 'react'
 import { ButtonAutoConfirm } from '../../components/button-auto-confirm/button-auto-confirm'
 import { useTranslate } from '../../hooks/translate.hook'
-import { MediaContext, MediaRoutes } from './media'
+import { MediaRoutes, useMedia } from './media'
 import { usePost } from '../../hooks/post.hook'
-import { ChronicleContext } from '../chronicle/chronicle'
+import { useChronicles } from '../chronicle/chronicle'
 
 export const MediaDelButton: React.FC = () => {
-  const [media] = useContext(MediaContext)
-  const [chronicle, setChronicle] = useContext(ChronicleContext)
+  const { media } = useMedia()
+  const { chronicle, deleteMedia } = useChronicles()
   const { post } = usePost<{ message: string }>(MediaRoutes.delete, (data) => {
-    setChronicle({
-      ...chronicle,
-      medias: chronicle.medias.filter((m) => m.id !== media.id),
-    })
+    deleteMedia(media.id)
   })
   const t = useTranslate({
     deleteMedia: {

@@ -1,36 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Flex } from '../../ui/flex/flex'
 import { GrabIcon } from '../../ui/icons/grab-icon'
-import {
-  ChronicleContext,
-  ChronicleThreeContext,
-  ChronicleToScreenContext,
-} from './chronicle'
+import { useThreeChronicle } from './chronicle'
 import styles from './chronicle-styles/chronicle-three-line.module.css'
 import { useDrag } from 'react-dnd'
 import { EDropZone } from '../../types/drop-zone'
 import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
 import { getResume } from '../../utils/get-resume'
 import { Col } from '../../ui/col/col'
-import { BroadcastReadModeContext } from '../broadcast/broadcast'
+import { useModes } from '../broadcast/broadcast'
 import { useTranslate } from '../../hooks/translate.hook'
+import { useChronicles } from './chronicle'
 
 export const ChronicleThreeLine: React.FC = () => {
-  const t = useTranslate({
-    noEditor: {
-      en: 'No editor',
-      fr: 'Aucun chroniqueur',
-    },
-  })
-  const [readMode] = useContext(BroadcastReadModeContext)
+  const t = useTranslate()
+  const { isReadMode } = useModes()
+  const { isDragging, updateDrag } = useThreeChronicle()
+  const { currentChronicle, chronicle, updateCurrentChronicle } =
+    useChronicles()
 
-  const [currentChronicle, setCurrentChronicle] = useContext(
-    ChronicleToScreenContext
-  )
-  const [isDragging, setIsDragging] = useContext(ChronicleThreeContext)
-  const [chronicle] = useContext(ChronicleContext)
-  isDragging
   const [collected, drag, dragPreview] = useDrag(() => ({
     type: EDropZone.CHRONICLE,
     item: { id: chronicle.id },
@@ -40,7 +29,7 @@ export const ChronicleThreeLine: React.FC = () => {
   }))
 
   useEffect(() => {
-    setIsDragging(collected.isDragging)
+    updateDrag(collected.isDragging)
   }, [collected.isDragging])
 
   if (collected.isDragging) return <div ref={dragPreview} />
@@ -50,13 +39,13 @@ export const ChronicleThreeLine: React.FC = () => {
       <div className={styles.dragZone} ref={drag}>
         <Flex alignItemCenter>
           <div className={styles.grab}>
-            {readMode ? `#${chronicle.position + 1}` : <GrabIcon />}
+            {isReadMode ? `#${chronicle.position + 1}` : <GrabIcon />}
           </div>
           <Col smallGap>
             <a
               className={styles.title}
               href={`#${chronicle.id}`}
-              onClick={() => setCurrentChronicle(chronicle.id)}
+              onClick={() => updateCurrentChronicle(chronicle.id)}
               data-current={currentChronicle === chronicle.id}
             >
               {getResume(chronicle.title, 20)}

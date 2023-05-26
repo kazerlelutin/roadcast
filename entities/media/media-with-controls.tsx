@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext } from 'react'
-import { MediaContext } from './media'
+import { useMedia } from './media'
 import styles from './media-styles/media-with-controls.module.css'
 import ReactPlayer from 'react-player'
 import { FullScreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
@@ -10,7 +9,7 @@ import { MediaDelButton } from './media-del-button'
 import { MediaBroadcastButton } from './media-broadcast-button'
 
 export const MediaWithControls: React.FC = () => {
-  const [media] = useContext(MediaContext)
+  const { media } = useMedia()
 
   return (
     <FullScreenPopin

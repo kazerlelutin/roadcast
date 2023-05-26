@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext } from 'react'
 import styles from './media-styles/media-display.module.css'
-import { MediaContext } from './media'
+import { useMedia } from './media'
 import ReactPlayer from 'react-player'
 
 export const MediaDisplay: React.FC = () => {
-  const [media] = useContext(MediaContext)
+  const { media } = useMedia()
 
   return (
     <div className={styles.container}>

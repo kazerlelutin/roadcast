@@ -146,3 +146,180 @@ export enum ChronicleRoutes {
   position = 'chronicle/position',
   previewSource = 'chronicle/preview_source',
 }
+
+// HOOKS --------------------------------------------------------------------
+
+export const useThreeChronicle = () => {
+  const ctx = useContext(ChronicleThreeContext)
+  const ctxChronicles = useContext(ChroniclesContext)
+
+  if (!ctx || !ctxChronicles)
+    throw new Error(
+      'useThreeChronicle fonctionne avec le contexte ChronicleThreeContext et ChroniclesContext'
+    )
+
+  const [isDragging, setIsDragging] = ctx
+  const [chronicles, setChronicles] = ctxChronicles
+
+  const activeDragging = () => {
+    setIsDragging(true)
+  }
+  const disabledDragging = () => {
+    setIsDragging(false)
+  }
+
+  const updateDrag = (value: boolean) => {
+    setIsDragging(value)
+  }
+
+  const updateThree = (id: string, position: number) => {
+    setChronicles(
+      chronicles
+        .map((chronicle) => {
+          if (chronicle.id === id) {
+            chronicle.position = position
+          } else if (chronicle.position >= position) chronicle.position += 1
+          return chronicle
+        })
+        .sort((a, b) => a.position - b.position)
+    )
+  }
+
+  return {
+    isDragging,
+    activeDragging,
+    disabledDragging,
+    chronicles,
+    updateThree,
+    updateDrag,
+  }
+}
+
+export const useCreateChronicle = () => {
+  const ctx = useContext(ChroniclesContext)
+
+  if (!ctx)
+    throw new Error(
+      'useCreateChronicle fonctionne avec le contexte ChroniclesContext'
+    )
+
+  const [_, setChronicles] = ctx
+  const createChronicle = (chronicles: IChronicle[]) => {
+    setChronicles(chronicles)
+  }
+
+  return {
+    createChronicle,
+  }
+}
+
+export const useShowChronicleButton = () => {
+  const ctx = useContext(ChronicleRefreshButtonContext)
+
+  if (!ctx)
+    throw new Error(
+      'useShowChronicleButton fonctionne avec le contexte ChronicleRefreshButtonContext'
+    )
+
+  const [showRefreshChronicleButton, setDisplayButton] = ctx
+
+  const showChronicleButton = () => {
+    setDisplayButton(true)
+  }
+
+  const hideChronicleButton = () => {
+    setDisplayButton(false)
+  }
+
+  return {
+    showRefreshChronicleButton,
+    showChronicleButton,
+    hideChronicleButton,
+  }
+}
+
+export const useLastPosition = () => {
+  const ctx = useContext(ChroniclesContext)
+  if (!ctx)
+    throw new Error(
+      'useChronicle fonctionne avec le contexte  ChroniclesContext '
+    )
+
+  const [chronicles] = ctx
+  const lastPosition =
+    chronicles.length === 0 ? 0 : chronicles.at(-1).position + 1
+
+  return {
+    lastPosition,
+    chronicles,
+  }
+}
+
+export const useChronicles = () => {
+  const currentChronicleCtx = useContext(ChronicleToScreenContext)
+  const ctx = useContext(ChronicleContext)
+  const chroniclesCtx = useContext(ChroniclesContext)
+
+  if (ctx === undefined || currentChronicleCtx === undefined)
+    throw new Error(
+      'useChronicle fonctionne avec le contexte ChronicleToScreenContext, ChronicleContext et ChroniclesContext '
+    )
+
+  const [chronicle, setChronicle] = ctx
+  const [currentChronicle, setCurrentChronicle] = currentChronicleCtx
+  const [chronicles, setChronicles] = chroniclesCtx
+
+  const addMedia = (media: IMedia) => {
+    setChronicle((prev) => ({ ...prev, medias: [...prev.medias, media] }))
+  }
+
+  const deleteMedia = (mediaId: string) => {
+    setChronicle((prev) => ({
+      ...prev,
+      medias: prev.medias.filter((m) => m.id !== mediaId),
+    }))
+  }
+
+  const updateCurrentChronicle = (chronicleId: string) => {
+    setCurrentChronicle(chronicleId)
+  }
+
+  const updateChronicle = (chronicle: IChronicle) => {
+    setChronicle(chronicle)
+  }
+
+  const updateChronicles = (chronicle: IChronicle[]) => {
+    setChronicles(chronicle)
+  }
+
+  const deleteChronicle = (chronicleId: string) => {
+    setChronicles((prev) => prev.filter((c) => c.id !== chronicleId))
+  }
+
+  function updateChronicleField<K extends keyof IChronicle>(
+    field: K,
+    value: IChronicle[K]
+  ) {
+    setChronicle((prev) => ({ ...prev, [field]: value }))
+    setChronicles((prev) =>
+      prev.map((chronicleEl) => {
+        if (chronicleEl.id === chronicle.id) chronicleEl[field] = value
+        return chronicleEl
+      })
+    )
+  }
+
+  return {
+    chronicle,
+    currentChronicle,
+    setCurrentChronicle,
+    chronicles,
+    addMedia,
+    deleteMedia,
+    updateChronicle,
+    updateChronicles,
+    deleteChronicle,
+    updateChronicleField,
+    updateCurrentChronicle,
+  }
+}

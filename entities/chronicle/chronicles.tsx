@@ -1,7 +1,5 @@
-import { ChronicleProvider, ChroniclesContext } from './chronicle'
-import { useContext } from 'react'
-import { BroadcastReadModeContext } from '../broadcast/broadcast'
-import { useTranslate } from '../../hooks/translate.hook'
+import { ChronicleProvider, useLastPosition } from './chronicle'
+import { useModes } from '../broadcast/broadcast'
 import { Col } from '../../ui/col/col'
 import { ChronicleCreateButton } from './chronicle-create-button'
 import { ChronicleForm } from './chronicle-form'
@@ -10,24 +8,15 @@ import { ChronicleRead } from './chronicle-read'
 import { EditorProvider } from '../editor/editor'
 
 export const Chronicles: React.FC = () => {
-  const [chronicles] = useContext(ChroniclesContext)
-  const [readMode] = useContext(BroadcastReadModeContext)
-
-  const lastPosition =
-    chronicles.length === 0 ? 0 : chronicles.at(-1).position + 1
-  const t = useTranslate({
-    noBroadcast: {
-      en: 'No broadcast selected',
-      fr: 'Aucune émission sélectionnée',
-    },
-  })
+  const { chronicles, lastPosition } = useLastPosition()
+  const { isReadMode } = useModes()
 
   return (
     <Col padding>
       <ChronicleRefreshButton />
       {chronicles.map((chronicle) => (
         <Col key={`${chronicle.id}-${chronicle.updatedAt}`}>
-          {!readMode && (
+          {!isReadMode && (
             <Col center>
               <ChronicleCreateButton
                 position={chronicle.position - 1 < 0 ? 0 : chronicle.position}
@@ -37,13 +26,13 @@ export const Chronicles: React.FC = () => {
           <ChronicleProvider chronicle={chronicle}>
             <EditorProvider editor={chronicle.editor}>
               <div id={chronicle.id}>
-                {readMode ? <ChronicleRead /> : <ChronicleForm />}
+                {isReadMode ? <ChronicleRead /> : <ChronicleForm />}
               </div>
             </EditorProvider>
           </ChronicleProvider>
         </Col>
       ))}
-      {!readMode && (
+      {!isReadMode && (
         <Col center>
           <ChronicleCreateButton position={lastPosition} />
         </Col>

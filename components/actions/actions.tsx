@@ -1,8 +1,5 @@
 import { useContext } from 'react'
-import {
-  BroadcastReadModeContext,
-  BroadcastFocusContext,
-} from '../../entities/broadcast/broadcast'
+import { useModes } from '../../entities/broadcast/broadcast'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Button } from '../../ui/button/button'
 import { MiniLoaderContext } from '../mini-loader/mini-loader'
@@ -10,45 +7,27 @@ import { Flex } from '../../ui/flex/flex'
 import useIsMobile from '../../hooks/is-mobile'
 
 export const Actions: React.FC = () => {
+  const t = useTranslate()
   const isMobile = useIsMobile()
   const [loading] = useContext(MiniLoaderContext)
-  const [readMode, setReadMode] = useContext(BroadcastReadModeContext)
-  const [focusMode, setFocusMode] = useContext(BroadcastFocusContext)
-  const t = useTranslate({
-    editMode: {
-      en: 'Edit mode',
-      fr: 'Mode édition',
-    },
-    readMode: {
-      en: 'Read mode',
-      fr: 'Mode lecture',
-    },
-    normalMode: {
-      en: 'Normal mode',
-      fr: 'Mode normal',
-    },
-    FocusMode: {
-      en: 'Focus mode',
-      fr: 'Mode focus',
-    },
-  })
+  const { isFocused, isReadMode, switchFocus, switchReadMode } = useModes()
 
   return (
     <Flex>
       <Button
         loading={loading}
-        onClick={() => setReadMode(!readMode)}
-        variant={readMode ? 'red' : 'normal'}
+        onClick={switchReadMode}
+        variant={isReadMode ? 'red' : 'normal'}
       >
-        {t(readMode ? 'editMode' : 'readMode')}
+        {t(isReadMode ? 'editMode' : 'readMode')}
       </Button>
-      {readMode && !isMobile && (
+      {isReadMode && !isMobile && (
         <Button
           loading={loading}
-          onClick={() => setFocusMode(!focusMode)}
-          variant={focusMode ? 'red' : 'normal'}
+          onClick={switchFocus}
+          variant={isFocused ? 'red' : 'normal'}
         >
-          {t(focusMode ? 'normalMode' : 'FocusMode')}
+          {t(isFocused ? 'normalMode' : 'FocusMode')}
         </Button>
       )}
     </Flex>
