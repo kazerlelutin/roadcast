@@ -6,19 +6,21 @@ interface BroadcastListLineProps {
   broadcast: IBroadcast
 }
 
+type TQuery = {
+  id: string
+  page: string
+  admin?: string
+  editor?: string
+  reader?: string
+}
+
 export const BroadcastListLine: React.FC<BroadcastListLineProps> = ({
   broadcast,
 }) => {
   const router = useRouter()
 
   const handleClick = () => {
-    const query: {
-      id: string
-      page: string
-      admin?: string
-      editor?: string
-      reader?: string
-    } = {
+    const query: TQuery = {
       id: broadcast.id,
       page: 'broadcast',
     }

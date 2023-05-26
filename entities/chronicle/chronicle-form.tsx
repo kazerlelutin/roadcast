@@ -1,10 +1,4 @@
-import {
-  ChronicleContext,
-  ChronicleRoutes,
-  ChroniclesContext,
-  IChronicle,
-} from './chronicle'
-import { useContext } from 'react'
+import { ChronicleRoutes, useChronicles } from './chronicle'
 import { Col } from '../../ui/col/col'
 import { ChronicleFormDescription } from './chronicle-form-description'
 import styles from './chronicle-styles/chronicle-form.module.css'
@@ -19,8 +13,7 @@ import { Label } from '../../ui/label/label'
 import { useTranslate } from '../../hooks/translate.hook'
 
 export const ChronicleForm: React.FC = () => {
-  const [chronicles, setChronicles] = useContext(ChroniclesContext)
-  const [chronicle, setChronicle] = useContext(ChronicleContext)
+  const { chronicle, updateChronicleField } = useChronicles()
   const t = useTranslate()
 
   return (
@@ -32,15 +25,7 @@ export const ChronicleForm: React.FC = () => {
             fontSize="large"
             id={chronicle.id}
             defaultValue={chronicle.title}
-            callback={(value) => {
-              setChronicle((prev) => ({ ...prev, title: value }))
-              setChronicles((prev) =>
-                prev.map((chronicleEl) => {
-                  if (chronicleEl.id === chronicle.id) chronicleEl.title = value
-                  return chronicleEl
-                })
-              )
-            }}
+            callback={(value) => updateChronicleField('title', value)}
             link={ChronicleRoutes.updateTitle}
           />
           <Label>{t('editor')}</Label>
@@ -52,16 +37,7 @@ export const ChronicleForm: React.FC = () => {
             name="source"
             id={chronicle.id}
             defaultValue={chronicle.source || ''}
-            callback={(value) => {
-              setChronicle((prev) => ({ ...prev, source: value }))
-              setChronicles((prev) =>
-                prev.map((chronicleEl) => {
-                  if (chronicleEl.id === chronicle.id)
-                    chronicleEl.source = value
-                  return chronicleEl
-                })
-              )
-            }}
+            callback={(value) => updateChronicleField('source', value)}
             link={ChronicleRoutes.updateSource}
           />
           <ChronicleFormDescription />

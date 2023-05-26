@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import { createContext, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { usePost } from '../../hooks/post.hook'
 import { TEntity } from '../../types/entity.type'
 import { IChronicle } from '../chronicle/chronicle'
@@ -74,6 +74,7 @@ export enum BroadcastRoutes {
 
 // HOOK ---------------------------------------------------------------------
 export const useBroadcast = () => {
+  const [broadcast] = useContext(BroadcastContext)
   const router = useRouter()
 
   const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
@@ -85,7 +86,8 @@ export const useBroadcast = () => {
     }
   }
 
-  return { createBroadcast }
+  // spread ...broadcast for access to the value
+  return { createBroadcast, broadcast, ...broadcast }
 }
 
 // PROVIDER -----------------------------------------------------------------
@@ -124,4 +126,33 @@ export const BroadcastProvider: React.FC<BroadcastProviderProps> = ({
       {children}
     </BroadcastContext.Provider>
   )
+}
+
+// HOOKS ---------------------------------------------------------------------
+
+export const useModes = () => {
+  const ctxRead = useContext(BroadcastReadModeContext)
+  const ctxFocus = useContext(BroadcastFocusContext)
+
+  if (!ctxFocus || !ctxRead)
+    throw new Error(
+      'useModes must be used within a BroadcastReadModeContext &  BroadcastFocusContext'
+    )
+
+  const [isFocused, setFocusMode] = ctxFocus
+  const [isReadMode, setReadMode] = ctxRead
+  const switchFocus = () => {
+    setFocusMode(!isFocused)
+  }
+
+  const switchReadMode = () => {
+    setReadMode(!isReadMode)
+  }
+
+  return {
+    isFocused,
+    isReadMode,
+    switchFocus,
+    switchReadMode,
+  }
 }

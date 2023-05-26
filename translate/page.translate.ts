@@ -151,6 +151,47 @@ const pageTranslate = {
     fr: 'Contact',
     en: 'Contact',
   },
+  confirm: {
+    en: 'Confirm',
+    fr: 'Confirmer',
+  },
+  noText: {
+    en: 'No text',
+    fr: 'Pas de texte',
+  },
+  noEditor: {
+    en: 'No editor',
+    fr: 'Aucun chroniqueur',
+  },
+  noBroadcast: {
+    en: 'No broadcast selected',
+    fr: 'Aucune émission sélectionnée',
+  },
+
+  editMode: {
+    en: 'Edit mode',
+    fr: 'Mode édition',
+  },
+  readMode: {
+    en: 'Read mode',
+    fr: 'Mode lecture',
+  },
+  normalMode: {
+    en: 'Normal mode',
+    fr: 'Mode normal',
+  },
+  FocusMode: {
+    en: 'Focus mode',
+    fr: 'Mode focus',
+  },
+  SelectEditor: {
+    en: 'Select an editor',
+    fr: 'Sélectionnez un chroniqueur',
+  },
+  create: {
+    en: 'Create',
+    fr: 'Créer',
+  },
 }
 
 export default pageTranslate

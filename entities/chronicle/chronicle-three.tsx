@@ -1,27 +1,20 @@
-import { useContext } from 'react'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Col } from '../../ui/col/col'
 import { NoMessage } from '../../ui/no-message/no-message'
-import { BroadcastContext } from '../broadcast/broadcast'
+import { useBroadcast } from '../broadcast/broadcast'
 import {
   ChronicleProvider,
-  ChroniclesContext,
   ChronicleThreeProvider,
+  useThreeChronicle,
 } from './chronicle'
 import { ChronicleRefreshButton } from './chronicle-refresh-button'
 import { ChronicleThreeLine } from './chronicle-three-line'
 import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
 
 export const ChronicleThreeComp: React.FC = () => {
-  const [broadcast] = useContext(BroadcastContext)
-  const [chronicles] = useContext(ChroniclesContext)
-
-  const t = useTranslate({
-    noBroadcast: {
-      en: 'No broadcast selected',
-      fr: 'Aucune émission sélectionnée',
-    },
-  })
+  const t = useTranslate()
+  const { broadcast } = useBroadcast()
+  const { chronicles } = useThreeChronicle()
 
   if (!broadcast.id) return <NoMessage message={t('noBroadcast')} />
 

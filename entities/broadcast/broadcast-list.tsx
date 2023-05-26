@@ -5,16 +5,15 @@ import { BroadcastListLine } from './broadcast-list-line'
 import styles from './broadcast-styles/broadcast-list.module.css'
 
 export const BroadcastList = () => {
-  const { data: broadcasts, loading } = useFetch<IBroadcast[]>(
-    BroadcastRoutes.findMany
-  )
-
   const t = useTranslate({
     title: {
       en: 'Broadcast List',
       fr: 'Liste des fils rouges',
     },
   })
+  const { data: broadcasts, loading } = useFetch<IBroadcast[]>(
+    BroadcastRoutes.findMany
+  )
 
   return (
     <div className={styles.container}>

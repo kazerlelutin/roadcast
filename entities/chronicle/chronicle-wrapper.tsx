@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactNode, useEffect, useState } from 'react'
-import { useContext } from 'react'
-import { ChronicleContext, ChronicleToScreenContext } from './chronicle'
+import { useChronicles } from './chronicle'
 import { useDebounce } from '../../hooks/debounce.hook'
 
 interface ChronicleWrapperProps {
@@ -11,10 +10,7 @@ interface ChronicleWrapperProps {
 export const ChronicleWrapper: React.FC<ChronicleWrapperProps> = ({
   children,
 }) => {
-  const [chronicle] = useContext(ChronicleContext)
-  const [currentChronicle, setCurrentChronicle] = useContext(
-    ChronicleToScreenContext
-  )
+  const { chronicle, currentChronicle, setCurrentChronicle } = useChronicles()
   const [overChronicle, setOverChronicle] = useState<string>('')
   const overChronicleDebounced = useDebounce(overChronicle, 500)
 

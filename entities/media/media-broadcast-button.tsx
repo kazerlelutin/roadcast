@@ -1,14 +1,14 @@
-import { useContext } from 'react'
 import { usePost } from '../../hooks/post.hook'
 import { useTranslate } from '../../hooks/translate.hook'
 import { Button } from '../../ui/button/button'
-import { MediaContext, MediaRoutes } from './media'
-import { FullscreenPopinContext } from '../../ui/fullscreen-popin/fullscreen-popin.context'
+import { MediaRoutes, useMedia } from './media'
+import { useFullscreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
 
 export const MediaBroadcastButton: React.FC = () => {
-  const [media] = useContext(MediaContext)
+  const { media } = useMedia()
   const { post } = usePost(MediaRoutes.broadcast)
-  const [_isOpen, setIsOpen] = useContext(FullscreenPopinContext)
+
+  const { openModale } = useFullscreenPopin()
 
   const t = useTranslate({
     broadcast: {
@@ -19,7 +19,7 @@ export const MediaBroadcastButton: React.FC = () => {
 
   const handleBroadcast = () => {
     post({ media })
-    setIsOpen(false)
+    openModale()
   }
 
   return (
