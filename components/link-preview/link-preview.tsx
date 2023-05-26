@@ -8,13 +8,16 @@ export interface LinkPreviewProps {
   url: string
 }
 
+interface IPreview {
+  title: string
+  description: string
+  image: string
+  link: string
+}
 export const LinkPreview: React.FC<LinkPreviewProps> = ({ url }) => {
-  const { data } = useFetch<{
-    title: string
-    description: string
-    image: string
-    link: string
-  }>(ChronicleRoutes.previewSource, { link: url })
+  const { data } = useFetch<IPreview>(ChronicleRoutes.previewSource, {
+    link: url,
+  })
 
   if (!data) return <div>{'...'}</div>
 

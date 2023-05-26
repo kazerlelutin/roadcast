@@ -2,6 +2,7 @@ import {
   ChronicleContext,
   ChronicleRoutes,
   ChroniclesContext,
+  IChronicle,
 } from './chronicle'
 import { useContext } from 'react'
 import { Col } from '../../ui/col/col'
@@ -32,9 +33,9 @@ export const ChronicleForm: React.FC = () => {
             id={chronicle.id}
             defaultValue={chronicle.title}
             callback={(value) => {
-              setChronicle({ ...chronicle, title: value })
-              setChronicles(
-                chronicles.map((chronicleEl) => {
+              setChronicle((prev) => ({ ...prev, title: value }))
+              setChronicles((prev) =>
+                prev.map((chronicleEl) => {
                   if (chronicleEl.id === chronicle.id) chronicleEl.title = value
                   return chronicleEl
                 })
@@ -52,14 +53,14 @@ export const ChronicleForm: React.FC = () => {
             id={chronicle.id}
             defaultValue={chronicle.source || ''}
             callback={(value) => {
-              setChronicle({ ...chronicle, source: value })
-              setChronicles([
-                ...chronicles.map((chronicleEl) => {
+              setChronicle((prev) => ({ ...prev, source: value }))
+              setChronicles((prev) =>
+                prev.map((chronicleEl) => {
                   if (chronicleEl.id === chronicle.id)
                     chronicleEl.source = value
                   return chronicleEl
-                }),
-              ])
+                })
+              )
             }}
             link={ChronicleRoutes.updateSource}
           />
