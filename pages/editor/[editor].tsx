@@ -10,7 +10,6 @@ import {
   ChroniclesProvider,
 } from '../../entities/chronicle/chronicle'
 import { EditorsProvider } from '../../entities/editor/editor'
-import {} from '../../pages_related/editor/editor'
 import { prisma } from '../../db/db'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
