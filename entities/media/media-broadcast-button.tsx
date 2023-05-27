@@ -8,7 +8,7 @@ export const MediaBroadcastButton: React.FC = () => {
   const { media } = useMedia()
   const { post } = usePost(MediaRoutes.broadcast)
 
-  const { openModale } = useFullscreenPopin()
+  const { closeModale } = useFullscreenPopin()
 
   const t = useTranslate({
     broadcast: {
@@ -19,7 +19,7 @@ export const MediaBroadcastButton: React.FC = () => {
 
   const handleBroadcast = () => {
     post({ media })
-    openModale()
+    closeModale()
   }
 
   return (

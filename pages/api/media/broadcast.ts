@@ -14,7 +14,7 @@ async function media_broadcast(
 
   trigger(reader, TriggerTypes.SLIDER, {
     message: media,
-    id: myLocalId,
+    id: myLocalId || '0',
   })
 
   return response.status(200).json({ message: 'ok' })
