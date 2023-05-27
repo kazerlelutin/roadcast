@@ -1,3 +1,9 @@
+.grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--dms-gap);
+}
+
 .container {
   font-size: var(--dms-font-size-md);
 }

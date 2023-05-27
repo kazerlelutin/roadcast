@@ -10,7 +10,7 @@ import { useState } from 'react'
 export const EditorSelector: React.FC = () => {
   const t = useTranslate()
   const { broadcast } = useBroadcast()
-  const { chronicle, updateChronicleField } = useChronicles()
+  const { chronicle, updateChronicleField, editorCount } = useChronicles()
   const { getData } = useSimpleFetch()
 
   const [value, setValue] = useState<{ label: string; value: string }>(
@@ -66,10 +66,10 @@ export const EditorSelector: React.FC = () => {
 
   return (
     <AsyncCreatableSelect
-      instanceId={`${broadcast.id}-${chronicle.id}-${
+      instanceId={`${editorCount}-${broadcast.id}-${chronicle.id}-${
         chronicle.editor?.id || 'noEditor'
       }`}
-      key={`${broadcast.id}-${chronicle.id}-${
+      key={`${editorCount}-${broadcast.id}-${chronicle.id}-${
         chronicle.editor?.id || 'noEditor'
       }`}
       styles={reactSelectStyle}

@@ -18,7 +18,7 @@
 
 .sidebar {
   display: grid;
-  grid-template-rows: auto auto 1fr 40px;
+  grid-template-rows: auto 1fr 40px;
   gap: var(--dms-gap);
 }
 

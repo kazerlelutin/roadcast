@@ -69,11 +69,7 @@ export const Editor: React.FC = () => {
               <BroadcastCreateNewWithHistory />
             </div>
           </Col>
-          <h3>{t('chroniclesHistory')}</h3>
-          <Gridbox>
-            <BroadcastChronicleHistory />
-            <BroadcastChronicleHistory />
-          </Gridbox>
+          <BroadcastChronicleHistory />
         </div>
 
         <Gridbox>
