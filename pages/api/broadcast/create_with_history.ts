@@ -55,15 +55,15 @@ async function create_with_history(
       },
       ChronicleHistories: {
         create: [
-          ...broadcast.ChronicleHistories.map((history) => ({
-            title: history.title,
-            source: history.source,
-            editor: history.editor,
-          })),
           ...broadcast.chronicles.map((chronicle) => ({
             title: chronicle.title,
             source: chronicle.source,
             editor: chronicle?.editor?.name || 'unknown',
+          })),
+          ...broadcast.ChronicleHistories.map((history) => ({
+            title: history.title,
+            source: history.source,
+            editor: history.editor,
           })),
         ].slice(0, 300),
       },
