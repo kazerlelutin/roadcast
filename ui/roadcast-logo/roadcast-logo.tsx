@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { FC } from 'react'
-import styles from './dms-logo.module.css'
+import styles from './roadcast-logo.module.css'
+import * as pkg from '../../package.json'
+const { version } = pkg
 
-export const DmsLogo: FC = () => (
-  <div className={styles.logo}>
+export const RoadcastLogo: FC = () => (
+  <div className={styles.logo} title={version}>
     <Link href={'/'}>
       <div className={styles.logoLink}>
         <span className={styles.firstLetter}>R</span>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { createContext } from 'react'
 import { TriggerTypes, useSocketTrigger } from '../../components/socket'
 import { TEntity } from '../../types/entity.type'
@@ -269,6 +269,19 @@ export const useChronicles = () => {
   const [currentChronicle, setCurrentChronicle] = currentChronicleCtx
   const [chronicles, setChronicles] = chroniclesCtx
 
+  const editorCount = useMemo(() => {
+    const editorIds = chronicles.reduce((acc, chronicle) => {
+      if (chronicle.editor) {
+        acc[chronicle.editor.id] = acc[chronicle.editor.id]
+          ? acc[chronicle.editor.id] + 1
+          : 1
+      }
+      return acc
+    }, {})
+
+    return Object.keys(editorIds).length
+  }, [chroniclesCtx[0]])
+
   const addMedia = (media: IMedia) => {
     setChronicle((prev) => ({ ...prev, medias: [...prev.medias, media] }))
   }
@@ -321,5 +334,6 @@ export const useChronicles = () => {
     deleteChronicle,
     updateChronicleField,
     updateCurrentChronicle,
+    editorCount,
   }
 }

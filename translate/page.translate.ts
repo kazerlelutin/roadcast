@@ -192,6 +192,18 @@ const pageTranslate = {
     en: 'Create',
     fr: 'Créer',
   },
+  createWithHistory: {
+    fr: 'Créer un conducteur avec historique',
+    en: 'Create a new broadcast with history',
+  },
+  createWithHistoryDesc: {
+    fr: "Validez la création et conservez l'historique des sujets, sources et chroniqueurs des émissions précédentes. Organisez votre prochain épisode avec cohérence et efficacité !",
+    en: 'Validate the creation and keep the history of the subjects, sources and editors of the previous broadcasts. Organize your next episode with consistency and efficiency!',
+  },
+  chroniclesHistory: {
+    fr: 'Historique des chroniques',
+    en: 'Chronicle history',
+  },
 }
 
 export default pageTranslate

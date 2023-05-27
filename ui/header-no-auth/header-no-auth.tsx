@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import { FC } from 'react'
-import { DmsLogo } from '../dms-logo/dms-logo'
+import { RoadcastLogo } from '../roadcast-logo/roadcast-logo'
 import KofiButton from '../kofi-button/kofi-button'
 import styles from './header-no-auth.module.css'
 
@@ -18,7 +18,7 @@ const ThemeSwitcher = dynamic(
 export const HeaderNoAuth: FC = () => (
   <div className={styles.container}>
     <header className={styles.header}>
-      <DmsLogo />
+      <RoadcastLogo />
       <div className={styles.actions}>
         <KofiButton />
         <ThemeSwitcher />

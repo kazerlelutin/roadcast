@@ -1,5 +1,5 @@
-import { FC, ReactNode, useContext } from 'react'
-import { FullscreenPopinContext } from './fullscreen-popin.context'
+import { FC, ReactNode } from 'react'
+import { useFullscreenPopin } from './fullscreen-popin'
 
 interface FullscreenPopinActionProps {
   children: ReactNode | string
@@ -8,7 +8,7 @@ interface FullscreenPopinActionProps {
 export const FullscreenPopinAction: FC<FullscreenPopinActionProps> = ({
   children,
 }) => {
-  const [_isOpen, setIsOpen] = useContext(FullscreenPopinContext)
+  const { openModale } = useFullscreenPopin()
 
-  return <span onClick={() => setIsOpen(true)}>{children}</span>
+  return <span onClick={openModale}>{children}</span>
 }

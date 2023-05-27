@@ -10,6 +10,7 @@ interface ColProps {
   right?: boolean
   padding?: boolean
   ref?: any
+  lgGap?: boolean
 }
 
 export const Col: FC<ColProps> = (props) => (

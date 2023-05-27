@@ -1,7 +1,7 @@
-import { FC, ReactNode, useContext } from 'react'
+import { FC, ReactNode } from 'react'
 import { Card } from '../card/card'
-import { FullscreenPopinContext } from './fullscreen-popin.context'
 import styles from './fullscreen-popin.module.css'
+import { useFullscreenPopin } from './fullscreen-popin'
 
 interface FullScreenPopinCardProps {
   children: ReactNode
@@ -11,13 +11,13 @@ export const FullScreenPopinCard: FC<FullScreenPopinCardProps> = ({
   children,
   title,
 }) => {
-  const [isOpen, setIsOpen] = useContext(FullscreenPopinContext)
+  const { modalIsOpen, closeModale } = useFullscreenPopin()
 
   return (
-    isOpen && (
+    modalIsOpen && (
       <div className={styles.container}>
         <div className={styles.modale}>
-          <Card title={title} onClose={() => setIsOpen(false)} type="classic">
+          <Card title={title} onClose={closeModale} type="classic">
             {children}
           </Card>
         </div>
