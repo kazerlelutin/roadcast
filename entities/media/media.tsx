@@ -60,7 +60,7 @@ export const useMedia = () => {
     throw new Error('useMedias must be used within a MediaProvider')
   }
 
-  const [media, setMedia] = ctx
+  const [media] = ctx
 
   return {
     media,
