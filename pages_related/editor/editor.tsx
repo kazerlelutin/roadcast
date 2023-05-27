@@ -8,18 +8,19 @@ import { HeaderNoAuth } from '../../ui/header-no-auth/header-no-auth'
 import { Col } from '../../ui/col/col'
 import { useBroadcastLocalSave } from '../../hooks/broadcast-local-save.hook'
 import useIsMobile from '../../hooks/is-mobile'
-import { useContext } from 'react'
 import {
-  BroadcastContext,
   BroadcastRoutes,
+  useBroadcast,
 } from '../../entities/broadcast/broadcast'
 import { StringEditor } from '../../components/string-editor/string-editor'
 import { LabelBox } from '../../ui/label-box/label-box'
 import { useTranslate } from '../../hooks/translate.hook'
+import { BroadcastCreateNewWithHistory } from '../../entities/broadcast/broadcast-create-new-with-history'
+import { BroadcastChronicleHistory } from '../../entities/broadcast/broadcast-chronicle-history'
 
 export const Editor: React.FC = () => {
   useBroadcastLocalSave()
-  const [broadcast, setBroadcast] = useContext(BroadcastContext)
+  const { broadcast, updateTitle } = useBroadcast()
   const isMobile = useIsMobile()
   const t = useTranslate()
 
@@ -37,7 +38,7 @@ export const Editor: React.FC = () => {
                 id={broadcast.editor}
                 name="title"
                 callback={(newTitle) => {
-                  setBroadcast({ ...broadcast, title: newTitle })
+                  updateTitle(newTitle)
                 }}
               />
             </LabelBox>
@@ -47,7 +48,6 @@ export const Editor: React.FC = () => {
               <Chronicles />
             </div>
           </Gridbox>
-
           <div className={styles.actionsMobile}>
             <Actions />
           </div>
@@ -59,14 +59,22 @@ export const Editor: React.FC = () => {
     <div className={styles.container}>
       <HeaderNoAuth />
       <div className={styles.content}>
-        <Gridbox>
+        <div className={styles.sidebar}>
           <Col>
             <Resume />
             <div className={styles.actions}>
               <Actions />
             </div>
+            <div className={styles.actions}>
+              <BroadcastCreateNewWithHistory />
+            </div>
           </Col>
-        </Gridbox>
+          <h3>{t('chroniclesHistory')}</h3>
+          <Gridbox>
+            <BroadcastChronicleHistory />
+            <BroadcastChronicleHistory />
+          </Gridbox>
+        </div>
 
         <Gridbox>
           <div className={styles.chronicles}>

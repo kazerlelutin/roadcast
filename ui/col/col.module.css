@@ -24,6 +24,10 @@
   gap: calc(var(--dms-gap) / 2);
 }
 
+.lgGap {
+  gap: var(--dms-gap-lg);
+}
+
 .padding {
   padding: var(--dms-padding);
 }

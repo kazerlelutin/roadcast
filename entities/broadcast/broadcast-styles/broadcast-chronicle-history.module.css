@@ -1,0 +1,18 @@
+.container {
+  font-size: var(--dms-font-size-md);
+}
+
+.title a {
+  color: var(--dms-text);
+}
+
+.icon svg {
+  fill: var(--dms-text);
+  width: 10px;
+  margin-left: 5px;
+}
+
+.editor {
+  color: var(--dms-highlight);
+  font-style: italic;
+}

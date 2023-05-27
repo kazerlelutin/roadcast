@@ -6,6 +6,9 @@ import { TEntity } from '../../types/entity.type'
 import { IChronicle } from '../chronicle/chronicle'
 import useLocalState from '../../hooks/local-state.hook'
 import { IEditor } from '../editor/editor'
+import { useLazyFetch } from '../../hooks/fetch-lazy.hook'
+import { useFetch } from '../../hooks/fetch.hook'
+import { BroadcastChronicleHistory } from './broadcast-chronicle-history'
 
 // INTERFACES ----------------------------------------------------------------
 interface BroadcastProviderProps {
@@ -15,6 +18,14 @@ interface BroadcastProviderProps {
 
 interface BroadcastOtherProviderProps {
   children: React.ReactNode
+}
+
+interface BroadcastChronicleHistory {
+  id: string
+  title: string
+  source: string
+  editor: string
+  createdAt: Date
 }
 
 export interface IBroadcast {
@@ -68,26 +79,63 @@ export enum BroadcastRoutes {
   findMany = 'broadcast/all',
   findOne = 'broadcast/findone',
   create = 'broadcast/create',
+  create_with_history = 'broadcast/create_with_history',
   update = 'broadcast/update',
   saveHistory = 'broadcast/save_history',
+  chronicle_history = 'broadcast/chronicle_history',
 }
 
 // HOOK ---------------------------------------------------------------------
+
+export const useGetChronicleHistory = () => {
+  const { data, loading } = useFetch<BroadcastChronicleHistory[]>(
+    BroadcastRoutes.chronicle_history
+  )
+
+  return {
+    chronicleHistory: data,
+    loading,
+  }
+}
 export const useBroadcast = () => {
-  const [broadcast] = useContext(BroadcastContext)
+  const [broadcast, setBroadcast] = useContext(BroadcastContext)
+  const { getData } = useLazyFetch(BroadcastRoutes.findOne, {}, setBroadcast)
   const router = useRouter()
 
   const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
+  const { post: createWithHistory } = usePost<IBroadcast>(
+    BroadcastRoutes.create_with_history
+  )
 
   const createBroadcast = async (title: string) => {
     const newBroadcast = await create({ title })
-    if (newBroadcast) {
-      router.push('editor/' + newBroadcast.editor)
-    }
+    if (newBroadcast) router.push('editor/' + newBroadcast.editor)
+  }
+
+  const createBroadcastWithHistory = async () => {
+    const newBroadcast = await createWithHistory()
+    if (newBroadcast)
+      router.push({
+        query: {
+          editor: newBroadcast.editor,
+        },
+      })
+
+    getData({ editor: newBroadcast.editor })
+  }
+
+  const updateTitle = async (title: string) => {
+    setBroadcast((prev) => ({ ...prev, title }))
   }
 
   // spread ...broadcast for access to the value
-  return { createBroadcast, broadcast, ...broadcast }
+  return {
+    createBroadcast,
+    createBroadcastWithHistory,
+    updateTitle,
+    broadcast,
+    ...broadcast,
+  }
 }
 
 // PROVIDER -----------------------------------------------------------------

@@ -16,6 +16,12 @@
   height: 100%;
 }
 
+.sidebar {
+  display: grid;
+  grid-template-rows: auto auto 1fr 40px;
+  gap: var(--dms-gap);
+}
+
 .contentMobile {
   display: grid;
   grid-template-rows: auto 1fr 100px;

@@ -27,3 +27,7 @@
 .alignItemCenter {
   align-items: center;
 }
+
+.alignEnd {
+  justify-content: flex-end;
+}
