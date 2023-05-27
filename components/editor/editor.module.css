@@ -13,7 +13,7 @@
   border-bottom: 1px solid var(--dms-highlight-dark);
   padding: var(--dms-padding-sm) var(--dms-padding-sm) var(--dms-padding)
     var(--dms-padding-sm);
-  z-index: 2;
+
   background: var(--dms-bg-dark);
   transition: 200ms ease-in-out;
 }
