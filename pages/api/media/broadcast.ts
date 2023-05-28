@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
-
-import { TriggerTypes } from '../../../components/socket'
 import { triggerSlider } from '../../../services/trigger'
 
 async function media_broadcast(
@@ -13,9 +11,8 @@ async function media_broadcast(
   const { media } = JSON.parse(request.body)
   const { reader } = infos
 
-  await triggerSlider(reader, TriggerTypes.SLIDER, {
+  await triggerSlider(reader, {
     message: media,
-    id: '0',
   })
 
   return response.status(200).json({ message: 'ok' })
