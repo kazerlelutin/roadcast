@@ -8,7 +8,7 @@ export const Slider: React.FC = () => {
   const [media, setMedia] = useState<IMedia | undefined>(undefined)
   useSocketTrigger(TriggerTypes.SLIDER, (message: IMedia) => {
     setMedia(undefined)
-    setTimeout(() => setMedia(message), 200)
+    setTimeout(() => setMedia({ ...message }), 200)
   })
 
   return (
