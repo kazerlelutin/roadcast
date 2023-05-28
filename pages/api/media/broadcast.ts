@@ -1,20 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
-import { trigger } from '../../../services/trigger'
+
 import { TriggerTypes } from '../../../components/socket'
+import { triggerSlider } from '../../../services/trigger'
 
 async function media_broadcast(
   request: NextApiRequest,
   response: NextApiResponse,
   infos: BroadcastCtx
 ) {
-  const { media, myLocalId } = JSON.parse(request.body)
+  const { media } = JSON.parse(request.body)
   const { reader } = infos
 
-  trigger(reader, TriggerTypes.SLIDER, {
+  await triggerSlider(reader, TriggerTypes.SLIDER, {
     message: media,
-    id: myLocalId || '0',
+    id: '0',
   })
 
   return response.status(200).json({ message: 'ok' })
