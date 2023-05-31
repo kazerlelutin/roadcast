@@ -8,6 +8,10 @@ import { trigger } from '../../../services/trigger'
 import { TriggerTypes } from '../../../components/socket'
 import { prisma } from '../../../db/db'
 
+// if is possible, define outside the handler
+const isYouTubeLinkRgx = /(youtube\.com|youtu\.be)/
+const shortLinkRgx = /youtu\.be/
+
 async function media_scrap(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -42,7 +46,6 @@ async function media_scrap(
       return response.status(400).send({ message: 'Error while fetching' })
 
     const dom = new JSDOM(resText)
-    const isYouTubeLinkRgx = /(youtube\.com|youtu\.be)/
 
     const isYouTubeLink = isYouTubeLinkRgx.test(link)
 
@@ -71,12 +74,10 @@ async function media_scrap(
     }
     // treat Youtube videos ______________________________________________________
     if (isYouTubeLink) {
-      const shortLinkRgx = /youtu\.be/
       const isShortLink = link.match(shortLinkRgx)
       const parsedLink = queryString.parseUrl(link)
       const videoId = (parsedLink?.query?.v as string) || ''
       const time = (parsedLink?.query?.t as string) || '0'
-
       //IF Youtube Video, it's a single media
       const media = await prisma.media.create({
         data: {
