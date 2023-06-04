@@ -3,6 +3,7 @@ import { BroadcastCtx } from '../../../types/broadcast-ctx'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { generateRandomCode } from '../../../utils/generate_code'
 import { v4 as uuidv4 } from 'uuid'
+import { prisma } from '../../../db/db'
 
 async function create_with_history(
   _request: NextApiRequest,
