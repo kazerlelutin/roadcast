@@ -10,34 +10,32 @@ export const BroadcastChronicleHistory: React.FC = () => {
   const t = useTranslate()
   const { chronicleHistory, loading } = useGetChronicleHistory()
 
-  if (!loading && !chronicleHistory?.length) return null
+  if (!chronicleHistory?.length) return null
 
   return (
-    <PromiseRender loading={loading} data={chronicleHistory}>
-      <div className={styles.grid}>
-        <h3>{t('chroniclesHistory')}</h3>
-        <Col lgGap>
-          <Gridbox>
-            {chronicleHistory?.map((history) => (
-              <div key={history.id} className={styles.container}>
-                <div className={styles.title}>
-                  {history.source && history.source.match(/http/) ? (
-                    <a href={history.source}>
-                      {history.title}
-                      <span className={styles.icon}>
-                        <ExternalIcon />
-                      </span>
-                    </a>
-                  ) : (
-                    history.title
-                  )}
-                </div>
-                <div className={styles.editor}>{history.editor}</div>
+    <div className={styles.grid}>
+      <h3>{t('chroniclesHistory')}</h3>
+      <Col lgGap>
+        <Gridbox>
+          {chronicleHistory?.map((history) => (
+            <div key={history.id} className={styles.container}>
+              <div className={styles.title}>
+                {history.source && history.source.match(/http/) ? (
+                  <a href={history.source}>
+                    {history.title}
+                    <span className={styles.icon}>
+                      <ExternalIcon />
+                    </span>
+                  </a>
+                ) : (
+                  history.title
+                )}
               </div>
-            ))}
-          </Gridbox>
-        </Col>
-      </div>
-    </PromiseRender>
+              <div className={styles.editor}>{history.editor}</div>
+            </div>
+          ))}
+        </Gridbox>
+      </Col>
+    </div>
   )
 }
