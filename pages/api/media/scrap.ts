@@ -72,6 +72,23 @@ async function media_scrap(
 
       medias.push(media)
     }
+
+    // treat link video  ______________________________________________________
+    if (res.headers.get('content-type').match(/video/g)) {
+      const name = link.split('/').at(-1)
+      const media = await prisma.media.create({
+        data: {
+          name,
+          size: 0,
+          type: 'video',
+          source: link,
+          url: link,
+          chronicle_id: chronicleId,
+        },
+      })
+
+      medias.push(media)
+    }
     // treat Youtube videos ______________________________________________________
     if (isYouTubeLink) {
       const isShortLink = link.match(shortLinkRgx)
