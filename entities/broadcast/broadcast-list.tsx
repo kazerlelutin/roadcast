@@ -20,7 +20,10 @@ export const BroadcastList = () => {
       {loading && <div>{t('loading')}...</div>}
       <ul className={styles.list}>
         {broadcasts?.map((broadcast) => (
-          <BroadcastListLine key={broadcast.id} broadcast={broadcast} />
+          <BroadcastListLine
+            key={`${broadcast.id}-${broadcast.createdAt}`}
+            broadcast={broadcast}
+          />
         ))}
       </ul>
     </div>
