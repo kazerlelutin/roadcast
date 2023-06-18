@@ -3,7 +3,7 @@
 }
 
 .error {
-  color: var(--dms-text);
+  color: var(--dms-warning-light);
   font-size: 0.9rem;
   padding: calc(var(--dms-padding) / 2);
   text-align: center;

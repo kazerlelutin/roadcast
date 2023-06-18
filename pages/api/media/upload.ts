@@ -45,7 +45,7 @@ async function media_upload(
     })
   })
 
-  const { size, fields } = fileContent
+  const { fields } = fileContent
 
   const broadcast = await prisma.broadcast.findFirst({
     where: {
@@ -57,8 +57,6 @@ async function media_upload(
     return response.status(400).send({ message: 'Broadcast not found' })
 
   //octet to megabytes
-  //TODO:  MAKE a limit global
-  const globalSize = 500 + size / 1000000
 
   const s3 = new S3()
   const link = await s3.sendMedia({
@@ -85,7 +83,7 @@ async function media_upload(
     id: myLocalId,
   })
 
-  return response.status(200).send({ media, quota: globalSize })
+  return response.status(200).send({ media })
 }
 
 const helper = (request: NextApiRequest, response: NextApiResponse) =>
