@@ -1,14 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
 import { createContext, useContext, useState } from 'react'
-import { usePost } from '../../hooks/post.hook'
-import { TEntity } from '../../types/entity.type'
-import { IChronicle } from '../chronicle/chronicle'
-import useLocalState from '../../hooks/local-state.hook'
-import { IEditor } from '../editor/editor'
-import { useLazyFetch } from '../../hooks/fetch-lazy.hook'
-import { useFetch } from '../../hooks/fetch.hook'
-import { BroadcastChronicleHistory } from './broadcast-chronicle-history'
+import { usePost, useLocalState, useLazyFetch, useFetch } from '@/hooks'
+import { TEntity } from '@/types'
+import { IChronicle, IEditor, BroadcastChronicleHistory } from '@/entities'
 
 // INTERFACES ----------------------------------------------------------------
 interface BroadcastProviderProps {

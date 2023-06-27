@@ -1,5 +1,5 @@
-import { CookieConsent } from '../../components/cookie-consent/cookie-consent'
-import { HeaderNoAuth } from '../../ui/header-no-auth/header-no-auth'
+import { CookieConsent } from '@/components'
+import { HeaderNoAuth } from '@/ui'
 import styles from './basic.module.css'
 
 interface BasicLayoutProps {

@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { useTranslate } from '../../hooks/translate.hook'
+import { useTranslate } from '@/hooks'
 import styles from './kofi-button.module.css'
 import va from '@vercel/analytics'
 
-export default function KofiButton() {
+export function KofiButton() {
   const t = useTranslate({
     BuyCoffe: {
       en: 'Buy me a coffee',

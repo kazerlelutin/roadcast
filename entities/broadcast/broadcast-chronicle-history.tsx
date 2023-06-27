@@ -1,9 +1,6 @@
-import { PromiseRender } from '../../components/promise-render/promise-render'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Col } from '../../ui/col/col'
-import { Gridbox } from '../../ui/grid-box/grid-box'
-import { ExternalIcon } from '../../ui/icons/external-icon'
-import { useGetChronicleHistory } from './broadcast'
+import { useTranslate } from '@/hooks'
+import { Col, ExternalIcon, Gridbox } from '@/ui'
+import { useGetChronicleHistory } from '@/entities'
 import styles from './broadcast-styles/broadcast-chronicle-history.module.css'
 
 export const BroadcastChronicleHistory: React.FC = () => {

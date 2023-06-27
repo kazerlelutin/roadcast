@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { useMedia } from './media'
+import {
+  useMedia,
+  MediaDisplay,
+  MediaDelButton,
+  MediaBroadcastButton,
+} from '@/entities'
 import styles from './media-styles/media-with-controls.module.css'
 import ReactPlayer from 'react-player'
-import { FullScreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
-import { MediaDisplay } from './media-display'
-import { Flex } from '../../ui/flex/flex'
-import { MediaDelButton } from './media-del-button'
-import { MediaBroadcastButton } from './media-broadcast-button'
+import { FullScreenPopin, Flex } from '@/ui'
 
 export const MediaWithControls: React.FC = () => {
   const { media } = useMedia()

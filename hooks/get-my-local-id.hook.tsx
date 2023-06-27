@@ -1,4 +1,4 @@
-import useLocalState from './local-state.hook'
+import { useLocalState } from '@/hooks'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useGetMyLocalId = (): string => {

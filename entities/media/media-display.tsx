@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from './media-styles/media-display.module.css'
-import { useMedia } from './media'
+import { useMedia } from '@/entities'
 import ReactPlayer from 'react-player'
 
 export const MediaDisplay: React.FC = () => {

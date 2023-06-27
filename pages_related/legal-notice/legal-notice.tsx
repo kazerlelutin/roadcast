@@ -1,8 +1,7 @@
-import { Footer } from '../../components/footer/footer'
-import { useTranslate } from '../../hooks/translate.hook'
-import { BasicLayout } from '../../layouts/basic/basic.layout'
-import { Col } from '../../ui/col/col'
-import { ExternalLink } from '../../ui/external-link/external-link'
+import { Footer } from '@/components'
+import { useTranslate } from '@/hooks'
+import { BasicLayout } from '@/layouts'
+import { Col, ExternalLink } from '@/ui'
 import style from './legal-notice.module.css'
 
 export const LegalNotice: React.FC = () => {

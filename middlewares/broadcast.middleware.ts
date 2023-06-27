@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getBase64toObject } from '../utils/get-object-to-base64'
+import { getBase64toObject } from '@/utils'
 
 export async function broadcastMiddleWare(
   request: NextApiRequest,

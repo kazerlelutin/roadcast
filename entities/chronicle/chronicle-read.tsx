@@ -1,13 +1,14 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { getReadTime } from '../../utils/get-read-time'
-import { getTextInHtml } from '../../utils/get-text-in-html'
-import { useChronicles } from './chronicle'
+import { useTranslate } from '@/hooks'
+import { getReadTime, getTextInHtml } from '@/utils'
+import {
+  useChronicles,
+  ChronicleWrapper,
+  MediaList,
+  useModes,
+} from '@/entities'
 import styles from './chronicle-styles/chronicle-read.module.css'
-import { ChronicleWrapper } from './chronicle-wrapper'
-import { useModes } from '../broadcast/broadcast'
-import { MediaList } from '../media/media-list'
-import { Col } from '../../ui/col/col'
-import { LinkPreview } from '../../components/link-preview/link-preview'
+import { Col } from '@/ui'
+import { LinkPreview } from '@/components'
 
 export const ChronicleRead: React.FC = () => {
   const t = useTranslate()

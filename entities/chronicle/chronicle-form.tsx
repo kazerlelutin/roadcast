@@ -1,16 +1,17 @@
-import { ChronicleRoutes, useChronicles } from './chronicle'
-import { Col } from '../../ui/col/col'
-import { ChronicleFormDescription } from './chronicle-form-description'
+import { Col, Flex, Label } from '@/ui'
+import {
+  ChronicleRoutes,
+  useChronicles,
+  ChronicleFormDescription,
+  EditorSelector,
+  ChronicleWrapper,
+  ChronicleDeleteButton,
+  MediaList,
+  MediaAddForm,
+} from '@/entities'
 import styles from './chronicle-styles/chronicle-form.module.css'
-import { StringEditor } from '../../components/string-editor/string-editor'
-import { EditorSelector } from '../editor/editor-selector'
-import { ChronicleWrapper } from './chronicle-wrapper'
-import { ChronicleDeleteButton } from './chronicle-delete-button'
-import { MediaList } from '../media/media-list'
-import { MediaAddForm } from '../media/media-add-form'
-import { Flex } from '../../ui/flex/flex'
-import { Label } from '../../ui/label/label'
-import { useTranslate } from '../../hooks/translate.hook'
+import { StringEditor } from '@/components'
+import { useTranslate } from '@/hooks'
 
 export const ChronicleForm: React.FC = () => {
   const { chronicle, updateChronicleField } = useChronicles()

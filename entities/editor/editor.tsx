@@ -1,6 +1,5 @@
-import { ReactNode, useState } from 'react'
-import { createContext } from 'react'
-import { TEntity } from '../../types/entity.type'
+import { ReactNode, useState, createContext } from 'react'
+import { TEntity } from '@/types'
 
 // INTERFACES ---------------------------------------------------------------
 interface EditorProviderProps {

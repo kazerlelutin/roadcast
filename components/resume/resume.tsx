@@ -1,13 +1,8 @@
 import { FC, useContext } from 'react'
-import { StringEditor } from '../string-editor/string-editor'
-import { Col } from '../../ui/col/col'
-import { LabelBox } from '../../ui/label-box/label-box'
-import { useTranslate } from '../../hooks/translate.hook'
-import {
-  BroadcastContext,
-  BroadcastRoutes,
-} from '../../entities/broadcast/broadcast'
-import { Info } from '../../ui/info/info'
+import { StringEditor } from '@/components'
+import { Col, LabelBox, Info } from '@/ui'
+import { useTranslate } from '@/hooks'
+import { BroadcastContext, BroadcastRoutes } from '@/entities'
 
 export const Resume: FC = () => {
   const t = useTranslate({

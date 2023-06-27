@@ -1,9 +1,11 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { Button } from '../../ui/button/button'
-import { usePost } from '../../hooks/post.hook'
-import { ChronicleRoutes, IChronicle, useCreateChronicle } from './chronicle'
-import { useBroadcast } from '../broadcast/broadcast'
-import { useGetMyLocalId } from '../../hooks/get-my-local-id.hook'
+import { useTranslate, usePost, useGetMyLocalId } from '@/hooks'
+import { Button } from '@/ui'
+import {
+  ChronicleRoutes,
+  IChronicle,
+  useCreateChronicle,
+  useBroadcast,
+} from '@/entities'
 
 interface ChronicleCreateButtonProps {
   position: number

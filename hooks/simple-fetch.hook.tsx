@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import { BroadcastContext } from '../entities/broadcast/broadcast'
-import { useGetMyLocalId } from './get-my-local-id.hook'
-import { getObjectToBase64 } from '../utils/get-object-to-base64'
+import { getObjectToBase64 } from '@/utils'
+import { BroadcastContext } from '@/entities'
+import { useGetMyLocalId } from '@/hooks'
 
 export const useSimpleFetch = () => {
   const [broadcast] = useContext(BroadcastContext),

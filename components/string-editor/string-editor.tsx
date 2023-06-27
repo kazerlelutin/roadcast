@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './string-editor.module.css'
 import { FC, useContext, useEffect, useState } from 'react'
-import { usePost } from '../../hooks/post.hook'
-import { useDebounce } from '../../hooks/debounce.hook'
-import { BroadcastReadModeContext } from '../../entities/broadcast/broadcast'
+import { usePost, useDebounce } from '@/hooks'
+import { BroadcastReadModeContext } from '@/entities'
 
 interface StringEditorProps {
   defaultValue: string

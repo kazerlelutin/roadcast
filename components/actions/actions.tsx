@@ -1,15 +1,12 @@
-import { useContext } from 'react'
-import { useModes } from '../../entities/broadcast/broadcast'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Button } from '../../ui/button/button'
-import { MiniLoaderContext } from '../mini-loader/mini-loader'
-import { Flex } from '../../ui/flex/flex'
-import useIsMobile from '../../hooks/is-mobile'
+import { useModes } from '@/entities'
+import { useTranslate, useIsMobile } from '@/hooks'
+import { Button, Flex } from '@/ui'
+import { useMiniLoader } from '@/components'
 
 export const Actions: React.FC = () => {
   const t = useTranslate()
   const isMobile = useIsMobile()
-  const [loading] = useContext(MiniLoaderContext)
+  const [loading] = useMiniLoader()
   const { isFocused, isReadMode, switchFocus, switchReadMode } = useModes()
 
   return (

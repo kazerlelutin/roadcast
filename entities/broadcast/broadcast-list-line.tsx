@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { IBroadcast } from './broadcast'
+import { IBroadcast } from '@/entities'
 import styles from './broadcast-styles/broadcast-list-line.module.css'
 
 interface BroadcastListLineProps {

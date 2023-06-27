@@ -1,22 +1,15 @@
-import { Chronicles } from '../../entities/chronicle/chronicles'
-import { ChronicleThree } from '../../entities/chronicle/chronicle-three'
-import { Resume } from '../../components/resume/resume'
-import { Actions } from '../../components/actions/actions'
-import styles from './editor.module.css'
-import { Gridbox } from '../../ui/grid-box/grid-box'
-import { HeaderNoAuth } from '../../ui/header-no-auth/header-no-auth'
-import { Col } from '../../ui/col/col'
-import { useBroadcastLocalSave } from '../../hooks/broadcast-local-save.hook'
-import useIsMobile from '../../hooks/is-mobile'
 import {
+  Chronicles,
+  ChronicleThree,
   BroadcastRoutes,
   useBroadcast,
-} from '../../entities/broadcast/broadcast'
-import { StringEditor } from '../../components/string-editor/string-editor'
-import { LabelBox } from '../../ui/label-box/label-box'
-import { useTranslate } from '../../hooks/translate.hook'
-import { BroadcastCreateNewWithHistory } from '../../entities/broadcast/broadcast-create-new-with-history'
-import { BroadcastChronicleHistory } from '../../entities/broadcast/broadcast-chronicle-history'
+  BroadcastCreateNewWithHistory,
+  BroadcastChronicleHistory,
+} from '@/entities'
+import { Resume, Actions, StringEditor } from '@/components'
+import styles from './editor.module.css'
+import { Gridbox, HeaderNoAuth, Col, LabelBox } from '@/ui'
+import { useIsMobile, useBroadcastLocalSave, useTranslate } from '@/hooks'
 
 export const Editor: React.FC = () => {
   useBroadcastLocalSave()

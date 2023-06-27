@@ -1,5 +1,5 @@
 import ReactCookieConsent from 'react-cookie-consent'
-import { useTranslate } from '../../hooks/translate.hook'
+import { useTranslate } from '@/hooks'
 
 export const CookieConsent: React.FC = () => {
   const t = useTranslate({

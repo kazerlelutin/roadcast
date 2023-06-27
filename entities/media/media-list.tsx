@@ -1,8 +1,10 @@
-import { useChronicles } from '../chronicle/chronicle'
-import { MediaProvider } from './media'
-import { MediaWithControls } from './media-with-controls'
+import {
+  MediaProvider,
+  useChronicles,
+  MediaWithControls,
+  useModes,
+} from '@/entities'
 import styles from './media-styles/media-list.module.css'
-import { useModes } from '../broadcast/broadcast'
 
 export const MediaList: React.FC = () => {
   const { isFocused } = useModes()

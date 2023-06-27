@@ -1,14 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex } from '../../ui/flex/flex'
+import { Flex, Info } from '@/ui'
 import { useEffect, useState } from 'react'
-import { ChronicleRoutes, useChronicles } from './chronicle'
-import { useTranslate } from '../../hooks/translate.hook'
+import { ChronicleRoutes, useChronicles, useModes } from '@/entities'
+import { useTranslate, usePost, useDebounce } from '@/hooks'
 import styles from './chronicle-styles/chronicle-form-description.module.css'
-import { Info } from '../../ui/info/info'
-import { usePost } from '../../hooks/post.hook'
-import { Editor } from '../../components/editor/editor'
-import { useModes } from '../broadcast/broadcast'
-import { useDebounce } from '../../hooks/debounce.hook'
+import { Editor } from '@/components'
 
 export const ChronicleFormDescription: React.FC = () => {
   const t = useTranslate()

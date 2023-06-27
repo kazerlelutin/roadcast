@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import { Flex } from '../../ui/flex/flex'
-import { GrabIcon } from '../../ui/icons/grab-icon'
-import { useThreeChronicle } from './chronicle'
+import { Flex, GrabIcon, Col } from '@/ui'
+import {
+  useThreeChronicle,
+  ChronicleThreeLineDrop,
+  useModes,
+  useChronicles,
+} from '@/entities'
 import styles from './chronicle-styles/chronicle-three-line.module.css'
 import { useDrag } from 'react-dnd'
-import { EDropZone } from '../../types/drop-zone'
-import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
-import { getResume } from '../../utils/get-resume'
-import { Col } from '../../ui/col/col'
-import { useModes } from '../broadcast/broadcast'
-import { useTranslate } from '../../hooks/translate.hook'
-import { useChronicles } from './chronicle'
+import { EDropZone } from '@/types'
+import { getResume } from '@/utils'
+import { useTranslate } from '@/hooks'
 
 export const ChronicleThreeLine: React.FC = () => {
   const t = useTranslate()

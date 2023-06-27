@@ -1,8 +1,6 @@
-import { ButtonAutoConfirm } from '../../components/button-auto-confirm/button-auto-confirm'
-import { useTranslate } from '../../hooks/translate.hook'
-import { MediaRoutes, useMedia } from './media'
-import { usePost } from '../../hooks/post.hook'
-import { useChronicles } from '../chronicle/chronicle'
+import { ButtonAutoConfirm } from '@/components'
+import { useTranslate, usePost } from '@/hooks'
+import { MediaRoutes, useMedia, useChronicles } from '@/entities'
 
 export const MediaDelButton: React.FC = () => {
   const { media } = useMedia()

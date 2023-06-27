@@ -1,8 +1,7 @@
 import styles from './twitch-button.module.css'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Col } from '../../ui/col/col'
+import { useTranslate, useCreateLink } from '@/hooks'
+import { Col } from '@/ui'
 import queryString from 'query-string'
-import { useCreateLink } from '../../hooks/create-link.hook'
 
 export const TwitchButton: React.FC = () => {
   const t = useTranslate(),

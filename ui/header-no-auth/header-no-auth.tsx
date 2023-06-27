@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import { FC } from 'react'
-import { RoadcastLogo } from '../roadcast-logo/roadcast-logo'
-import KofiButton from '../kofi-button/kofi-button'
+import { RoadcastLogo, KofiButton } from '@/ui'
 import styles from './header-no-auth.module.css'
 
 //for prevent SSR render with localStorage

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useState, useContext } from 'react'
 import { createContext } from 'react'
-import { TEntity } from '../../types/entity.type'
-import { IChronicle } from '../chronicle/chronicle'
+import { TEntity } from '@/types'
+import { IChronicle } from '@/entities'
 
 // INTERFACES ---------------------------------------------------------------
 interface MediaProviderProps {

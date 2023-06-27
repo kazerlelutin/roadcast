@@ -1,14 +1,8 @@
 import { useState } from 'react'
-import { useBroadcast } from '../broadcast/broadcast'
-import { useChronicles } from '../chronicle/chronicle'
-import { useUpload } from '../../hooks/upload.hook'
+import { useBroadcast, useChronicles } from '@/entities'
+import { useUpload, useTranslate } from '@/hooks'
 import { IMedia, MediaRoutes } from './media'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Col } from '../../ui/col/col'
-import { Button } from '../../ui/button/button'
-import { useFullscreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
-import { Info } from '../../ui/info/info'
-import { ErrorMsg } from '../../ui/error-msg/error-msg'
+import { Button, Col, ErrorMsg, Info, useFullscreenPopin } from '@/ui'
 
 export const MediaAddFormLocal: React.FC = () => {
   const { id, editor } = useBroadcast()

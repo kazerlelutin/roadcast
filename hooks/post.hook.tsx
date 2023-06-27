@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react'
-import { MiniLoaderContext } from '../components/mini-loader/mini-loader'
-import { useGetMyLocalId } from './get-my-local-id.hook'
-import { BroadcastContext } from '../entities/broadcast/broadcast'
-import { getObjectToBase64 } from '../utils/get-object-to-base64'
+import { MiniLoaderContext } from '@/components'
+import { getObjectToBase64 } from '@/utils'
+import { BroadcastContext } from '@/entities'
+import { useGetMyLocalId } from '@/hooks'
 
 interface Error {
   message: string

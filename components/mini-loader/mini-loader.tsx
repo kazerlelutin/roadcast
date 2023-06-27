@@ -1,5 +1,5 @@
 import styles from './mini-loader.module.css'
-import { ReactNode, useState, createContext } from 'react'
+import { ReactNode, useState, createContext, useContext } from 'react'
 
 // INTERFACES ---------------------------------------------------------------
 interface MiniLoaderProps {
@@ -33,3 +33,21 @@ export const MiniLoader = () => (
     </div>
   </div>
 )
+
+// HOOKS --------------------------------------------------------------------
+export const useMiniLoader = () => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [_, setGlobalLoading] = useContext(MiniLoaderContext)
+
+  const startLoading = () => {
+    setLoading(true)
+    setGlobalLoading(true)
+  }
+
+  const stopLoading = () => {
+    setLoading(false)
+    setGlobalLoading(false)
+  }
+
+  return [loading, startLoading, stopLoading] as const
+}

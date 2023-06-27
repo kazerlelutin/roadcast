@@ -1,11 +1,14 @@
-import { ChronicleProvider, useLastPosition } from './chronicle'
-import { useModes } from '../broadcast/broadcast'
-import { Col } from '../../ui/col/col'
-import { ChronicleCreateButton } from './chronicle-create-button'
-import { ChronicleForm } from './chronicle-form'
-import { ChronicleRefreshButton } from './chronicle-refresh-button'
-import { ChronicleRead } from './chronicle-read'
-import { EditorProvider } from '../editor/editor'
+import {
+  ChronicleProvider,
+  useLastPosition,
+  useModes,
+  ChronicleCreateButton,
+  ChronicleForm,
+  ChronicleRefreshButton,
+  ChronicleRead,
+  EditorProvider,
+} from '@/entities'
+import { Col } from '@/ui'
 
 export const Chronicles: React.FC = () => {
   const { chronicles, lastPosition } = useLastPosition()

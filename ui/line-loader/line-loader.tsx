@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Col } from '../col/col'
+import { Col } from '@/ui'
 import styles from './line-loader.module.css'
 
 interface LineLoaderProps {

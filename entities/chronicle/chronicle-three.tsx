@@ -1,15 +1,14 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { Col } from '../../ui/col/col'
-import { NoMessage } from '../../ui/no-message/no-message'
-import { useBroadcast } from '../broadcast/broadcast'
+import { useTranslate } from '@/hooks'
+import { Col, NoMessage } from '@/ui'
 import {
+  useBroadcast,
   ChronicleProvider,
   ChronicleThreeProvider,
+  ChronicleRefreshButton,
+  ChronicleThreeLine,
+  ChronicleThreeLineDrop,
   useThreeChronicle,
-} from './chronicle'
-import { ChronicleRefreshButton } from './chronicle-refresh-button'
-import { ChronicleThreeLine } from './chronicle-three-line'
-import { ChronicleThreeLineDrop } from './chronicle-three-line-drop'
+} from '@/entities'
 
 export const ChronicleThreeComp: React.FC = () => {
   const t = useTranslate()

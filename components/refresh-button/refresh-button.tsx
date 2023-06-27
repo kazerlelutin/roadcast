@@ -1,7 +1,6 @@
 import styles from './refresh-button.module.css'
-import { useTranslate } from '../../hooks/translate.hook'
-import { useLazyFetch } from '../../hooks/fetch-lazy.hook'
-import { UpdateIcon } from '../../ui/icons/update-icon'
+import { useLazyFetch, useTranslate } from '@/hooks'
+import { UpdateIcon } from '@/ui'
 
 interface RefreshButtonProps {
   url: string

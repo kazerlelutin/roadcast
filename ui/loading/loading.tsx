@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Flex } from '../flex/flex'
+import { useTranslate } from '@/hooks'
+import { Flex } from '@/ui'
 import styles from './loading.module.css'
 
 export const LoadingView: FC = () => {

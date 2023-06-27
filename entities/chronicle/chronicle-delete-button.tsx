@@ -1,13 +1,6 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { Button } from '../../ui/button/button'
-import { Col } from '../../ui/col/col'
-import { Flex } from '../../ui/flex/flex'
-import { ChronicleRoutes, useChronicles } from './chronicle'
-import { usePost } from '../../hooks/post.hook'
-import {
-  FullScreenPopin,
-  useFullscreenPopin,
-} from '../../ui/fullscreen-popin/fullscreen-popin'
+import { useTranslate, usePost } from '@/hooks'
+import { Button, Col, Flex, FullScreenPopin, useFullscreenPopin } from '@/ui'
+import { ChronicleRoutes, useChronicles } from '@/entities'
 
 export const ChronicleDeleteButtonForm: React.FC = () => {
   const { chronicle } = useChronicles()
