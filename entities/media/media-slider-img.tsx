@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { IMedia } from './media'
+import { IMedia } from '@/entities'
 import styles from './media-styles/media-slider-img.module.css'
 
 interface MediaSliderImgProps {

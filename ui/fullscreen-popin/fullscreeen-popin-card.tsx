@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react'
-import { Card } from '../card/card'
+import { useFullscreenPopin, Card } from '@/ui'
 import styles from './fullscreen-popin.module.css'
-import { useFullscreenPopin } from './fullscreen-popin'
 
 interface FullScreenPopinCardProps {
   children: ReactNode

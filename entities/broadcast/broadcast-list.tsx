@@ -1,7 +1,6 @@
-import { useFetch } from '../../hooks/fetch.hook'
-import { useTranslate } from '../../hooks/translate.hook'
-import { BroadcastRoutes, IBroadcast } from './broadcast'
-import { BroadcastListLine } from './broadcast-list-line'
+import { useFetch } from '@/hooks'
+import { useTranslate } from '@/hooks'
+import { BroadcastRoutes, IBroadcast, BroadcastListLine } from '@/entities'
 import styles from './broadcast-styles/broadcast-list.module.css'
 
 export const BroadcastList = () => {

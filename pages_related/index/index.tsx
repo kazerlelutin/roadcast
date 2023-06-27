@@ -1,10 +1,9 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { BasicLayout } from '../../layouts/basic/basic.layout'
+import { useTranslate } from '@/hooks'
+import { BasicLayout } from '@/layouts'
 import style from './index.module.css'
-import { BroadcastCreateForm } from '../../entities/broadcast/broadcast-create-form'
-import { BroadcastList } from '../../entities/broadcast/broadcast-list'
-import { Gridbox } from '../../ui/grid-box/grid-box'
-import { Footer } from '../../components/footer/footer'
+import { BroadcastCreateForm, BroadcastList } from '@/entities'
+import { Gridbox } from '@/ui'
+import { Footer } from '@/components'
 
 export default function Index() {
   const t = useTranslate()

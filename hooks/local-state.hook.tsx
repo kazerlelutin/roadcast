@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function useLocalState<T>(
+export function useLocalState<T>(
   initialState: T,
   nameOfState: string
 ): [T, React.Dispatch<React.SetStateAction<T>>] {

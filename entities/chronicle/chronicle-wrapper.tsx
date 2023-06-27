@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactNode, useEffect, useState } from 'react'
-import { useChronicles } from './chronicle'
-import { useDebounce } from '../../hooks/debounce.hook'
+import { useChronicles } from '@/entities'
+import { useDebounce } from '@/hooks'
 
 interface ChronicleWrapperProps {
   children: ReactNode

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Button } from '../../ui/button/button'
-import { useTranslate } from '../../hooks/translate.hook'
+import { Button } from '@/ui'
+import { useTranslate } from '@/hooks'
 import styles from './button-auto-confirm.module.css'
 
 interface ButtonAutoConfirmProps {

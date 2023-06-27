@@ -1,10 +1,9 @@
-import { Footer } from '../../components/footer/footer'
-import { useTranslate } from '../../hooks/translate.hook'
-import { BasicLayout } from '../../layouts/basic/basic.layout'
-import { Col } from '../../ui/col/col'
+import { Footer } from '@/components'
+import { useTranslate } from '@/hooks'
+import { BasicLayout } from '@/layouts'
+import { Col, ExternalLink } from '@/ui'
 import styles from './about.module.css'
 import pkg from '../../package.json'
-import { ExternalLink } from '../../ui/external-link/external-link'
 
 export const About: React.FC = () => {
   const t = useTranslate({

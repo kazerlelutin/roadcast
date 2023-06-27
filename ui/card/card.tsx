@@ -1,6 +1,5 @@
 import { FC, ReactNode, ReactElement } from 'react'
-import { Flex } from '../flex/flex'
-import { CloseIcon } from '../icons/close-icon'
+import { CloseIcon, Flex } from '@/ui'
 import styles from './card.module.css'
 
 interface CardProps {

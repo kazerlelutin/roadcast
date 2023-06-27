@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { createContext } from 'react'
-import { TriggerTypes, useSocketTrigger } from '../../components/socket'
-import { TEntity } from '../../types/entity.type'
-import { BroadcastContext } from '../broadcast/broadcast'
-import { IMedia } from '../media/media'
+import { TriggerTypes, useSocketTrigger } from '@/components'
+import { TEntity } from '@/types'
+import { BroadcastContext, IMedia } from '@/entities'
 
 // INTERFACES ---------------------------------------------------------------
 

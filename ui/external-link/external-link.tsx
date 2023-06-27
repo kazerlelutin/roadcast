@@ -1,5 +1,5 @@
 import styles from './external-link.module.css'
-import { ExternalIcon } from '../icons/external-icon'
+import { ExternalIcon } from '@/ui'
 
 interface ExternalLinkProps {
   href: string

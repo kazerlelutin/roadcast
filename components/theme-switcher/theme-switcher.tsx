@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import useLocalState from '../../hooks/local-state.hook'
-import { LightIcon } from '../../ui/icons/light-icon'
-import { LightOpenIcon } from '../../ui/icons/light-open-icon'
+import { useLocalState } from '@/hooks'
+import { LightIcon, LightOpenIcon } from '@/ui'
 import styles from './theme-switcher.module.css'
 
 export const ThemeSwitcher = () => {

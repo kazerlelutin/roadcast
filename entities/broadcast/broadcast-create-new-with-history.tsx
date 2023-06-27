@@ -1,13 +1,7 @@
 import { FC } from 'react'
-import {
-  FullScreenPopin,
-  useFullscreenPopin,
-} from '../../ui/fullscreen-popin/fullscreen-popin'
-import { Col } from '../../ui/col/col'
-import { Button } from '../../ui/button/button'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Flex } from '../../ui/flex/flex'
-import { useBroadcast } from './broadcast'
+import { FullScreenPopin, useFullscreenPopin, Col, Button, Flex } from '@/ui'
+import { useTranslate } from '@/hooks'
+import { useBroadcast } from '@/entities'
 
 const ModalContent: FC = () => {
   const { createBroadcastWithHistory } = useBroadcast()

@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Flex } from '../../ui/flex/flex'
-import { ExternalLink } from '../../ui/external-link/external-link'
+import { useTranslate } from '@/hooks'
+import { ExternalLink, Flex } from '@/ui'
 
 export const Footer: React.FC = () => {
   const t = useTranslate({

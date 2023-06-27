@@ -1,14 +1,8 @@
 import styles from './chronicle-styles/chronicle-three-line-drop.module.css'
 import { useDrop } from 'react-dnd'
-import { EDropZone } from '../../types/drop-zone'
-import { useContext } from 'react'
-import {
-  ChronicleRoutes,
-  ChroniclesContext,
-  IChronicle,
-  useThreeChronicle,
-} from './chronicle'
-import { usePost } from '../../hooks/post.hook'
+import { EDropZone } from '@/types'
+import { ChronicleRoutes, IChronicle, useThreeChronicle } from '@/entities'
+import { usePost } from '@/hooks'
 
 interface IChronicleThreeLineDrop {
   position: number

@@ -1,5 +1,5 @@
 import ReactPlayer from 'react-player'
-import { IMedia } from './media'
+import { IMedia } from '@/entities'
 import styles from './media-styles/media-slider-video.module.css'
 
 interface MediaSliderVideoProps {

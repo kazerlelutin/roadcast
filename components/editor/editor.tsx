@@ -2,16 +2,18 @@ import styles from './editor.module.css'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
-import { ParagraphIcon } from '../../ui/icons/paragraph-icon'
-import { BulletListIcon } from '../../ui/icons/bullet-list-icon'
-import { OrderListIcon } from '../../ui/icons/order-list-icon'
-import { QuoteIcon } from '../../ui/icons/quote-icon'
-import { UndoIcon } from '../../ui/icons/undo-icon'
-import { RedoIcon } from '../../ui/icons/redo-icon'
-import { CodeIcon } from '../../ui/icons/code-icon'
-import { CodeBlockIcon } from '../../ui/icons/code-block-icon'
-import { HorizontalRuleIcon } from '../../ui/icons/horizontal-rule'
-import { ReturnIcon } from '../../ui/icons/return-icon'
+import {
+  BulletListIcon,
+  CodeBlockIcon,
+  HorizontalRuleIcon,
+  OrderListIcon,
+  ParagraphIcon,
+  QuoteIcon,
+  RedoIcon,
+  ReturnIcon,
+  UndoIcon,
+} from '@/ui/icons'
+import { CodeIcon } from '@/ui/icons/code-icon'
 
 interface EditorProps {
   onChange: (value: string) => void

@@ -1,4 +1,4 @@
-const pageTranslate = {
+export const pageTranslate = {
   titleAccueil: {
     fr: 'Gérez et partagez vos conducteurs',
     en: 'Manage and share your drivers',
@@ -205,5 +205,3 @@ const pageTranslate = {
     en: 'Chronicle history',
   },
 }
-
-export default pageTranslate

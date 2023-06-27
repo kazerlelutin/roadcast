@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import pageTranslate from '../translate/page.translate'
+import { pageTranslate } from '@/translate'
 
 export const useTranslate = (translateJson?: Object) => {
   const { locale } = useRouter(),

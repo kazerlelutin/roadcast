@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Flex } from '../../ui/flex/flex'
+import { useTranslate } from '@/hooks'
+import { Flex } from '@/ui'
 
 interface PromiseRenderProps {
   loading: boolean

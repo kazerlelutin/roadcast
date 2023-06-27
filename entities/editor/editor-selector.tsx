@@ -1,10 +1,13 @@
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import { EditorRoutes, IEditor } from './editor'
+import {
+  EditorRoutes,
+  IEditor,
+  useBroadcast,
+  IChronicle,
+  useChronicles,
+} from '@/entities'
 import reactSelectStyle from '../../styles/reactSelectStyle'
-import { useTranslate } from '../../hooks/translate.hook'
-import { useBroadcast } from '../broadcast/broadcast'
-import { useSimpleFetch } from '../../hooks/simple-fetch.hook'
-import { IChronicle, useChronicles } from '../chronicle/chronicle'
+import { useTranslate, useSimpleFetch } from '@/hooks'
 import { useState } from 'react'
 
 export const EditorSelector: React.FC = () => {

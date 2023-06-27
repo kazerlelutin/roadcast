@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from './link-preview.module.css'
-import { useFetch } from '../../hooks/fetch.hook'
-import { ChronicleRoutes } from '../../entities/chronicle/chronicle'
-import { ExternalIcon } from '../../ui/icons/external-icon'
+import { useFetch } from '@/hooks'
+import { ChronicleRoutes } from '@/entities'
+import { ExternalIcon } from '@/ui'
 
 export interface LinkPreviewProps {
   url: string

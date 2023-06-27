@@ -1,10 +1,11 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react'
-import { FullscreenPopinProvider } from './fullscreen-popin.provider'
-import { FullScreenPopinCard } from './fullscreeen-popin-card'
-import { FullscreenPopinAction } from './fullscreen-popin-action'
+import {
+  FullscreenPopinProvider,
+  FullScreenPopinCard,
+  FullscreenPopinAction,
+  FullscreenPopinContext,
+} from '@/ui'
 import { createPortal } from 'react-dom'
-import { FullscreenPopinContext } from './fullscreen-popin.context'
-
 interface FullScreenPopinProps {
   children: ReactNode
   title: string

@@ -1,6 +1,9 @@
-import { RefreshButton } from '../../components/refresh-button/refresh-button'
-import { useBroadcast } from '../broadcast/broadcast'
-import { ChronicleRoutes, useShowChronicleButton } from './chronicle'
+import { RefreshButton } from '@/components'
+import {
+  useBroadcast,
+  ChronicleRoutes,
+  useShowChronicleButton,
+} from '@/entities'
 
 export const ChronicleRefreshButton: React.FC = () => {
   const { broadcast } = useBroadcast()

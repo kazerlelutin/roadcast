@@ -1,9 +1,7 @@
-import { useTranslate } from '../../hooks/translate.hook'
-import { FullScreenPopin } from '../../ui/fullscreen-popin/fullscreen-popin'
-import { Button } from '../../ui/button/button'
-import { MediaAddOnline } from './media-add-online'
+import { useTranslate } from '@/hooks'
+import { FullScreenPopin, Button } from '@/ui'
+import { MediaAddOnline, MediaAddFormLocal } from '@/entities'
 import styles from './media-styles/media-add-form.module.css'
-import { MediaAddFormLocal } from './media-add-form-local'
 
 export const MediaAddForm: React.FC = () => {
   const t = useTranslate({

@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react'
-import { MiniLoaderContext } from '../components/mini-loader/mini-loader'
-import { getObjectToBase64 } from '../utils/get-object-to-base64'
-import { BroadcastContext } from '../entities/broadcast/broadcast'
-import { useGetMyLocalId } from './get-my-local-id.hook'
+import { MiniLoaderContext } from '@/components'
+import { getObjectToBase64 } from '@/utils'
+import { BroadcastContext } from '@/entities'
+import { useGetMyLocalId } from '@/hooks'
 
-export interface Error {
+interface Error {
   message: string
   response: {
     status: number
     data: string
   }
 }
-export type FetchResult<T> = {
+type FetchResult<T> = {
   refetch: (newBody?: object) => void
   reSync: (newBody?: object) => void
   data: T

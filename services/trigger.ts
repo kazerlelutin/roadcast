@@ -1,11 +1,11 @@
 import Pusher from 'pusher'
-import { TriggerTypes } from '../components/socket'
+import { TriggerTypes } from '@/components'
 import {
   PUSHER_API_ID,
   PUSHER_KEY,
   PUSHER_REGION,
   PUSHER_SECRET,
-} from '../utils/constants'
+} from '@/utils'
 
 export const trigger = async (
   room: string,

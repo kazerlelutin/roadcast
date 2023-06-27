@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { FullscreenPopinContext } from './fullscreen-popin.context'
+import { FullscreenPopinContext } from '@/ui'
 
 interface FullscreenPopinProviderProps {
   children: ReactNode

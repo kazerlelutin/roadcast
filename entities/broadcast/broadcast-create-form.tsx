@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { Button } from '../../ui/button/button'
-import { useTranslate } from '../../hooks/translate.hook'
-import { Flex } from '../../ui/flex/flex'
+import { Button, Flex } from '@/ui'
+import { useTranslate } from '@/hooks'
 import va from '@vercel/analytics'
-import { useBroadcast } from './broadcast'
+import { useBroadcast } from '@/entities'
 
 export const BroadcastCreateForm: React.FC = () => {
   const [title, setTitle] = useState('')
