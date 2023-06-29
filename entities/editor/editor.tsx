@@ -1,5 +1,6 @@
 import { ReactNode, useState, createContext } from 'react'
 import { TEntity } from '@/types'
+import { Editor } from '@prisma/client'
 
 // INTERFACES ---------------------------------------------------------------
 interface EditorProviderProps {
@@ -10,13 +11,7 @@ interface EditorProviderProps {
 interface EditorsProviderProps {
   children: ReactNode
 }
-export interface IEditor {
-  id: string
-  name: string
-  description: string
-  broadcast_id: string
-  createdAt: Date
-}
+export interface IEditor extends Editor {}
 
 // CONTEXT ------------------------------------------------------------------
 
@@ -25,10 +20,7 @@ export const EditorsContext = createContext<TEntity<IEditor[]>>(null)
 
 // PROVIDER -----------------------------------------------------------------
 
-export const EditorProvider: React.FC<EditorProviderProps> = ({
-  children,
-  editor,
-}) => {
+export function EditorProvider({ children, editor }: EditorProviderProps) {
   const value = useState<IEditor | null>(editor)
 
   return (
@@ -36,9 +28,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
   )
 }
 
-export const EditorsProvider: React.FC<EditorsProviderProps> = ({
-  children,
-}) => {
+export function EditorsProvider({ children }: EditorsProviderProps) {
   const value = useState<IEditor[]>([])
 
   return (

@@ -3,7 +3,7 @@ import { FullScreenPopin, Button } from '@/ui'
 import { MediaAddOnline, MediaAddFormLocal } from '@/entities'
 import styles from './media-styles/media-add-form.module.css'
 
-export const MediaAddForm: React.FC = () => {
+export function MediaAddForm() {
   const t = useTranslate({
     addMedia: {
       en: 'Add media',

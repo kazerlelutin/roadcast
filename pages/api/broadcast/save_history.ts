@@ -8,10 +8,11 @@ async function broadcast_save_history(
   response: NextApiResponse,
   infos: BroadcastCtx
 ) {
-  const { myLocalId, reader } = infos
+  //TODO explain : save only editor history
+  const { myLocalId, editor } = infos
   const broadcast = await prisma.broadcast.findFirst({
     where: {
-      reader,
+      editor,
     },
   })
 

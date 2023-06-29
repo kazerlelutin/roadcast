@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { MiniLoaderContext } from '@/components'
 import { getObjectToBase64 } from '@/utils'
-import { BroadcastContext } from '@/entities'
+import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
 import { useGetMyLocalId } from '@/hooks'
 
 interface Error {
@@ -32,6 +32,7 @@ export function useLazyFetch<T>(
     [loading, setLoading] = useContext(MiniLoaderContext),
     [localLoading, setLocalLoading] = useState<boolean>(false),
     [broadcast] = useContext(BroadcastContext),
+    [scheduleAccount] = useContext(ScheduleAccountCtx),
     myLocalId = useGetMyLocalId(),
     [abort, setAbort] = useState<AbortController>()
 
@@ -51,8 +52,8 @@ export function useLazyFetch<T>(
           Accept: 'application/json',
           ['X-Info']: getObjectToBase64({
             myLocalId,
-            editor: broadcast.editor,
-            reader: broadcast.reader,
+            editor: broadcast.id ? broadcast.editor : scheduleAccount.editor,
+            reader: broadcast.id ? broadcast.reader : scheduleAccount.reader,
           }),
         },
         body: JSON.stringify(newBody || body || {}),

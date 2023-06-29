@@ -13,7 +13,7 @@ import { EDropZone } from '@/types'
 import { getResume } from '@/utils'
 import { useTranslate } from '@/hooks'
 
-export const ChronicleThreeLine: React.FC = () => {
+export function ChronicleThreeLine() {
   const t = useTranslate()
   const { isReadMode } = useModes()
   const { isDragging, updateDrag } = useThreeChronicle()

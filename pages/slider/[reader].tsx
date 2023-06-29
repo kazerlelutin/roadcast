@@ -1,7 +1,7 @@
-import { SocketProvider } from '../../components/socket'
-import { BroadcastProvider } from '../../entities/broadcast/broadcast'
-import { Slider } from '../../pages_related/slider/slider'
-import { prisma } from '../../db/db'
+import { SocketProvider } from '@/components'
+import { BroadcastProvider } from '@/entities'
+import { Slider } from '@/pages_related'
+import { prisma } from '@/db'
 
 export default function SliderPage({ broadcast }: { broadcast: string }) {
   return (

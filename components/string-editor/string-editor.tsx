@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './string-editor.module.css'
-import { FC, useContext, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { usePost, useDebounce } from '@/hooks'
-import { BroadcastReadModeContext } from '@/entities'
+import { useModes } from '@/entities'
 
 interface StringEditorProps {
   defaultValue: string
@@ -26,7 +26,7 @@ export const StringEditor: FC<StringEditorProps> = ({
     callback?.(data?.[name])
   })
   const [value, setValue] = useState<string>(defaultValue)
-  const [isReadMode] = useContext(BroadcastReadModeContext)
+  const { isReadMode } = useModes()
   const debouncedValue = useDebounce<string>(value, 800)
 
   useEffect(() => {

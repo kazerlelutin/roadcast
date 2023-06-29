@@ -10,7 +10,7 @@ import styles from './chronicle-styles/chronicle-read.module.css'
 import { Col } from '@/ui'
 import { LinkPreview } from '@/components'
 
-export const ChronicleRead: React.FC = () => {
+export function ChronicleRead() {
   const t = useTranslate()
   const { currentChronicle, chronicle } = useChronicles()
   const { isFocused } = useModes()

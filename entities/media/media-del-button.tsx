@@ -2,7 +2,7 @@ import { ButtonAutoConfirm } from '@/components'
 import { useTranslate, usePost } from '@/hooks'
 import { MediaRoutes, useMedia, useChronicles } from '@/entities'
 
-export const MediaDelButton: React.FC = () => {
+export function MediaDelButton() {
   const { media } = useMedia()
   const { chronicle, deleteMedia } = useChronicles()
   const { post } = usePost<{ message: string }>(MediaRoutes.delete, (data) => {

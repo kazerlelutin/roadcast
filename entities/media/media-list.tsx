@@ -6,7 +6,7 @@ import {
 } from '@/entities'
 import styles from './media-styles/media-list.module.css'
 
-export const MediaList: React.FC = () => {
+export function MediaList() {
   const { isFocused } = useModes()
   const { chronicle, currentChronicle } = useChronicles()
 

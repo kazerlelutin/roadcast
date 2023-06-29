@@ -3,9 +3,9 @@ import { Col, ExternalIcon, Gridbox } from '@/ui'
 import { useGetChronicleHistory } from '@/entities'
 import styles from './broadcast-styles/broadcast-chronicle-history.module.css'
 
-export const BroadcastChronicleHistory: React.FC = () => {
+export function BroadcastChronicleHistory() {
   const t = useTranslate()
-  const { chronicleHistory, loading } = useGetChronicleHistory()
+  const { chronicleHistory } = useGetChronicleHistory()
 
   if (!chronicleHistory?.length) return null
 

@@ -1,7 +1,19 @@
 export const pageTranslate = {
-  titleAccueil: {
+  titleHome: {
     fr: 'Gérez et partagez vos conducteurs',
     en: 'Manage and share your drivers',
+  },
+  subtitleHome: {
+    fr: "Organisez et planifiez vos émissions en un clin d'œil!",
+    en: 'Organize and plan your broadcasts in a snap!',
+  },
+  appSummarySchedule: {
+    fr: "Gérez votre calendrier d'émissions, ajoutez des sujets, descriptifs, dates, invitez des participants et suivez l'état de vos projets en toute simplicité.",
+    en: 'Manage your broadcast calendar, add topics, descriptions, dates, invite participants and track the status of your projects with ease.',
+  },
+  noAccountRequired: {
+    fr: 'Commencez tout de suite, aucune création de compte requise!',
+    en: 'Start right away, no account creation required!',
   },
   appSummary: {
     fr: 'Vous pouvez rédiger des conducteurs et les partager avec vos chroniqueurs, diffuser des médias sur votre live, et bien plus encore.',
@@ -203,5 +215,69 @@ export const pageTranslate = {
   chroniclesHistory: {
     fr: 'Historique des chroniques',
     en: 'Chronicle history',
+  },
+  drivers: {
+    fr: 'Conducteurs',
+    en: 'broadcasts',
+  },
+  schedule: {
+    fr: 'planning',
+    en: 'schedule',
+  },
+  subject: {
+    en: 'Subject',
+    fr: 'Titre',
+  },
+  info: {
+    en: 'Info',
+    fr: 'Info',
+  },
+  guests: {
+    en: 'Guests',
+    fr: 'Invités',
+  },
+  editors: {
+    fr: 'Chroniqueurs',
+    en: 'Editors',
+  },
+  start_at: {
+    fr: 'Horaire',
+    en: 'Schedule',
+  },
+  status: {
+    en: 'Status',
+    fr: 'Statut',
+  },
+  close: {
+    en: 'Close',
+    fr: 'Fermer',
+  },
+  project: {
+    en: 'Project',
+    fr: 'Projet',
+  },
+  delayed: {
+    fr: 'Reporté',
+    en: 'Delayed',
+  },
+  progress: {
+    fr: 'En cours',
+    en: 'In progress',
+  },
+  done: {
+    fr: 'Terminé',
+    en: 'Done',
+  },
+  noGuests: {
+    fr: 'Aucun invité',
+    en: 'No guests',
+  },
+  SelectGuests: {
+    fr: 'Sélectionnez des invités',
+    en: 'Select guests',
+  },
+  broadcast: {
+    fr: 'conducteur',
+    en: 'broadcast',
   },
 }

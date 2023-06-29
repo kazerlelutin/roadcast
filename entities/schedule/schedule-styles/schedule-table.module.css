@@ -1,0 +1,53 @@
+.container {
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  --table-size: (100vw / 10);
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
+}
+
+.table td {
+  padding: var(--dms-padding) var(--dms-padding-lg);
+}
+
+.table tr:nth-child(odd) {
+  background: var(--dms-bg-dark);
+}
+
+.table thead > tr:nth-child(odd) {
+  background: var(--dms-bg);
+}
+
+.table th {
+  padding: var(--dms-padding-lg) var(--dms-padding-sm);
+  text-transform: uppercase;
+}
+
+.subject {
+  min-width: calc(var(--table-size));
+}
+
+.info {
+  min-width: calc(var(--table-size) * 3);
+}
+
+.guests,
+.editors {
+  min-width: calc(var(--table-size));
+}
+
+.start {
+  min-width: calc(var(--table-size) / 2);
+}
+
+.status {
+  min-width: calc(var(--table-size) / 2);
+}

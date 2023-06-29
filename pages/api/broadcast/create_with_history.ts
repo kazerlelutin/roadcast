@@ -30,7 +30,7 @@ async function create_with_history(
           },
         },
       },
-      ChronicleHistories: {
+      chronicleHistories: {
         select: {
           title: true,
           source: true,
@@ -54,14 +54,14 @@ async function create_with_history(
           position: 0,
         },
       },
-      ChronicleHistories: {
+      chronicleHistories: {
         create: [
           ...broadcast.chronicles.map((chronicle) => ({
             title: chronicle.title,
             source: chronicle.source,
             editor: chronicle?.editor?.name || 'unknown',
           })),
-          ...broadcast.ChronicleHistories.map((history) => ({
+          ...broadcast.chronicleHistories.map((history) => ({
             title: history.title,
             source: history.source,
             editor: history.editor,

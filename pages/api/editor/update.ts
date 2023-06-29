@@ -5,16 +5,91 @@ import { BroadcastCtx } from '../../../types/broadcast-ctx'
 import { trigger } from '../../../services/trigger'
 import { TriggerTypes } from '../../../components/socket'
 
+interface EditorUpdateBody {
+  chronicleId?: string
+  id?: string
+  idsToDelete?: string[]
+  idsToAdd?: string[]
+  scheduleId?: string
+}
 async function editor_update(
   request: NextApiRequest,
   response: NextApiResponse,
   info: BroadcastCtx
 ) {
   const { editor, myLocalId, reader } = info
-  const { chronicleId, id } = JSON.parse(request.body)
+  const {
+    chronicleId,
+    id,
+    idsToDelete,
+    idsToAdd,
+    scheduleId,
+  }: EditorUpdateBody = JSON.parse(request.body)
 
-  if (!editor || !chronicleId)
-    return response.status(401).json({ error: 'Unauthorized' })
+  if (!editor) return response.status(401).json({ error: 'Unauthorized' })
+
+  if (scheduleId) {
+    const scheduleAccount = await prisma.scheduleAccount.findUnique({
+      where: {
+        editor,
+      },
+    })
+
+    if (!scheduleAccount)
+      return response.status(401).json({ error: 'Unauthorized' })
+
+    const schedule = await prisma.schedule.findUnique({
+      where: {
+        id: scheduleId,
+      },
+    })
+
+    if (!schedule || !scheduleAccount.id)
+      return response.status(401).json({ error: 'Unauthorized' })
+
+    await prisma.editor.updateMany({
+      where: {
+        id: {
+          in: idsToDelete || [],
+        },
+      },
+      data: {
+        scheduleId: null,
+      },
+    })
+
+    await prisma.editor.updateMany({
+      where: {
+        id: {
+          in: idsToAdd || [],
+        },
+      },
+      data: {
+        scheduleId: schedule.id,
+        scheduleAccountId: scheduleAccount.id,
+      },
+    })
+
+    trigger(reader, TriggerTypes.SCHEDULE, {
+      message: scheduleId,
+      id: myLocalId,
+    })
+
+    trigger(editor, TriggerTypes.SCHEDULE, {
+      message: 'refresh',
+      id: myLocalId,
+    })
+
+    const editors = await prisma.editor.findMany({
+      where: {
+        scheduleId: schedule.id,
+      },
+    })
+
+    return response.status(200).json(editors)
+  }
+
+  if (!chronicleId) return response.status(401).json({ error: 'Unauthorized' })
 
   const broadcast = await prisma.broadcast.findUnique({
     where: {

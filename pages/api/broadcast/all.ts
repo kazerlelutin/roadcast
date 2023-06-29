@@ -15,8 +15,10 @@ async function broadcast_all(
     select: {
       broadcast: {
         select: {
+          id: true,
           editor: true,
           title: true,
+          createdAt: true,
         },
       },
     },

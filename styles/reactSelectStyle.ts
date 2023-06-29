@@ -18,7 +18,7 @@ const reactSelectStyle = {
     border: 'none',
     backgroundColor: 'var(--dms-card)',
   }),
-  input: (provided, state) => ({
+  input: (provided: any) => ({
     ...provided,
     minWidth: '100px',
     color: 'var(--color-txt)',
@@ -33,11 +33,11 @@ const reactSelectStyle = {
     display: state.isFocused ? 'none' : 'inherit',
     padding: '0 10px',
   }),
-  dropdownIndicator: (provided: any, state: any) => ({
+  dropdownIndicator: (_provided: any, state: any) => ({
     color: `var(${state.hover ? '--color-border' : '--color-link'})`,
     padding: '0 5px',
     cursor: 'pointer',
-    zIndex: 10,
+    zIndex: 0,
   }),
   singleValue: (provided, state) => {
     const opacity = state.isDisabled ? 0.5 : 1,
@@ -50,13 +50,14 @@ const reactSelectStyle = {
     margin: '0',
     padding: '0',
     background: 'var(--dms-bg-dark)',
-    zIndex: 10,
+    zIndex: 15,
     border: 'none',
   }),
   multiValue: (provided: any) => ({
     ...provided,
     background: 'var(--dms-card-bg)',
     color: 'var(--color-text)',
+    zIndex: 15,
   }),
   multiValueLabel: (provided: any) => ({
     ...provided,

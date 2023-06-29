@@ -20,17 +20,33 @@
 }
 
 .read h2 {
-  font-size: var(--dms-font-size-xl);
+  font-size: var(--dms-font-size-lg);
   font-weight: bold;
 }
 
+.read h3 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
 .read p {
-  font-size: var(--dms-font-size-lg);
+  font-size: var(--dms-font-size);
   color: var(--dms-highlight);
 }
 
 :is(body[data-color-scheme='light']) .read p {
   color: var(--dms-highlight-dark);
+}
+
+p.account {
+  font-size: var(--dms-font-size);
+  font-style: italic;
+  color: var(--dms-light);
+}
+
+.form {
+  height: 100%;
+  overflow: hidden;
 }
 
 @media screen and (min-width: 600px) {
@@ -42,6 +58,10 @@
   .read h2 {
     max-width: 75%;
     font-size: var(--dms-font-size-xxl);
+  }
+
+  .read h3 {
+    font-weight: bold;
   }
 
   .actions {

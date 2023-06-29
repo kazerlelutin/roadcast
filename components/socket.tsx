@@ -11,7 +11,7 @@ import { PUSHER_KEY } from '@/utils'
 import { useRouter } from 'next/router'
 import { useGetMyLocalId } from '@/hooks'
 import Pusher from 'pusher-js'
-import { BroadcastContext } from '@/entities'
+import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -22,6 +22,8 @@ export enum TriggerTypes {
   BROADCAST = 'broadcast',
   MEDIA = 'media',
   SLIDER = 'slider',
+  SCHEDULE_ACCOUNT = 'schedule_account',
+  SCHEDULE = 'schedule',
 }
 
 // CONTEXT ------------------------------------------------------------------
@@ -50,6 +52,7 @@ export const useSocketTrigger = (
 export const useSocket = () => {
   const myLocalId = useGetMyLocalId()
   const [broadcast] = useContext(BroadcastContext)
+  const [schedule] = useContext(ScheduleAccountCtx)
   const router = useRouter()
   const [message, setMessage] = useState<{
     type: TriggerTypes | undefined
@@ -72,12 +75,18 @@ export const useSocket = () => {
       cluster: 'eu',
     })
 
-    const channel = pusher.subscribe(broadcast.reader as string)
+    const channelName = router.pathname.match(/schedule/)
+      ? (schedule.reader as string)
+      : (broadcast.reader as string)
+
+    const channel = pusher.subscribe(channelName)
     const events = [
       TriggerTypes?.BROADCAST,
       TriggerTypes?.CHRONICLE,
       TriggerTypes?.MEDIA,
       TriggerTypes?.SLIDER,
+      TriggerTypes?.SCHEDULE_ACCOUNT,
+      TriggerTypes?.SCHEDULE,
     ]
     events.forEach((event) => {
       channel.bind(event, cbSocket)

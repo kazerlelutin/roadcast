@@ -8,9 +8,7 @@ interface IChronicleThreeLineDrop {
   position: number
 }
 
-export const ChronicleThreeLineDrop: React.FC<IChronicleThreeLineDrop> = ({
-  position,
-}) => {
+export function ChronicleThreeLineDrop({ position }: IChronicleThreeLineDrop) {
   const { isDragging, updateThree } = useThreeChronicle()
   const { post } = usePost<IChronicle[]>(ChronicleRoutes.position)
   const [collectedProps, drop] = useDrop(() => ({

@@ -3,7 +3,8 @@ import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { createContext } from 'react'
 import { TriggerTypes, useSocketTrigger } from '@/components'
 import { TEntity } from '@/types'
-import { BroadcastContext, IMedia } from '@/entities'
+import { BroadcastContext, IEditor, IMedia } from '@/entities'
+import { Chronicle } from '@prisma/client'
 
 // INTERFACES ---------------------------------------------------------------
 
@@ -13,18 +14,9 @@ export enum ChronicleStatus {
   read = 'read',
 }
 
-export interface IChronicle {
-  id: string
-  broadcast_id: string
-  title: string
-  position: number
-  text?: string
-  source: string
-  status: ChronicleStatus
-  createdAt: Date
-  updatedAt: Date
+export interface IChronicle extends Chronicle {
   medias: IMedia[]
-  editor: any
+  editor: IEditor
 }
 
 interface ChronicleProviderProps {
@@ -51,10 +43,10 @@ export const ChronicleRefreshButtonContext =
 
 // PROVIDERS -----------------------------------------------------------------
 
-export const ChronicleProvider: React.FC<ChronicleProviderProps> = ({
+export function ChronicleProvider({
   children,
   chronicle,
-}) => {
+}: ChronicleProviderProps) {
   const value = useState<IChronicle>(chronicle)
 
   return (
@@ -64,9 +56,9 @@ export const ChronicleProvider: React.FC<ChronicleProviderProps> = ({
   )
 }
 
-export const ChronicleToScreenProvider: React.FC<ChroniclesProviderProps> = ({
+export function ChronicleToScreenProvider({
   children,
-}) => {
+}: ChroniclesProviderProps) {
   const value = useState<string>()
 
   return (
@@ -76,9 +68,7 @@ export const ChronicleToScreenProvider: React.FC<ChroniclesProviderProps> = ({
   )
 }
 
-export const ChroniclesProvider: React.FC<ChroniclesProviderProps> = ({
-  children,
-}) => {
+export function ChroniclesProvider({ children }: ChroniclesProviderProps) {
   const [broadcast] = useContext(BroadcastContext)
   const chronicles =
     broadcast?.chronicles?.sort((a, b) => a.position - b.position) || []
@@ -110,9 +100,7 @@ export const ChroniclesProvider: React.FC<ChroniclesProviderProps> = ({
   )
 }
 
-export const ChronicleThreeProvider: React.FC<ChroniclesProviderProps> = ({
-  children,
-}) => {
+export function ChronicleThreeProvider({ children }: ChroniclesProviderProps) {
   const value = useState<boolean>(false)
   return (
     <ChronicleThreeContext.Provider value={value}>
@@ -121,9 +109,9 @@ export const ChronicleThreeProvider: React.FC<ChroniclesProviderProps> = ({
   )
 }
 
-export const ChronicleRefreshButtonProvider: React.FC<
-  ChroniclesProviderProps
-> = ({ children }) => {
+export function ChronicleRefreshButtonProvider({
+  children,
+}: ChroniclesProviderProps) {
   const value = useState<boolean>(false)
   return (
     <ChronicleRefreshButtonContext.Provider value={value}>
@@ -148,7 +136,7 @@ export enum ChronicleRoutes {
 
 // HOOKS --------------------------------------------------------------------
 
-export const useThreeChronicle = () => {
+export function useThreeChronicle() {
   const ctx = useContext(ChronicleThreeContext)
   const ctxChronicles = useContext(ChroniclesContext)
 
@@ -194,7 +182,7 @@ export const useThreeChronicle = () => {
   }
 }
 
-export const useCreateChronicle = () => {
+export function useCreateChronicle() {
   const ctx = useContext(ChroniclesContext)
 
   if (!ctx)
@@ -212,7 +200,7 @@ export const useCreateChronicle = () => {
   }
 }
 
-export const useShowChronicleButton = () => {
+export function useShowChronicleButton() {
   const ctx = useContext(ChronicleRefreshButtonContext)
 
   if (!ctx)
@@ -237,7 +225,7 @@ export const useShowChronicleButton = () => {
   }
 }
 
-export const useLastPosition = () => {
+export function useLastPosition() {
   const ctx = useContext(ChroniclesContext)
   if (!ctx)
     throw new Error(
@@ -254,7 +242,7 @@ export const useLastPosition = () => {
   }
 }
 
-export const useChronicles = () => {
+export function useChronicles() {
   const currentChronicleCtx = useContext(ChronicleToScreenContext)
   const ctx = useContext(ChronicleContext)
   const chroniclesCtx = useContext(ChroniclesContext)

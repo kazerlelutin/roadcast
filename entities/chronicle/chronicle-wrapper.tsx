@@ -7,9 +7,7 @@ interface ChronicleWrapperProps {
   children: ReactNode
 }
 
-export const ChronicleWrapper: React.FC<ChronicleWrapperProps> = ({
-  children,
-}) => {
+export function ChronicleWrapper({ children }: ChronicleWrapperProps) {
   const { chronicle, currentChronicle, setCurrentChronicle } = useChronicles()
   const [overChronicle, setOverChronicle] = useState<string>('')
   const overChronicleDebounced = useDebounce(overChronicle, 500)

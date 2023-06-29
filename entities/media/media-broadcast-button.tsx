@@ -2,7 +2,7 @@ import { usePost, useTranslate } from '@/hooks'
 import { Button, useFullscreenPopin } from '@/ui'
 import { MediaRoutes, useMedia } from '@/entities'
 
-export const MediaBroadcastButton: React.FC = () => {
+export function MediaBroadcastButton() {
   const { media } = useMedia()
   const { post } = usePost(MediaRoutes.broadcast)
 

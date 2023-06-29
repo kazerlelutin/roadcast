@@ -10,6 +10,8 @@ import { FullscreenPopinProvider } from '@/ui'
 import { useTranslate } from '@/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import 'dayjs/locale/fr'
+import 'dayjs/locale/en'
 
 NProgress.configure({ showSpinner: false, easing: 'ease', speed: 500 })
 Router.events.on('routeChangeStart', () => NProgress.start())

@@ -10,7 +10,7 @@ import {
   useThreeChronicle,
 } from '@/entities'
 
-export const ChronicleThreeComp: React.FC = () => {
+export function ChronicleThreeComp() {
   const t = useTranslate()
   const { broadcast } = useBroadcast()
   const { chronicles } = useThreeChronicle()
@@ -33,8 +33,10 @@ export const ChronicleThreeComp: React.FC = () => {
   )
 }
 
-export const ChronicleThree: React.FC = () => (
-  <ChronicleThreeProvider>
-    <ChronicleThreeComp />
-  </ChronicleThreeProvider>
-)
+export function ChronicleThree() {
+  return (
+    <ChronicleThreeProvider>
+      <ChronicleThreeComp />
+    </ChronicleThreeProvider>
+  )
+}

@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  gap: var(--dms-gap-sm);
+}
+
+.status {
+  white-space: nowrap;
+  color: white;
+  border-radius: var(--dms-border-radius);
+  padding: var(--dms-padding-sm) var(--dms-padding);
+}
+
+.status[data-status='project'] {
+  background: var(--dms-highlight);
+}
+
+.status[data-status='delayed'] {
+  background: var(--dms-warning-light);
+}
+
+.status[data-status='progress'] {
+  background: var(--dms-light);
+}
+
+.status[data-status='done'] {
+  background: var(--dms-info-light);
+}

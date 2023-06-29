@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect } from 'react'
-import {
-  BroadcastContext,
-  BroadcastRoutes,
-} from '../entities/broadcast/broadcast'
+import { useEffect } from 'react'
+import { BroadcastRoutes } from '../entities/broadcast/broadcast'
 import { usePost } from './post.hook'
 
 export const useBroadcastLocalSave = () => {

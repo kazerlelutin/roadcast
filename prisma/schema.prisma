@@ -13,6 +13,13 @@ enum ChronicleStatus {
   read
 }
 
+enum ScheduleStatus {
+  project
+  delayed
+  progress
+  done
+}
+
 model Broadcast {
   id                 String                 @id @default(uuid())
   title              String                 @db.Text
@@ -26,8 +33,9 @@ model Broadcast {
   updatedAt          DateTime               @updatedAt
   chronicles         Chronicle[]
   editors            Editor[]
-  History            UserBroadcastHistory[]
-  ChronicleHistories ChronicleHistory[]
+  history            UserBroadcastHistory[]
+  chronicleHistories ChronicleHistory[]
+  schedule           Schedule?
 }
 
 model ChronicleHistory {
@@ -41,12 +49,16 @@ model ChronicleHistory {
 }
 
 model Editor {
-  id           String      @id @default(uuid())
-  name         String      @db.Text
-  broadcast    Broadcast   @relation(fields: [broadcast_id], references: [id])
-  broadcast_id String      @db.Text
-  createdAt    DateTime    @default(now()) @db.Timestamp(6)
-  chronicles   Chronicle[]
+  id                String           @id @default(uuid())
+  name              String           @db.Text
+  broadcast         Broadcast?       @relation(fields: [broadcast_id], references: [id])
+  broadcast_id      String?          @db.Text
+  createdAt         DateTime         @default(now()) @db.Timestamp(6)
+  chronicles        Chronicle[]
+  ScheduleAccount   ScheduleAccount? @relation(fields: [scheduleAccountId], references: [id])
+  scheduleAccountId String?
+  schedule          Schedule?        @relation(fields: [scheduleId], references: [id])
+  scheduleId        String?
 }
 
 model Chronicle {
@@ -93,4 +105,57 @@ model UserBroadcastHistory {
   broadcast    Broadcast @relation(fields: [broadcast_id], references: [id])
   createdAt    DateTime  @default(now()) @db.Timestamp(6)
   user_id      String    @db.Text
+}
+
+model UserScheduleHistory {
+  id               String          @id @default(uuid())
+  schedule_id      String          @db.Text
+  scheduleAccounts ScheduleAccount @relation(fields: [schedule_id], references: [id])
+  createdAt        DateTime        @default(now()) @db.Timestamp(6)
+  user_id          String          @db.Text
+}
+
+model ScheduleAccount {
+  id                  String                @id @default(uuid())
+  title               String                @db.Text
+  prefix              String                @unique @db.Uuid
+  editor              String                @unique @db.Text
+  //reader for guests
+  reader              String                @unique @db.Text
+  createdAt           DateTime              @default(now()) @db.Timestamp(6)
+  user_id             String                @db.Text
+  schedules           Schedule[]
+  userScheduleHistory UserScheduleHistory[]
+  editors             Editor[]
+  guests              Guest[]
+}
+
+model Schedule {
+  id           String          @id @default(uuid())
+  createdAt    DateTime        @default(now()) @db.Timestamp(6)
+  start_at     DateTime?       @db.Timestamp(6)
+  subject      String          @db.Text
+  info         String          @db.Text
+  status       ScheduleStatus  @default(project)
+  account      ScheduleAccount @relation(fields: [account_id], references: [id])
+  account_id   String          @db.Text
+  broadcast    Broadcast?      @relation(fields: [broadcast_id], references: [id])
+  broadcast_id String?         @unique @db.Text
+  guests       Guest[]
+  editors      Editor[]
+}
+
+model Guest {
+  id                String          @id @default(uuid())
+  name              String          @db.Text
+  twitter           String?         @db.Text
+  picture           String?         @db.Text
+  link              String?         @db.Text
+  bio               String?         @db.Text
+  confirm           Boolean         @default(false)
+  createdAt         DateTime        @default(now()) @db.Timestamp(6)
+  scheduleAccount   ScheduleAccount @relation(fields: [scheduleAccountId], references: [id])
+  scheduleAccountId String
+  Schedule          Schedule?       @relation(fields: [schedule_id], references: [id])
+  schedule_id       String?
 }

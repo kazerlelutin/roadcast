@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 
 const About = dynamic(
-  () => import('../pages_related/about/about').then((comp) => comp.About),
+  () => import('@/pages_related').then((comp) => comp.About),
   {
     ssr: false,
   }

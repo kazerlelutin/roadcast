@@ -16,11 +16,11 @@ async function chronicle_history(
       editor: editor,
     },
     select: {
-      ChronicleHistories: true,
+      chronicleHistories: true,
     },
   })
 
-  return response.status(200).json(broadcast.ChronicleHistories)
+  return response.status(200).json(broadcast.chronicleHistories)
 }
 
 const helper = (request: NextApiRequest, response: NextApiResponse) =>
