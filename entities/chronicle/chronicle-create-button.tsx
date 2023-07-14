@@ -11,9 +11,9 @@ interface ChronicleCreateButtonProps {
   position: number
 }
 
-export const ChronicleCreateButton: React.FC<ChronicleCreateButtonProps> = ({
+export function ChronicleCreateButton({
   position,
-}) => {
+}: ChronicleCreateButtonProps) {
   const t = useTranslate({
     create: {
       fr: 'Ajouter une chronique',

@@ -1,16 +1,10 @@
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import {
-  EditorRoutes,
-  IEditor,
-  useBroadcast,
-  IChronicle,
-  useChronicles,
-} from '@/entities'
+import { EditorRoutes, IEditor, useBroadcast, useChronicles } from '@/entities'
 import reactSelectStyle from '../../styles/reactSelectStyle'
 import { useTranslate, useSimpleFetch } from '@/hooks'
 import { useState } from 'react'
 
-export const EditorSelector: React.FC = () => {
+export function EditorSelector() {
   const t = useTranslate()
   const { broadcast } = useBroadcast()
   const { chronicle, updateChronicleField, editorCount } = useChronicles()
@@ -44,37 +38,35 @@ export const EditorSelector: React.FC = () => {
   const createEditor = async (inputValue: string) => {
     const newEditor = await getData<IEditor>(EditorRoutes.create, {
       name: inputValue,
-      editor: broadcast.editor,
       chronicleId: chronicle.id,
     })
     setValue({
       value: newEditor.id,
       label: newEditor.name,
     })
-    updateChronicleField<IChronicle['editor']>('editor', newEditor)
+    updateChronicleField('editor', newEditor)
   }
 
   const updateEditor = async (id: string) => {
     const newEditor = await getData<IEditor>(EditorRoutes.update, {
       id,
-      editor: broadcast.editor,
       chronicleId: chronicle.id,
     })
     setValue({
       value: newEditor.id,
       label: newEditor.name,
     })
-    updateChronicleField<IChronicle['editor']>('editor', newEditor)
+    updateChronicleField('editor', newEditor)
   }
+
+  const key = `${editorCount}-${broadcast.id}-${chronicle.id}-${
+    chronicle.editor?.id || 'noEditor'
+  }`
 
   return (
     <AsyncCreatableSelect
-      instanceId={`${editorCount}-${broadcast.id}-${chronicle.id}-${
-        chronicle.editor?.id || 'noEditor'
-      }`}
-      key={`${editorCount}-${broadcast.id}-${chronicle.id}-${
-        chronicle.editor?.id || 'noEditor'
-      }`}
+      instanceId={key}
+      key={key}
       styles={reactSelectStyle}
       placeholder={t('SelectEditor')}
       cacheOptions

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../db/db'
+import { prisma } from '@/db'
 import { v4 as uuidv4 } from 'uuid'
-import { generateRandomCode } from '../../../utils/generate_code'
+import { generateRandomCode } from '@/utils'
 
 export default async function broadcast_create(
   request: NextApiRequest,

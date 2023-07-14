@@ -3,6 +3,7 @@ import { ReactNode, useState, useContext } from 'react'
 import { createContext } from 'react'
 import { TEntity } from '@/types'
 import { IChronicle } from '@/entities'
+import { Media } from '@prisma/client'
 
 // INTERFACES ---------------------------------------------------------------
 interface MediaProviderProps {
@@ -10,15 +11,7 @@ interface MediaProviderProps {
   media: IMedia
 }
 
-export interface IMedia {
-  id: string
-  source: string
-  name: string
-  type: 'image' | 'video' | 'website' | 'text'
-  url: string
-  cover?: string
-  size: number
-  createdAt: Date
+export interface IMedia extends Media {
   chronicles: IChronicle[]
   tags: string[]
 }

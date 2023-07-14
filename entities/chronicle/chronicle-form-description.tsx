@@ -6,7 +6,7 @@ import { useTranslate, usePost, useDebounce } from '@/hooks'
 import styles from './chronicle-styles/chronicle-form-description.module.css'
 import { Editor } from '@/components'
 
-export const ChronicleFormDescription: React.FC = () => {
+export function ChronicleFormDescription() {
   const t = useTranslate()
   const { chronicle, updateChronicle } = useChronicles()
   const { isReadMode } = useModes()

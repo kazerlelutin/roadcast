@@ -3,7 +3,7 @@ import { useTranslate, usePost } from '@/hooks'
 import { Button, Col, Info, useFullscreenPopin } from '@/ui'
 import { useChronicles, useBroadcast, IMedia, MediaRoutes } from '@/entities'
 
-export const MediaAddOnline: React.FC = () => {
+export function MediaAddOnline() {
   const [link, setLink] = useState<string>('')
   const { id, editor } = useBroadcast()
   const { chronicle, addMedia } = useChronicles()

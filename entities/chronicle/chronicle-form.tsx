@@ -13,7 +13,7 @@ import styles from './chronicle-styles/chronicle-form.module.css'
 import { StringEditor } from '@/components'
 import { useTranslate } from '@/hooks'
 
-export const ChronicleForm: React.FC = () => {
+export function ChronicleForm() {
   const { chronicle, updateChronicleField } = useChronicles()
   const t = useTranslate()
 

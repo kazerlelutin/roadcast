@@ -4,17 +4,13 @@ import { useTranslate } from '@/hooks'
 import va from '@vercel/analytics'
 import { useBroadcast } from '@/entities'
 
-export const BroadcastCreateForm: React.FC = () => {
+export function BroadcastCreateForm() {
   const [title, setTitle] = useState('')
   const { createBroadcast } = useBroadcast()
   const t = useTranslate({
     createBroadcast: {
       fr: 'Créer un conducteur',
       en: 'Create a broadcast',
-    },
-    create: {
-      fr: 'Créer',
-      en: 'Create',
     },
   })
 

@@ -10,7 +10,7 @@ import {
 } from '@/entities'
 import { Col } from '@/ui'
 
-export const Chronicles: React.FC = () => {
+export function Chronicles() {
   const { chronicles, lastPosition } = useLastPosition()
   const { isReadMode } = useModes()
 

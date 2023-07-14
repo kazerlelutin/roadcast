@@ -1,21 +1,19 @@
-import { SocketProvider } from '../../components/socket'
+import { SocketProvider } from '@/components'
 import {
   BroadcastFocusModeProvider,
   BroadcastProvider,
   BroadcastReadModeProvider,
-} from '../../entities/broadcast/broadcast'
-import {
   ChronicleRefreshButtonProvider,
   ChronicleToScreenProvider,
   ChroniclesProvider,
-} from '../../entities/chronicle/chronicle'
-import { EditorsProvider } from '../../entities/editor/editor'
-import { prisma } from '../../db/db'
+  EditorsProvider,
+} from '@/entities'
+import { prisma } from '@/db'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 
 const Editor = dynamic(
-  () => import('../../pages_related/editor/editor').then((comp) => comp.Editor),
+  () => import('@/pages_related').then((comp) => comp.Editor),
   {
     ssr: false,
   }
@@ -52,7 +50,7 @@ export default function EditorPage({
   )
 }
 
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query }) {
   const broadcast = await prisma.broadcast.findFirst({
     where: { editor: query.editor },
     include: {
@@ -64,6 +62,12 @@ export async function getServerSideProps({ query, req }) {
       },
     },
   })
+
+  if (!broadcast) {
+    return {
+      redirect: '/',
+    }
+  }
 
   return {
     props: { broadcast: JSON.stringify(broadcast), title: broadcast.title },

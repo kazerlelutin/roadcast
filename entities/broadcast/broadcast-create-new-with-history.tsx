@@ -3,7 +3,7 @@ import { FullScreenPopin, useFullscreenPopin, Col, Button, Flex } from '@/ui'
 import { useTranslate } from '@/hooks'
 import { useBroadcast } from '@/entities'
 
-const ModalContent: FC = () => {
+function ModalContent() {
   const { createBroadcastWithHistory } = useBroadcast()
   const { closeModale } = useFullscreenPopin()
   const t = useTranslate()
@@ -30,7 +30,7 @@ const ModalContent: FC = () => {
   )
 }
 
-export const BroadcastCreateNewWithHistory: FC = () => {
+export function BroadcastCreateNewWithHistory() {
   const t = useTranslate({
     createWithHistory: {
       fr: 'Créer un conducteur avec historique',

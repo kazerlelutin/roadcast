@@ -1,10 +1,11 @@
 import { useContext } from 'react'
 import { getObjectToBase64 } from '@/utils'
-import { BroadcastContext } from '@/entities'
+import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
 import { useGetMyLocalId } from '@/hooks'
 
 export const useSimpleFetch = () => {
   const [broadcast] = useContext(BroadcastContext),
+    [scheduleAccount] = useContext(ScheduleAccountCtx),
     myLocalId = useGetMyLocalId()
 
   async function getData<T>(url: string, body: Object): Promise<T> {
@@ -14,8 +15,8 @@ export const useSimpleFetch = () => {
         Accept: 'application/json',
         ['X-Info']: getObjectToBase64({
           myLocalId,
-          editor: broadcast.editor,
-          reader: broadcast.reader,
+          editor: broadcast.id ? broadcast.editor : scheduleAccount.editor,
+          reader: broadcast.id ? broadcast.reader : scheduleAccount.reader,
         }),
       },
       body: JSON.stringify(body || {}),

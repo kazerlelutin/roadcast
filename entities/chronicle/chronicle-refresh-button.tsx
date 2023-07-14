@@ -1,23 +1,7 @@
 import { RefreshButton } from '@/components'
-import {
-  useBroadcast,
-  ChronicleRoutes,
-  useShowChronicleButton,
-} from '@/entities'
+import { useShowChronicleButton } from '@/entities'
 
-export const ChronicleRefreshButton: React.FC = () => {
-  const { broadcast } = useBroadcast()
+export function ChronicleRefreshButton() {
   const { showRefreshChronicleButton } = useShowChronicleButton()
-
-  return showRefreshChronicleButton ? (
-    <RefreshButton
-      url={ChronicleRoutes.findMany}
-      body={{ reader: broadcast.reader }}
-      callback={() => {
-        window.location.reload()
-      }}
-    />
-  ) : (
-    <></>
-  )
+  return showRefreshChronicleButton ? <RefreshButton /> : <></>
 }

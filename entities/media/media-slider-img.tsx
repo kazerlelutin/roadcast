@@ -6,7 +6,7 @@ interface MediaSliderImgProps {
   media: IMedia
 }
 
-export const MediaSliderImg: React.FC<MediaSliderImgProps> = ({ media }) => {
+export function MediaSliderImg({ media }: MediaSliderImgProps) {
   return (
     <div className={styles.container}>
       {media.url && (

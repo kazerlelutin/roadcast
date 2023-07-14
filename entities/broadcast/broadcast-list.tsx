@@ -1,9 +1,10 @@
 import { useFetch } from '@/hooks'
 import { useTranslate } from '@/hooks'
-import { BroadcastRoutes, IBroadcast, BroadcastListLine } from '@/entities'
+import { BroadcastRoutes, IBroadcast } from '@/entities'
 import styles from './broadcast-styles/broadcast-list.module.css'
+import { HomeItemLine } from '@/components'
 
-export const BroadcastList = () => {
+export function BroadcastList() {
   const t = useTranslate({
     title: {
       en: 'Broadcast List',
@@ -19,9 +20,14 @@ export const BroadcastList = () => {
       {loading && <div>{t('loading')}...</div>}
       <ul className={styles.list}>
         {broadcasts?.map((broadcast) => (
-          <BroadcastListLine
+          <HomeItemLine
             key={`${broadcast.id}-${broadcast.createdAt}`}
-            broadcast={broadcast}
+            type="broadcast"
+            item={{
+              title: broadcast.title,
+              reader: broadcast.reader,
+              editor: broadcast.editor,
+            }}
           />
         ))}
       </ul>

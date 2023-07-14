@@ -3,7 +3,7 @@ import styles from './media-styles/media-display.module.css'
 import { useMedia } from '@/entities'
 import ReactPlayer from 'react-player'
 
-export const MediaDisplay: React.FC = () => {
+export function MediaDisplay() {
   const { media } = useMedia()
 
   return (

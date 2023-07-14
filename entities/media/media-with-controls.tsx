@@ -9,7 +9,7 @@ import styles from './media-styles/media-with-controls.module.css'
 import ReactPlayer from 'react-player'
 import { FullScreenPopin, Flex } from '@/ui'
 
-export const MediaWithControls: React.FC = () => {
+export function MediaWithControls() {
   const { media } = useMedia()
 
   return (

@@ -6,9 +6,7 @@ interface MediaSliderVideoProps {
   media: IMedia
 }
 
-export const MediaSliderVideo: React.FC<MediaSliderVideoProps> = ({
-  media,
-}) => {
+export function MediaSliderVideo({ media }: MediaSliderVideoProps) {
   const regexProviders = new RegExp(
     /youtu|vimeo|facebook|twitter|dailymotion|twitch/
   )

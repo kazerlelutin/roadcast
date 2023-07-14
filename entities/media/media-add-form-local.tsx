@@ -4,7 +4,7 @@ import { useUpload, useTranslate } from '@/hooks'
 import { IMedia, MediaRoutes } from './media'
 import { Button, Col, ErrorMsg, Info, useFullscreenPopin } from '@/ui'
 
-export const MediaAddFormLocal: React.FC = () => {
+export function MediaAddFormLocal() {
   const { id, editor } = useBroadcast()
   const { chronicle, addMedia } = useChronicles()
   const [error, setError] = useState<string | null>(null)

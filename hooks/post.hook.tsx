@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { MiniLoaderContext } from '@/components'
 import { getObjectToBase64 } from '@/utils'
-import { BroadcastContext } from '@/entities'
+import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
 import { useGetMyLocalId } from '@/hooks'
 
 interface Error {
@@ -25,6 +25,7 @@ export function usePost<T>(
   const [data, setData] = useState<T>(),
     [error, setError] = useState<Error>(),
     [broadcast] = useContext(BroadcastContext),
+    [scheduleAccount] = useContext(ScheduleAccountCtx),
     [loading, setLoading] = useContext(MiniLoaderContext),
     myLocalId = useGetMyLocalId(),
     abortController = new AbortController()
@@ -40,8 +41,8 @@ export function usePost<T>(
           Accept: 'application/json',
           ['X-Info']: getObjectToBase64({
             myLocalId,
-            editor: broadcast.editor,
-            reader: broadcast.reader,
+            editor: broadcast.id ? broadcast.editor : scheduleAccount.editor,
+            reader:  broadcast.id ? broadcast.reader : scheduleAccount.reader,
           }),
         },
         body: JSON.stringify(body || {}),

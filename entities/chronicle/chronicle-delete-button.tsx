@@ -2,7 +2,7 @@ import { useTranslate, usePost } from '@/hooks'
 import { Button, Col, Flex, FullScreenPopin, useFullscreenPopin } from '@/ui'
 import { ChronicleRoutes, useChronicles } from '@/entities'
 
-export const ChronicleDeleteButtonForm: React.FC = () => {
+export function ChronicleDeleteButtonForm() {
   const { chronicle } = useChronicles()
   const { closeModale } = useFullscreenPopin()
   const { deleteChronicle } = useChronicles()
@@ -32,7 +32,7 @@ export const ChronicleDeleteButtonForm: React.FC = () => {
   )
 }
 
-export const ChronicleDeleteButton: React.FC = () => {
+export function ChronicleDeleteButton() {
   const { chronicle } = useChronicles()
 
   const t = useTranslate({
