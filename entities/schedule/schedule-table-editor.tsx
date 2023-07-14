@@ -73,9 +73,11 @@ export function ScheduleTableEditor() {
     <EditMode
       readMode={
         <Col>
-          {schedule.editors.map((editor) => (
-            <div key={editor.id}>{editor.name}</div>
-          ))}
+          {schedule.editors.length === 0
+            ? t('noEditor')
+            : schedule.editors.map((editor) => (
+                <div key={editor.id}>{editor.name}</div>
+              ))}
         </Col>
       }
     >

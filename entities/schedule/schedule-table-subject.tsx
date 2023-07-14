@@ -5,13 +5,22 @@ import { Button, Flex, EditMode } from '@/ui'
 import { useTranslate } from '@/hooks'
 
 export function ScheduleTableSubject() {
-  const t = useTranslate()
+  const t = useTranslate({
+    noSubject: {
+      en: 'No subject',
+      fr: 'Pas de sujet',
+    },
+  })
   const { schedule, updateSubject } = useSchedule()
   const [subject, setSubject] = useState(schedule.subject)
 
   return (
     <EditMode
-      readMode={<div className={styles.subject}>{schedule.subject}</div>}
+      readMode={
+        <div className={styles.subject}>
+          {schedule.subject || t('noSubject')}
+        </div>
+      }
     >
       {({ close }) => (
         <form

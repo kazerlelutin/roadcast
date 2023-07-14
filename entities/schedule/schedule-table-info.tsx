@@ -6,7 +6,12 @@ import { Editor } from '@/components'
 import { useTranslate } from '@/hooks'
 
 export function ScheduleTableInfo() {
-  const t = useTranslate()
+  const t = useTranslate({
+    noInfo: {
+      en: 'No info',
+      fr: "Pas d'info",
+    },
+  })
   const { schedule, updateInfo } = useSchedule()
   const [info, setInfo] = useState(schedule.info)
 
@@ -14,7 +19,7 @@ export function ScheduleTableInfo() {
     <EditMode
       readMode={
         <div
-          dangerouslySetInnerHTML={{ __html: schedule.info }}
+          dangerouslySetInnerHTML={{ __html: schedule.info || t('noInfo') }}
           className={styles.info}
         />
       }

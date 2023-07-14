@@ -70,9 +70,11 @@ export function ScheduleTableGuests() {
     <EditMode
       readMode={
         <Col>
-          {schedule.guests.map((guest) => (
-            <div key={guest.id}>{guest.name}</div>
-          ))}
+          {schedule.guests.length === 0
+            ? t('noGuest')
+            : schedule.guests.map((guest) => (
+                <div key={guest.id}>{guest.name}</div>
+              ))}
         </Col>
       }
     >
