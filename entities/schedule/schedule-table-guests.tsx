@@ -71,7 +71,7 @@ export function ScheduleTableGuests() {
       readMode={
         <Col>
           {schedule.guests.length === 0
-            ? t('noGuest')
+            ? t('noGuests')
             : schedule.guests.map((guest) => (
                 <div key={guest.id}>{guest.name}</div>
               ))}
