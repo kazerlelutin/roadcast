@@ -2,6 +2,7 @@ import { useTranslate } from '@/hooks'
 import { ScheduleProvider, useSchedules } from './schedule'
 import styles from './schedule-styles/schedule-table.module.css'
 import {
+  ScheduleDeleteButton,
   ScheduleTableBroadcast,
   ScheduleTableDate,
   ScheduleTableEditor,
@@ -10,6 +11,7 @@ import {
   ScheduleTableStatus,
   ScheduleTableSubject,
 } from '@/entities'
+import { Col } from '@/ui'
 
 export function ScheduleTable() {
   const { schedules } = useSchedules()
@@ -52,7 +54,10 @@ export function ScheduleTable() {
                   <ScheduleTableStatus />
                 </td>
                 <td className={styles.broadcast}>
-                  <ScheduleTableBroadcast />
+                  <Col lgGap>
+                    <ScheduleTableBroadcast />
+                    <ScheduleDeleteButton />
+                  </Col>
                 </td>
               </tr>
             </ScheduleProvider>

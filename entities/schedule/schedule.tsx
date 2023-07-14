@@ -76,6 +76,7 @@ export enum ScheduleRoutes {
   findManyGuest = 'schedule/guests',
   findOne = 'schedule/findone',
   create = 'schedule/create',
+  delete = 'schedule/delete',
   createAccount = 'schedule/create_account',
   create_with_history = 'schedule/create_with_history',
   createBroadcast = 'schedule/create_broadcast',
@@ -179,6 +180,9 @@ export function useSchedules() {
     ScheduleRoutes.create
   )
 
+  const { post: postDelSchedule, loading: loadingDelSchedule } =
+    usePost<IBroadcast>(ScheduleRoutes.createBroadcast)
+
   if (!ctx)
     throw new Error('useGetSchedule must be used within a ScheduleProvider')
   const [schedules, setSchedules] = ctx
@@ -188,10 +192,17 @@ export function useSchedules() {
     if (newSchedule) setSchedules([...schedules, newSchedule])
   }
 
+  const deleteSchedule = (id: string) => {
+    postDelSchedule({ id })
+    setSchedules((prev) => prev.filter((schedule) => schedule.id !== id))
+  }
+
   return {
     schedules,
-    createSchedule,
     loadingCreate,
+    loadingDelSchedule,
+    deleteSchedule,
+    createSchedule,
   }
 }
 
