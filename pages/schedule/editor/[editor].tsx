@@ -52,8 +52,8 @@ export async function getServerSideProps({ query }) {
   }
 
   const statusOrder = [
-    ScheduleStatus.project,
     ScheduleStatus.progress,
+    ScheduleStatus.project,
     ScheduleStatus.delayed,
     ScheduleStatus.done,
   ]
