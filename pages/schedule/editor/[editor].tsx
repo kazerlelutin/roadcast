@@ -66,7 +66,9 @@ export async function getServerSideProps({ query }) {
         return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
       } else {
         //if status is the same, sort by start_at
-        return a.start_at.getTime() - b.start_at.getTime()
+        const aStartAt = a.start_at ? a.start_at.getTime() : 0
+        const bStartAt = b.start_at ? b.start_at.getTime() : 0
+        return aStartAt - bStartAt
       }
     }),
   }
