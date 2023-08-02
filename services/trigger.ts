@@ -22,7 +22,7 @@ export const trigger = async (
     cluster: PUSHER_REGION,
     useTLS: true,
   })
-  pusher.trigger(room, type, { ...body, type })
+  await pusher.trigger(room, type, { ...body, type })
 }
 
 export const triggerSlider = async (

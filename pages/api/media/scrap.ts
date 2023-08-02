@@ -116,7 +116,7 @@ async function media_scrap(
     const imgs = Array.from(dom.window.document.querySelectorAll('img'))
     const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
-    trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+    await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
       message: chronicleId,
       id: myLocalId,
     })

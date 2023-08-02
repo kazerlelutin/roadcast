@@ -70,12 +70,12 @@ async function editor_update(
       },
     })
 
-    trigger(reader, TriggerTypes.SCHEDULE, {
+    await trigger(reader, TriggerTypes.SCHEDULE, {
       message: scheduleId,
       id: myLocalId,
     })
 
-    trigger(editor, TriggerTypes.SCHEDULE, {
+    await trigger(editor, TriggerTypes.SCHEDULE, {
       message: 'refresh',
       id: myLocalId,
     })
@@ -115,12 +115,12 @@ async function editor_update(
     },
   })
 
-  trigger(reader, TriggerTypes.CHRONICLE, {
+  await trigger(reader, TriggerTypes.CHRONICLE, {
     message: chronicleId,
     id: myLocalId,
   })
 
-  trigger(editor, TriggerTypes.CHRONICLE, {
+  await trigger(editor, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
   })

@@ -65,7 +65,7 @@ async function chronicle_delete(
 
   await prisma.$transaction([deleteMedias, deleteChronicle, updateChronicles])
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
   })

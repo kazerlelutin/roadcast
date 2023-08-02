@@ -36,7 +36,7 @@ async function media_delete(
     },
   })
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: chronicleId,
     id: myLocalId,
   })
