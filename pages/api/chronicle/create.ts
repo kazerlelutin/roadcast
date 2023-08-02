@@ -45,7 +45,7 @@ export default async function chronicle_create(
     },
   })
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
   })

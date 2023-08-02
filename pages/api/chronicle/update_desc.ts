@@ -37,7 +37,7 @@ async function chronicle_desc(
     },
   })
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: chronicleId,
     id: myLocalId,
   })

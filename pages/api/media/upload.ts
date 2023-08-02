@@ -78,7 +78,7 @@ async function media_upload(
     },
   })
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: fields.chronicleId,
     id: myLocalId,
   })

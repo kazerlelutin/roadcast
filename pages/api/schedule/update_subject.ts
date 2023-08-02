@@ -33,7 +33,7 @@ export async function schedule_update_subject(
     },
   })
 
-  trigger(infos.reader, TriggerTypes.SCHEDULE_ACCOUNT, {
+  await trigger(infos.reader, TriggerTypes.SCHEDULE_ACCOUNT, {
     message: schedule.id,
     id: infos.myLocalId,
   })

@@ -52,7 +52,7 @@ async function chronicle_position(
     },
   })
 
-  trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
+  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
     message: 'refresh',
     id: myLocalId,
   })
