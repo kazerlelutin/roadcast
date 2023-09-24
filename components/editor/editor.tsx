@@ -1,6 +1,7 @@
 import styles from './editor.module.css'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
 import React from 'react'
 import {
   BulletListIcon,
@@ -14,7 +15,6 @@ import {
   UndoIcon,
 } from '@/ui/icons'
 import { CodeIcon } from '@/ui/icons/code-icon'
-
 interface EditorProps {
   onChange: (value: string) => void
   defaultValue: string
@@ -23,6 +23,7 @@ interface EditorProps {
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
   const editor = useEditor({
     extensions: [
+      Underline,
       StarterKit.configure({
         bulletList: {
           keepMarks: true,
@@ -95,15 +96,15 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
               type="button"
               onClick={() => editor.chain().focus().toggleStrike().run()}
               disabled={!editor.can().chain().focus().toggleStrike().run()}
-              className={editor.isActive('underline') ? 'is-active' : ''}
+              className={editor.isActive('strike') ? 'is-active' : ''}
             >
               <u>U</u>
             </button>
           </div>
           <button
             type="button"
-            onClick={() => editor.chain().focus().setParagraph().run()}
-            className={editor.isActive('paragraph') ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={editor.isActive('underline') ? 'is-active' : ''}
           >
             <div className={styles.icon}>
               <ParagraphIcon />
