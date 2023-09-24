@@ -1,92 +1,56 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../db/db'
-import formidable from 'formidable'
-import fs from 'fs'
-import { v4 as uuidv4 } from 'uuid'
-import S3 from '../../../utils/bucket'
-import { trigger } from '../../../services/trigger'
-import { TriggerTypes } from '../../../components/socket'
-import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
-import { BroadcastCtx } from '../../../types/broadcast-ctx'
+import { handleBlobUpload, type HandleBlobUploadBody } from '@vercel/blob'
+import type { NextApiResponse, NextApiRequest } from 'next'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
-async function media_upload(
+export default async function handler(
   request: NextApiRequest,
-  response: NextApiResponse,
-  infos: BroadcastCtx
+  response: NextApiResponse
 ) {
-  const { editor, myLocalId } = infos
-  const form = new formidable.IncomingForm()
-  const fileContent: {
-    content: Buffer
-    name: string
-    type: string
-    size: number
-    extension: string
-    fields: { chronicleId: string; broadcastId: string }
-  } = await new Promise((resolve, reject) => {
-    form.parse(request, (_err, fields, files) => {
-      const fileContentBuffer = fs.readFileSync(files.file.filepath)
-      resolve({
-        content: fileContentBuffer,
-        name: files.file.originalFilename,
-        type: files.file.mimetype,
-        size: files.file.size,
-        extension: files.file.originalFilename.split('.').pop(),
-        fields,
-      })
+  const body = (await request.json()) as HandleBlobUploadBody
 
-      reject()
+  console.log('body', body)
+
+  try {
+    const jsonResponse = await handleBlobUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname) => {
+        // Generate a client token for the browser to upload the file
+
+        // ⚠️ Authenticate users before reaching this point.
+        // Otherwise, you're allowing anonymous uploads.
+        // const { user, userCanUpload } = await auth(request, pathname);
+        // if (!userCanUpload) {
+        //   throw new Error('not authenticated or bad pathname');
+        // }
+
+        return {
+          allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif'],
+          metadata: JSON.stringify({
+            // optional, sent to your server on upload completion
+            userId: user.id,
+          }),
+        }
+      },
+      onUploadCompleted: async ({ blob, metadata }) => {
+        // Get notified of browser upload completion
+        // ⚠️ This will not work on `localhost` websites,
+        // Use ngrok or similar to get the full upload flow
+
+        console.log('blob upload completed', blob, metadata)
+
+        try {
+          // Run any logic after the file upload completed
+          // const { userId } = JSON.parse(metadata);
+          // await db.update({ avatar: blob.url, userId });
+        } catch (error) {
+          throw new Error('Could not update user')
+        }
+      },
     })
-  })
 
-  const { fields } = fileContent
-
-  const broadcast = await prisma.broadcast.findFirst({
-    where: {
-      editor,
-    },
-  })
-
-  if (!broadcast)
-    return response.status(400).send({ message: 'Broadcast not found' })
-
-  //octet to megabytes
-
-  const s3 = new S3()
-  const link = await s3.sendMedia({
-    folder: broadcast.id,
-    body: fileContent.content,
-    fileName: uuidv4(),
-    tag: 'roadcast=' + broadcast.id,
-    ext: fileContent.extension,
-  })
-
-  const media = await prisma.media.create({
-    data: {
-      name: fileContent.name,
-      size: fileContent.size,
-      type: fileContent.type,
-      source: 'local',
-      url: link,
-      chronicle_id: fields.chronicleId,
-    },
-  })
-
-  await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
-    message: fields.chronicleId,
-    id: myLocalId,
-  })
-
-  return response.status(200).send({ media })
+    return response.status(200).json(jsonResponse)
+  } catch (error) {
+    // The webhook will retry 5 times waiting for a 200
+    return response.status(400).json({ error: (error as Error).message })
+  }
 }
-
-const helper = (request: NextApiRequest, response: NextApiResponse) =>
-  broadcastMiddleWare(request, response, media_upload)
-
-export default helper

@@ -2,7 +2,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { MiniLoaderContext } from '@/components'
 import { getObjectToBase64 } from '@/utils'
-import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
+import {
+  BroadcastContext,
+  ChronicleContext,
+  ScheduleAccountCtx,
+} from '@/entities'
 import { useGetMyLocalId } from '@/hooks'
 
 interface Error {
@@ -26,25 +30,26 @@ export function useUpload<T>(
     [error, setError] = useState<Error>(),
     [loading, setLoading] = useContext(MiniLoaderContext),
     [broadcast] = useContext(BroadcastContext),
+    [chronicle] = useContext(ChronicleContext),
     [scheduleAccount] = useContext(ScheduleAccountCtx),
     myLocalId = useGetMyLocalId(),
     abortController = new AbortController()
 
-  async function handlePost(data: FormData, newUrl?: string) {
+  async function handlePost(body: FormData, newUrl?: string) {
     setLoading(true)
     try {
       const res = await fetch(`/api/${newUrl || url}`, {
         method: 'POST',
         signal: abortController.signal,
         headers: {
-          Accept: 'application/json',
           ['X-Info']: getObjectToBase64({
             myLocalId,
             editor: broadcast.id ? broadcast.editor : scheduleAccount.editor,
             reader: broadcast.id ? broadcast.reader : scheduleAccount.reader,
+            chronicleId: chronicle.id ? chronicle.id : '',
           }),
         },
-        body: data,
+        body: JSON.stringify(body),
       })
 
       const resJson = await res.json()

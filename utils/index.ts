@@ -1,4 +1,3 @@
-export * from './bucket'
 export * from './constants'
 export * from './generate_code'
 export * from './get-base64'
