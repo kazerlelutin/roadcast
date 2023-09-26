@@ -57,6 +57,7 @@ export default async function chronicle_create(
       },
       include: {
         medias: true,
+        editor: true,
       },
       orderBy: {
         position: 'asc',
