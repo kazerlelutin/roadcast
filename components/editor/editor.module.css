@@ -50,7 +50,3 @@
 .icon:hover svg {
   fill: var(--dms-bg-dark);
 }
-
-:global(.underline) {
-  text-decoration: underline;
-}
