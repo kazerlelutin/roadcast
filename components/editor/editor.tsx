@@ -23,7 +23,11 @@ interface EditorProps {
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
   const editor = useEditor({
     extensions: [
-      Underline,
+      Underline.configure({
+        HTMLAttributes: {
+          class: 'underline',
+        },
+      }),
       StarterKit.configure({
         bulletList: {
           keepMarks: true,
