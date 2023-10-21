@@ -1,7 +1,6 @@
 import { Footer } from '@/components'
 import { useTranslate } from '@/hooks'
-import { BasicLayout } from '@/layouts'
-import { Col, ExternalLink } from '@/ui'
+import { Col, ExternalLink, BasicLayout } from '@/ui'
 import styles from './about.module.css'
 import pkg from '../../package.json'
 

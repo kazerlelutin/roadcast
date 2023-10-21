@@ -14,8 +14,8 @@ export const ThemeSwitcher = () => {
   }
 
   useEffect(() => {
-    document.body.setAttribute('data-color-scheme', theme.value)
-    document.body.setAttribute('data-color-mode', theme.value)
+    document.documentElement.setAttribute('class', theme.value)
+    document.documentElement.setAttribute('class', theme.value)
   }, [theme])
 
   return (

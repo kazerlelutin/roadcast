@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /** --- colors --- **/
@@ -67,29 +70,12 @@
 }
 
 body {
-  background-color: var(--dms-bg);
   font-family: 'Inter', sans-serif;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  color: var(--dms-text);
-  font-size: var(--dms-font-size);
   color-scheme: dark;
   transition: color-scheme 500ms ease-in-out;
-}
-
-body[data-color-scheme='light'] {
-  --dms-bg: #f7f6f3;
-  --dms-bg-dark: #bec0c7;
-  --dms-text: #121523;
-  --dms-text-invert: #fff;
-  --dms-highlight-dark: #015657;
-  --dms-light: #d97f0a;
-
-  --dms-card-bg: #50597b;
-  --dms-card: #d4dadd;
-  --dms-card-dark: #8690b3;
-  color-scheme: light;
 }
 
 h1,
@@ -113,12 +99,12 @@ li {
 }
 
 li::marker {
-  color: var(--dms-highlight);
+  color: theme('colors.rc.highlight');
 }
 
 a,
 a:visited {
-  color: var(--dms-highlight);
+  color: theme('colors.rc.highlight');
   text-decoration: none;
 }
 
@@ -129,10 +115,10 @@ a:hover {
 code {
   font-family: Menlo, Monaco, Courier New, monospace;
   font-size: 0.9em;
-  background-color: var(--dms-bg-dark);
+  background-color: theme('colors.rc.bg-dark');
   padding: 2px 4px;
   border-radius: 3px;
-  border-bottom: 2px solid var(--dms-bg);
+  border-bottom: 2px solid theme('colors.rc.bg');
 }
 
 img {
