@@ -30,16 +30,27 @@ interface ChroniclesProviderProps {
 
 // CONTEXTS ------------------------------------------------------------------
 
-export const ChroniclesContext = createContext<TEntity<IChronicle[]>>(null)
+export const ChroniclesContext = createContext<TEntity<IChronicle[]>>([
+  [],
+  () => {},
+])
 
-export const ChronicleContext = createContext<TEntity<IChronicle>>(null)
+export const ChronicleContext = createContext<TEntity<IChronicle>>({}, () => {})
 
-export const ChronicleToScreenContext = createContext<TEntity<string>>(null)
+export const ChronicleToScreenContext = createContext<TEntity<string>>(
+  '',
+  () => {}
+)
 
-export const ChronicleThreeContext = createContext<TEntity<boolean>>(null)
+export const ChronicleThreeContext = createContext<TEntity<boolean>>(
+  true,
+  () => {}
+)
 
-export const ChronicleRefreshButtonContext =
-  createContext<TEntity<boolean>>(null)
+export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>(
+  false,
+  () => {}
+)
 
 // PROVIDERS -----------------------------------------------------------------
 
@@ -140,11 +151,6 @@ export function useThreeChronicle() {
   const ctx = useContext(ChronicleThreeContext)
   const ctxChronicles = useContext(ChroniclesContext)
 
-  if (!ctx || !ctxChronicles)
-    throw new Error(
-      'useThreeChronicle fonctionne avec le contexte ChronicleThreeContext et ChroniclesContext'
-    )
-
   const [isDragging, setIsDragging] = ctx
   const [chronicles, setChronicles] = ctxChronicles
 
@@ -185,11 +191,6 @@ export function useThreeChronicle() {
 export function useCreateChronicle() {
   const ctx = useContext(ChroniclesContext)
 
-  if (!ctx)
-    throw new Error(
-      'useCreateChronicle fonctionne avec le contexte ChroniclesContext'
-    )
-
   const [_, setChronicles] = ctx
   const createChronicle = (chronicles: IChronicle[]) => {
     setChronicles(chronicles)
@@ -201,14 +202,9 @@ export function useCreateChronicle() {
 }
 
 export function useShowChronicleButton() {
-  const ctx = useContext(ChronicleRefreshButtonContext)
-
-  if (!ctx)
-    throw new Error(
-      'useShowChronicleButton fonctionne avec le contexte ChronicleRefreshButtonContext'
-    )
-
-  const [showRefreshChronicleButton, setDisplayButton] = ctx
+  //TODO faire gaffe, context viré
+  const [showRefreshChronicleButton, setDisplayButton] =
+    useState<boolean>(false)
 
   const showChronicleButton = () => {
     setDisplayButton(true)
@@ -227,10 +223,6 @@ export function useShowChronicleButton() {
 
 export function useLastPosition() {
   const ctx = useContext(ChroniclesContext)
-  if (!ctx)
-    throw new Error(
-      'useChronicle fonctionne avec le contexte  ChroniclesContext '
-    )
 
   const [chronicles] = ctx
   const lastPosition =
@@ -246,11 +238,6 @@ export function useChronicles() {
   const currentChronicleCtx = useContext(ChronicleToScreenContext)
   const ctx = useContext(ChronicleContext)
   const chroniclesCtx = useContext(ChroniclesContext)
-
-  if (ctx === undefined || currentChronicleCtx === undefined)
-    throw new Error(
-      'useChronicle fonctionne avec le contexte ChronicleToScreenContext, ChronicleContext et ChroniclesContext '
-    )
 
   const [chronicle, setChronicle] = ctx
   const [currentChronicle, setCurrentChronicle] = currentChronicleCtx

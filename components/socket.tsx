@@ -11,7 +11,7 @@ import { PUSHER_KEY } from '@/utils'
 import { useRouter } from 'next/router'
 import { useGetMyLocalId } from '@/hooks'
 import Pusher from 'pusher-js'
-import { BroadcastContext, ScheduleAccountCtx } from '@/entities'
+import { BroadcastContext, ScheduleAccountCtx, useBroadcast } from '@/entities'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -51,7 +51,7 @@ export const useSocketTrigger = (
 
 export const useSocket = () => {
   const myLocalId = useGetMyLocalId()
-  const [broadcast] = useContext(BroadcastContext)
+  const { broadcast } = useBroadcast()
   const [schedule] = useContext(ScheduleAccountCtx)
   const router = useRouter()
   const [message, setMessage] = useState<{
@@ -71,6 +71,7 @@ export const useSocket = () => {
   }
 
   useEffect(() => {
+    if (!broadcast?.reader && !schedule?.reader) return
     const pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
     })

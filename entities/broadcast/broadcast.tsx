@@ -95,6 +95,10 @@ export const BroadcastProvider: React.FC<BroadcastProviderProps> = ({
 
 // HOOKS ---------------------------------------------------------------------
 
+/**
+ *
+ * @deprecated
+ */
 export const useGetChronicleHistory = () => {
   const { data, loading } = useFetch<BroadcastChronicleHistory[]>(
     BroadcastRoutes.chronicle_history
@@ -106,31 +110,19 @@ export const useGetChronicleHistory = () => {
   }
 }
 
+/**
+ *
+ * @deprecated
+ */
 export const useBroadcast = () => {
   const [broadcast, setBroadcast] = useContext(BroadcastContext)
-  const { getData } = useLazyFetch(BroadcastRoutes.findOne, {}, setBroadcast)
   const router = useRouter()
 
   const { post: create } = usePost<IBroadcast>(BroadcastRoutes.create)
-  const { post: createWithHistory } = usePost<IBroadcast>(
-    BroadcastRoutes.create_with_history
-  )
 
   const createBroadcast = async (title: string) => {
     const newBroadcast = await create({ title })
     if (newBroadcast) router.push('editor/' + newBroadcast.editor)
-  }
-
-  const createBroadcastWithHistory = async () => {
-    const newBroadcast = await createWithHistory()
-    if (newBroadcast)
-      router.push({
-        query: {
-          editor: newBroadcast.editor,
-        },
-      })
-
-    getData({ editor: newBroadcast.editor })
   }
 
   const updateTitle = async (title: string) => {
@@ -140,13 +132,16 @@ export const useBroadcast = () => {
   // spread ...broadcast for access to the value
   return {
     createBroadcast,
-    createBroadcastWithHistory,
     updateTitle,
     broadcast,
     ...broadcast,
   }
 }
 
+/**
+ *
+ * @deprecated
+ */
 export const useModes = () => {
   const { broadcast } = useBroadcast()
   const ctxRead = useContext(BroadcastReadModeContext)

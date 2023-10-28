@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+
 import { dc } from '@/utils/dynamic-classes'
 
 interface ButtonProps {
@@ -21,11 +22,11 @@ export function Button({
       disabled={loading}
       className={dc(
         'disabled:opacity-50',
-        'text-sm',
-        'outline-none border border-rc-text uppercase py-1 px-2 text-rc-text',
+        'text-xs',
+        'outline-none border border-light-text dark:border-rc-text uppercase py-1 px-2 text-rc-text',
         'cursor-pointer transition duration-200 ease-in-out',
         'rounded-3xl',
-        'hover:bg-rc-info hover:border-rc-info-light hover:text-rc-text hover:rounded-sm',
+        'hover:bg-rc-info hover:border-rc-info-light hover:text-rc-text',
         [variant === 'normal', 'bg-rc-info-light border-rc-info text-rc-text'],
         [
           variant === 'twitch',
