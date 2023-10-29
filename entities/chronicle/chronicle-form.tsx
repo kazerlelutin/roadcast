@@ -4,13 +4,12 @@ import {
   useChronicles,
   ChronicleFormDescription,
   EditorSelector,
-  ChronicleWrapper,
   ChronicleDeleteButton,
   MediaList,
   MediaAddForm,
 } from '@/entities'
 import styles from './chronicle-styles/chronicle-form.module.css'
-import { StringEditor } from '@/components'
+import { ChronicleWrapper, StringEditor } from '@/components'
 import { useTranslate } from '@/hooks'
 
 export function ChronicleForm() {

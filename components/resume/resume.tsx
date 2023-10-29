@@ -2,7 +2,7 @@ import { LabelBox, Info } from '@/ui'
 import { useTranslate } from '@/hooks'
 import { useRouter } from 'next/router'
 import { useBroadcast } from '@/stores/broadcast.store'
-import { BroadcastStringEditor } from '../broadcast/broadcast-string-editor'
+import { BroadcastStringEditor } from '../broadcast-string-editor'
 import { Input } from '@/ui/input'
 
 export function Resume() {

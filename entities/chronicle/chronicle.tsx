@@ -5,6 +5,7 @@ import { TriggerTypes, useSocketTrigger } from '@/components'
 import { TEntity } from '@/types'
 import { BroadcastContext, IEditor, IMedia } from '@/entities'
 import { Chronicle } from '@prisma/client'
+import { useBroadcast } from '@/stores/broadcast.store'
 
 // INTERFACES ---------------------------------------------------------------
 
@@ -21,7 +22,7 @@ export interface IChronicle extends Chronicle {
 
 interface ChronicleProviderProps {
   children: ReactNode
-  chronicle: IChronicle
+  id: string
 }
 
 interface ChroniclesProviderProps {
@@ -35,7 +36,7 @@ export const ChroniclesContext = createContext<TEntity<IChronicle[]>>([
   () => {},
 ])
 
-export const ChronicleContext = createContext<TEntity<IChronicle>>({}, () => {})
+export const ChronicleContext = createContext<string>('')
 
 export const ChronicleToScreenContext = createContext<TEntity<string>>(
   '',
@@ -54,16 +55,9 @@ export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>(
 
 // PROVIDERS -----------------------------------------------------------------
 
-export function ChronicleProvider({
-  children,
-  chronicle,
-}: ChronicleProviderProps) {
-  const value = useState<IChronicle>(chronicle)
-
+export function ChronicleProvider({ children, id }: ChronicleProviderProps) {
   return (
-    <ChronicleContext.Provider value={value}>
-      {children}
-    </ChronicleContext.Provider>
+    <ChronicleContext.Provider value={id}>{children}</ChronicleContext.Provider>
   )
 }
 
@@ -221,25 +215,11 @@ export function useShowChronicleButton() {
   }
 }
 
-export function useLastPosition() {
-  const ctx = useContext(ChroniclesContext)
-
-  const [chronicles] = ctx
-  const lastPosition =
-    chronicles.length === 0 ? 0 : chronicles.at(-1).position + 1
-
-  return {
-    lastPosition,
-    chronicles,
-  }
-}
-
 export function useChronicles() {
   const currentChronicleCtx = useContext(ChronicleToScreenContext)
-  const ctx = useContext(ChronicleContext)
   const chroniclesCtx = useContext(ChroniclesContext)
 
-  const [chronicle, setChronicle] = ctx
+  const { chronicle, setChronicle } = useChronicle()
   const [currentChronicle, setCurrentChronicle] = currentChronicleCtx
   const [chronicles, setChronicles] = chroniclesCtx
 
@@ -309,5 +289,17 @@ export function useChronicles() {
     updateChronicleField,
     updateCurrentChronicle,
     editorCount,
+  }
+}
+
+// NEW **
+
+export function useChronicle() {
+  const { getChronicle } = useBroadcast()
+  const id = useContext(ChronicleContext)
+  if (!id) throw new Error('ChronicleProvider not found')
+
+  return {
+    chronicle: getChronicle(id),
   }
 }

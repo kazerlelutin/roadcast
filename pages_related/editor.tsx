@@ -1,14 +1,12 @@
 import {
-  Chronicles,
-  ChronicleThree,
   BroadcastCreateNewWithHistory,
   BroadcastChronicleHistory,
 } from '@/entities'
-import { Resume, Actions } from '@/components'
+import { Resume, Actions, ChronicleTree, Chronicles } from '@/components'
 import { Gridbox, HeaderNoAuth, LabelBox } from '@/ui'
 import { useIsMobile, useTranslate } from '@/hooks'
 import { useBroadcast } from '@/stores/broadcast.store'
-import { BroadcastStringEditor } from '@/components/broadcast/broadcast-string-editor'
+import { BroadcastStringEditor } from '@/components/broadcast-string-editor'
 
 export function Editor() {
   const { broadcast } = useBroadcast()
@@ -59,7 +57,7 @@ export function Editor() {
         </Gridbox>
         <Gridbox>
           <div className="p-2">
-            <ChronicleThree />
+            <ChronicleTree />
           </div>
         </Gridbox>
       </div>

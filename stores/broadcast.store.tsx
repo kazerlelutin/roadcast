@@ -1,27 +1,42 @@
 import { create } from 'zustand'
-import { Broadcast } from '@prisma/client'
+import { Broadcast, Chronicle, Editor } from '@prisma/client'
 import { createHeader } from '@/utils/create-header'
 
+type ExtendedBroadcast = Broadcast & {
+  chronicles: ExtendedChronicle[]
+}
+
+type ExtendedChronicle = Chronicle & {
+  editor: Editor
+}
+
 interface BroadcastState {
-  broadcast: Broadcast
+  broadcast: ExtendedBroadcast
   loading: 'createBroadcastWithHistory' | null
   readMode: boolean
   focusMode: boolean
-  lastPosition: string
+  lastPosition: number
+  treeIsDragging: boolean
+  currentChronicle: string
 }
 
 interface BroadcastSetters {
   setBroadcast: (broadcast: Partial<Broadcast>) => void
   toggleFocus: () => void
   toggleReadMode: () => void
+  updateDrag: (isDragging: boolean) => void
+  setCurrentChronicle: (chronicleId: string) => void
 }
 
-interface BroadcastGetters {}
+interface BroadcastGetters {
+  getChronicle: (chronicleId: string) => ExtendedChronicle
+}
 
 interface BroadcastActions {
   getBroadcast: (editor: string) => void
   updateField: (field: string, value: string) => void
   createBroadcastWithHistory: () => Promise<Broadcast>
+  updateTree: (id: string, position: number) => void
 }
 
 interface BroadcastStore
@@ -32,6 +47,7 @@ interface BroadcastStore
 
 const roadcast_focus_mode = 'roadcast_focus_mode'
 const roadcast_read_mode = 'roadcast_read_mode'
+const roadcast_current_chronicle = 'roadcast_current_chronicle'
 
 export const useBroadcast = create<BroadcastStore>((set, get) => ({
   // === State ================================================================
@@ -54,8 +70,17 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
   loading: null,
   readMode: false,
   focusMode: false,
-  lastPosition: '',
-  // === Setters ==============================================================
+  lastPosition: 0,
+  treeIsDragging: false,
+  currentChronicle: '',
+
+  // === GETTERS ==============================================================
+  getChronicle: (chronicleId) => {
+    const { broadcast } = get()
+    return broadcast.chronicles.find((c) => c.id === chronicleId)
+  },
+
+  // === SETTERS ==============================================================
 
   setBroadcast: (broadcast) =>
     set((prev) => ({ broadcast: { ...prev.broadcast, ...broadcast } })),
@@ -68,6 +93,11 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
     const { readMode } = get()
     localStorage.setItem(roadcast_read_mode, JSON.stringify(!readMode))
     set((prev) => ({ readMode: !prev.readMode }))
+  },
+  updateDrag: (isDragging) => set({ treeIsDragging: isDragging }),
+  setCurrentChronicle: (chronicleId) => {
+    localStorage.setItem(roadcast_current_chronicle, chronicleId)
+    set({ currentChronicle: chronicleId })
   },
 
   // === Actions ==============================================================
@@ -83,7 +113,14 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
       })
 
       const resJson = await res.json()
-      set({ broadcast: resJson })
+      const currentChronicle = localStorage.getItem(roadcast_current_chronicle)
+
+      set({
+        broadcast: resJson,
+        readMode: localStorage.getItem(roadcast_read_mode) === 'true',
+        focusMode: localStorage.getItem(roadcast_current_chronicle) === 'true',
+        currentChronicle,
+      })
     } catch (err) {}
   },
   async updateField(field, value) {
@@ -98,8 +135,6 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
       const resJson = await res.json()
       set({
         broadcast: resJson,
-        readMode: localStorage.getItem(roadcast_read_mode) === 'true',
-        focusMode: localStorage.getItem(roadcast_focus_mode) === 'true',
       })
     } catch (err) {}
   },
@@ -116,6 +151,31 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
       return newBroadcast
     } catch (err) {
       set({ loading: null })
+    }
+  },
+  async updateTree(id, position) {
+    const { broadcast } = get()
+    const chronicles = broadcast.chronicles
+      .map((chronicle) => {
+        if (chronicle.id === id) {
+          chronicle.position = position
+        } else if (chronicle.position >= position) chronicle.position += 1
+        return chronicle
+      })
+      .sort((a, b) => a.position - b.position)
+
+    set({ broadcast: { ...broadcast, chronicles } })
+
+    try {
+      const res = await fetch(`/api/chronicle/position`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ id, position }),
+      })
+      await res.json()
+    } catch (err) {
+      // reset broadcast
+      set({ broadcast })
     }
   },
   // === Getters ==============================================================

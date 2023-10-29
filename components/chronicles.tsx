@@ -1,41 +1,38 @@
+import { ChronicleRead, ChronicleRefreshButton } from '@/components'
 import {
   ChronicleProvider,
-  useLastPosition,
-  useModes,
   ChronicleCreateButton,
   ChronicleForm,
-  ChronicleRefreshButton,
-  ChronicleRead,
   EditorProvider,
 } from '@/entities'
+import { useBroadcast } from '@/stores/broadcast.store'
 import { Col } from '@/ui'
 
 export function Chronicles() {
-  const { chronicles, lastPosition } = useLastPosition()
-  const { isReadMode } = useModes()
+  const { broadcast, lastPosition, readMode } = useBroadcast()
 
   return (
     <Col padding>
       <ChronicleRefreshButton />
-      {chronicles.map((chronicle) => (
+      {broadcast.chronicles.map((chronicle) => (
         <Col key={`${chronicle.id}-${chronicle.updatedAt}`}>
-          {!isReadMode && (
+          {!readMode && (
             <Col center>
               <ChronicleCreateButton
                 position={chronicle.position - 1 < 0 ? 0 : chronicle.position}
               />
             </Col>
           )}
-          <ChronicleProvider chronicle={chronicle}>
+          <ChronicleProvider id={chronicle.id}>
             <EditorProvider editor={chronicle.editor}>
               <div id={chronicle.id}>
-                {isReadMode ? <ChronicleRead /> : <ChronicleForm />}
+                {readMode ? <ChronicleRead /> : <ChronicleForm />}
               </div>
             </EditorProvider>
           </ChronicleProvider>
         </Col>
       ))}
-      {!isReadMode && (
+      {!readMode && (
         <Col center>
           <ChronicleCreateButton position={lastPosition} />
         </Col>

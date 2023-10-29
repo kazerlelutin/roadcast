@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactNode, useEffect, useState } from 'react'
-import { useChronicles } from '@/entities'
+
+import { useChronicle } from '@/entities'
 import { useDebounce } from '@/hooks'
+import { useBroadcast } from '@/stores/broadcast.store'
 
 interface ChronicleWrapperProps {
   children: ReactNode
 }
 
 export function ChronicleWrapper({ children }: ChronicleWrapperProps) {
-  const { chronicle, currentChronicle, setCurrentChronicle } = useChronicles()
+  const { currentChronicle, setCurrentChronicle } = useBroadcast()
+  const { chronicle } = useChronicle()
   const [overChronicle, setOverChronicle] = useState<string>('')
   const overChronicleDebounced = useDebounce(overChronicle, 500)
 
