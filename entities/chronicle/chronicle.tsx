@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useContext, useMemo, useState } from 'react'
 import { createContext } from 'react'
-import { TriggerTypes, useSocketTrigger } from '@/components'
 import { TEntity } from '@/types'
-import { BroadcastContext, IEditor, IMedia } from '@/entities'
+import { IEditor, IMedia } from '@/entities'
 import { Chronicle } from '@prisma/client'
 import { useBroadcast } from '@/stores/broadcast.store'
 
@@ -31,22 +30,7 @@ interface ChroniclesProviderProps {
 
 // CONTEXTS ------------------------------------------------------------------
 
-export const ChroniclesContext = createContext<TEntity<IChronicle[]>>([
-  [],
-  () => {},
-])
-
 export const ChronicleContext = createContext<string>('')
-
-export const ChronicleToScreenContext = createContext<TEntity<string>>(
-  '',
-  () => {}
-)
-
-export const ChronicleThreeContext = createContext<TEntity<boolean>>(
-  true,
-  () => {}
-)
 
 export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>(
   false,
@@ -58,59 +42,6 @@ export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>(
 export function ChronicleProvider({ children, id }: ChronicleProviderProps) {
   return (
     <ChronicleContext.Provider value={id}>{children}</ChronicleContext.Provider>
-  )
-}
-
-export function ChronicleToScreenProvider({
-  children,
-}: ChroniclesProviderProps) {
-  const value = useState<string>()
-
-  return (
-    <ChronicleToScreenContext.Provider value={value}>
-      {children}
-    </ChronicleToScreenContext.Provider>
-  )
-}
-
-export function ChroniclesProvider({ children }: ChroniclesProviderProps) {
-  const [broadcast] = useContext(BroadcastContext)
-  const chronicles =
-    broadcast?.chronicles?.sort((a, b) => a.position - b.position) || []
-  const [currentChronicle, setCurrentChronicle] = useContext(
-    ChronicleToScreenContext
-  )
-  const [_displayButton, setDisplayButton] = useContext(
-    ChronicleRefreshButtonContext
-  )
-  const value = useState<IChronicle[]>(chronicles)
-
-  useEffect(() => {
-    if (!broadcast.id) return
-    value[1](chronicles)
-
-    if (!currentChronicle && chronicles.length > 0) {
-      setCurrentChronicle(chronicles[0].id)
-    }
-  }, [broadcast])
-
-  useSocketTrigger(TriggerTypes.CHRONICLE, () => {
-    setDisplayButton(true)
-  })
-
-  return (
-    <ChroniclesContext.Provider value={value}>
-      {children}
-    </ChroniclesContext.Provider>
-  )
-}
-
-export function ChronicleThreeProvider({ children }: ChroniclesProviderProps) {
-  const value = useState<boolean>(false)
-  return (
-    <ChronicleThreeContext.Provider value={value}>
-      {children}
-    </ChronicleThreeContext.Provider>
   )
 }
 
@@ -141,49 +72,8 @@ export enum ChronicleRoutes {
 
 // HOOKS --------------------------------------------------------------------
 
-export function useThreeChronicle() {
-  const ctx = useContext(ChronicleThreeContext)
-  const ctxChronicles = useContext(ChroniclesContext)
-
-  const [isDragging, setIsDragging] = ctx
-  const [chronicles, setChronicles] = ctxChronicles
-
-  const activeDragging = () => {
-    setIsDragging(true)
-  }
-  const disabledDragging = () => {
-    setIsDragging(false)
-  }
-
-  const updateDrag = (value: boolean) => {
-    setIsDragging(value)
-  }
-
-  const updateThree = (id: string, position: number) => {
-    setChronicles(
-      chronicles
-        .map((chronicle) => {
-          if (chronicle.id === id) {
-            chronicle.position = position
-          } else if (chronicle.position >= position) chronicle.position += 1
-          return chronicle
-        })
-        .sort((a, b) => a.position - b.position)
-    )
-  }
-
-  return {
-    isDragging,
-    activeDragging,
-    disabledDragging,
-    chronicles,
-    updateThree,
-    updateDrag,
-  }
-}
-
 export function useCreateChronicle() {
-  const ctx = useContext(ChroniclesContext)
+  const ctx = []
 
   const [_, setChronicles] = ctx
   const createChronicle = (chronicles: IChronicle[]) => {
@@ -216,15 +106,17 @@ export function useShowChronicleButton() {
 }
 
 export function useChronicles() {
-  const currentChronicleCtx = useContext(ChronicleToScreenContext)
-  const chroniclesCtx = useContext(ChroniclesContext)
+  const chroniclesCtx = []
 
-  const { chronicle, setChronicle } = useChronicle()
-  const [currentChronicle, setCurrentChronicle] = currentChronicleCtx
-  const [chronicles, setChronicles] = chroniclesCtx
+  const { broadcast } = useBroadcast()
+  const setChronicle = () => {
+    console.log('TODO')
+  }
+
+  const setChronicles = () => {}
 
   const editorCount = useMemo(() => {
-    const editorIds = chronicles.reduce((acc, chronicle) => {
+    const editorIds = broadcast.chronicles.reduce((acc, chronicle) => {
       if (chronicle.editor) {
         acc[chronicle.editor.id] = acc[chronicle.editor.id]
           ? acc[chronicle.editor.id] + 1
@@ -245,10 +137,6 @@ export function useChronicles() {
       ...prev,
       medias: prev.medias.filter((m) => m.id !== mediaId),
     }))
-  }
-
-  const updateCurrentChronicle = (chronicleId: string) => {
-    setCurrentChronicle(chronicleId)
   }
 
   const updateChronicle = (chronicle: IChronicle) => {
@@ -277,17 +165,13 @@ export function useChronicles() {
   }
 
   return {
-    chronicle,
-    currentChronicle,
-    setCurrentChronicle,
-    chronicles,
+    chronicles: broadcast.chronicles,
     addMedia,
     deleteMedia,
     updateChronicle,
     updateChronicles,
     deleteChronicle,
     updateChronicleField,
-    updateCurrentChronicle,
     editorCount,
   }
 }

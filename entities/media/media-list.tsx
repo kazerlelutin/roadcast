@@ -1,20 +1,16 @@
-import {
-  MediaProvider,
-  useChronicles,
-  MediaWithControls,
-  useModes,
-} from '@/entities'
+import { MediaProvider, MediaWithControls, useChronicle } from '@/entities'
 import styles from './media-styles/media-list.module.css'
+import { useBroadcast } from '@/stores/broadcast.store'
 
 export function MediaList() {
-  const { isFocused } = useModes()
-  const { chronicle, currentChronicle } = useChronicles()
+  const { focusMode, currentChronicle } = useBroadcast()
+  const { chronicle } = useChronicle()
 
   if (chronicle.medias.length === 0) return <></>
   return (
     <div
       className={styles.container}
-      data-visible={!isFocused || currentChronicle === chronicle.id}
+      data-visible={!focusMode || currentChronicle === chronicle.id}
     >
       {chronicle.medias.map((media) => (
         <MediaProvider key={media.id} media={media}>

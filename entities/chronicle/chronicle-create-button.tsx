@@ -1,11 +1,6 @@
-import { useTranslate, usePost, useGetMyLocalId } from '@/hooks'
+import { useTranslate } from '@/hooks'
 import { Button } from '@/ui'
-import {
-  ChronicleRoutes,
-  IChronicle,
-  useCreateChronicle,
-  useBroadcast,
-} from '@/entities'
+import { useBroadcast } from '@/stores/broadcast.store'
 
 interface ChronicleCreateButtonProps {
   position: number
@@ -20,19 +15,9 @@ export function ChronicleCreateButton({
       en: 'Add a chronicle',
     },
   })
-  const myLocalId = useGetMyLocalId()
-  const { broadcast } = useBroadcast()
-  const { createChronicle } = useCreateChronicle()
+  const { createChronicle } = useBroadcast()
 
-  const { post } = usePost<IChronicle[]>(
-    ChronicleRoutes.create,
-    createChronicle
-  )
   return (
-    <Button
-      onClick={() => post({ editor: broadcast.editor, position, myLocalId })}
-    >
-      {t('create')}
-    </Button>
+    <Button onClick={() => createChronicle(position)}>{t('create')}</Button>
   )
 }

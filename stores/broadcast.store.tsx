@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Broadcast, Chronicle, Editor } from '@prisma/client'
+import { Broadcast, Chronicle, Editor, Media } from '@prisma/client'
 import { createHeader } from '@/utils/create-header'
 
 type ExtendedBroadcast = Broadcast & {
@@ -8,11 +8,12 @@ type ExtendedBroadcast = Broadcast & {
 
 type ExtendedChronicle = Chronicle & {
   editor: Editor
+  medias: Media[]
 }
 
 interface BroadcastState {
   broadcast: ExtendedBroadcast
-  loading: 'createBroadcastWithHistory' | null
+  loading: 'createBroadcastWithHistory' | 'createChronicle' | null
   readMode: boolean
   focusMode: boolean
   lastPosition: number
@@ -37,6 +38,7 @@ interface BroadcastActions {
   updateField: (field: string, value: string) => void
   createBroadcastWithHistory: () => Promise<Broadcast>
   updateTree: (id: string, position: number) => void
+  createChronicle: (position: number) => void
 }
 
 interface BroadcastStore
@@ -171,6 +173,23 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
         method: 'POST',
         headers: createHeader(broadcast),
         body: JSON.stringify({ id, position }),
+      })
+      await res.json()
+    } catch (err) {
+      // reset broadcast
+      set({ broadcast })
+    }
+  },
+  async createChronicle(position) {
+    const { broadcast } = get()
+
+    set({ loading: 'createChronicle' })
+
+    try {
+      const res = await fetch(`/api/chronicle/create`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ position }),
       })
       await res.json()
     } catch (err) {

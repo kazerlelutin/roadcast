@@ -2,23 +2,17 @@
 import { ReactNode, useState, useContext } from 'react'
 import { createContext } from 'react'
 import { TEntity } from '@/types'
-import { IChronicle } from '@/entities'
 import { Media } from '@prisma/client'
 
 // INTERFACES ---------------------------------------------------------------
 interface MediaProviderProps {
   children: ReactNode
-  media: IMedia
-}
-
-export interface IMedia extends Media {
-  chronicles: IChronicle[]
-  tags: string[]
+  media: Media
 }
 
 // CONTEXT ------------------------------------------------------------------
 
-export const MediaContext = createContext<TEntity<IMedia>>(null)
+export const MediaContext = createContext<TEntity<Media>>(null)
 
 // PROVIDER -----------------------------------------------------------------
 
@@ -26,7 +20,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   children,
   media,
 }) => {
-  const value = useState<IMedia>(media)
+  const value = useState<Media>(media)
 
   return <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
 }
