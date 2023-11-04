@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd'
 import { EDropZone } from '@/types'
 import { dc } from '@/utils/dynamic-classes'
 
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 interface ChronicleTreeLineDrop {
   position: number

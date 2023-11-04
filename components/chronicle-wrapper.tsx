@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 
 import { useChronicle } from '@/entities'
 import { useDebounce } from '@/hooks'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 interface ChronicleWrapperProps {
   children: ReactNode

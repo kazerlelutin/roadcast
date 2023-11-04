@@ -1,8 +1,8 @@
 import { useTranslate } from '@/hooks'
 import { getReadTime, getTextInHtml } from '@/utils'
-import { MediaList, useChronicle } from '@/entities'
-import { ChronicleWrapper, LinkPreview } from '@/components'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useChronicle } from '@/entities'
+import { ChronicleWrapper, LinkPreview, MediaList } from '@/components'
+import { useBroadcast } from '@/stores'
 import { dc } from '@/utils/dynamic-classes'
 import { Input } from '@/ui/input'
 
@@ -15,7 +15,7 @@ export function ChronicleRead() {
     <ChronicleWrapper>
       <div
         className={dc('py-1 transition-all duration-300 ease-in-out', [
-          focusMode || currentChronicle !== chronicle.id,
+          focusMode && currentChronicle !== chronicle.id,
           'opacity-20',
         ])}
         id={chronicle.id}

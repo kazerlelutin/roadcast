@@ -1,6 +1,7 @@
+import { useBroadcast } from '@/stores'
 import { MediaProvider, MediaWithControls, useChronicle } from '@/entities'
-import styles from './media-styles/media-list.module.css'
-import { useBroadcast } from '@/stores/broadcast.store'
+
+import { dc } from '@/utils/dynamic-classes'
 
 export function MediaList() {
   const { focusMode, currentChronicle } = useBroadcast()
@@ -9,7 +10,13 @@ export function MediaList() {
   if (chronicle.medias.length === 0) return <></>
   return (
     <div
-      className={styles.container}
+      className={dc(
+        'grid grid-cols-[repeat(auto-fill,_minmax(110px,_1fr))]',
+        'grid-rows-[repeat(auto-fill,_minmax(110px,_1fr))]',
+        'gap-[var(--dms-gap-sm)] justify-center',
+        'cursor-pointer p-[var(--dms-padding)] transition-opacity duration-300',
+        [focusMode && currentChronicle !== chronicle.id, 'opacity-20']
+      )}
       data-visible={!focusMode || currentChronicle === chronicle.id}
     >
       {chronicle.medias.map((media) => (

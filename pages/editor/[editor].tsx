@@ -4,7 +4,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 
 import { prisma } from '@/db'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 import { SocketProvider } from '@/components'
 
 const Editor = dynamic(

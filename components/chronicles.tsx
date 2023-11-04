@@ -5,7 +5,7 @@ import {
   ChronicleForm,
   EditorProvider,
 } from '@/entities'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 import { Col } from '@/ui'
 
 export function Chronicles() {

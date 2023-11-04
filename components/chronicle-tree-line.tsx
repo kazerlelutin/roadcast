@@ -6,7 +6,7 @@ import { useDrag } from 'react-dnd'
 import { EDropZone } from '@/types'
 import { getResume } from '@/utils'
 import { useTranslate } from '@/hooks'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 import { ChronicleTreeLineDrop } from '@/components'
 import { dc } from '@/utils/dynamic-classes'
 

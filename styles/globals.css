@@ -190,3 +190,16 @@ body {
     align-items: center;
   }
 }
+
+@layer components {
+  .label {
+    @apply text-sm text-[var(--dms-text)] text-center;
+  }
+}
+
+@layer utilities {
+  .container img,
+  .container video {
+    @apply w-full h-auto object-cover;
+  }
+}

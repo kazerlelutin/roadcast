@@ -1,6 +1,6 @@
 import { NoMessage } from '@/ui'
 import { useTranslate } from '@/hooks'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 import {
   ChronicleRefreshButton,
   ChronicleTreeLine,

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 
 import { Button, Modal } from '@/ui'
 import { useTranslate } from '@/hooks'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 export function BroadcastCreateNewWithHistory() {
   const { createBroadcastWithHistory } = useBroadcast()

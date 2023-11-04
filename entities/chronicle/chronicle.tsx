@@ -4,7 +4,7 @@ import { createContext } from 'react'
 import { TEntity } from '@/types'
 import { IEditor, IMedia } from '@/entities'
 import { Chronicle } from '@prisma/client'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 // INTERFACES ---------------------------------------------------------------
 

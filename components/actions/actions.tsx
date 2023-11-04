@@ -2,7 +2,7 @@ import { useModes } from '@/entities'
 import { useTranslate, useIsMobile } from '@/hooks'
 import { Button, Flex } from '@/ui'
 import { useMiniLoader } from '@/components'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 export function Actions() {
   const t = useTranslate()

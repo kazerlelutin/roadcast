@@ -1,19 +1,18 @@
 import { Col, Flex, Label } from '@/ui'
 import {
   ChronicleRoutes,
-  useChronicles,
   ChronicleFormDescription,
   EditorSelector,
   ChronicleDeleteButton,
-  MediaList,
   MediaAddForm,
+  useChronicle,
 } from '@/entities'
 import styles from './chronicle-styles/chronicle-form.module.css'
-import { ChronicleWrapper, StringEditor } from '@/components'
+import { ChronicleWrapper, StringEditor, MediaList } from '@/components'
 import { useTranslate } from '@/hooks'
 
 export function ChronicleForm() {
-  const { chronicle, updateChronicleField } = useChronicles()
+  const { chronicle, updateChronicleField } = useChronicle()
   const t = useTranslate()
 
   return (

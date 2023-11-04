@@ -1,6 +1,6 @@
 import { useTranslate } from '@/hooks'
 import { Button } from '@/ui'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 
 interface ChronicleCreateButtonProps {
   position: number

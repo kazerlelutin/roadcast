@@ -1,7 +1,7 @@
 import { LabelBox, Info } from '@/ui'
 import { useTranslate } from '@/hooks'
 import { useRouter } from 'next/router'
-import { useBroadcast } from '@/stores/broadcast.store'
+import { useBroadcast } from '@/stores'
 import { BroadcastStringEditor } from '../broadcast-string-editor'
 import { Input } from '@/ui/input'
 
