@@ -6,7 +6,7 @@ import { Resume, Actions, ChronicleTree, Chronicles } from '@/components'
 import { Gridbox, HeaderNoAuth, LabelBox } from '@/ui'
 import { useIsMobile, useTranslate } from '@/hooks'
 import { useBroadcast } from '@/stores'
-import { BroadcastStringEditor } from '@/components/broadcast-string-editor'
+import { BroadcastStringEditor } from '@/components/BroadcastStringEditor'
 
 export function Editor() {
   const { broadcast } = useBroadcast()

@@ -7,11 +7,14 @@ import {
   createContext,
   useState,
 } from 'react'
-import { PUSHER_KEY } from '@/utils'
-import { useRouter } from 'next/router'
-import { useGetMyLocalId } from '@/hooks'
 import Pusher from 'pusher-js'
-import { BroadcastContext, ScheduleAccountCtx, useBroadcast } from '@/entities'
+import { useRouter } from 'next/router'
+
+import { ScheduleAccountCtx } from '@/entities'
+import { useBroadcast } from '@/stores'
+
+import { PUSHER_KEY } from '@/utils'
+import { useGetMyLocalId } from '@/hooks'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {

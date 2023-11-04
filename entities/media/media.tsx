@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useState, useContext } from 'react'
+import { ReactNode, useContext } from 'react'
 import { createContext } from 'react'
-import { TEntity } from '@/types'
 import { Media } from '@prisma/client'
 
 // INTERFACES ---------------------------------------------------------------
@@ -12,7 +11,7 @@ interface MediaProviderProps {
 
 // CONTEXT ------------------------------------------------------------------
 
-export const MediaContext = createContext<TEntity<Media>>(null)
+export const MediaContext = createContext<Media>(null)
 
 // PROVIDER -----------------------------------------------------------------
 
@@ -20,9 +19,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   children,
   media,
 }) => {
-  const value = useState<Media>(media)
-
-  return <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
+  return <MediaContext.Provider value={media}>{children}</MediaContext.Provider>
 }
 
 // ROUTES -------------------------------------------------------------------
@@ -43,13 +40,9 @@ export enum MediaRoutes {
 export const useMedia = () => {
   const ctx = useContext(MediaContext)
 
-  if (!ctx) {
-    throw new Error('useMedias must be used within a MediaProvider')
-  }
-
-  const [media] = ctx
+  if (!ctx) throw new Error('useMedias must be used within a MediaProvider')
 
   return {
-    media,
+    media: ctx,
   }
 }

@@ -21,6 +21,7 @@ export function LinkPreview({ url }: LinkPreviewProps) {
 
   if (!data) return <div>{'...'}</div>
 
+  if (!data?.link) return null
   return (
     <div className="grid grid-cols-[auto_1fr] gap-2 items-center border border-rc-bg-dark rounded-sm p-1 bg-slate-900">
       <div className="m-w-[100px]">

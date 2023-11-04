@@ -1,16 +1,22 @@
 import { ReactNode, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
-import { Button } from './button'
+import { Button } from '@/ui'
 import { CloseIcon } from './icons'
 
 interface ModalProps {
   title?: ReactNode
   content: (closeModal: () => void) => ReactNode
   button: ReactNode
+  apparenceButton?: boolean
 }
 
-export function Modal({ title, content, button }: ModalProps) {
+export function Modal({
+  title,
+  content,
+  button,
+  apparenceButton = true,
+}: ModalProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
@@ -23,9 +29,13 @@ export function Modal({ title, content, button }: ModalProps) {
 
   return (
     <>
-      <Button type="button" onClick={openModal}>
-        {button}
-      </Button>
+      {apparenceButton ? (
+        <Button type="button" onClick={openModal}>
+          {button}
+        </Button>
+      ) : (
+        <div onClick={openModal}>{button}</div>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

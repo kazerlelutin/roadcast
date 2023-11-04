@@ -1,6 +1,6 @@
 import { useTranslate } from '@/hooks'
-import { Button } from '@/ui'
 import { useBroadcast } from '@/stores'
+import { Button } from '@/ui'
 
 interface ChronicleCreateButtonProps {
   position: number
@@ -15,9 +15,15 @@ export function ChronicleCreateButton({
       en: 'Add a chronicle',
     },
   })
-  const { createChronicle } = useBroadcast()
+  const { loading, createChronicle } = useBroadcast()
 
   return (
-    <Button onClick={() => createChronicle(position)}>{t('create')}</Button>
+    <Button
+      variant="normal"
+      onClick={() => createChronicle(position)}
+      loading={loading === 'createChronicle'}
+    >
+      {t('create')}
+    </Button>
   )
 }

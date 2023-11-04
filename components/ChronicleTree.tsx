@@ -1,14 +1,43 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import { GrabIcon } from '@/ui'
-import { useChronicle } from '@/entities'
 import { useDrag } from 'react-dnd'
 import { EDropZone } from '@/types'
-import { getResume } from '@/utils'
-import { useTranslate } from '@/hooks'
+
+import { ChronicleProvider } from '@/entities'
 import { useBroadcast } from '@/stores'
-import { ChronicleTreeLineDrop } from '@/components'
-import { dc } from '@/utils/dynamic-classes'
+
+import { useTranslate } from '@/hooks'
+import { getResume, dc } from '@/utils'
+
+import {
+  ChronicleRefreshButton,
+  ChronicleTreeLineDrop,
+} from '@/components'
+import { GrabIcon, NoMessage } from '@/ui'
+import { useChronicle } from '@/entities'
+
+export function ChronicleTree() {
+  const t = useTranslate()
+  const { broadcast } = useBroadcast()
+
+  if (!broadcast.id) return <NoMessage message={t('noBroadcast')} />
+
+  return (
+    <div className="flex flex-col gap-1">
+      <ChronicleRefreshButton />
+      {broadcast.chronicles.length > 0 && (
+        <ChronicleTreeLineDrop position={0} />
+      )}
+      {broadcast.chronicles.map((chronicle) => (
+        <ChronicleProvider key={chronicle.id} id={chronicle.id}>
+          <ChronicleTreeLine
+            key={`${chronicle.id}-${chronicle?.editor?.id}-${chronicle.position}`}
+          />
+        </ChronicleProvider>
+      ))}
+    </div>
+  )
+}
 
 export function ChronicleTreeLine() {
   const t = useTranslate()

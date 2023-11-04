@@ -3,5 +3,5 @@ import { useShowChronicleButton } from '@/entities'
 
 export function ChronicleRefreshButton() {
   const { showRefreshChronicleButton } = useShowChronicleButton()
-  return showRefreshChronicleButton ? <RefreshButton /> : <></>
+  return showRefreshChronicleButton ? <RefreshButton /> : null
 }

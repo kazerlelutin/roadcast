@@ -1,7 +1,7 @@
 import { useDrop } from 'react-dnd'
-
 import { EDropZone } from '@/types'
-import { dc } from '@/utils/dynamic-classes'
+
+import { dc } from '@/utils'
 
 import { useBroadcast } from '@/stores'
 

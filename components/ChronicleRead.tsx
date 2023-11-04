@@ -1,10 +1,11 @@
-import { useTranslate } from '@/hooks'
-import { getReadTime, getTextInHtml } from '@/utils'
-import { useChronicle } from '@/entities'
-import { ChronicleWrapper, LinkPreview, MediaList } from '@/components'
 import { useBroadcast } from '@/stores'
-import { dc } from '@/utils/dynamic-classes'
-import { Input } from '@/ui/input'
+import { useChronicle } from '@/entities'
+
+import { useTranslate } from '@/hooks'
+import { getReadTime, getTextInHtml, dc } from '@/utils'
+
+import { Input } from '@/ui'
+import { ChronicleWrapper, LinkPreview, MediaList } from '@/components'
 
 export function ChronicleRead() {
   const t = useTranslate()

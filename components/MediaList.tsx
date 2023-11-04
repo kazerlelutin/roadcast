@@ -1,7 +1,9 @@
 import { useBroadcast } from '@/stores'
-import { MediaProvider, MediaWithControls, useChronicle } from '@/entities'
+import { MediaProvider, useChronicle } from '@/entities'
 
-import { dc } from '@/utils/dynamic-classes'
+import { dc } from '@/utils'
+
+import { MediaWithControls } from '@/components'
 
 export function MediaList() {
   const { focusMode, currentChronicle } = useBroadcast()

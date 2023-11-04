@@ -2,8 +2,8 @@
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { createContext } from 'react'
 import { TEntity } from '@/types'
-import { IEditor, IMedia } from '@/entities'
-import { Chronicle } from '@prisma/client'
+import { IEditor } from '@/entities'
+import { Chronicle, Media } from '@prisma/client'
 import { useBroadcast } from '@/stores'
 
 // INTERFACES ---------------------------------------------------------------
@@ -15,7 +15,7 @@ export enum ChronicleStatus {
 }
 
 export interface IChronicle extends Chronicle {
-  medias: IMedia[]
+  medias: Media[]
   editor: IEditor
 }
 
@@ -32,10 +32,10 @@ interface ChroniclesProviderProps {
 
 export const ChronicleContext = createContext<string>('')
 
-export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>(
+export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>([
   false,
-  () => {}
-)
+  () => {},
+])
 
 // PROVIDERS -----------------------------------------------------------------
 
@@ -132,13 +132,6 @@ export function useChronicles() {
     setChronicle((prev) => ({ ...prev, medias: [...prev.medias, media] }))
   }
 
-  const deleteMedia = (mediaId: string) => {
-    setChronicle((prev) => ({
-      ...prev,
-      medias: prev.medias.filter((m) => m.id !== mediaId),
-    }))
-  }
-
   const updateChronicle = (chronicle: IChronicle) => {
     setChronicle(chronicle)
   }
@@ -167,7 +160,6 @@ export function useChronicles() {
   return {
     chronicles: broadcast.chronicles,
     addMedia,
-    deleteMedia,
     updateChronicle,
     updateChronicles,
     deleteChronicle,
@@ -179,11 +171,12 @@ export function useChronicles() {
 // NEW **
 
 export function useChronicle() {
-  const { getChronicle } = useBroadcast()
+  const { getChronicle, deleteMedia } = useBroadcast()
   const id = useContext(ChronicleContext)
   if (!id) throw new Error('ChronicleProvider not found')
 
   return {
     chronicle: getChronicle(id),
+    deleteMedia: (mediaId: string) => deleteMedia(id, mediaId),
   }
 }

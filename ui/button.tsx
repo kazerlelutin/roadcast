@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { dc } from '@/utils/dynamic-classes'
+import { dc } from '@/utils'
 
 interface ButtonProps {
   children: ReactNode

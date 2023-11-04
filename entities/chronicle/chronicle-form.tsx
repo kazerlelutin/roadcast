@@ -12,9 +12,12 @@ import { ChronicleWrapper, StringEditor, MediaList } from '@/components'
 import { useTranslate } from '@/hooks'
 
 export function ChronicleForm() {
-  const { chronicle, updateChronicleField } = useChronicle()
+  const { chronicle } = useChronicle()
   const t = useTranslate()
 
+  const updateChronicleField = (field: string, value: string) => {
+    console.log('updateChronicleField', field, value)
+  }
   return (
     <ChronicleWrapper>
       <div className={styles.container}>

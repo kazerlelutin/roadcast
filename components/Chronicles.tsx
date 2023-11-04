@@ -1,42 +1,39 @@
-import { ChronicleRead, ChronicleRefreshButton } from '@/components'
 import {
-  ChronicleProvider,
+  ChronicleRead,
+  ChronicleRefreshButton,
   ChronicleCreateButton,
   ChronicleForm,
-  EditorProvider,
-} from '@/entities'
+} from '@/components'
+import { ChronicleProvider } from '@/entities'
 import { useBroadcast } from '@/stores'
-import { Col } from '@/ui'
 
 export function Chronicles() {
   const { broadcast, lastPosition, readMode } = useBroadcast()
 
   return (
-    <Col padding>
+    <div className="flex flex-col gap-3 items-center">
       <ChronicleRefreshButton />
       {broadcast.chronicles.map((chronicle) => (
-        <Col key={`${chronicle.id}-${chronicle.updatedAt}`}>
+        <div key={chronicle.id} className="flex flex-col gap-3 items-center">
           {!readMode && (
-            <Col center>
+            <div className="flex flex-col gap-1 items-center">
               <ChronicleCreateButton
                 position={chronicle.position - 1 < 0 ? 0 : chronicle.position}
               />
-            </Col>
+            </div>
           )}
           <ChronicleProvider id={chronicle.id}>
-            <EditorProvider editor={chronicle.editor}>
-              <div id={chronicle.id}>
-                {readMode ? <ChronicleRead /> : <ChronicleForm />}
-              </div>
-            </EditorProvider>
+            <div id={chronicle.id}>
+              {readMode ? <ChronicleRead /> : <ChronicleForm />}
+            </div>
           </ChronicleProvider>
-        </Col>
+        </div>
       ))}
       {!readMode && (
-        <Col center>
+        <div className="flex flex-col items-center">
           <ChronicleCreateButton position={lastPosition} />
-        </Col>
+        </div>
       )}
-    </Col>
+    </div>
   )
 }

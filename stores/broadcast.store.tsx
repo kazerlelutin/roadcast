@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { Broadcast, Chronicle, Editor, Media } from '@prisma/client'
 import { createHeader } from '@/utils/create-header'
+import async from '../pages/editor/[editor]'
 
 type ExtendedBroadcast = Broadcast & {
   chronicles: ExtendedChronicle[]
@@ -39,6 +40,8 @@ interface BroadcastActions {
   createBroadcastWithHistory: () => Promise<Broadcast>
   updateTree: (id: string, position: number) => void
   createChronicle: (position: number) => void
+  deleteMedia: (chronicleId: string, mediaId: string) => void
+  broadcastMedia: (media: Media) => void
 }
 
 interface BroadcastStore
@@ -191,10 +194,53 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
         headers: createHeader(broadcast),
         body: JSON.stringify({ position }),
       })
+      const chronicles = await res.json()
+      broadcast.chronicles = chronicles
+      set({ loading: null, broadcast })
+    } catch (err) {
+      // reset broadcast
+      set({ broadcast, loading: null })
+    }
+  },
+  async deleteMedia(chronicleId, mediaId) {
+    const { broadcast } = get()
+    const chronicle = broadcast.chronicles.find((c) => c.id === chronicleId)
+    if (!chronicle) return
+    const medias = chronicle.medias.filter((m) => m.id !== mediaId)
+    set({
+      broadcast: {
+        ...broadcast,
+        chronicles: broadcast.chronicles.map((c) => {
+          if (c.id === chronicleId) c.medias = medias
+          return c
+        }),
+      },
+    })
+
+    try {
+      const res = await fetch(`/api/media/delete`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ id: mediaId, chronicleId: chronicle.id }),
+      })
       await res.json()
     } catch (err) {
       // reset broadcast
       set({ broadcast })
+    }
+  },
+  async broadcastMedia(media) {
+    const { broadcast } = get()
+    try {
+      const res = await fetch(`/api/media/broadcast`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ media }),
+      })
+      await res.json()
+    } catch (err) {
+      // reset broadcast
+      console.log(err)
     }
   },
   // === Getters ==============================================================

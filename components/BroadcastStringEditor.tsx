@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useDebounce } from '@/hooks'
 import { useBroadcast } from '@/stores'
-import { Input } from '@/ui/input'
+import { Input } from '@/ui/Input'
 
 interface StringEditorProps {
   name: string

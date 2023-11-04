@@ -2,8 +2,8 @@ import { LabelBox, Info } from '@/ui'
 import { useTranslate } from '@/hooks'
 import { useRouter } from 'next/router'
 import { useBroadcast } from '@/stores'
-import { BroadcastStringEditor } from '../broadcast-string-editor'
-import { Input } from '@/ui/input'
+import { BroadcastStringEditor } from '../BroadcastStringEditor'
+import { Input } from '@/ui/Input'
 
 export function Resume() {
   const t = useTranslate({
