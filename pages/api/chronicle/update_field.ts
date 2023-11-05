@@ -1,17 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { TriggerTypes } from '../../../components/socket'
 import { prisma } from '../../../db/db'
 import { trigger } from '../../../services/trigger'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
+import { TriggerTypes } from '@/components'
 
-async function chronicle_title(
+async function chronicle_update_field(
   request: NextApiRequest,
   response: NextApiResponse,
   infos: BroadcastCtx
 ) {
   const { editor, myLocalId } = infos
-  const { title, id: chronicleId } = JSON.parse(request.body)
+  const {chronicle} = JSON.parse(request.body)
+
+  if(!chronicle) return response.status(400).json({ error: 'Missing chronicle' })
+  const { id:chronicleId, title, text, status, source } = chronicle
 
   if (!editor && chronicleId)
     return response.status(401).json({ error: 'Unauthorized' })
@@ -34,6 +37,9 @@ async function chronicle_title(
     },
     data: {
       title,
+      text,
+      status,
+      source : /^(http|https):\/\//.test(source) ? source : null,
     },
   })
 
@@ -54,6 +60,6 @@ async function chronicle_title(
 }
 
 const helper = (request: NextApiRequest, response: NextApiResponse) =>
-  broadcastMiddleWare(request, response, chronicle_title)
+  broadcastMiddleWare(request, response, chronicle_update_field)
 
 export default helper

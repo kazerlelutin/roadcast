@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { TriggerTypes } from '../../../components/socket'
 import { prisma } from '../../../db/db'
 import { trigger } from '../../../services/trigger'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
+import { TriggerTypes } from '@/components'
 
 async function chronicle_position(
   request: NextApiRequest,

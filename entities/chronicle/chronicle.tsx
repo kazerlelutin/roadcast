@@ -2,8 +2,7 @@
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { createContext } from 'react'
 import { TEntity } from '@/types'
-import { IEditor } from '@/entities'
-import { Chronicle, Media } from '@prisma/client'
+import { Chronicle, Editor, Media } from '@prisma/client'
 import { useBroadcast } from '@/stores'
 
 // INTERFACES ---------------------------------------------------------------
@@ -16,7 +15,7 @@ export enum ChronicleStatus {
 
 export interface IChronicle extends Chronicle {
   medias: Media[]
-  editor: IEditor
+  editor: Editor
 }
 
 interface ChronicleProviderProps {
@@ -72,19 +71,6 @@ export enum ChronicleRoutes {
 
 // HOOKS --------------------------------------------------------------------
 
-export function useCreateChronicle() {
-  const ctx = []
-
-  const [_, setChronicles] = ctx
-  const createChronicle = (chronicles: IChronicle[]) => {
-    setChronicles(chronicles)
-  }
-
-  return {
-    createChronicle,
-  }
-}
-
 export function useShowChronicleButton() {
   //TODO faire gaffe, context viré
   const [showRefreshChronicleButton, setDisplayButton] =
@@ -105,78 +91,18 @@ export function useShowChronicleButton() {
   }
 }
 
-export function useChronicles() {
-  const chroniclesCtx = []
-
-  const { broadcast } = useBroadcast()
-  const setChronicle = () => {
-    console.log('TODO')
-  }
-
-  const setChronicles = () => {}
-
-  const editorCount = useMemo(() => {
-    const editorIds = broadcast.chronicles.reduce((acc, chronicle) => {
-      if (chronicle.editor) {
-        acc[chronicle.editor.id] = acc[chronicle.editor.id]
-          ? acc[chronicle.editor.id] + 1
-          : 1
-      }
-      return acc
-    }, {})
-
-    return Object.keys(editorIds).length
-  }, [chroniclesCtx[0]])
-
-  const addMedia = (media: IMedia) => {
-    setChronicle((prev) => ({ ...prev, medias: [...prev.medias, media] }))
-  }
-
-  const updateChronicle = (chronicle: IChronicle) => {
-    setChronicle(chronicle)
-  }
-
-  const updateChronicles = (chronicle: IChronicle[]) => {
-    setChronicles(chronicle)
-  }
-
-  const deleteChronicle = (chronicleId: string) => {
-    setChronicles((prev) => prev.filter((c) => c.id !== chronicleId))
-  }
-
-  function updateChronicleField<K extends keyof IChronicle>(
-    field: K,
-    value: IChronicle[K]
-  ) {
-    setChronicle((prev) => ({ ...prev, [field]: value }))
-    setChronicles((prev) =>
-      prev.map((chronicleEl) => {
-        if (chronicleEl.id === chronicle.id) chronicleEl[field] = value
-        return chronicleEl
-      })
-    )
-  }
-
-  return {
-    chronicles: broadcast.chronicles,
-    addMedia,
-    updateChronicle,
-    updateChronicles,
-    deleteChronicle,
-    updateChronicleField,
-    editorCount,
-  }
-}
-
 // NEW **
 
 export function useChronicle() {
-  const { getChronicle, deleteMedia } = useBroadcast()
+  const { getChronicle,setChronicle, updateChronicleField, deleteMedia } = useBroadcast()
   const id = useContext(ChronicleContext)
   if (!id) throw new Error('ChronicleProvider not found')
 
+  const chronicle = getChronicle(id)
   return {
-    chronicle: getChronicle(id),
+    chronicle,
     deleteMedia: (mediaId: string) => deleteMedia(id, mediaId),
+    updateChronicleField: (chronicle: Partial<Chronicle>) => updateChronicleField({...chronicle, id}),
+    setChronicle: (chronicle: Partial<Chronicle>) => setChronicle({...chronicle, id}),
   }
 }

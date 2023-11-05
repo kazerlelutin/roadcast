@@ -8,7 +8,7 @@ interface LabelBoxProps {
 
 export function LabelBox({ children, label, required }: LabelBoxProps) {
   return (
-    <div className="flex flex-wrap py-0 px-1 items-center">
+    <div className="flex flex-wrap py-0 px-1 items-center gap-1">
       <label aria-required={required} className="text-rc-highlight">
         {label}
         {required && <sup className="text-rc-warning text-xs pl-1">{'*'}</sup>}

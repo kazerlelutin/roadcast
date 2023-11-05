@@ -17,11 +17,13 @@ export function Editor() {
     return (
       <div className="h-screen p-2 bg-light-bg dark:bg-rc-bg text-light-text dark:text-rc-text overflow-y-hidden">
         <HeaderNoAuth />
-        <div className="grid grid-rows-[auto_1fr_100px] h-full">
+        <div className="grid grid-rows-[auto_1fr_100px] h-full gap-3">
           {broadcast.title && (
+            <div className='flex w-full justify-center'>
             <LabelBox label={t('Title')}>
               <BroadcastStringEditor key={broadcast.editor} name="title" />
             </LabelBox>
+            </div>
           )}
           <Gridbox>
             <Chronicles />
@@ -36,7 +38,7 @@ export function Editor() {
   return (
     <div className="h-screen p-2 bg-light-bg dark:bg-rc-bg text-light-text dark:text-rc-text overflow-y-hidden">
       <HeaderNoAuth />
-      <div className="grid grid-cols-[200px_5fr_220px] h-full">
+      <div className="grid grid-cols-[245px_5fr_220px] h-full gap-1">
         <div className="grid grid-rows-[auto_1fr_40px] gap-2">
           <div className="flex flex-col gap-1">
             <Resume />

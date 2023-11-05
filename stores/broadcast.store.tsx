@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { Broadcast, Chronicle, Editor, Media } from '@prisma/client'
 import { createHeader } from '@/utils/create-header'
-import async from '../pages/editor/[editor]'
 
 type ExtendedBroadcast = Broadcast & {
   chronicles: ExtendedChronicle[]
@@ -28,6 +27,7 @@ interface BroadcastSetters {
   toggleReadMode: () => void
   updateDrag: (isDragging: boolean) => void
   setCurrentChronicle: (chronicleId: string) => void
+  setChronicle: (chronicle: Partial<Chronicle>) => void
 }
 
 interface BroadcastGetters {
@@ -42,6 +42,7 @@ interface BroadcastActions {
   createChronicle: (position: number) => void
   deleteMedia: (chronicleId: string, mediaId: string) => void
   broadcastMedia: (media: Media) => void
+  updateChronicleField: (chronicle: Partial<Chronicle>) => void
 }
 
 interface BroadcastStore
@@ -89,6 +90,19 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
 
   setBroadcast: (broadcast) =>
     set((prev) => ({ broadcast: { ...prev.broadcast, ...broadcast } })),
+  setChronicle: (chronicle) => {
+    const { broadcast } = get()
+    const chronicles = broadcast.chronicles.map((c) => {
+      if (c.id === chronicle.id) c = { ...c, ...chronicle }
+      return c
+    })
+    set({
+      broadcast: {
+        ...broadcast,
+        chronicles,
+      },
+    })
+  },
   toggleFocus: () => {
     const { focusMode } = get()
     localStorage.setItem(roadcast_focus_mode, JSON.stringify(!focusMode))
@@ -229,6 +243,30 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
       set({ broadcast })
     }
   },
+  async updateChronicleField(chronicle) {
+    const { broadcast } = get()
+
+
+    try {
+      const res = await fetch(`/api/chronicle/update_field`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ chronicle }),
+      })
+      if(res.status !== 200) throw new Error('updateChronicleField')
+      await res.json()
+    
+      set((prev)=> ({broadcast: {...prev.broadcast, chronicles: prev.broadcast.chronicles.map((c) => {
+        if (c.id === chronicle.id) c = { ...c, updatedAt: new Date() }
+        return c
+      })}}))
+
+    } catch (err) {
+      // reset broadcast
+      set({ broadcast })
+    }
+  },
+
   async broadcastMedia(media) {
     const { broadcast } = get()
     try {

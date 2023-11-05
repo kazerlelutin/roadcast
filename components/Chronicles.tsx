@@ -11,10 +11,10 @@ export function Chronicles() {
   const { broadcast, lastPosition, readMode } = useBroadcast()
 
   return (
-    <div className="flex flex-col gap-3 items-center">
+    <div className="flex flex-col gap-3 items-center w-full">
       <ChronicleRefreshButton />
-      {broadcast.chronicles.map((chronicle) => (
-        <div key={chronicle.id} className="flex flex-col gap-3 items-center">
+      {broadcast.chronicles.sort((a,b)=> a.position - b.position).map((chronicle) => (
+        <div key={chronicle.id} className="flex flex-col gap-3 w-full">
           {!readMode && (
             <div className="flex flex-col gap-1 items-center">
               <ChronicleCreateButton
