@@ -10,29 +10,20 @@ interface ButtonProps {
   loading?: boolean
 }
 
-export function Button({
-  children,
-  variant,
-  onClick,
-  type = 'button',
-  loading,
-}: ButtonProps) {
+export function Button({ children, variant, onClick, type = 'button', loading }: ButtonProps) {
   return (
     <button
       disabled={loading}
       className={dc(
         'disabled:opacity-50',
         'text-xs',
-        'outline-none border border-light-text dark:border-rc-text uppercase py-1 px-2 text-rc-text',
+        'border border-light-text px-2 py-1 uppercase text-rc-text outline-none dark:border-rc-text',
         'cursor-pointer transition duration-200 ease-in-out',
         'rounded-3xl',
-        'hover:bg-rc-info hover:border-rc-info-light hover:text-rc-text',
-        [variant === 'normal', 'bg-rc-info-light border-rc-info text-rc-text'],
-        [
-          variant === 'twitch',
-          'bg-twitch-primary border-twitch-primary text-dms-text-invert',
-        ],
-        [variant === 'red', 'bg-rc-warning border-rc-warning text-rc-text'],
+        'hover:border-rc-info-light hover:bg-rc-info hover:text-rc-text',
+        [variant === 'normal', 'border-rc-info bg-rc-info-light text-rc-text'],
+        [variant === 'twitch', 'text-dms-text-invert border-twitch-primary bg-twitch-primary'],
+        [variant === 'red', 'border-rc-warning bg-rc-warning text-rc-text'],
         [!variant, 'bg-rc-highlight-dark text-rc-text']
       )}
       onClick={() => onClick?.()}

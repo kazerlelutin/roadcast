@@ -4,10 +4,7 @@ import { RoadcastLogo, KofiButton } from '@/ui'
 
 //for prevent SSR render with localStorage
 const ThemeSwitcher = dynamic(
-  () =>
-    import('../components/theme-switcher/theme-switcher').then(
-      (mod) => mod.ThemeSwitcher
-    ),
+  () => import('../components/theme-switcher/theme-switcher').then((mod) => mod.ThemeSwitcher),
   {
     ssr: false,
   }

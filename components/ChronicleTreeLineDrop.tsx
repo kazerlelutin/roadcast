@@ -25,13 +25,9 @@ export function ChronicleTreeLineDrop({ position }: ChronicleTreeLineDrop) {
   return (
     <div
       className={dc(
-        'border-2 border-transparent border-dashed  transition-200ms-ease-in-out',
-        [
-          treeIsDragging && !collectedProps?.isOver,
-          'h-[25px] border-rc-card-bg',
-          'h-0',
-        ],
-        [collectedProps?.isOver, 'border-rc-highlight h-[25px]', 'h-0']
+        'transition-200ms-ease-in-out border-2 border-dashed  border-transparent',
+        [treeIsDragging && !collectedProps?.isOver, 'h-[25px] border-rc-card-bg', 'h-0'],
+        [collectedProps?.isOver, 'h-[25px] border-rc-highlight', 'h-0']
       )}
       ref={drop}
     />

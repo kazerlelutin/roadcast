@@ -19,12 +19,5 @@ export function BroadcastStringEditor({ name, fontSize }: StringEditorProps) {
     updateField(name, value)
   }, [debouncedValue])
 
-  return (
-    <Input
-      data-size={fontSize}
-      disabled={readMode}
-      value={value}
-      onChange={setValue}
-    />
-  )
+  return <Input data-size={fontSize} disabled={readMode} value={value} onChange={setValue} />
 }

@@ -28,9 +28,7 @@ export function ChronicleRead() {
           </span>
         </h2>
 
-        <p className="text-rc-light pb-2 border-b border-rc-bg-dark mt-4">
-          {chronicle?.editor?.name || t('noEditor')}
-        </p>
+        <p className="mt-4 border-b border-rc-bg-dark pb-2 text-rc-light">{chronicle?.editor?.name || t('noEditor')}</p>
 
         <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
         {chronicle.source && chronicle.source.match(/http/) && (

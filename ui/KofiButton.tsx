@@ -15,14 +15,14 @@ export function KofiButton() {
       onClick={() => {
         va.track('kofiButton')
       }}
-      className=" fixed md:relative bottom-1 right-1  flex justify-center gap-1 text-sm items-center"
+      className=" fixed bottom-1 right-1 flex  items-center justify-center gap-1 text-sm md:relative"
       href="https://ko-fi.com/kazerlelutin"
       target="_blank"
       rel="noreferrer"
     >
-      <div className=" p-1 rounded-sm z-30 border-y-rc-bg">{t('BuyCoffe')}</div>
+      <div className=" z-30 rounded-sm border-y-rc-bg p-1">{t('BuyCoffe')}</div>
 
-      <div className="w-[30px] h-[20px]">
+      <div className="h-[20px] w-[30px]">
         <Image src="/kofi_logo.svg" width={30} height={20} alt="kofi logo" />
       </div>
     </a>

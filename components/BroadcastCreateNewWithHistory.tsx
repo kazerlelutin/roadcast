@@ -30,9 +30,7 @@ export function BroadcastCreateNewWithHistory() {
       button={t('createWithHistory')}
       content={(closeModal) => (
         <div className="flex flex-col gap-1 text-rc-text">
-          <div className="flex flex-col gap-1 justify-center">
-            {t('createWithHistoryDesc')}
-          </div>
+          <div className="flex flex-col justify-center gap-1">{t('createWithHistoryDesc')}</div>
           <div className="flex justify-end gap-2">
             <Button
               variant="normal"

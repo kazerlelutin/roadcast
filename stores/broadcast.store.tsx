@@ -45,11 +45,7 @@ interface BroadcastActions {
   updateChronicleField: (chronicle: Partial<Chronicle>) => void
 }
 
-interface BroadcastStore
-  extends BroadcastState,
-    BroadcastSetters,
-    BroadcastActions,
-    BroadcastGetters {}
+interface BroadcastStore extends BroadcastState, BroadcastSetters, BroadcastActions, BroadcastGetters {}
 
 const roadcast_focus_mode = 'roadcast_focus_mode'
 const roadcast_read_mode = 'roadcast_read_mode'
@@ -88,8 +84,7 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
 
   // === SETTERS ==============================================================
 
-  setBroadcast: (broadcast) =>
-    set((prev) => ({ broadcast: { ...prev.broadcast, ...broadcast } })),
+  setBroadcast: (broadcast) => set((prev) => ({ broadcast: { ...prev.broadcast, ...broadcast } })),
   setChronicle: (chronicle) => {
     const { broadcast } = get()
     const chronicles = broadcast.chronicles.map((c) => {
@@ -246,21 +241,24 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
   async updateChronicleField(chronicle) {
     const { broadcast } = get()
 
-
     try {
       const res = await fetch(`/api/chronicle/update_field`, {
         method: 'POST',
         headers: createHeader(broadcast),
         body: JSON.stringify({ chronicle }),
       })
-      if(res.status !== 200) throw new Error('updateChronicleField')
+      if (res.status !== 200) throw new Error('updateChronicleField')
       await res.json()
-    
-      set((prev)=> ({broadcast: {...prev.broadcast, chronicles: prev.broadcast.chronicles.map((c) => {
-        if (c.id === chronicle.id) c = { ...c, updatedAt: new Date() }
-        return c
-      })}}))
 
+      set((prev) => ({
+        broadcast: {
+          ...prev.broadcast,
+          chronicles: prev.broadcast.chronicles.map((c) => {
+            if (c.id === chronicle.id) c = { ...c, updatedAt: new Date() }
+            return c
+          }),
+        },
+      }))
     } catch (err) {
       // reset broadcast
       set({ broadcast })

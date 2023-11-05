@@ -11,12 +11,7 @@ interface ModalProps {
   apparenceButton?: boolean
 }
 
-export function Modal({
-  title,
-  content,
-  button,
-  apparenceButton = true,
-}: ModalProps) {
+export function Modal({ title, content, button, apparenceButton = true }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
@@ -65,13 +60,10 @@ export function Modal({
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-rc-card-bg text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 flex justify-between items-center p-2 text-rc-text uppercase bg-rc-bg-dark"
+                    className="flex items-center justify-between bg-rc-bg-dark p-2 text-lg font-medium uppercase leading-6 text-rc-text"
                   >
                     {title || ''}
-                    <div
-                      className="w-[20px] cursor-pointer m-2"
-                      onClick={closeModal}
-                    >
+                    <div className="m-2 w-[20px] cursor-pointer" onClick={closeModal}>
                       <CloseIcon />
                     </div>
                   </Dialog.Title>

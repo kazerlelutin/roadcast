@@ -22,7 +22,7 @@ export * from './BroadcastCreateNewWithHistory'
 export * from './Chronicles'
 
 // Chronicle
-export * from './chronicle-create-button'
+export * from './ChronicleCreateBtn'
 export * from './ChronicleRead'
 export * from './ChronicleTree'
 export * from './ChronicleWrapper'

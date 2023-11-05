@@ -4,15 +4,11 @@ const { version } = pkg
 
 export function RoadcastLogo() {
   return (
-    <div className="font-semibold text-lg uppercase" title={version}>
+    <div className="text-lg font-semibold uppercase" title={version}>
       <Link href={'/'}>
-        <div className="text-current no-underline uppercase font-bold">
-          <span className="border-t border-current text-rc-warning-light">
-            R
-          </span>
-          <span className="border-b border-rc-warning-light dark:text-rc-text text-light-text">
-            oadcast
-          </span>
+        <div className="font-bold uppercase text-current no-underline">
+          <span className="border-t border-current text-rc-warning-light">R</span>
+          <span className="border-b border-rc-warning-light text-light-text dark:text-rc-text">oadcast</span>
         </div>
       </Link>
     </div>

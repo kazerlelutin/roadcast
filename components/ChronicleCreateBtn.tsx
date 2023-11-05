@@ -6,9 +6,7 @@ interface ChronicleCreateButtonProps {
   position: number
 }
 
-export function ChronicleCreateButton({
-  position,
-}: ChronicleCreateButtonProps) {
+export function ChronicleCreateButton({ position }: ChronicleCreateButtonProps) {
   const t = useTranslate({
     create: {
       fr: 'Ajouter une chronique',
@@ -18,11 +16,7 @@ export function ChronicleCreateButton({
   const { loading, createChronicle } = useBroadcast()
 
   return (
-    <Button
-      variant="normal"
-      onClick={() => createChronicle(position)}
-      loading={loading === 'createChronicle'}
-    >
+    <Button variant="normal" onClick={() => createChronicle(position)} loading={loading === 'createChronicle'}>
       {t('create')}
     </Button>
   )
