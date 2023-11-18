@@ -1,6 +1,9 @@
 import { create } from 'zustand'
+import { v4 as uuidv4 } from 'uuid'
 import { Broadcast, Chronicle, Editor, Media } from '@prisma/client'
+
 import { createHeader } from '@/utils/create-header'
+import { getObjectToBase64 } from '@/utils'
 
 type ExtendedBroadcast = Broadcast & {
   chronicles: ExtendedChronicle[]
@@ -11,6 +14,13 @@ type ExtendedChronicle = Chronicle & {
   medias: Media[]
 }
 
+type ErrorBroadcast = {
+  message: string
+  type: 'chronicle' | 'media' | 'editor' | 'broadcast'
+  id: string
+  field: string
+}
+
 interface BroadcastState {
   broadcast: ExtendedBroadcast
   loading: 'createBroadcastWithHistory' | 'createChronicle' | null
@@ -19,6 +29,7 @@ interface BroadcastState {
   lastPosition: number
   treeIsDragging: boolean
   currentChronicle: string
+  error: ErrorBroadcast | null
 }
 
 interface BroadcastSetters {
@@ -32,6 +43,7 @@ interface BroadcastSetters {
 
 interface BroadcastGetters {
   getChronicle: (chronicleId: string) => ExtendedChronicle
+  getHeader: (editorId?: string) => HeadersInit
 }
 
 interface BroadcastActions {
@@ -75,11 +87,18 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
   lastPosition: 0,
   treeIsDragging: false,
   currentChronicle: '',
+  error: null,
+  editorId: '',
 
   // === GETTERS ==============================================================
   getChronicle: (chronicleId) => {
     const { broadcast } = get()
     return broadcast.chronicles.find((c) => c.id === chronicleId)
+  },
+  getHeader: (editorId) => {
+    const { broadcast } = get()
+    broadcast.editor = editorId || broadcast.editor
+    return createHeader(broadcast)
   },
 
   // === SETTERS ==============================================================
@@ -117,12 +136,12 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
   // === Actions ==============================================================
 
   async getBroadcast(editor) {
-    const { broadcast } = get()
-    broadcast.editor = editor
+    const { getHeader } = get()
+
     try {
       const res = await fetch(`/api/broadcast/findone`, {
         method: 'POST',
-        headers: createHeader(broadcast),
+        headers: getHeader(editor),
         body: JSON.stringify({ editor }),
       })
 
