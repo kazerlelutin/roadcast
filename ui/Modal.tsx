@@ -60,7 +60,7 @@ export function Modal({ title, content, button, apparenceButton = true }: ModalP
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-rc-card-bg text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex items-center justify-between bg-rc-bg-dark p-2 text-lg font-medium uppercase leading-6 text-rc-text"
+                    className="flex items-center justify-between bg-rc-card-dark p-2 text-lg font-medium uppercase leading-6 text-rc-text"
                   >
                     {title || ''}
                     <div className="m-2 w-[20px] cursor-pointer" onClick={closeModal}>

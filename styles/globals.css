@@ -118,7 +118,11 @@ body {
   }
 
   code {
-    font-family: Menlo, Monaco, Courier New, monospace;
+    font-family:
+      Menlo,
+      Monaco,
+      Courier New,
+      monospace;
     font-size: 0.9em;
     background-color: theme('colors.rc.bg-dark');
     padding: 2px 4px;
@@ -148,15 +152,11 @@ body {
 
   .card-separate:not(.card-separate:last-child) {
     border-bottom: 1px solid theme('colors.rc.bg');
-    --card-separate-margin: calc(
-      var(--dms-padding) - var(--dms-padding) - var(--dms-padding)
-    );
+    --card-separate-margin: calc(var(--dms-padding) - var(--dms-padding) - var(--dms-padding));
     padding: var(--dms-padding);
     margin-left: var(--card-separate-margin);
     margin-right: var(--card-separate-margin);
-    width: calc(
-      100% - var(--card-separate-margin) * 2 - var(--dms-padding) * 2
-    );
+    width: calc(100% - var(--card-separate-margin) * 2 - var(--dms-padding) * 2);
   }
 
   .layout {
@@ -193,13 +193,17 @@ body {
 
 @layer components {
   .label {
-    @apply text-sm text-[var(--dms-text)] text-center;
+    @apply text-center text-sm text-[var(--dms-text)];
+  }
+
+  .input {
+    @apply w-full rounded-md border border-rc-bg-dark bg-rc-card px-2 py-1 text-rc-text outline-none  focus:border-rc-highlight disabled:cursor-text disabled:bg-transparent disabled:text-rc-text;
   }
 }
 
 @layer utilities {
   .container img,
   .container video {
-    @apply w-full h-auto object-cover;
+    @apply h-auto w-full object-cover;
   }
 }

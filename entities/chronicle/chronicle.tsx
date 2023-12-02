@@ -31,28 +31,17 @@ interface ChroniclesProviderProps {
 
 export const ChronicleContext = createContext<string>('')
 
-export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>([
-  false,
-  () => {},
-])
+export const ChronicleRefreshButtonContext = createContext<TEntity<boolean>>([false, () => {}])
 
 // PROVIDERS -----------------------------------------------------------------
 
 export function ChronicleProvider({ children, id }: ChronicleProviderProps) {
-  return (
-    <ChronicleContext.Provider value={id}>{children}</ChronicleContext.Provider>
-  )
+  return <ChronicleContext.Provider value={id}>{children}</ChronicleContext.Provider>
 }
 
-export function ChronicleRefreshButtonProvider({
-  children,
-}: ChroniclesProviderProps) {
+export function ChronicleRefreshButtonProvider({ children }: ChroniclesProviderProps) {
   const value = useState<boolean>(false)
-  return (
-    <ChronicleRefreshButtonContext.Provider value={value}>
-      {children}
-    </ChronicleRefreshButtonContext.Provider>
-  )
+  return <ChronicleRefreshButtonContext.Provider value={value}>{children}</ChronicleRefreshButtonContext.Provider>
 }
 
 // ROUTES -------------------------------------------------------------------
@@ -73,8 +62,7 @@ export enum ChronicleRoutes {
 
 export function useShowChronicleButton() {
   //TODO faire gaffe, context viré
-  const [showRefreshChronicleButton, setDisplayButton] =
-    useState<boolean>(false)
+  const [showRefreshChronicleButton, setDisplayButton] = useState<boolean>(false)
 
   const showChronicleButton = () => {
     setDisplayButton(true)
@@ -94,7 +82,7 @@ export function useShowChronicleButton() {
 // NEW **
 
 export function useChronicle() {
-  const { getChronicle,setChronicle, updateChronicleField, deleteMedia } = useBroadcast()
+  const { getChronicle, setChronicle, updateChronicleField, deleteMedia, updateEditor, createEditor } = useBroadcast()
   const id = useContext(ChronicleContext)
   if (!id) throw new Error('ChronicleProvider not found')
 
@@ -102,7 +90,9 @@ export function useChronicle() {
   return {
     chronicle,
     deleteMedia: (mediaId: string) => deleteMedia(id, mediaId),
-    updateChronicleField: (chronicle: Partial<Chronicle>) => updateChronicleField({...chronicle, id}),
-    setChronicle: (chronicle: Partial<Chronicle>) => setChronicle({...chronicle, id}),
+    updateChronicleField: (chronicle: Partial<Chronicle>) => updateChronicleField({ ...chronicle, id }),
+    setChronicle: (chronicle: Partial<Chronicle>) => setChronicle({ ...chronicle, id }),
+    updateEditor: (editor: Editor) => updateEditor(id, editor),
+    createEditor: (name: string) => createEditor(id, name),
   }
 }

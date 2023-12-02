@@ -29,6 +29,10 @@ export * from './ChronicleWrapper'
 export * from './ChronicleRefreshButton'
 export * from './ChronicleTreeLineDrop'
 export * from './ChronicleForm'
+export * from './SourceInput'
+
+// Editors
+export * from './EditorsSelector'
 
 // Media
 export * from './MediaList'

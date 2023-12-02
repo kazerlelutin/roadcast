@@ -23,10 +23,11 @@ export function LinkPreview({ url }: LinkPreviewProps) {
 
   if (!data?.link) return null
   return (
-    <div className="grid grid-cols-[auto_1fr] gap-2 items-center border border-rc-bg-dark rounded-sm p-1 bg-slate-900">
-      <div className="m-w-[100px]">
+    <div className="grid grid-cols-[auto_1fr] items-center gap-2 rounded-sm border border-rc-bg-dark bg-slate-900 p-1">
+      <div className="w-[100px]">
         {data?.image && (
           <img
+            className="h-full w-full object-cover"
             src={data?.image}
             alt="Link preview"
             onError={({ currentTarget }) => {
@@ -38,12 +39,7 @@ export function LinkPreview({ url }: LinkPreviewProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <a
-          href={data.link}
-          target="_blank"
-          rel="noreferrer"
-          className="flex gap-2 items-center"
-        >
+        <a href={data.link} target="_blank" rel="noreferrer" className="flex items-center gap-2">
           {data.title}
           <span>
             <ExternalIcon />

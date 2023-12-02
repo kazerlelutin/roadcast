@@ -7,6 +7,7 @@ import { getObjectToBase64 } from '@/utils'
 
 type ExtendedBroadcast = Broadcast & {
   chronicles: ExtendedChronicle[]
+  editors: Editor[]
 }
 
 type ExtendedChronicle = Chronicle & {
@@ -55,6 +56,8 @@ interface BroadcastActions {
   deleteMedia: (chronicleId: string, mediaId: string) => void
   broadcastMedia: (media: Media) => void
   updateChronicleField: (chronicle: Partial<Chronicle>) => void
+  createEditor: (chronicleId: string, name: string) => Promise<Editor>
+  updateEditor: (chronicleId: string, editor: Editor) => void
 }
 
 interface BroadcastStore extends BroadcastState, BroadcastSetters, BroadcastActions, BroadcastGetters {}
@@ -133,7 +136,7 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
     set({ currentChronicle: chronicleId })
   },
 
-  // === Actions ==============================================================
+  // === ACTIONS ==============================================================
 
   async getBroadcast(editor) {
     const { getHeader } = get()
@@ -298,5 +301,58 @@ export const useBroadcast = create<BroadcastStore>((set, get) => ({
       console.log(err)
     }
   },
-  // === Getters ==============================================================
+  async createEditor(chronicleId, name) {
+    const { broadcast } = get()
+    try {
+      const res = await fetch(`/api/chronicle/create_editor`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ chronicleId, name }),
+      })
+      const { chronicle, editor } = await res.json()
+
+      set({
+        broadcast: {
+          ...broadcast,
+          chronicles: broadcast.chronicles.map((c) => {
+            if (c.id === chronicleId) c = chronicle
+            return c
+          }),
+          editors: [...broadcast.editors, editor],
+        },
+      })
+      return editor
+    } catch (err) {
+      set({ broadcast })
+      console.log(err)
+    }
+  },
+  async updateEditor(chronicleId, editor) {
+    const { broadcast } = get()
+    const chronicle = broadcast.chronicles.find((c) => c.id === chronicleId)
+    if (!chronicle) return
+    chronicle.editor = editor
+
+    set({
+      broadcast: {
+        ...broadcast,
+        chronicles: broadcast.chronicles.map((c) => {
+          if (c.id === chronicleId) c.editor = editor
+          return c
+        }),
+      },
+    })
+
+    try {
+      const res = await fetch(`/api/chronicle/update_editor`, {
+        method: 'POST',
+        headers: createHeader(broadcast),
+        body: JSON.stringify({ chronicleId, editor }),
+      })
+      await res.json()
+    } catch (err) {
+      set({ broadcast })
+      console.log(err)
+    }
+  },
 }))
