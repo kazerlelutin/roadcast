@@ -2,13 +2,12 @@ import { Col, Flex, Label } from '@/ui'
 import {
   ChronicleRoutes,
   ChronicleFormDescription,
-  EditorSelector,
   ChronicleDeleteButton,
   MediaAddForm,
   useChronicle,
 } from '@/entities'
 import styles from './chronicle-styles/chronicle-form.module.css'
-import { ChronicleWrapper, StringEditor, MediaList } from '@/components'
+import { ChronicleWrapper, StringEditor, MediaList, EditorsSelector } from '@/components'
 import { useTranslate } from '@/hooks'
 
 export function ChronicleForm() {
@@ -32,7 +31,7 @@ export function ChronicleForm() {
           />
           <Label>{t('editor')}</Label>
           <div className={styles.editor}>
-            <EditorSelector />
+            <EditorsSelector />
           </div>
           <Label>{t('source')}</Label>
           <StringEditor
