@@ -2,12 +2,16 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { TriggerTypes } from '../../../components/socket'
 import { prisma } from '../../../db/db'
 import { trigger } from '../../../services/trigger'
+import { broadcastMiddleWare } from '@/middlewares/broadcast.middleware'
+import { BroadcastCtx } from '@/types'
 
-export default async function chronicle_create(
+async function chronicle_create(
   request: NextApiRequest,
-  response: NextApiResponse
+  response: NextApiResponse,
+  infos: BroadcastCtx
 ) {
-  const { editor, position, myLocalId } = JSON.parse(request.body)
+  const { editor, myLocalId } = infos
+  const { position } = JSON.parse(request.body)
 
   if (!editor && !position)
     return response.status(401).json({ error: 'Unauthorized' })
@@ -65,3 +69,8 @@ export default async function chronicle_create(
     })
   )
 }
+
+const helper = (request: NextApiRequest, response: NextApiResponse) =>
+  broadcastMiddleWare(request, response, chronicle_create)
+
+export default helper

@@ -1,10 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../db/db'
 
-export default async function broadcast_findone(
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
+export default async function broadcast_findone(request: NextApiRequest, response: NextApiResponse) {
   const { editor, reader } = JSON.parse(request.body)
 
   if (editor) {
@@ -23,6 +20,7 @@ export default async function broadcast_findone(
             editor: true,
           },
         },
+        editors: true,
       },
     })
 

@@ -13,6 +13,10 @@ interface ColProps {
   lgGap?: boolean
 }
 
+/**
+ *
+ * @deprecated
+ */
 export const Col: FC<ColProps> = (props) => (
   <div
     ref={props?.ref}

@@ -1,16 +1,11 @@
-import { SocketProvider } from '@/components'
-import {
-  BroadcastFocusModeProvider,
-  BroadcastProvider,
-  BroadcastReadModeProvider,
-  ChronicleRefreshButtonProvider,
-  ChronicleToScreenProvider,
-  ChroniclesProvider,
-  EditorsProvider,
-} from '@/entities'
-import { prisma } from '@/db'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
+
+import { prisma } from '@/db'
+import { useBroadcast } from '@/stores'
+import { SocketProvider } from '@/components'
 
 const Editor = dynamic(
   () => import('@/pages_related').then((comp) => comp.Editor),
@@ -20,46 +15,34 @@ const Editor = dynamic(
 )
 
 export default function EditorPage({
-  broadcast,
   title,
+  editor,
 }: {
-  broadcast: string
   title: string
+  editor: string
 }) {
+  const { getBroadcast } = useBroadcast()
+
+  useEffect(() => {
+    getBroadcast(editor)
+  }, [])
+
   return (
-    <ChronicleToScreenProvider>
-      <BroadcastReadModeProvider>
-        <BroadcastFocusModeProvider>
-          <BroadcastProvider broadcast={JSON.parse(broadcast)}>
-            <SocketProvider>
-              <ChronicleRefreshButtonProvider>
-                <ChroniclesProvider>
-                  <EditorsProvider>
-                    <Head>
-                      <title>{title}</title>
-                    </Head>
-                    <Editor />
-                  </EditorsProvider>
-                </ChroniclesProvider>
-              </ChronicleRefreshButtonProvider>
-            </SocketProvider>
-          </BroadcastProvider>
-        </BroadcastFocusModeProvider>
-      </BroadcastReadModeProvider>
-    </ChronicleToScreenProvider>
+    <SocketProvider>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <Editor />
+    </SocketProvider>
   )
 }
 
 export async function getServerSideProps({ query }) {
   const broadcast = await prisma.broadcast.findFirst({
     where: { editor: query.editor },
-    include: {
-      chronicles: {
-        include: {
-          medias: true,
-          editor: true,
-        },
-      },
+    select: {
+      title: true,
+      editor: true,
     },
   })
 
@@ -70,6 +53,6 @@ export async function getServerSideProps({ query }) {
   }
 
   return {
-    props: { broadcast: JSON.stringify(broadcast), title: broadcast.title },
+    props: broadcast,
   }
 }

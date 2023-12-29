@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("RC_PRISMA_URL") // uses connection pooling
+  directUrl = env("RC_URL_NON_POOLING") // uses a direct connection
 }
 
 enum ChronicleStatus {

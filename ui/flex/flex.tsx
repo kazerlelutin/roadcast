@@ -11,6 +11,11 @@ interface FlexProps {
   alignItemCenter?: boolean
   alignEnd?: boolean
 }
+
+/**
+ *
+ * @deprecated Use TailwindCSS instead
+ */
 export const Flex: FC<FlexProps> = (props) => (
   <div
     className={`${styles.flex} ${Object.keys(props)

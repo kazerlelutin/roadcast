@@ -11,6 +11,11 @@ interface FullScreenPopinProps {
   title: string
   action: ReactNode | string
 }
+
+/**
+ *
+ * @deprecated Use headless ui instead
+ */
 export const FullScreenPopin: FC<FullScreenPopinProps> = ({
   children,
   title,

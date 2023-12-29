@@ -1,35 +1,36 @@
-import { useBroadcast, useModes } from '@/entities'
+import { useModes } from '@/entities'
 import { useTranslate, useIsMobile } from '@/hooks'
 import { Button, Flex } from '@/ui'
 import { useMiniLoader } from '@/components'
+import { useBroadcast } from '@/stores'
 
 export function Actions() {
   const t = useTranslate()
   const isMobile = useIsMobile()
   const [loading] = useMiniLoader()
-  const { broadcast } = useBroadcast()
-  const { isFocused, isReadMode, switchFocus, switchReadMode } = useModes()
+  const { broadcast, focusMode, readMode, toggleFocus, toggleReadMode } =
+    useBroadcast()
 
   return (
-    <Flex>
+    <div className="flex gap-2">
       {broadcast.editor && (
         <Button
           loading={loading}
-          onClick={switchReadMode}
-          variant={isReadMode ? 'red' : 'normal'}
+          onClick={toggleReadMode}
+          variant={readMode ? 'red' : 'normal'}
         >
-          {t(isReadMode ? 'editMode' : 'readMode')}
+          {t(readMode ? 'editMode' : 'readMode')}
         </Button>
       )}
-      {isReadMode && !isMobile && (
+      {readMode && !isMobile && (
         <Button
           loading={loading}
-          onClick={switchFocus}
-          variant={isFocused ? 'red' : 'normal'}
+          onClick={toggleFocus}
+          variant={focusMode ? 'red' : 'normal'}
         >
-          {t(isFocused ? 'normalMode' : 'FocusMode')}
+          {t(focusMode ? 'normalMode' : 'FocusMode')}
         </Button>
       )}
-    </Flex>
+    </div>
   )
 }

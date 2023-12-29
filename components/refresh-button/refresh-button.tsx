@@ -2,6 +2,10 @@ import styles from './refresh-button.module.css'
 import { useTranslate } from '@/hooks'
 import { UpdateIcon } from '@/ui'
 
+/**
+ *
+ * @deprecated
+ */
 export function RefreshButton() {
   const t = useTranslate({
     refresh: {

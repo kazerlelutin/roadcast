@@ -3,7 +3,7 @@ import { prisma } from '../../../db/db'
 import { broadcastMiddleWare } from '../../../middlewares/broadcast.middleware'
 import { BroadcastCtx } from '../../../types/broadcast-ctx'
 import { trigger } from '../../../services/trigger'
-import { TriggerTypes } from '../../../components/socket'
+import { TriggerTypes } from '@/components'
 
 interface EditorUpdateBody {
   chronicleId?: string
@@ -12,19 +12,9 @@ interface EditorUpdateBody {
   idsToAdd?: string[]
   scheduleId?: string
 }
-async function editor_update(
-  request: NextApiRequest,
-  response: NextApiResponse,
-  info: BroadcastCtx
-) {
+async function editor_update(request: NextApiRequest, response: NextApiResponse, info: BroadcastCtx) {
   const { editor, myLocalId, reader } = info
-  const {
-    chronicleId,
-    id,
-    idsToDelete,
-    idsToAdd,
-    scheduleId,
-  }: EditorUpdateBody = JSON.parse(request.body)
+  const { chronicleId, id, idsToDelete, idsToAdd, scheduleId }: EditorUpdateBody = JSON.parse(request.body)
 
   if (!editor) return response.status(401).json({ error: 'Unauthorized' })
 
@@ -35,8 +25,7 @@ async function editor_update(
       },
     })
 
-    if (!scheduleAccount)
-      return response.status(401).json({ error: 'Unauthorized' })
+    if (!scheduleAccount) return response.status(401).json({ error: 'Unauthorized' })
 
     const schedule = await prisma.schedule.findUnique({
       where: {
@@ -44,8 +33,7 @@ async function editor_update(
       },
     })
 
-    if (!schedule || !scheduleAccount.id)
-      return response.status(401).json({ error: 'Unauthorized' })
+    if (!schedule || !scheduleAccount.id) return response.status(401).json({ error: 'Unauthorized' })
 
     await prisma.editor.updateMany({
       where: {

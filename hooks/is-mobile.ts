@@ -10,7 +10,7 @@ export function useIsMobile(): boolean {
 
   function handleResize() {
     setLocalState({
-      isMobile: window.innerWidth <= 768 ? true : false,
+      isMobile: window.innerWidth <= 768,
     })
   }
 
