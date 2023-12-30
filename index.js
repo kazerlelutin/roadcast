@@ -24,14 +24,15 @@ const init = async () => {
   })
 
   // === Register plugins ===
-  await server.register(Inert)
   await server.register(Nes);
+  await server.register(Inert)
 
+  server.subscription('/bc/{id}');
   // === Register routes ===
   server.route(routes)
 
   await server.start()
-
+  server.broadcast('welcome!');
   console.log("Server running on %s", server.info.uri)
 }
 
@@ -41,3 +42,5 @@ process.on("unhandledRejection", (err) => {
 })
 
 init()
+
+

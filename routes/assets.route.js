@@ -1,9 +1,9 @@
 module.exports = {
     method: "GET",
-    path: "/public/{param*}",
+    path: "/assets/{param*}",
     handler: {
       directory: {
-        path: "front/public",
+        path: "front/dist/assets",
         index: false,
       },
     },

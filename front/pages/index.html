@@ -1,13 +1,15 @@
-<div>
-  <h1>Hello KLL!</h1>
-  <div kll-t="button-count" kll-ctrl="buttonCount" kll-s-word="salut ceci vient d'une props" data-trans="test"
-    kll-id="my_button"></div>
+<div kll-t="basicLayout">
+  <div class="md:grid md:grid-cols-2 gap-2 flex flex-col-reverse md:justify-center justify-end items-center h-full p-3">
 
-  <div kll-t="text-to-render" kll-b="truc.rien,my_button.count" kll-ctrl="textToRender"></div>
+    <div>
+      <div kll-tc="createBroadcastForm"></div>
+      <div kll-tc="lastBroadcast"></div>
+    </div>
 
-  <div kll-t="with-children">
-    <div>hello, children</div>
+    <div class="flex flex-col gap-2">
+      <h1 data-trans="titleHome" class="md:text-5xl text-3xl font-bold"></h1>
+      <p data-trans="appSummary" class="text-rc-highlight-dark dark:text-rc-highlight"></p>
+      <p data-trans="noAccountRequired" class="italic text-rc-light pt-2"></p>
+    </div>
   </div>
-  <div kll-t="inception" kll-ctrl="inception" kll-b="inception_button.count"></div>
-  <div kll-t="ui.button" kll-ctrl="ui.button">Button in folder "ui"</div>
 </div>

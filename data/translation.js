@@ -1,7 +1,15 @@
 export const translation = {
+  kofi: {
+    fr: 'Payez-moi un café',
+    en: 'Buy me a coffee',
+  },
   titleHome: {
     fr: 'Gérez et partagez vos conducteurs',
     en: 'Manage and share your drivers',
+  },
+  home: {
+    fr: 'Accueil',
+    en: 'Home',
   },
   subtitleHome: {
     fr: "Organisez et planifiez vos émissions en un clin d'œil!",
@@ -279,5 +287,45 @@ export const translation = {
   broadcast: {
     fr: 'conducteur',
     en: 'broadcast',
+  },
+  about_1: {
+    fr: "Roadcast est une application que j'ai créée pour aider les utilisateurs à gérer et à partager facilement des conducteurs pour leurs émissions en direct. L'application est conçue pour être intuitive et facile à utiliser, même pour les utilisateurs novices.",
+    en: 'Roadcast is an application that I created to help users easily manage and share drivers for their live streams. The app is designed to be intuitive and easy to use, even for novice users.',
+  },
+  about_2:{
+    fr: "L'une des caractéristiques clés de Roadcast est sa gratuité totale d'utilisation, sans aucun compte utilisateur requis. Roadcast est accessible à tous.",
+    en: 'One of the key features of Roadcast is its completely free to use, with no user account required. Roadcast is accessible to everyone.',
+  },
+  about_3:{
+    fr: "Le code source de l'application est open source et est disponible sur ",
+    en: 'The source code for the app is open source and is available on ',
+  },
+  about_4:{
+    fr: "Si vous êtes intéressé par le développement d'applications, je vous encourage à explorer le code et à contribuer à son amélioration en partageant vos commentaires et suggestions.",
+    en: 'If you are interested in app development, I encourage you to explore the code and contribute to its improvement by sharing your feedback and suggestions.',
+  },
+  about_5:{
+    fr: "Enfin, si vous trouvez l'application Roadcast utile et que vous souhaitez me soutenir dans le développement continu de l'application, vous pouvez faire un don sur ma page <a href='https://ko-fi.com/kazerlelutin' target='_blank' rel='noopener noreferrer'>Ko-Fi</a>. Votre soutien m'aidera à continuer à fournir des mises à jour et des améliorations pour Roadcast.",
+    en: "Finally, if you find the Roadcast app useful and would like to support me in the continued development of the app, you can make a donation on my <a href='https://ko-fi.com/kazerlelutin' target='_blank' rel='noopener noreferrer'>Ko-Fi</a> page. Your support will help me continue to provide updates and improvements for Roadcast.",
+  },
+  about_6:{
+    fr: "Merci d'avoir choisi Roadcast pour vos besoins de diffusion en direct. J'espère que vous trouverez l'application utile et je suis impatient de voir les émissions que vous créerez avec elle.",
+    en: 'Thank you for choosing Roadcast for your live streaming needs. I hope you find the app useful and I look forward to seeing the shows you create with it.',
+  },
+  editorTitle: {
+    fr: 'Éditeur',
+    en: 'Editor',
+  },
+  editor_content: {
+    fr: 'Le site Roadcast est édité par Benoist Bouteiller. Vous pouvez me contacter via <a href="https://bouteiller.contact"  target="_blank" rel="noopener noreferrer">bouteiller.contact</a>.',
+    en: 'The Roadcast site is edited by Benoist Bouteiller. You can contact me via <a href="https://bouteiller.contact"  target="_blank" rel="noopener noreferrer">bouteiller.contact</a>.',
+  },
+  hostingTitle: {
+    fr: 'Hébergement',
+    en: 'Hosting',
+  },
+  hosting_content: {
+    fr: 'Roadcast est hébergé par <a href="https://www.o2switch.fr/"  target="_blank" rel="noopener noreferrer">02switch</a>.',
+    en: 'Roadcast is hosted by <a href="https://www.o2switch.fr/"  target="_blank" rel="noopener noreferrer">02switch</a>.',
   },
 }

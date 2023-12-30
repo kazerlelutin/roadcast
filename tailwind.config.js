@@ -1,6 +1,7 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
+    "./public/*.css",
     "./front/pages/*.html",
     "./front/templates/**/*.html",
     "./front/ctrl/**/*.js",
@@ -8,15 +9,45 @@ module.exports = {
     "./libs/*.js",
   ],
   theme: {
+ 
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Inter', 'sans-serif'],
+        mono: ['Inter', 'sans-serif'],
+      },
       colors: {
-        cookiz: {
-          bg: "#F2F2F2",
-          margin: "#BF5672",
-          tile: "#6C6AA6",
-          row: "#9593BF",
-          line: "#A8A9BF",
-          text: "#ffffff",
+        rc: {
+          bg: '#1f253d',
+          'bg-dark': '#121523',
+          'card-bg': '#50597b',
+          card: '#394264',
+          'card-dark': '#363f61',
+          text: '#fff',
+          'text-invert': '#ffffff',
+          highlight: '#11a8ab',
+          'highlight-dark': '#0a888a',
+          warning: '#cc324b',
+          'warning-light': '#e64c65',
+          light: '#fcb150',
+          info: '#1a4e95',
+          'info-light': '#3468af',
+        },
+        light: {
+          bg: '#f7f6f3',
+          'bg-dark': '#bec0c7',
+          text: '#121523',
+          'text-invert': '#fff',
+          'highlight-dark': '#015657',
+          card: '#d4dadd',
+          'card-dark': '#8690b3',
+        },
+
+        twitch: {
+          primary: '#5c16c5',
+        },
+        canvas: {
+          default: '#121523',
         },
       },
     },
