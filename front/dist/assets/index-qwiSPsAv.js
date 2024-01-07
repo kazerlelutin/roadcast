@@ -2,35 +2,9 @@ const t=`<template id="button">\r
   <button type="button" class="rounded-md border border-green-700 text-green-700 p-3 mt-3">\r
     <slot></slot>\r
   </button>\r
-</template>`,p=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
+</template>`,u=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
     <a href="{{href}}" alt="{{alt}}"><slot/></a>\r
-</template>`,b=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="inception">\r
-  <div>\r
-    <h2>Call a template in template, with async render</h2>\r
-    <div>The async count : <span data-async-count>0</span></div>\r
-    <div data-async>\r
-      ...waiting for async render\r
-    </div>\r
-  </div>\r
-</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="buttonCount">\r
-  <button class="border border-white m-2" type="button">\r
-  </button>\r
-</template>`,m=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),o=`<template id="textToRender">\r
-\r
-  <div>\r
-    <h2>Render</h2>\r
-    <p>the count of button: <span data-count>0</span></p>\r
-  </div>\r
-\r
-</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),l=`<template id="withChildren">\r
-  <div class="container">\r
-    <div class="row">\r
-      <div class="col-md-12 text-red-800">\r
-        <h3>With Children</h3>\r
-        <slot />\r
-      </div>\r
-    </div>\r
-  </div>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),a=`<template id="wsTest">\r
+</template>`,p=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="wsTest">\r
 \r
     <div>\r
 \r
@@ -38,7 +12,7 @@ const t=`<template id="button">\r
 \r
         <h2 data-msg></h2>\r
     </div>\r
-</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),s=`<template id="header">\r
+</template>`,b=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),a=`<template id="header">\r
     <header class="flex justify-between p-2">\r
         <div class="font-bold"><span class="text-rc-warning border-t border-white">R</span><span\r
                 class="border-b border-rc-warning">OADCAST</span></div>\r
@@ -47,10 +21,10 @@ const t=`<template id="button">\r
                 <div data-trans="kofi" class="text-xs"></div>\r
                 <img src="/public/kofi_logo.svg" alt="Ko-fi" class="w-6 inline-block">\r
             </div>\r
-            <div kll-t="rupteur" kll-ctrl="rupteur"></div>\r
+            <div kll-tc="rupteur"></div>\r
         </div>\r
     </header>\r
-</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),i=`<template id="rupteur">\r
+</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),n=`<template id="rupteur">\r
     <div>\r
         <button data-type="dark" class="fill-rc-light">\r
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" class="pointer-events-none"\r
@@ -67,7 +41,7 @@ const t=`<template id="button">\r
             </svg>\r
         </button>\r
     </div>\r
-</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),c=`<template id="footer">\r
+</template>`,m=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),o=`<template id="footer">\r
     <footer>\r
         <ul class="list-none flex flex-wrap items-center justify-center gap-3 m-0 p-3">\r
             <li class="p-0">\r
@@ -85,18 +59,32 @@ const t=`<template id="button">\r
             </li>\r
         </ul>\r
     </footer>\r
-</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),d=`<template id="basicLayout">\r
+</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),l=`<template id="basicLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr_auto] h-[100dvh]">\r
-        <header kll-t="header" kll-ctrl="header"></header>\r
+        <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full relative">\r
-           <div class="inset-0 absolute overflow-y-auto">\r
-            <slot />\r
-           </div>\r
+            <div class="inset-0 absolute overflow-y-auto">\r
+                <slot></slot>\r
+            </div>\r
         </main>\r
         <footer kll-t="footer" kll-ctrl="translate"></footer>\r
     </div>\r
-</template>`,S=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"})),u=`<template id="lastBroadcast">\r
+</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),s=`<template id="lastBroadcast">\r
     <div>\r
         ici les derniers broadcasts\r
     </div>\r
-</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:u},Symbol.toStringTag,{value:"Module"}));export{S as basicLayout,p as button,m as buttonCount,w as footer,_ as header,f as inception,j as lastBroadcast,b as link,y as rupteur,v as textToRender,h as withChildren,g as wsTest};
+</template>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="createBroadcastForm">\r
+    <form class="flex gap-2 max-w-[300px]">\r
+        <input class="input" placeholder="createBroadcast" name="name" kll-ctrl="input" kll-id="createBroadcastName"/>\r
+        <button class="btn" data-trans="create"></button>\r
+    </form>\r
+</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),i=`<template id="errorMsg">\r
+    <span class="text-rc-warning text-xs italic"></span>\r
+</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),d=`<template id="broadcastLayout">\r
+    <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr] h-[100dvh]">\r
+        <header kll-tc="header"></header>\r
+        <main kll-ctrl="translate" class="h-full">\r
+            <slot></slot>\r
+        </main>\r
+    </div>\r
+</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"}));export{v as basicLayout,w as broadcastLayout,u as button,_ as createBroadcastForm,y as errorMsg,g as footer,f as header,h as lastBroadcast,p as link,m as rupteur,b as wsTest};

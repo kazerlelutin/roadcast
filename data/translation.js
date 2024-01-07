@@ -70,10 +70,6 @@ export const translation = {
     en: 'see all',
     fr: 'voir tout',
   },
-  create_show: {
-    en: 'create a show',
-    fr: 'Créer une émission',
-  },
   info_create_channel: {
     en: 'This show will be created for the channel:',
     fr: 'Cette émission sera créée pour la chaîne :',
@@ -158,7 +154,6 @@ export const translation = {
     en: 'Editor',
     fr: 'Chroniqueur',
   },
-
   about: {
     fr: 'À propos',
     en: 'About',
@@ -211,6 +206,10 @@ export const translation = {
   create: {
     en: 'Create',
     fr: 'Créer',
+  },
+  createBroadcast: {
+    en: 'Create a broadcast',
+    fr: 'Créer une émission',
   },
   createWithHistory: {
     fr: 'Créer un conducteur avec historique',
@@ -327,5 +326,9 @@ export const translation = {
   hosting_content: {
     fr: 'Roadcast est hébergé par <a href="https://www.o2switch.fr/"  target="_blank" rel="noopener noreferrer">02switch</a>.',
     en: 'Roadcast is hosted by <a href="https://www.o2switch.fr/"  target="_blank" rel="noopener noreferrer">02switch</a>.',
+  },
+  error_create_broadcast: {
+    fr: "Une erreur s'est produite lors de la création de l'émission",
+    en: 'An error occurred while creating the broadcast',
   },
 }

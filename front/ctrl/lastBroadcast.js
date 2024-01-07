@@ -1,4 +1,3 @@
-import { createHeaderXInfo } from "../utils/createXinfos";
 import { fetcher } from "../utils/fetcher";
 
 export const lastBroadcast = {
@@ -12,7 +11,6 @@ export const lastBroadcast = {
     if(state.isInit) return;
     state.isInit = true;
     const signal = state.controller.signal;
-    const xInfo = createHeaderXInfo();
     try {
       const response = await fetcher.get("/api/broadcasts/last",signal);
       const json = await response.json();

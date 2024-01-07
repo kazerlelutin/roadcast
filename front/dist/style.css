@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 * {
   box-sizing: border-box;
   scrollbar-color: theme("colors.rc.highlight") theme("colors.rc.highlight");
@@ -36,7 +35,7 @@
     box-sizing: border-box;
     color-scheme: dark;
     transition: color-scheme 500ms ease-in-out;
-   @apply text-light-text dark:text-rc-text
+    @apply text-light-text dark:text-rc-text;
   }
 
   h1,
@@ -124,16 +123,6 @@
     height: 100%;
   }
 
-  #nprogress .bar {
-    background: theme("colors.rc.highlight");
-    position: fixed;
-    z-index: 1031;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-  }
-
   .edit {
     cursor: pointer;
   }
@@ -158,6 +147,10 @@
 
   .input {
     @apply w-full rounded-md border border-rc-bg-dark bg-rc-card px-2 py-1 text-rc-text outline-none  focus:border-rc-highlight disabled:cursor-text disabled:bg-transparent disabled:text-rc-text;
+  }
+
+  .btn {
+    @apply rounded-2xl border dark:border-rc-text px-2 py-1  dark:text-rc-text outline-none border-rc-card-dark  text-rc-card-dark focus:border-rc-highlight disabled:cursor-not-allowed disabled:opacity-50;
   }
 }
 

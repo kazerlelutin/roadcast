@@ -1,8 +1,9 @@
 <div kll-t="basicLayout">
-  <div class="md:grid md:grid-cols-2 gap-2 flex flex-col-reverse md:justify-center justify-end items-center h-full p-3">
+  <div class="md:grid md:grid-cols-2 gap-5 flex flex-col-reverse md:justify-center justify-end items-center h-full p-3">
 
     <div>
-      <div kll-tc="createBroadcastForm"></div>
+      <div kll-tc="createBroadcastForm" kll-id="createBroadcast"></div>
+      <div kll-tc="errorMsg" kll-b="createBroadcast.error,createBroadcastName.error"></div>    
       <div kll-tc="lastBroadcast"></div>
     </div>
 

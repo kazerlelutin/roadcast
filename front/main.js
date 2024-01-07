@@ -19,7 +19,7 @@ const params = {
     "/": import("./pages/index.html?raw").then((m) => m.default),
     "/about": import("./pages/about.html?raw").then((m) => m.default),
     "/legal": import("./pages/legal.html?raw").then((m) => m.default),
-    "/broadcast/:id": import("./pages/broadcast.html?raw").then((m) => m.default),
+    "/bc/editor/:editor": import("./pages/broadcast-editor.html?raw").then((m) => m.default),
   },
   plugins: [CreateComponentPlugin, kll=> new TranslatePlugin(kll,translation, translateLsKey)],
 }
