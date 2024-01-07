@@ -14,7 +14,7 @@ async function _fetch(verb, signal, url, body) {
   return await fetch(url, {
     method: verb,
     signal,
-    body,
+    body: body ? JSON.stringify(body) : undefined,
     ...xInfo,
   });
 }

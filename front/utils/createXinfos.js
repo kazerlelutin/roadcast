@@ -15,10 +15,10 @@ export function getUserId() {
 export function createHeaderXInfo(){
     const {params} = kll.parseRoute()
     const res = {
-        ['X-USER-ID']: getUserId(),
+        ['x-user-id']: getUserId(),
     }
-    if(params.editor ) res['X-editor-ID'] = params.broadcast
-    if(params.viewer ) res['X-viewer-ID'] = params.broadcast
+    if(params.editor ) res['x-editor-id'] = params.broadcast
+    if(params.reader ) res['x-reader-id'] = params.broadcast
 
     return {
         headers: res

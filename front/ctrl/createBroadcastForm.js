@@ -20,19 +20,24 @@ export const createBroadcastForm = {
       const res = await fetcher.post(
         "/api/broadcast",
         state.controller.signal,
-        data,
+        data
       );
+      
+      if(res.status !== 201) {
+        state.error = "error_create_broadcast";
+        return;
+      }
       const { editor } = await res.json();
       const path = `/bc/editor/${editor}`;
       window.history.pushState(null, null, path);
-      kll.injectPage(path)
+      kll.injectPage(path);
     } catch (e) {
       console.log("broadcast creation: ", e);
       state.error = "error_create_broadcast";
     }
   },
-  onClean(state){
-    state.controller.abort()
+  onClean(state) {
+    state.controller.abort();
   },
   render() {},
 };
