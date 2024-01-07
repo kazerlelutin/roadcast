@@ -47,10 +47,7 @@ addEventListener("DOMContentLoaded", async () => {
 
 });
 
-//TODO à mettre dans la lib
-addEventListener("popstate", () => { 
-  kll.injectPage(window.location.pathname)
-})
+
 
 // Prevent the flash of the dark theme
 const theme =  localStorage.getItem(lsKEY) || "dark";

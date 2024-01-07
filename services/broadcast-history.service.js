@@ -20,8 +20,18 @@ module.exports = {
   },
   async getBroadcastsHistoryByUserId(user_id) {
     try {
-      const broadcasts = await knex(tableName).where({ user_id });
-      return broadcasts[0];
+      return await knex(tableName)
+        .where({ user_id })
+        .join(
+          "broadcasts",
+          "broadcasts.id",
+          "=",
+          "broadcasts_history.broadcast_id"
+        )
+        .select(
+          "broadcasts.name",
+          "broadcasts.editor"
+        ).orderBy('broadcasts_history.created_at', 'desc').limit(25)
     } catch (err) {
       console.error("Erreur lors de la récupération du broadcast:", err);
       throw err;

@@ -331,4 +331,9 @@ export const translation = {
     fr: "Une erreur s'est produite lors de la création de l'émission",
     en: 'An error occurred while creating the broadcast',
   },
+  no_broadcast_history: {
+    fr: "Vous n'avez pas encore créé d'émission",
+    en: 'You have not created any broadcasts yet',
+
+  }
 }

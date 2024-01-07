@@ -3,8 +3,8 @@ const t=`<template id="button">\r
     <slot></slot>\r
   </button>\r
 </template>`,u=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
-    <a href="{{href}}" alt="{{alt}}"><slot/></a>\r
-</template>`,p=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="wsTest">\r
+    <a href="{{href}}" alt="{{alt}}"><slot></slot></a>\r
+</template>`,m=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="wsTest">\r
 \r
     <div>\r
 \r
@@ -12,7 +12,7 @@ const t=`<template id="button">\r
 \r
         <h2 data-msg></h2>\r
     </div>\r
-</template>`,b=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),a=`<template id="header">\r
+</template>`,b=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="header">\r
     <header class="flex justify-between p-2">\r
         <div class="font-bold"><span class="text-rc-warning border-t border-white">R</span><span\r
                 class="border-b border-rc-warning">OADCAST</span></div>\r
@@ -24,7 +24,7 @@ const t=`<template id="button">\r
             <div kll-tc="rupteur"></div>\r
         </div>\r
     </header>\r
-</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),n=`<template id="rupteur">\r
+</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),a=`<template id="rupteur">\r
     <div>\r
         <button data-type="dark" class="fill-rc-light">\r
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" class="pointer-events-none"\r
@@ -41,7 +41,7 @@ const t=`<template id="button">\r
             </svg>\r
         </button>\r
     </div>\r
-</template>`,m=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),o=`<template id="footer">\r
+</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),l=`<template id="footer">\r
     <footer>\r
         <ul class="list-none flex flex-wrap items-center justify-center gap-3 m-0 p-3">\r
             <li class="p-0">\r
@@ -59,7 +59,7 @@ const t=`<template id="button">\r
             </li>\r
         </ul>\r
     </footer>\r
-</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),l=`<template id="basicLayout">\r
+</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),o=`<template id="basicLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr_auto] h-[100dvh]">\r
         <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full relative">\r
@@ -69,16 +69,16 @@ const t=`<template id="button">\r
         </main>\r
         <footer kll-t="footer" kll-ctrl="translate"></footer>\r
     </div>\r
-</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),s=`<template id="lastBroadcast">\r
-    <div>\r
-        ici les derniers broadcasts\r
+</template>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),s=`<template id="lastBroadcast">\r
+    <div class="p-3">\r
+        <div kll-t="loader"></div>\r
     </div>\r
-</template>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="createBroadcastForm">\r
+</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="createBroadcastForm">\r
     <form class="flex gap-2 max-w-[300px]">\r
         <input class="input" placeholder="createBroadcast" name="name" kll-ctrl="input" kll-id="createBroadcastName"/>\r
         <button class="btn" data-trans="create"></button>\r
     </form>\r
-</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),i=`<template id="errorMsg">\r
+</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),i=`<template id="errorMsg">\r
     <span class="text-rc-warning text-xs italic"></span>\r
 </template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),d=`<template id="broadcastLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr] h-[100dvh]">\r
@@ -87,4 +87,12 @@ const t=`<template id="button">\r
             <slot></slot>\r
         </main>\r
     </div>\r
-</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"}));export{v as basicLayout,w as broadcastLayout,u as button,_ as createBroadcastForm,y as errorMsg,g as footer,f as header,h as lastBroadcast,p as link,m as rupteur,b as wsTest};
+</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"})),p=`<template id="loader">\r
+    <div class="fill-rc-light flex items-center justify-center">\r
+        <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" height="16" width="16"\r
+            viewBox="0 0 512 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
+            <path\r
+                d="M288 32V0H224V32 96v32h64V96 32zm0 384V384H224v32 64 32h64V480 416zM0 224v64H32 96h32V224H96 32 0zm416 0H384v64h32 64 32V224H480 416zM97.6 52.4L52.4 97.6 75 120.2l45.3 45.3 22.6 22.6 45.3-45.3-22.6-22.6L120.2 75 97.6 52.4zM391.8 346.5l-22.6-22.6-45.3 45.3 22.6 22.6L391.8 437l22.6 22.6 45.3-45.3L437 391.8l-45.3-45.3zM52.4 414.4l45.3 45.3L120.2 437l45.3-45.3 22.6-22.6-45.3-45.3-22.6 22.6L75 391.8 52.4 414.4zM346.5 120.2l-22.6 22.6 45.3 45.3 22.6-22.6L437 120.2l22.6-22.6L414.4 52.3 391.8 75l-45.3 45.3z" />\r
+        </svg>\r
+    </div>\r
+</template>`,k=Object.freeze(Object.defineProperty({__proto__:null,default:p},Symbol.toStringTag,{value:"Module"}));export{h as basicLayout,j as broadcastLayout,u as button,w as createBroadcastForm,y as errorMsg,v as footer,f as header,_ as lastBroadcast,m as link,k as loader,g as rupteur,b as wsTest};

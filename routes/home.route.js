@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const jsdom = require("jsdom");
+const { getBroadcastByEditor } = require('../services/broadcasts.service');
 const { JSDOM } = jsdom;
 
 module.exports = {
@@ -16,9 +17,17 @@ module.exports = {
         title.textContent = " | ROADCAST";
         const params = req.params.any.split("/");
 
-        if (params[0] === "broadcast") {
+        if (params[0] === "bc" && params.length === 3 && (params[1] === "editor" || params[1] === "reader")) {
+            const editor = params[1] === "editor" ? params[2] : null;
+            const reader = params[1] === "reader" ? params[2] : null;
+            const broadcast = editor ? await getBroadcastByEditor(editor) : await getBroadcastByReader(reader);
+
+            if(!broadcast) {
+                return h.response(dom.serialize()).type('text/html');
+            }
+        
             //TODO on cherche le broadcast juste pour injecter les meta
-            title.textContent = params[1] + " | ROADCAST";
+            title.textContent = broadcast.name + " | ROADCAST";
         }
         return h.response(dom.serialize()).type('text/html');
     }

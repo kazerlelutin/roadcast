@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { getXInfo } = require("../services/get-x--info");
-const { createBroadcastHistory } = require("../services/broadcast-history.service");
+const { createBroadcastHistory, getBroadcastsHistoryByUserId } = require("../services/broadcast-history.service");
 const { getBroadcastById, createBroadcast } = require("../services/broadcasts.service");
 module.exports = [
   {
@@ -10,8 +10,9 @@ module.exports = [
     method: "GET",
     path: "/api/broadcasts/last",
     handler: async (req, h) => {
-      //TODO ici on gère les last broadcasts
-      return h.response([]).type("json");
+      const { userId } = getXInfo(req);
+      const broadcasts = await getBroadcastsHistoryByUserId(userId);
+      return h.response(broadcasts).type("json");
     },
   },
   {
