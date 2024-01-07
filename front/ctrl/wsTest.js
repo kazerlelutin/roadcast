@@ -1,18 +1,16 @@
 import { v4 as uuid } from "uuid";
-import { kll } from "../main"
+import { kll } from "../main";
 
 export const wsTest = {
   state: {
     msg: uuid(),
   },
   async onInit(_state, el) {
-    const app = document.querySelector("#app")
-   const client  =  app._socket
+    const app = document.querySelector("#app");
+    const client = app._socket;
 
-   const {params } = kll.parseRoute()
+    const { params } = kll.parseRoute();
     const start = async () => {
-
-
       const handler = (update, flags) => {
         console.log(update, flags);
 
@@ -21,25 +19,23 @@ export const wsTest = {
       };
 
       console.log("subscribe", client._subscriptions);
-      if(client._subscriptions?.["/bc/123"]?.length > 0) {
+      if (client._subscriptions?.["/bc/123"]?.length > 0) {
         client.unsubscribe("/bc/123", handler);
       }
       client.subscribe("/bc/123", handler);
-
-    
     };
 
     await start();
 
     setTimeout(() => {
-        console.log("publish");
+      console.log("publish");
       fetch("http://localhost:3000/bc/123");
     }, 4000);
   },
-  cleanUp(){
+  cleanUp() {
     console.log("cleanUp");
-    const app = document.querySelector("#app")
-    const client  =  app._socket
+    const app = document.querySelector("#app");
+    const client = app._socket;
     client.unsubscribe("/bc/123");
   },
 

@@ -34,5 +34,5 @@ export const createBroadcastForm = {
   onClean(state){
     state.controller.abort()
   },
-  render(_state, el) {},
+  render() {},
 };

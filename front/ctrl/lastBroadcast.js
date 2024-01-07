@@ -8,20 +8,20 @@ export const lastBroadcast = {
   },
   async onInit(state) {
     console.log("lastBroadcast onInit");
-    if(state.isInit) return;
+    if (state.isInit) return;
     state.isInit = true;
     const signal = state.controller.signal;
     try {
-      const response = await fetcher.get("/api/broadcasts/last",signal);
+      const response = await fetcher.get("/api/broadcasts/last", signal);
       const json = await response.json();
       state.broadcast = json;
       console.log(json);
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   },
-  onClean(state){
-    state.controller.abort()
+  onClean(state) {
+    state.controller.abort();
   },
   render() {},
 };

@@ -7,24 +7,23 @@ function getLs() {
 }
 
 function rupteurTheme(theme, el) {
-
   const elToKeep = el.querySelector(`[data-type="${theme}"]`);
   const elToHide = el.querySelector(
     `[data-type="${theme === "dark" ? "light" : "dark"}"]`
   );
-  
+
   elToHide.classList.add("hidden");
   elToKeep.classList.remove("hidden");
 
-  if(theme === "dark"){
-    document.documentElement.classList.remove('light')
-    document.documentElement.classList.add('dark')
+  if (theme === "dark") {
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add("dark");
   } else {
-    document.documentElement.classList.remove('dark')
-    document.documentElement.classList.add('light')
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
   }
 
-    localStorage.setItem(lsKEY, theme);
+  localStorage.setItem(lsKEY, theme);
 }
 
 export const rupteur = {
@@ -35,6 +34,5 @@ export const rupteur = {
   onClick(_, el) {
     const theme = el.getAttribute("data-type");
     rupteurTheme(theme === "dark" ? "light" : "dark", el.parentElement);
-  }
-
+  },
 };
