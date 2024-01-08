@@ -335,5 +335,13 @@ export const translation = {
     fr: "Vous n'avez pas encore créé d'émission",
     en: 'You have not created any broadcasts yet',
 
-  }
+  },
+  slider_link: {
+    fr: 'Lien du slider',
+    en: 'Slider link',
+  },
+  reader_link: {
+    fr: 'Lien du lecteur',
+    en: 'Reader link',
+  },
 }

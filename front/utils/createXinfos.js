@@ -17,8 +17,8 @@ export function createHeaderXInfo(){
     const res = {
         ['x-user-id']: getUserId(),
     }
-    if(params.editor ) res['x-editor-id'] = params.broadcast
-    if(params.reader ) res['x-reader-id'] = params.broadcast
+    if(params.editor ) res['x-editor-id'] = params.editor
+    if(params.reader ) res['x-reader-id'] = params.reader
 
     return {
         headers: res

@@ -3,21 +3,23 @@ const { v4: uuidv4 } = require("uuid");
 
 const tableName = "broadcasts_history";
 
+async function createBroadcastHistory(broadcast_id, user_id) {
+  const id = uuidv4();
+  try {
+    await knex(tableName).insert({
+      id,
+      broadcast_id,
+      user_id,
+    });
+    return id;
+  } catch (err) {
+    console.error("Erreur lors de l’enregistrement de l’utilisateur:", err);
+    throw err;
+  }
+}
+
 module.exports = {
-  async createBroadcastHistory(broadcast_id, user_id) {
-    const id = uuidv4();
-    try {
-      await knex(tableName).insert({
-        id,
-        broadcast_id,
-        user_id,
-      });
-      return id;
-    } catch (err) {
-      console.error("Erreur lors de l’enregistrement de l’utilisateur:", err);
-      throw err;
-    }
-  },
+  createBroadcastHistory,
   async getBroadcastsHistoryByUserId(user_id) {
     try {
       return await knex(tableName)
@@ -37,4 +39,11 @@ module.exports = {
       throw err;
     }
   },
+  async findOrCreateHistory(broadcast_id, user_id) {
+    const history = await knex(tableName)
+      .where({ broadcast_id, user_id })
+      .first();
+    if (history) return history;
+    return await createBroadcastHistory(broadcast_id, user_id);
+  }
 };

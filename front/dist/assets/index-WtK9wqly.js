@@ -2,9 +2,9 @@ const t=`<template id="button">\r
   <button type="button" class="rounded-md border border-green-700 text-green-700 p-3 mt-3">\r
     <slot></slot>\r
   </button>\r
-</template>`,u=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
+</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
     <a href="{{href}}" alt="{{alt}}"><slot></slot></a>\r
-</template>`,m=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="wsTest">\r
+</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="wsTest">\r
 \r
     <div>\r
 \r
@@ -12,7 +12,7 @@ const t=`<template id="button">\r
 \r
         <h2 data-msg></h2>\r
     </div>\r
-</template>`,b=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="header">\r
+</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="header">\r
     <header class="flex justify-between p-2">\r
         <div class="font-bold"><span class="text-rc-warning border-t border-white">R</span><span\r
                 class="border-b border-rc-warning">OADCAST</span></div>\r
@@ -24,7 +24,7 @@ const t=`<template id="button">\r
             <div kll-tc="rupteur"></div>\r
         </div>\r
     </header>\r
-</template>`,f=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),a=`<template id="rupteur">\r
+</template>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),l=`<template id="rupteur">\r
     <div>\r
         <button data-type="dark" class="fill-rc-light">\r
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" class="pointer-events-none"\r
@@ -41,7 +41,7 @@ const t=`<template id="button">\r
             </svg>\r
         </button>\r
     </div>\r
-</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),l=`<template id="footer">\r
+</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),o=`<template id="footer">\r
     <footer>\r
         <ul class="list-none flex flex-wrap items-center justify-center gap-3 m-0 p-3">\r
             <li class="p-0">\r
@@ -59,7 +59,7 @@ const t=`<template id="button">\r
             </li>\r
         </ul>\r
     </footer>\r
-</template>`,v=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),o=`<template id="basicLayout">\r
+</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),a=`<template id="basicLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr_auto] h-[100dvh]">\r
         <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full relative">\r
@@ -69,30 +69,74 @@ const t=`<template id="button">\r
         </main>\r
         <footer kll-t="footer" kll-ctrl="translate"></footer>\r
     </div>\r
-</template>`,h=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),s=`<template id="lastBroadcast">\r
+</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),s=`<template id="lastBroadcast">\r
     <div class="p-3">\r
         <div kll-t="loader"></div>\r
     </div>\r
-</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="createBroadcastForm">\r
+</template>`,k=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),i=`<template id="createBroadcastForm">\r
     <form class="flex gap-2 max-w-[300px]">\r
         <input class="input" placeholder="createBroadcast" name="name" kll-ctrl="input" kll-id="createBroadcastName"/>\r
         <button class="btn" data-trans="create"></button>\r
     </form>\r
-</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),i=`<template id="errorMsg">\r
+</template>`,x=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),c=`<template id="errorMsg">\r
     <span class="text-rc-warning text-xs italic"></span>\r
-</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),d=`<template id="broadcastLayout">\r
+</template>`,M=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),d=`<template id="broadcastLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr] h-[100dvh]">\r
         <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full">\r
             <slot></slot>\r
         </main>\r
     </div>\r
-</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"})),p=`<template id="loader">\r
-    <div class="fill-rc-light flex items-center justify-center">\r
+</template>`,z=Object.freeze(Object.defineProperty({__proto__:null,default:d},Symbol.toStringTag,{value:"Module"})),p=`<template id="loader">\r
+    <div class="fill-rc-light flex justify-center">\r
         <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" height="16" width="16"\r
             viewBox="0 0 512 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
             <path\r
                 d="M288 32V0H224V32 96v32h64V96 32zm0 384V384H224v32 64 32h64V480 416zM0 224v64H32 96h32V224H96 32 0zm416 0H384v64h32 64 32V224H480 416zM97.6 52.4L52.4 97.6 75 120.2l45.3 45.3 22.6 22.6 45.3-45.3-22.6-22.6L120.2 75 97.6 52.4zM391.8 346.5l-22.6-22.6-45.3 45.3 22.6 22.6L391.8 437l22.6 22.6 45.3-45.3L437 391.8l-45.3-45.3zM52.4 414.4l45.3 45.3L120.2 437l45.3-45.3 22.6-22.6-45.3-45.3-22.6 22.6L75 391.8 52.4 414.4zM346.5 120.2l-22.6 22.6 45.3 45.3 22.6-22.6L437 120.2l22.6-22.6L414.4 52.3 391.8 75l-45.3 45.3z" />\r
         </svg>\r
     </div>\r
-</template>`,k=Object.freeze(Object.defineProperty({__proto__:null,default:p},Symbol.toStringTag,{value:"Module"}));export{h as basicLayout,j as broadcastLayout,u as button,w as createBroadcastForm,y as errorMsg,v as footer,f as header,_ as lastBroadcast,m as link,k as loader,g as rupteur,b as wsTest};
+</template>`,S=Object.freeze(Object.defineProperty({__proto__:null,default:p},Symbol.toStringTag,{value:"Module"})),u=`<template id="broadcastInfo">\r
+    <div class="h-full grid grid-rows-[1fr_auto]">\r
+        <div kll-t="loader" kll-id="broadcast_info_loader"></div>\r
+        <div kll-id="broadcast_info" class="hidden p-3">\r
+\r
+            <div class="flex flex-col gap-3 text-sm">\r
+                <div class="flex gap-3 flex-wrap">\r
+                    <span data-trans="Title" class="text-rc-highlight"></span>\r
+                    <input kll-id="broadcast_info_title" kll-tc="invisibleInput" kll-b="lock.lock" />\r
+                </div>\r
+                <div class="">\r
+                    <div data-trans="slider_link" class="text-rc-highlight"></div>\r
+                    <input disabled kll-id="broadcast_info_slider" class="input w-full max-w-[175px] " />\r
+                </div>\r
+                <div class="">\r
+                    <div data-trans="reader_link" class="text-rc-highlight"></div>\r
+                    <input disabled kll-id="broadcast_info_reader" class="input w-full max-w-[175px] " />\r
+                </div>\r
+            </div>\r
+        </div>\r
+        <div class="flex p-4 ">\r
+            <div kll-tc="lock" kll-id="lock"></div>\r
+        </div>\r
+    </div>\r
+</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:u},Symbol.toStringTag,{value:"Module"})),m=`<template id="lock">\r
+    <div>\r
+        <button data-type="lock" class="fill-rc-text bg-rc-warning-light cursor-pointer p-3 rounded-md">\r
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" class="pointer-events-none"\r
+                viewBox="0 0 448 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
+                <path\r
+                    d="M224 64c44.2 0 80 35.8 80 80v48H144V144c0-44.2 35.8-80 80-80zM80 144v48H0V512H448V192H368V144C368 64.5 303.5 0 224 0S80 64.5 80 144zM256 320v64 32H192V384 320 288h64v32z" />\r
+            </svg>\r
+\r
+        </button>\r
+        <button data-type="unlock" class="fill-rc-text cursor-pointer bg-rc-highlight p-3 rounded-md">\r
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" class="pointer-events-none"\r
+                viewBox="0 0 576 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
+                <path\r
+                    d="M432 64c-44.2 0-80 35.8-80 80v48h96V512H0V192H288V144C288 64.5 352.5 0 432 0s144 64.5 144 144v48 32H512V192 144c0-44.2-35.8-80-80-80zM256 384h32V320H256 192 160v64h32 64z" />\r
+            </svg>\r
+        </button>\r
+    </div>\r
+</template>`,O=Object.freeze(Object.defineProperty({__proto__:null,default:m},Symbol.toStringTag,{value:"Module"})),b=`<template id="invisibleInput">\r
+    <input type="text" class="outline-none border-none text-light-text dark:text-rc-text p-0 bg-transparent" />\r
+</template>`,L=Object.freeze(Object.defineProperty({__proto__:null,default:b},Symbol.toStringTag,{value:"Module"}));export{y as basicLayout,j as broadcastInfo,z as broadcastLayout,f as button,x as createBroadcastForm,M as errorMsg,w as footer,h as header,L as invisibleInput,k as lastBroadcast,g as link,S as loader,O as lock,_ as rupteur,v as wsTest};

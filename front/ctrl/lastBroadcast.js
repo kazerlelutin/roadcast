@@ -47,6 +47,5 @@ export const lastBroadcast = {
         el.appendChild(li);
       });
     }
-
   },
 };
