@@ -1,5 +1,5 @@
-const a=`<div kll-t="broadcastLayout">\r
-    <div class="sm:grid sm:grid-cols-[auto_1fr_20dvw] h-full gap-5" kll-ctrl="broadcast" kll-id="broadcast">\r
+const r=`<div kll-t="broadcastLayout">\r
+    <div class="sm:grid sm:grid-cols-[25dvw_1fr_20dvw] h-full gap-5" kll-ctrl="broadcast" kll-id="broadcast">\r
         <aside kll-tc="broadcastInfo" kll-b="broadcast.broadcast,broadcast_info_title.value"></aside>\r
 \r
         <section class="relative">\r
@@ -13,4 +13,4 @@ const a=`<div kll-t="broadcastLayout">\r
             </div>\r
         </nav>\r
     </div>\r
-</div>`;export{a as default};
+</div>`;export{r as default};

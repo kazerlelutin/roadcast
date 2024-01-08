@@ -5,16 +5,16 @@
 
             <div class="flex flex-col gap-3 text-sm">
                 <div class="flex gap-3 flex-wrap">
-                    <span data-trans="Title" class="text-rc-highlight"></span>
-                    <input kll-id="broadcast_info_title" kll-tc="invisibleInput" kll-b="lock.lock" />
+                    <label data-trans="Title" class="text-rc-highlight" for="broadcastName"></label>
+                    <input kll-id="broadcast_info_title" kll-tc="invisibleInput" kll-b="lock.lock" name="broadcastName" id="broadcastName" />
                 </div>
                 <div class="">
-                    <div data-trans="slider_link" class="text-rc-highlight"></div>
-                    <input disabled kll-id="broadcast_info_slider" class="input w-full max-w-[175px] " />
+                    <label data-trans="slider_link" class="text-rc-highlight" for="sliderLink"></label>
+                    <input disabled kll-id="broadcast_info_slider" class="input w-full" name="sliderLink" id="sliderLink" />
                 </div>
                 <div class="">
-                    <div data-trans="reader_link" class="text-rc-highlight"></div>
-                    <input disabled kll-id="broadcast_info_reader" class="input w-full max-w-[175px] " />
+                    <label data-trans="reader_link" class="text-rc-highlight" for="readerLink"></label>
+                    <input disabled kll-id="broadcast_info_reader" class="input w-full" name="readerLink" id="readerLink"/>
                 </div>
             </div>
         </div>

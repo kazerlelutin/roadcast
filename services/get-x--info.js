@@ -2,7 +2,7 @@ module.exports = {
   getXInfo(req) {
     const decodeHeader = (value) => {
       try {
-        return decodeURIComponent(value.replace(/\+/g, " "));
+        return decodeURIComponent(value);
       } catch (e) {
         console.error("Erreur de décodage:", e);
         return value;
