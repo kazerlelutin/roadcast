@@ -7,6 +7,7 @@ import { getLsLock } from "./lock";
 
 export const chronicle = {
   state: {
+    init: false,
     chronicle: null,
     editor: null,
     delay: 1000,
@@ -19,12 +20,12 @@ export const chronicle = {
     if (!broadcastEl) return;
 
     const chronicle = broadcastEl.state.broadcast.chronicles.find(
-        (c) => c.id === el.getAttribute("kll-id")
-        );
+      (c) => c.id === el.getAttribute("kll-id")
+    );
     if (!chronicle) {
-        el.remove()
-        return
-    };
+      el.remove();
+      return;
+    }
 
     state.chronicle = chronicle;
 
@@ -32,8 +33,14 @@ export const chronicle = {
     // ===== EDITOR =====
 
     const bubbleMenuElement = document.createElement("div");
-    bubbleMenuElement.classList.add("bg-rc-bg-dark", "p-2", "rounded", 'text-xs', 'flex', 'gap-2');
-    
+    bubbleMenuElement.classList.add(
+      "bg-rc-bg-dark",
+      "p-2",
+      "rounded",
+      "text-xs",
+      "flex",
+      "gap-2"
+    );
 
     const boldBtn = document.createElement("button");
     boldBtn.innerHTML = "B";
@@ -84,12 +91,15 @@ export const chronicle = {
       ],
       content: state.chronicle.content,
       async onUpdate({ editor }) {
-     
         state.chronicle.content = editor.getHTML();
         clearTimeout(state.timeout);
 
         state.timeout = setTimeout(() => {
-          fetcher.put(`/api/chronicle/${chronicle.id}`,state.controller.signal, {content: editor.getHTML()})
+          fetcher.put(
+            `/api/chronicle/${chronicle.id}`,
+            state.controller.signal,
+            { content: editor.getHTML() }
+          );
         }, state.delay);
         // optimiste update (dont change current state)
       },
@@ -97,23 +107,34 @@ export const chronicle = {
 
     state.editor = editor;
 
-
-
-   el.render()
+    el.render();
   },
   onClean(state) {
     clearTimeout(state.timeout);
   },
   async render(state, el, listen) {
-    const editor = el.querySelector(".ProseMirror");
-    if(!editor) return
-    const ls =getLsLock()
-    if (ls === "lock") {
-      editor.setAttribute("contenteditable", "false");
-    } else {
-      editor.setAttribute("contenteditable", "true");
+
+
+    if (!state.init) {
+      const editor = el.querySelector(".ProseMirror");
+      if (!editor) return;
+      const ls = getLsLock();
+      if (ls === "lock") {
+        editor.setAttribute("contenteditable", "false");
+      } else {
+        editor.setAttribute("contenteditable", "true");
+      }
+      state.init = true;
     }
 
+    if(listen?.name.match(/title|source/)){
+      const [key] = listen.name.split("_");
+      await fetcher.put(
+        `/api/chronicle/${state.chronicle.id}`,
+        state.controller.signal,
+        { [key]: listen.value }
+      );
+    }
     //console.log("chronicle", state, state.chronicle?.id, listen);
   },
 };

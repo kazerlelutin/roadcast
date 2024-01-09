@@ -56,7 +56,6 @@ module.exports = [
       try {
         const { value } = schema.validate(JSON.parse(req.payload));
 
-        console.log("value", {...value});
         await updateChronicle(id, editor, {...value});
         return h.response({message:'ok'}).type("json").code(200);
       } catch (e) {

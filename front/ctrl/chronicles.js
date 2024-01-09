@@ -53,8 +53,12 @@ export const chronicles = {
           addButton.setAttribute("kll-id", addButtonId);
           addButton.setAttribute("kll-s-position", chronicle.position + 1);
 
+
+          // === Inject Values ===
           if (chronicle.title)
             titleEl.setAttribute("kll-s-value", chronicle.title);
+
+          if(chronicle.source)sourceEl.setAttribute("kll-s-value", chronicle.source );
           kll.plugins.translate(chronicleEl);
 
           // === Hydrate ===

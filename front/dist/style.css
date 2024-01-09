@@ -139,7 +139,9 @@
     align-items: center;
   }
 
-
+  .underline {
+    text-decoration: underline;
+  }
 }
 
 @layer components {
@@ -148,7 +150,7 @@
   }
 
   .input {
-    @apply w-full rounded-md border border-rc-bg-dark bg-rc-card px-2 py-1 text-rc-text outline-none  focus:border-rc-highlight disabled:cursor-text disabled:bg-transparent disabled:text-rc-text;
+    @apply w-full rounded-md border border-rc-bg-dark bg-rc-card px-2 py-1 dark:text-rc-text outline-none  focus:border-rc-highlight disabled:cursor-text disabled:bg-transparent;
   }
 
   .btn {
@@ -161,4 +163,13 @@
   .container video {
     @apply h-auto w-full object-cover;
   }
+}
+
+.tiptap.ProseMirror {
+  transition: color 200ms ease-in-out;
+  @apply p-1 min-h-16 outline-none;
+}
+
+.tiptap.ProseMirror[contenteditable='true']:focus {
+  background: rgba(0, 0, 0, 0.1);
 }
