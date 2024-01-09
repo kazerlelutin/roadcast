@@ -15,7 +15,7 @@ exports.up = function (knex) {
       .comment("draft, published, archived");
     table.integer("position").notNullable().defaultTo(0);
 
-    table.string("editor_id").notNullable().references("id").inTable("editors");
+    table.string("editor_id").references("id").inTable("editors");
     table
       .string("broadcast_id")
       .notNullable()

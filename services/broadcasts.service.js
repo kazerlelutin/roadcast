@@ -33,6 +33,8 @@ function getBroadcastWithDetails(broadcast) {
         },
         title: row.chronicle_title,
         content: row.chronicle_content,
+        source: row.chronicle_source,
+        position: row.chronicle_position,
         medias: [],
       };
 

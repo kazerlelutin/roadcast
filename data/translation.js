@@ -344,4 +344,28 @@ export const translation = {
     fr: 'Lien du lecteur',
     en: 'Reader link',
   },
+  add_chronicle: {
+    fr: 'Ajouter une chronique',
+    en: 'Add a chronicle',
+  },
+  no_chronicle: {
+    fr: "Vous n'avez pas encore créé de chronique",
+    en: 'You have not created any chronicles yet',
+  },
+  chronicle_title: {
+    fr: 'Titre: ',
+    en: 'Title: ',
+  },
+  chronicle_source: {
+    fr: 'Source: ',
+    en: 'Source: ',
+  },
+  no_title: {
+    fr: 'Pas de titre',
+    en: 'No title',
+  },
+  no_source: {
+    fr: 'Pas de source',
+    en: 'No source',
+  },
 }

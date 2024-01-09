@@ -19,7 +19,7 @@ const t=`<template id="button">\r
         <div class="flex gap-2 items-center">\r
             <div class="flex gap-1 items-center">\r
                 <div data-trans="kofi" class="text-xs"></div>\r
-                <img src="/public/kofi_logo.svg" alt="Ko-fi" class="w-6 inline-block">\r
+                <img src="/public/kofi_logo.svg" alt="Ko-fi" class="w-6 inline-block" width="24" height="15" >\r
             </div>\r
             <div kll-tc="rupteur"></div>\r
         </div>\r

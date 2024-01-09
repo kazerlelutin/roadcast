@@ -3,13 +3,28 @@
         <aside kll-tc="broadcastInfo" kll-b="broadcast.broadcast,broadcast_info_title.value"></aside>
 
         <section class="relative">
-            <div class="absolute inset-0 overflow-y-auto flex flex-cols gap-4">
+            <div class="absolute inset-0 overflow-y-auto flex flex-col gap-4 px-3">
+                <div kll-tc="addChronicleButton" kll-b="lock.lock" kll-s-position="0"></div>
+                <div kll-tc="addFirstChronicle" kll-b="broadcast.broadcast"></div>
+                <div kll-id="chronicles" kll-b="broadcast.broadcast" kll-ctrl="chronicles">
+                    <div kll-t="loader"></div>
+                </div>
+              <div>
                 chroniques
+                <p>Faire des : </p>
+               
+                <p>Numéroté tous le temps les chroniques</p>
+                <p>editeur toolbar au survol</p>
+                <p> invisible input lockable</p>
+                <p>mini selector ou selector du navigateur pour les chroniqueurs</p>
+                <p>Nom sur les media en overlay</p>
+                <p> un media 'fantôme' en guise de bouton pour ajout ([ + ])</p>
+              </div>
             </div>
         </section>
         <nav class="relative">
             <div class="absolute inset-0 overflow-y-auto flex flex-cols gap-2 pr-3">
-                arbre. Voir sur notion pour le DnD
+                arbre. Voir sur notion pour le DnD (une petite ligne au survol)
             </div>
         </nav>
     </div>

@@ -1,7 +1,17 @@
-const LS_KEY = "rc___lock";
+export const LS_KEY_LOCK = "rc___lock";
 
+function toogleEditors(status) {
+  const editors = document.querySelectorAll(".ProseMirror");
+  for (const editor of editors) {
+    if (status === "lock") {
+      editor.setAttribute("contenteditable", "false");
+    } else {
+      editor.setAttribute("contenteditable", "true");
+    }
+  }
+}
 export function getLsLock() {
-  return localStorage.getItem(LS_KEY) || "unlock";
+  return localStorage.getItem(LS_KEY_LOCK) || "unlock";
 }
 
 function toogle(status, el) {
@@ -21,7 +31,8 @@ function toogle(status, el) {
     document.documentElement.classList.add("unlock");
   }
 
-  localStorage.setItem(LS_KEY, status);
+  toogleEditors(status);
+  localStorage.setItem(LS_KEY_LOCK, status);
 }
 
 export const lock = {
@@ -38,5 +49,5 @@ export const lock = {
     toogle(status === "lock" ? "unlock" : "lock", el.parentElement);
     state.lock = !state.lock;
   },
-  render(){}
+  render() {},
 };

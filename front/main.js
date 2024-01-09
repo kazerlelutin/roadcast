@@ -1,10 +1,13 @@
 import "./public/style.css"
+import Nes from "@hapi/nes/lib/client";
 import { KLL } from "@kll_/core"
 import { CreateComponentPlugin } from "@kll_/basic"
-import Nes from "@hapi/nes/lib/client";
 import { TranslatePlugin } from "@kll_/translate"
 import { translation } from "../data/translation"
 import { lsKEY } from "./ctrl/rupteur.js";
+//import { KLL } from "../@kll_/core"
+//import { TranslatePlugin } from "../@kll_/translate"
+//import { CreateComponentPlugin } from "../@kll_/basic"
 
 
 const client = new Nes.Client(`ws://${import.meta.env.MODE === "development" ? 'localhost:3000': window.location.host}` , { reconnect: true });
