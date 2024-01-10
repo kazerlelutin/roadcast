@@ -18,7 +18,9 @@ export const chronicles = {
         
         const wrapper  = document.createElement("div");
         const chronicleTemplate = await kll.processTemplate("chronicle");
+
         for (const chronicle of broadcast.chronicles) {
+          //TODO arrêter si dans DOM et ectouer etat dans chronicle
           const container = document.createElement("div");
 
           container.setAttribute("data-position", chronicle.position);

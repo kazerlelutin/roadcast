@@ -2,8 +2,11 @@ import { Editor } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Underline from "@tiptap/extension-underline";
+import FloatingMenu from "@tiptap/extension-floating-menu";
 import { fetcher } from "../utils/fetcher";
 import { getLsLock } from "./lock";
+import { createEditorMenu } from "../utils/createEditorMenu";
+import { menuItems } from "../../data/menuItems";
 
 export const chronicle = {
   state: {
@@ -32,44 +35,72 @@ export const chronicle = {
     //TODO exract this
     // ===== EDITOR =====
 
-    const bubbleMenuElement = document.createElement("div");
-    bubbleMenuElement.classList.add(
-      "bg-rc-bg-dark",
-      "p-2",
-      "rounded",
-      "text-xs",
-      "flex",
-      "gap-2"
-    );
+    const bubbleMenuElement = createEditorMenu();
 
-    const boldBtn = document.createElement("button");
-    boldBtn.innerHTML = "B";
-    boldBtn.addEventListener("click", () => {
-      state.editor.chain().focus().toggleBold().run();
-    });
+    const floatingMenuElement = createEditorMenu('floating');
 
-    const italicBtn = document.createElement("button");
-    italicBtn.innerHTML = "I";
-    italicBtn.addEventListener("click", () => {
-      state.editor.chain().focus().toggleItalic().run();
-    });
 
-    const underlineBtn = document.createElement("button");
-    underlineBtn.innerHTML = "U";
-    underlineBtn.addEventListener("click", () => {
-      state.editor.chain().focus().toggleUnderline().run();
-    });
+    el.appendChild(bubbleMenuElement);
+    el.appendChild(floatingMenuElement);
 
-    const strikeBtn = document.createElement("button");
-    strikeBtn.innerHTML = "S";
-    strikeBtn.addEventListener("click", () => {
-      state.editor.chain().focus().toggleStrike().run();
-    });
+    function createEditorMenu(type) {
+      const menuElement = document.createElement("div");
+      menuElement.setAttribute('data-type', type ? type : 'bubble')
+      menuElement.classList.add(
+        "bg-rc-bg-dark",
+        "p-1",
+        "rounded",
+        "text-xs",
+        "flex",
+        "gap-2"
+      );
 
-    bubbleMenuElement.appendChild(italicBtn);
-    bubbleMenuElement.appendChild(underlineBtn);
-    bubbleMenuElement.appendChild(strikeBtn);
-    bubbleMenuElement.appendChild(boldBtn);
+      menuItems.filter(el=> {
+        if(type) return el.menu === type
+        return true
+      }).forEach((item) => {
+        if (item.items && item.items.length > 0) {
+          // Créer un dropdown pour les éléments avec des sous-items
+          const select = document.createElement("select");
+          select.classList.add('bg-transparent', 'text-white', 'rounded', 'py-1', 'px-2')
+          select.addEventListener("change", () => {
+            const selectedItem = item.items[select.selectedIndex];
+            console.log(selectedItem)
+            editor.chain().focus()[selectedItem.command](selectedItem.param).run();
+          });
+    
+
+          item.items.forEach((subItem) => {
+            const option = document.createElement("option");
+
+            option.value = subItem.name;
+            option.textContent = subItem.label;
+
+            option.classList.add('bg-rc-bg-dark', 'text-white', 'py-1', 'px-2')
+            select.appendChild(option);
+          });
+    
+          menuElement.appendChild(select);
+        } else {
+          // Créer un bouton pour les éléments sans sous-items
+          const btn = document.createElement("button");
+          btn.innerHTML = item.label;
+          btn.addEventListener("click", () => {
+            editor.chain().focus()[item.command](item.param).run();
+          });
+
+          btn.classList.add('text-white', 'rounded', 'py-1', 'px-2')
+          btn.setAttribute('data-command', item.name)
+
+          if(state.editor && state.editor.isActive(item.label)) btn.classList.add('bg-rc-bg-light')
+
+          menuElement.appendChild(btn);
+        }
+      });
+
+
+      return menuElement;
+    }
 
     const editor = new Editor({
       element: el.querySelector("[data-type=editor]"),
@@ -82,11 +113,14 @@ export const chronicle = {
           },
         }),
         BubbleMenu.configure({
-          element: bubbleMenuElement,
+          element: el.querySelector("[data-type=bubble]"),
           tippyOptions: {
             placement: "top",
             // options de Tippy.js pour le positionnement du menu
           },
+        }),
+        FloatingMenu.configure({
+          element:  el.querySelector("[data-type=floating]"),
         }),
       ],
       content: state.chronicle.content,
@@ -107,14 +141,34 @@ export const chronicle = {
 
     state.editor = editor;
 
+    editor.on('selectionUpdate', ()=>updateMenuButtons());
+    editor.on('update', ()=>updateMenuButtons(true));
+ 
+    let upt
+    function updateMenuButtons(up) {
+  
+      clearTimeout(upt);
+      upt = setTimeout(() => {
+        menuItems.forEach(item => {
+          const button = document.querySelector(`[data-command="${item.name}"]`);
+          if (button) {
+            if (state.editor.isActive(item.name)) {
+              button.classList.add('text-white', 'bg-rc-info', 'rounded');
+            } else {
+              button.classList.remove('text-white', 'bg-rc-info', 'rounded');
+            }
+          }
+        });
+      },up ? 0:300)
+    }
+
+
     el.render();
   },
   onClean(state) {
     clearTimeout(state.timeout);
   },
   async render(state, el, listen) {
-
-
     if (!state.init) {
       const editor = el.querySelector(".ProseMirror");
       if (!editor) return;
@@ -127,7 +181,7 @@ export const chronicle = {
       state.init = true;
     }
 
-    if(listen?.name.match(/title|source/)){
+    if (listen?.name.match(/title|source/)) {
       const [key] = listen.name.split("_");
       await fetcher.put(
         `/api/chronicle/${state.chronicle.id}`,
