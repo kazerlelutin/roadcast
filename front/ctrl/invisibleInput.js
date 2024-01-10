@@ -8,6 +8,10 @@ export const invisibleInput = {
   },
   onInit(state, el) {
 
+
+    if(el.getAttribute("data-theme") === "light") {
+      el.classList.add('dark:text-rc-light')
+    }
     el.value = state.value;
 
     // ===== RENDER =====

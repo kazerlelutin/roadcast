@@ -3,9 +3,9 @@ import StarterKit from "@tiptap/starter-kit";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Underline from "@tiptap/extension-underline";
 import FloatingMenu from "@tiptap/extension-floating-menu";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { fetcher } from "../utils/fetcher";
 import { getLsLock } from "./lock";
-import { createEditorMenu } from "../utils/createEditorMenu";
 import { menuItems } from "../../data/menuItems";
 
 export const chronicle = {
@@ -52,7 +52,9 @@ export const chronicle = {
         "rounded",
         "text-xs",
         "flex",
-        "gap-2"
+        "flex-wrap",
+        "gap-2",
+        'fill-current'
       );
 
       menuItems.filter(el=> {
@@ -62,19 +64,18 @@ export const chronicle = {
         if (item.items && item.items.length > 0) {
           // Créer un dropdown pour les éléments avec des sous-items
           const select = document.createElement("select");
-          select.classList.add('bg-transparent', 'text-white', 'rounded', 'py-1', 'px-2')
+          select.classList.add('bg-transparent', 'text-white', 'rounded','text-right', 'py-1', 'px-2')
           select.addEventListener("change", () => {
             const selectedItem = item.items[select.selectedIndex];
-            console.log(selectedItem)
             editor.chain().focus()[selectedItem.command](selectedItem.param).run();
           });
     
-
-          item.items.forEach((subItem) => {
+          item.items.forEach((subItem, index) => {
             const option = document.createElement("option");
 
             option.value = subItem.name;
             option.textContent = subItem.label;
+            if(index === 0) option.setAttribute('selected', 'selected')
 
             option.classList.add('bg-rc-bg-dark', 'text-white', 'py-1', 'px-2')
             select.appendChild(option);
@@ -122,6 +123,11 @@ export const chronicle = {
         FloatingMenu.configure({
           element:  el.querySelector("[data-type=floating]"),
         }),
+        HorizontalRule.configure({
+          HTMLAttributes: {
+            class: 'hr',
+          },
+        })
       ],
       content: state.chronicle.content,
       async onUpdate({ editor }) {
@@ -150,19 +156,29 @@ export const chronicle = {
       clearTimeout(upt);
       upt = setTimeout(() => {
         menuItems.forEach(item => {
-          const button = document.querySelector(`[data-command="${item.name}"]`);
-          if (button) {
-            if (state.editor.isActive(item.name)) {
-              button.classList.add('text-white', 'bg-rc-info', 'rounded');
+          // Sélectionner le bouton ou le sélecteur
+          const element = document.querySelector(`[data-command="${item.name}"]`);
+        
+          if (element) {
+            if (element.tagName === 'SELECT') {
+              // Mise à jour pour les sélecteurs
+              const activeOption = item.items.find(subItem => state.editor.isActive(subItem.name));
+              if (activeOption) {
+                element.value = activeOption.name;
+              }
             } else {
-              button.classList.remove('text-white', 'bg-rc-info', 'rounded');
+              // Mise à jour pour les boutons
+              if (state.editor.isActive(item.name)) {
+                element.classList.add('text-white', 'bg-rc-info', 'rounded');
+              } else {
+                element.classList.remove('text-white', 'bg-rc-info', 'rounded');
+              }
             }
           }
         });
+        
       },up ? 0:300)
     }
-
-
     el.render();
   },
   onClean(state) {
