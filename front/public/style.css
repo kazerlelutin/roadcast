@@ -187,3 +187,7 @@ hr {
   border-top: 1px solid theme("colors.rc.card");
   margin: 10px 0;
 }
+
+.locked {
+  @apply opacity-60 pointer-events-none relative;
+}

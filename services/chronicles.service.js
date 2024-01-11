@@ -24,12 +24,18 @@ module.exports = {
       .andWhere("position", ">=", position)
       .andWhere("id", "!=", chronicleId)
       .increment("position", 1);
+  },
+  async getChronicle(id, editor) {
+    const broadcast = await knex("broadcasts").where({ editor }).first();
 
-    // Retourne la chronique nouvellement créée, avec un tri par position pour toutes les chroniques
-    return await knex(tableName)
-      .where({ broadcast_id: broadcast.id })
-      .orderBy("position")
-      .select('*');
+    if (!broadcast) return null;
+
+    //TODO appliquer les joins
+    const chronicle = await knex(tableName)
+      .where({ id, broadcast_id: broadcast.id })
+      .first();
+
+    return chronicle;
   },
   async updateChronicle(id, editor, payload) {
     const broadcast = await knex("broadcasts").where({ editor }).first();

@@ -3,7 +3,6 @@ import StarterKit from "@tiptap/starter-kit";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Underline from "@tiptap/extension-underline";
 import FloatingMenu from "@tiptap/extension-floating-menu";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { fetcher } from "../utils/fetcher";
 import { getLsLock } from "./lock";
 import { menuItems } from "../../data/menuItems";
@@ -123,11 +122,7 @@ export const chronicle = {
         FloatingMenu.configure({
           element:  el.querySelector("[data-type=floating]"),
         }),
-        HorizontalRule.configure({
-          HTMLAttributes: {
-            class: 'hr',
-          },
-        })
+
       ],
       content: state.chronicle.content,
       async onUpdate({ editor }) {

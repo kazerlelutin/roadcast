@@ -25,8 +25,8 @@ export const broadcast = {
       state.loading = false;
     }
   },
-  onClean(){
-    this.state.controller.abort()
+  onClean(state){
+    state.controller.abort()
   },
   render() {},
 };

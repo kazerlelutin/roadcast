@@ -6,7 +6,8 @@ import { TranslatePlugin } from "@kll_/translate"
 import { translation } from "../data/translation"
 import { lsKEY } from "./ctrl/rupteur.js";
 
-const client = new Nes.Client(`ws://${import.meta.env.MODE === "development" ? 'localhost:3000': window.location.host}` , { reconnect: true });
+const client = new Nes.Client(`ws://${import.meta.env.MODE === "development" ? 'localhost:3000': window.location.host}` , { reconnect: true , maxDelay: 1000});
+
 
 // TRANSLATE ========================
 const translateLsKey = "__rc__lang"
@@ -31,17 +32,18 @@ if(import.meta.env.MODE === "development"){
   params.templatePath = import('/templates/index.js').then(m => m)
 
 }
+
 export const kll = new KLL(params)
 
-addEventListener("DOMContentLoaded", async () => {
+addEventListener("DOMContentLoaded", () => {
   const app = document.querySelector("#app")
-
   app._socket = client;
-  await   app._socket.connect();
+  client.connect();
 
   app._socket.onConnect = () => {
     console.log("I Listen Update");
   };
+  
   kll.plugins.translate()
 
 });

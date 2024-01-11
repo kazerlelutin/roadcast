@@ -27,7 +27,7 @@ const init = async () => {
   await server.register(Nes);
   await server.register(Inert)
 
-  server.subscription('/bc/{id}');
+  server.subscription('/chronicle/update/{id}');
   // === Register routes ===
   server.route(routes)
 

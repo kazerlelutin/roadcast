@@ -368,4 +368,8 @@ export const translation = {
     fr: 'Pas de source',
     en: 'No source',
   },
+  lock_edit_chronicle: {
+    fr: 'Un chroniqueur est en train d\'éditer cette chronique',
+    en: 'A reporter is editing this chronicle',
+  },
 }

@@ -142,6 +142,8 @@
   .underline {
     text-decoration: underline;
   }
+
+
 }
 
 @layer components {
@@ -172,4 +174,20 @@
 
 .tiptap.ProseMirror[contenteditable='true']:focus {
   background: rgba(0, 0, 0, 0.1);
+}
+
+blockquote {
+  border-left: 3px solid theme("colors.rc.highlight");
+  padding-left: 10px;
+  margin-left: 0;
+  @apply text-sm m-0 pl-3 italic;
+}
+
+hr {
+  border-top: 1px solid theme("colors.rc.card");
+  margin: 10px 0;
+}
+
+.locked {
+  @apply opacity-60 pointer-events-none relative;
 }

@@ -2,9 +2,9 @@ const t=`<template id="button">\r
   <button type="button" class="rounded-md border border-green-700 text-green-700 p-3 mt-3">\r
     <slot></slot>\r
   </button>\r
-</template>`,g=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
+</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:t},Symbol.toStringTag,{value:"Module"})),e=`<template id="link">\r
     <a href="{{href}}" alt="{{alt}}"><slot></slot></a>\r
-</template>`,_=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="addChronicleButton">\r
+</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:e},Symbol.toStringTag,{value:"Module"})),r=`<template id="addChronicleButton">\r
     <button class="flex items-center gap-1 w-full transition-opacity ease-in-out opacity-5 hover:opacity-100" aria-label="button for add chronicle">\r
         <div class="h-[5px] bg-rc-highlight w-full flex-1"></div>\r
         <div>\r
@@ -16,13 +16,13 @@ const t=`<template id="button">\r
         </div>\r
         <div class="h-[5px] bg-rc-highlight flex-1"></div>\r
     </button>\r
-</template>`,w=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="addFirstChronicle">\r
+</template>`,k=Object.freeze(Object.defineProperty({__proto__:null,default:r},Symbol.toStringTag,{value:"Module"})),n=`<template id="addFirstChronicle">\r
     <div class="justify-center hidden">\r
 \r
         <button id="add-first-chronicle" data-trans="add_chronicle" class="btn">\r
         </button>\r
     </div>\r
-</template>`,k=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),l=`<template id="basicLayout">\r
+</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"})),l=`<template id="basicLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr_auto] h-[100dvh]">\r
         <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full relative">\r
@@ -32,7 +32,7 @@ const t=`<template id="button">\r
         </main>\r
         <footer kll-t="footer" kll-ctrl="translate"></footer>\r
     </div>\r
-</template>`,y=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),o=`<template id="broadcastInfo">\r
+</template>`,x=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"})),o=`<template id="broadcastInfo">\r
     <div class="h-full grid grid-rows-[1fr_auto]">\r
         <div kll-t="loader" kll-id="broadcast_info_loader"></div>\r
         <div kll-id="broadcast_info" class="hidden p-3">\r
@@ -56,19 +56,21 @@ const t=`<template id="button">\r
             <div kll-tc="lock" kll-id="lock"></div>\r
         </div>\r
     </div>\r
-</template>`,x=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),a=`<template id="broadcastLayout">\r
+</template>`,z=Object.freeze(Object.defineProperty({__proto__:null,default:o},Symbol.toStringTag,{value:"Module"})),a=`<template id="broadcastLayout">\r
     <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr] h-[100dvh]">\r
         <header kll-tc="header"></header>\r
         <main kll-ctrl="translate" class="h-full">\r
             <slot></slot>\r
         </main>\r
     </div>\r
-</template>`,S=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),i=`<template id="chronicle">\r
+</template>`,M=Object.freeze(Object.defineProperty({__proto__:null,default:a},Symbol.toStringTag,{value:"Module"})),i=`<template id="chronicle">\r
     <div class="flex flex-col gap-2" kll-ctrl="chronicle">\r
+        <div class="self-end">\r
+            <div kll-t="miniLock" kll-b="lock.lock" kll-ctrl="chronicleLock" data-type="lock"></div>\r
+        </div>\r
 \r
-        <div class="grid grid-cols-[auto_1fr] gap-2">\r
-            <span data-trans="chronicle_title"></span>\r
-            <div kll-tc="invisibleInput" kll-b="lock.lock" data-type="title" placeholder="no_title"></div>\r
+        <div class="grid grid-cols-[auto_1fr] gap-2 text-3xl font-bold">\r
+            <div kll-tc="invisibleInput" kll-b="lock.lock" data-type="title" placeholder="no_title" data-theme="light"></div>\r
         </div>\r
 \r
         <div>\r
@@ -81,14 +83,14 @@ const t=`<template id="button">\r
         <div kll-tc="addChronicleButton" kll-b="lock.lock" kll-s-position="0" data-type="add"></div>\r
 \r
     </div>\r
-</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),s=`<template id="createBroadcastForm">\r
+</template>`,S=Object.freeze(Object.defineProperty({__proto__:null,default:i},Symbol.toStringTag,{value:"Module"})),s=`<template id="createBroadcastForm">\r
     <form class="flex gap-2 max-w-[300px]">\r
         <input class="input" placeholder="createBroadcast" name="name" kll-ctrl="input" kll-id="createBroadcastName"/>\r
         <button class="btn" data-trans="create" name="create"></button>\r
     </form>\r
-</template>`,M=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="errorMsg">\r
+</template>`,j=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"})),c=`<template id="errorMsg">\r
     <span class="text-rc-warning text-xs italic"></span>\r
-</template>`,z=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),d=`<template id="footer">\r
+</template>`,L=Object.freeze(Object.defineProperty({__proto__:null,default:c},Symbol.toStringTag,{value:"Module"})),d=`<template id="footer">\r
     <footer>\r
         <ul class="list-none flex flex-wrap items-center justify-center gap-3 m-0 p-3">\r
             <li class="p-0">\r
@@ -118,13 +120,13 @@ const t=`<template id="button">\r
             <div kll-tc="rupteur"></div>\r
         </div>\r
     </header>\r
-</template>`,L=Object.freeze(Object.defineProperty({__proto__:null,default:p},Symbol.toStringTag,{value:"Module"})),u=`<template id="invisibleInput">\r
+</template>`,H=Object.freeze(Object.defineProperty({__proto__:null,default:p},Symbol.toStringTag,{value:"Module"})),u=`<template id="invisibleInput">\r
     <input type="text" class="outline-none border-none text-light-text dark:text-rc-text p-0 bg-transparent" />\r
-</template>`,C=Object.freeze(Object.defineProperty({__proto__:null,default:u},Symbol.toStringTag,{value:"Module"})),b=`<template id="lastBroadcast">\r
+</template>`,C=Object.freeze(Object.defineProperty({__proto__:null,default:u},Symbol.toStringTag,{value:"Module"})),m=`<template id="lastBroadcast">\r
     <div class="p-3">\r
         <div kll-t="loader"></div>\r
     </div>\r
-</template>`,H=Object.freeze(Object.defineProperty({__proto__:null,default:b},Symbol.toStringTag,{value:"Module"})),h=`<template id="loader">\r
+</template>`,V=Object.freeze(Object.defineProperty({__proto__:null,default:m},Symbol.toStringTag,{value:"Module"})),v=`<template id="loader">\r
     <div class="fill-rc-light flex justify-center">\r
         <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" height="16" width="16"\r
             viewBox="0 0 512 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
@@ -132,7 +134,7 @@ const t=`<template id="button">\r
                 d="M288 32V0H224V32 96v32h64V96 32zm0 384V384H224v32 64 32h64V480 416zM0 224v64H32 96h32V224H96 32 0zm416 0H384v64h32 64 32V224H480 416zM97.6 52.4L52.4 97.6 75 120.2l45.3 45.3 22.6 22.6 45.3-45.3-22.6-22.6L120.2 75 97.6 52.4zM391.8 346.5l-22.6-22.6-45.3 45.3 22.6 22.6L391.8 437l22.6 22.6 45.3-45.3L437 391.8l-45.3-45.3zM52.4 414.4l45.3 45.3L120.2 437l45.3-45.3 22.6-22.6-45.3-45.3-22.6 22.6L75 391.8 52.4 414.4zM346.5 120.2l-22.6 22.6 45.3 45.3 22.6-22.6L437 120.2l22.6-22.6L414.4 52.3 391.8 75l-45.3 45.3z" />\r
         </svg>\r
     </div>\r
-</template>`,P=Object.freeze(Object.defineProperty({__proto__:null,default:h},Symbol.toStringTag,{value:"Module"})),f=`<template id="lock">\r
+</template>`,P=Object.freeze(Object.defineProperty({__proto__:null,default:v},Symbol.toStringTag,{value:"Module"})),b=`<template id="lock">\r
     <div>\r
         <button data-type="lock" class="fill-rc-text bg-rc-warning-light cursor-pointer p-3 rounded-md" id="lock" aria-label="lock">\r
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" class="pointer-events-none"\r
@@ -150,7 +152,16 @@ const t=`<template id="button">\r
             </svg>\r
         </button>\r
     </div>\r
-</template>`,T=Object.freeze(Object.defineProperty({__proto__:null,default:f},Symbol.toStringTag,{value:"Module"})),v=`<template id="rupteur">\r
+</template>`,T=Object.freeze(Object.defineProperty({__proto__:null,default:b},Symbol.toStringTag,{value:"Module"})),h=`<template id="miniLock">\r
+    <div class="pointer-events-none fill-rc-warning flex gap-2 items-center transition-opacity ease-in-out ">\r
+        <div data-type="msg" class="text-rc-warning-light italic text-xs"></div>\r
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14"\r
+            viewBox="0 0 448 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->\r
+            <path\r
+                d="M224 48c44.2 0 80 35.8 80 80v64H144V128c0-44.2 35.8-80 80-80zM96 128v64H48 0v48V464v48H48 400h48V464 240 192H400 352V128C352 57.3 294.7 0 224 0S96 57.3 96 128zM48 240H400V464H48V240zm200 80V296H200v24 64 24h48V384 320z" />\r
+        </svg>\r
+    </div>\r
+</template>`,B=Object.freeze(Object.defineProperty({__proto__:null,default:h},Symbol.toStringTag,{value:"Module"})),g=`<template id="rupteur">\r
     <div>\r
         <button data-type="dark" class="fill-rc-light" id="darkRupteur" aria-label="dark rupteur">\r
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" class="pointer-events-none"\r
@@ -167,7 +178,7 @@ const t=`<template id="button">\r
             </svg>\r
         </button>\r
     </div>\r
-</template>`,V=Object.freeze(Object.defineProperty({__proto__:null,default:v},Symbol.toStringTag,{value:"Module"})),m=`<template id="wsTest">\r
+</template>`,F=Object.freeze(Object.defineProperty({__proto__:null,default:g},Symbol.toStringTag,{value:"Module"})),f=`<template id="wsTest">\r
 \r
     <div>\r
 \r
@@ -175,4 +186,4 @@ const t=`<template id="button">\r
 \r
         <h2 data-msg></h2>\r
     </div>\r
-</template>`,B=Object.freeze(Object.defineProperty({__proto__:null,default:m},Symbol.toStringTag,{value:"Module"}));export{w as addChronicleButton,k as addFirstChronicle,y as basicLayout,x as broadcastInfo,S as broadcastLayout,g as button,j as chronicle,M as createBroadcastForm,z as errorMsg,O as footer,L as header,C as invisibleInput,H as lastBroadcast,_ as link,P as loader,T as lock,V as rupteur,B as wsTest};
+</template>`,$=Object.freeze(Object.defineProperty({__proto__:null,default:f},Symbol.toStringTag,{value:"Module"}));export{k as addChronicleButton,y as addFirstChronicle,x as basicLayout,z as broadcastInfo,M as broadcastLayout,_ as button,S as chronicle,j as createBroadcastForm,L as errorMsg,O as footer,H as header,C as invisibleInput,V as lastBroadcast,w as link,P as loader,T as lock,B as miniLock,F as rupteur,$ as wsTest};
