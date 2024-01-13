@@ -1,8 +1,8 @@
-const { createKey } = require("./create-key.js");
-const { knex } = require("./db.service.js");
-const { v4: uuidv4 } = require("uuid");
+const { createKey } = require('./create-key.js')
+const { knex } = require('./db.service.js')
+const { v4: uuidv4 } = require('uuid')
 
-const tableName = "broadcasts";
+const tableName = 'broadcasts'
 
 function getBroadcastWithDetails(broadcast) {
   const broadcastsWithDetails = broadcast.reduce((acc, row) => {
@@ -19,8 +19,8 @@ function getBroadcastWithDetails(broadcast) {
         finished_at: row.broadcast_finished_at,
         created_at: row.broadcast_created_at,
         updated_at: row.broadcast_updated_at,
-        chronicles: [],
-      };
+        chronicles: []
+      }
     }
 
     // Si une chronique existe pour cette ligne, traitez-la
@@ -29,14 +29,14 @@ function getBroadcastWithDetails(broadcast) {
         id: row.chronicle_id,
         editorDetails: {
           name: row.editor_name,
-          id: row.editor_id,
+          id: row.editor_id
         },
         title: row.chronicle_title,
         content: row.chronicle_content,
         source: row.chronicle_source,
         position: row.chronicle_position,
-        medias: [],
-      };
+        medias: []
+      }
 
       // Ajouter des médias à la chronique si disponibles
       if (row.media_id) {
@@ -48,109 +48,109 @@ function getBroadcastWithDetails(broadcast) {
           url: row.url,
           cover: row.cover,
           size: row.size,
-          createdAt: row.media_createdAt,
-        };
-        chronicle.media.push(mediaItem);
+          createdAt: row.media_createdAt
+        }
+        chronicle.media.push(mediaItem)
       }
 
       // Ajoutez la chronique au broadcast
-      acc[row.id].chronicles.push(chronicle);
+      acc[row.id].chronicles.push(chronicle)
     }
 
-    return acc;
-  }, {});
+    return acc
+  }, {})
 
-  return Object.values(broadcastsWithDetails)[0];
+  return Object.values(broadcastsWithDetails)[0]
 }
 module.exports = {
   async createBroadcast(broadcast) {
-    const id = uuidv4();
+    const id = uuidv4()
 
     try {
       await knex(tableName).insert({
         id,
         ...broadcast,
         editor: createKey(),
-        reader: createKey(),
-      });
-      return id;
+        reader: createKey()
+      })
+      return id
     } catch (err) {
-      console.error("Erreur lors de l’enregistrement de l’utilisateur:", err);
-      throw err;
+      console.error('Erreur lors de l’enregistrement de l’utilisateur:', err)
+      throw err
     }
   },
   async getBroadcastById(id) {
     try {
-      return await knex(tableName).where({ id }).first();
+      return await knex(tableName).where({ id }).first()
     } catch (err) {
-      console.error("Erreur lors de la récupération du broadcast:", err);
-      throw err;
+      console.error('Erreur lors de la récupération du broadcast:', err)
+      throw err
     }
   },
   async getBroadcastByEditor(editor) {
     try {
-      const broadcast = await knex("broadcasts")
-        .where("broadcasts.editor", editor)
-        .leftJoin("chronicles", "broadcasts.id", "=", "chronicles.broadcast_id")
-        .leftJoin("medias", "chronicles.id", "=", "medias.chronicle_id")
-        .leftJoin("editors", "chronicles.editor_id", "=", "editors.id")
+      const broadcast = await knex('broadcasts')
+        .where('broadcasts.editor', editor)
+        .leftJoin('chronicles', 'broadcasts.id', '=', 'chronicles.broadcast_id')
+        .leftJoin('medias', 'chronicles.id', '=', 'medias.chronicle_id')
+        .leftJoin('editors', 'chronicles.editor_id', '=', 'editors.id')
         .select([
           // Alias pour les champs de broadcast
-          "broadcasts.id as broadcast_id",
-          "broadcasts.editor",
-          "broadcasts.reader",
-          "broadcasts.name as broadcast_name",
-          "broadcasts.started_at as broadcast_started_at",
-          "broadcasts.finished_at as broadcast_finished_at",
-          "broadcasts.created_at as broadcast_createdAt",
-          "broadcasts.updated_at as broadcast_updatedAt",
+          'broadcasts.id as broadcast_id',
+          'broadcasts.editor',
+          'broadcasts.reader',
+          'broadcasts.name as broadcast_name',
+          'broadcasts.started_at as broadcast_started_at',
+          'broadcasts.finished_at as broadcast_finished_at',
+          'broadcasts.created_at as broadcast_createdAt',
+          'broadcasts.updated_at as broadcast_updatedAt',
           // ... autres champs de broadcasts ...
 
           // Alias pour les champs de chronicle
-          "chronicles.id as chronicle_id",
-          "chronicles.title as chronicle_title",
-          "chronicles.content as chronicle_content",
-          "chronicles.created_at as chronicle_createdAt",
-          "chronicles.updated_at as chronicle_updatedAt",
-          "chronicles.position as chronicle_position",
-          "chronicles.editor_id as chronicle_editor_id",
-          "chronicles.source as chronicle_source",
+          'chronicles.id as chronicle_id',
+          'chronicles.title as chronicle_title',
+          'chronicles.content as chronicle_content',
+          'chronicles.created_at as chronicle_createdAt',
+          'chronicles.updated_at as chronicle_updatedAt',
+          'chronicles.position as chronicle_position',
+          'chronicles.editor_id as chronicle_editor_id',
+          'chronicles.source as chronicle_source',
           // ... autres champs de chronicles ...
 
           // Alias pour les champs de media
-          "medias.id as media_id",
-          "medias.name as media_name",
-          "medias.type as media_type",
-          "medias.url as media_url",
-          "medias.cover as media_cover",
-          "medias.size as media_size",
-          "medias.created_at as media_createdAt",
-          "medias.updated_at as media_updatedAt",
-          "medias.source as media_source",
+          'medias.id as media_id',
+          'medias.name as media_name',
+          'medias.type as media_type',
+          'medias.url as media_url',
+          'medias.cover as media_cover',
+          'medias.size as media_size',
+          'medias.created_at as media_createdAt',
+          'medias.updated_at as media_updatedAt',
+          'medias.source as media_source',
 
           // ... autres champs de medias ...
 
           // Alias pour les champs de editor
-          "editors.id as editor_id",
-          "editors.name as editor_name",
+          'editors.id as editor_id',
+          'editors.name as editor_name'
           // ... autres champs de editors ...
-        ]);
+        ])
 
-      return getBroadcastWithDetails(broadcast);
+      return getBroadcastWithDetails(broadcast)
     } catch (err) {
-      console.error("Erreur lors de la récupération du broadcast:", err);
-      throw err;
+      console.error('Erreur lors de la récupération du broadcast:', err)
+      throw err
     }
   },
   async getBroadcastByReader(reader) {
     try {
       return await knex(tableName)
         .where({ reader })
-        .join("chronicles", "broadcasts.id", "=", "chronicles.broadcast_id")
-        .first();
+        .join('chronicles', 'broadcasts.id', '=', 'chronicles.broadcast_id')
+        .first()
     } catch (err) {
-      console.error("Erreur lors de la récupération du broadcast:", err);
-      throw err;
+      console.error('Erreur lors de la récupération du broadcast:', err)
+      throw err
     }
   },
   async updateBroadcast(broadcast, editor) {
@@ -159,11 +159,11 @@ module.exports = {
         .where({ editor })
         .update({
           ...broadcast,
-          updated_at: knex.fn.now(),
-        });
+          updated_at: knex.fn.now()
+        })
     } catch (err) {
-      console.error("Erreur lors de la mise à jour du broadcast:", err);
-      throw err;
+      console.error('Erreur lors de la mise à jour du broadcast:', err)
+      throw err
     }
   }
-};
+}

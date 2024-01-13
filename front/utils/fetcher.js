@@ -1,4 +1,4 @@
-import { createHeaderXInfo } from "./createXinfos";
+import { createHeaderXInfo } from './createXinfos'
 
 /**
  * Crée une requête fetch avec des en-têtes personnalisés et retourne la réponse.
@@ -10,13 +10,13 @@ import { createHeaderXInfo } from "./createXinfos";
  * @returns {Promise<Response>} - Promesse qui résout la réponse de la requête fetch.
  */
 async function _fetch(verb, signal, url, body) {
-  const xInfo = createHeaderXInfo();
+  const xInfo = createHeaderXInfo()
   return await fetch(url, {
     method: verb,
     signal,
     body: body ? JSON.stringify(body) : undefined,
-    ...xInfo,
-  });
+    ...xInfo
+  })
 }
 
 /**
@@ -24,15 +24,15 @@ async function _fetch(verb, signal, url, body) {
  */
 export const fetcher = {
   async get(url, signal) {
-    return await _fetch("GET", signal, url);
+    return await _fetch('GET', signal, url)
   },
   async post(url, signal, body) {
-    return await _fetch("POST", signal, url, body);
+    return await _fetch('POST', signal, url, body)
   },
   async put(url, signal, body) {
-    return await _fetch("PUT", signal, url, body);
+    return await _fetch('PUT', signal, url, body)
   },
   async delete(url, signal) {
-    return await _fetch("DELETE", signal, url);
-  },
-};
+    return await _fetch('DELETE', signal, url)
+  }
+}

@@ -1,108 +1,108 @@
-const Joi = require("joi");
+const Joi = require('joi')
 const {
   createChronicle,
   updateChronicle,
-  getChronicle,
-} = require("../services/chronicles.service");
-const { getXInfo } = require("../services/get-x--info");
+  getChronicle
+} = require('../services/chronicles.service')
+const { getXInfo } = require('../services/get-x--info')
 
 module.exports = [
   {
     /**
      * update a chronicle
      **/
-    method: "GET",
-    path: "/api/chronicle/{id}",
+    method: 'GET',
+    path: '/api/chronicle/{id}',
     handler: async (req, h) => {
-      const { id } = req.params;
-      const { editor } = getXInfo(req);
+      const { id } = req.params
+      const { editor } = getXInfo(req)
       try {
-        const chronicle = await getChronicle(id, editor);
-        return h.response(chronicle).type("json").code(200);
+        const chronicle = await getChronicle(id, editor)
+        return h.response(chronicle).type('json').code(200)
       } catch (e) {
-        console.log("update chronicle: ", e);
+        console.log('update chronicle: ', e)
         return h
           .response({
-            error: "Error updating chronicle",
+            error: 'Error updating chronicle'
           })
           .code(500)
-          .type("json");
+          .type('json')
       }
-    },
+    }
   },
 
   {
     /**
      * create a chronicle
      **/
-    method: "POST",
-    path: "/api/chronicle",
+    method: 'POST',
+    path: '/api/chronicle',
     handler: async (req, h) => {
-      const { editor } = getXInfo(req);
+      const { editor } = getXInfo(req)
 
       const schema = Joi.object({
-        position: Joi.number().required(),
-      });
+        position: Joi.number().required()
+      })
 
       try {
-        const { value } = schema.validate(JSON.parse(req.payload));
+        const { value } = schema.validate(JSON.parse(req.payload))
 
         await createChronicle({
           editor,
-          ...value,
-        });
+          ...value
+        })
 
-        const broadcast = await getBroadcastByEditor(editor);
+        const broadcast = await getBroadcastByEditor(editor)
 
-        return h.response(broadcast.chronicles).type("json").code(201);
+        return h.response(broadcast.chronicles).type('json').code(201)
       } catch (e) {
-        console.log("create chronicle: ", e);
+        console.log('create chronicle: ', e)
         return h
           .response({
-            error: "Error creating chronicle",
+            error: 'Error creating chronicle'
           })
           .code(500)
-          .type("json");
+          .type('json')
       }
       //TODO brancher les SOCKETS
-    },
+    }
   },
   {
     /**
      * update a chronicle
      **/
-    method: "PUT",
-    path: "/api/chronicle/{id}",
+    method: 'PUT',
+    path: '/api/chronicle/{id}',
     handler: async (req, h) => {
-      const { id } = req.params;
-      const { editor, userId } = getXInfo(req);
+      const { id } = req.params
+      const { editor, userId } = getXInfo(req)
       const schema = Joi.object({
         position: Joi.number(),
         content: Joi.string(),
         title: Joi.string(),
-        source: Joi.string(),
-      });
+        source: Joi.string()
+      })
 
       try {
-        const { value } = schema.validate(JSON.parse(req.payload));
+        const { value } = schema.validate(JSON.parse(req.payload))
 
-        await updateChronicle(id, editor, { ...value });
-        req.server.publish("/broadcast/editor/" + editor, {
+        await updateChronicle(id, editor, { ...value })
+        req.server.publish('/broadcast/editor/' + editor, {
           userId,
-          type: "update",
-          context: "chronicle",
-          id,
-        });
-        return h.response({ message: "ok" }).type("json").code(200);
+          type: 'update',
+          context: 'chronicle',
+          id
+        })
+        return h.response({ message: 'ok' }).type('json').code(200)
       } catch (e) {
-        console.log("update chronicle: ", e);
+        console.log('update chronicle: ', e)
         return h
           .response({
-            error: "Error updating chronicle",
+            error: 'Error updating chronicle'
           })
           .code(500)
-          .type("json");
+          .type('json')
       }
-    },
-  },
-];
+    }
+  }
+]

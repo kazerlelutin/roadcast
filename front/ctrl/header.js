@@ -1,10 +1,10 @@
-import { kll } from "../main";
+import { kll } from '../main'
 
 export const header = {
   onInit(_state, el) {
-     el.render()
+    el.render()
   },
   render(_state, el) {
-    kll.plugins.translate(el);
-  },
-};
+    kll.plugins.translate(el)
+  }
+}

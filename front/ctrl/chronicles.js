@@ -5,6 +5,7 @@ export const chronicles = {
   async render(_state, el, listen) {
     // ===== LISTEN =====
     if (listen && listen.key === "broadcast") {
+      
       const broadcast = listen.value;
       if (!broadcast.id) return;
 
@@ -25,6 +26,7 @@ export const chronicles = {
           wrapper.appendChild(chronicleEl);
         }
 
+        
         el.innerHTML = wrapper.innerHTML;
         kll.reload(el);
       }
