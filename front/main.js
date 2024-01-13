@@ -48,8 +48,6 @@ addEventListener("DOMContentLoaded", () => {
 
 });
 
-
-
 // Prevent the flash of the dark theme
 const theme =  localStorage.getItem(lsKEY) || "dark";
 if(theme === "dark"){

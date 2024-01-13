@@ -1,6 +1,5 @@
 import { kll } from "../main";
 import { createChronicleElement } from "../utils/createChronicleElement";
-import { getUserId } from "../utils/createXinfos";
 import { fetcher } from "../utils/fetcher";
 
 export const chronicleLock = {
@@ -11,26 +10,30 @@ export const chronicleLock = {
     timeout: null,
     controller: new AbortController(),
   },
-  async onInit(state, el) {
-    const msgEl = el.querySelector("[data-type='msg']");
+  async onInit(_, el) {
+    const msgEl = el.querySelector("[data-type=msg]");
     msgEl.setAttribute("data-trans", "lock_edit_chronicle");
+    el.render();
+    kll.plugins.translate(el);
+  },
 
-    const app = document.querySelector("#app");
-    const client = app._socket;
-
-    const handler = (update) => {
-      const userId = getUserId();
-      if (userId === update.userId) return;
-
+  cleanUp(state) {
+    clearTimeout(state.timeout);
+    state.controller.abort();
+  },
+  async render(state, el, listen) {
+    if (
+      listen?.key === "message" &&
+      listen?.value?.type === "update" &&
+      listen?.value?.id === state.chronicle_id
+    ) {
       const chronicleEl = document.querySelector(
         `[kll-id='${state.chronicle_id}']`
       );
-      if (chronicleEl) {
-        chronicleEl.classList.add("locked");
-        state.lock = true;
 
-        el.render();
-      }
+      state.lock = true;
+      chronicleEl.classList.add("locked");
+
       clearTimeout(state.timeout);
 
       state.timeout = setTimeout(async () => {
@@ -52,36 +55,18 @@ export const chronicleLock = {
 
           kll.reload(chronicleEl);
           state.lock = false;
+          chronicleEl.replaceWith(await createChronicleElement(chronicle));
         } catch (e) {
           console.log(e);
         } finally {
-          chronicleEl.replaceWith(await createChronicleElement(chronicle));
           chronicleEl.classList.remove("locked");
-          el.render();
+          el.classList.add("hidden");
         }
       }, 5000);
-    };
-
-    if (client._subscriptions?.[state.channel]?.length > 0) {
-      client.unsubscribe(state.channel, handler);
     }
 
-    client.subscribe(state.channel, handler);
-
-    el.render();
-  },
-
-  cleanUp(state) {
-    const app = document.querySelector("#app");
-    const client = app._socket;
-    client.unsubscribe(state.channel);
-    clearTimeout(state.timeout);
-    state.controller.abort();
-  },
-  async render(state, el) {
     if (state.lock) el.classList.remove("hidden");
     else el.classList.add("hidden");
-
     kll.plugins.translate(el);
   },
 };

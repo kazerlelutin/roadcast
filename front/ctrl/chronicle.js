@@ -36,15 +36,14 @@ export const chronicle = {
 
     const bubbleMenuElement = createEditorMenu();
 
-    const floatingMenuElement = createEditorMenu('floating');
-
+    const floatingMenuElement = createEditorMenu("floating");
 
     el.appendChild(bubbleMenuElement);
     el.appendChild(floatingMenuElement);
 
     function createEditorMenu(type) {
       const menuElement = document.createElement("div");
-      menuElement.setAttribute('data-type', type ? type : 'bubble')
+      menuElement.setAttribute("data-type", type ? type : "bubble");
       menuElement.classList.add(
         "bg-rc-bg-dark",
         "p-1",
@@ -53,51 +52,69 @@ export const chronicle = {
         "flex",
         "flex-wrap",
         "gap-2",
-        'fill-current'
+        "fill-current"
       );
 
-      menuItems.filter(el=> {
-        if(type) return el.menu === type
-        return true
-      }).forEach((item) => {
-        if (item.items && item.items.length > 0) {
-          // Créer un dropdown pour les éléments avec des sous-items
-          const select = document.createElement("select");
-          select.classList.add('bg-transparent', 'text-white', 'rounded','text-right', 'py-1', 'px-2')
-          select.addEventListener("change", () => {
-            const selectedItem = item.items[select.selectedIndex];
-            editor.chain().focus()[selectedItem.command](selectedItem.param).run();
-          });
-    
-          item.items.forEach((subItem, index) => {
-            const option = document.createElement("option");
+      menuItems
+        .filter((el) => {
+          if (type) return el.menu === type;
+          return true;
+        })
+        .forEach((item) => {
+          if (item.items && item.items.length > 0) {
+            // Créer un dropdown pour les éléments avec des sous-items
+            const select = document.createElement("select");
+            select.classList.add(
+              "bg-transparent",
+              "text-white",
+              "rounded",
+              "text-right",
+              "py-1",
+              "px-2"
+            );
+            select.addEventListener("change", () => {
+              const selectedItem = item.items[select.selectedIndex];
+              editor
+                .chain()
+                .focus()
+                [selectedItem.command](selectedItem.param)
+                .run();
+            });
 
-            option.value = subItem.name;
-            option.textContent = subItem.label;
-            if(index === 0) option.setAttribute('selected', 'selected')
+            item.items.forEach((subItem, index) => {
+              const option = document.createElement("option");
 
-            option.classList.add('bg-rc-bg-dark', 'text-white', 'py-1', 'px-2')
-            select.appendChild(option);
-          });
-    
-          menuElement.appendChild(select);
-        } else {
-          // Créer un bouton pour les éléments sans sous-items
-          const btn = document.createElement("button");
-          btn.innerHTML = item.label;
-          btn.addEventListener("click", () => {
-            editor.chain().focus()[item.command](item.param).run();
-          });
+              option.value = subItem.name;
+              option.textContent = subItem.label;
+              if (index === 0) option.setAttribute("selected", "selected");
 
-          btn.classList.add('text-white', 'rounded', 'py-1', 'px-2')
-          btn.setAttribute('data-command', item.name)
+              option.classList.add(
+                "bg-rc-bg-dark",
+                "text-white",
+                "py-1",
+                "px-2"
+              );
+              select.appendChild(option);
+            });
 
-          if(state.editor && state.editor.isActive(item.label)) btn.classList.add('bg-rc-bg-light')
+            menuElement.appendChild(select);
+          } else {
+            // Créer un bouton pour les éléments sans sous-items
+            const btn = document.createElement("button");
+            btn.innerHTML = item.label;
+            btn.addEventListener("click", () => {
+              editor.chain().focus()[item.command](item.param).run();
+            });
 
-          menuElement.appendChild(btn);
-        }
-      });
+            btn.classList.add("text-white", "rounded", "py-1", "px-2");
+            btn.setAttribute("data-command", item.name);
 
+            if (state.editor && state.editor.isActive(item.label))
+              btn.classList.add("bg-rc-bg-light");
+
+            menuElement.appendChild(btn);
+          }
+        });
 
       return menuElement;
     }
@@ -120,9 +137,8 @@ export const chronicle = {
           },
         }),
         FloatingMenu.configure({
-          element:  el.querySelector("[data-type=floating]"),
+          element: el.querySelector("[data-type=floating]"),
         }),
-
       ],
       content: state.chronicle.content,
       async onUpdate({ editor }) {
@@ -142,37 +158,46 @@ export const chronicle = {
 
     state.editor = editor;
 
-    editor.on('selectionUpdate', ()=>updateMenuButtons());
-    editor.on('update', ()=>updateMenuButtons(true));
- 
-    let upt
+    editor.on("selectionUpdate", () => updateMenuButtons());
+    editor.on("update", () => updateMenuButtons(true));
+
+    let upt;
     function updateMenuButtons(up) {
-  
       clearTimeout(upt);
-      upt = setTimeout(() => {
-        menuItems.forEach(item => {
-          // Sélectionner le bouton ou le sélecteur
-          const element = document.querySelector(`[data-command="${item.name}"]`);
-        
-          if (element) {
-            if (element.tagName === 'SELECT') {
-              // Mise à jour pour les sélecteurs
-              const activeOption = item.items.find(subItem => state.editor.isActive(subItem.name));
-              if (activeOption) {
-                element.value = activeOption.name;
-              }
-            } else {
-              // Mise à jour pour les boutons
-              if (state.editor.isActive(item.name)) {
-                element.classList.add('text-white', 'bg-rc-info', 'rounded');
+      upt = setTimeout(
+        () => {
+          menuItems.forEach((item) => {
+            // Sélectionner le bouton ou le sélecteur
+            const element = document.querySelector(
+              `[data-command="${item.name}"]`
+            );
+
+            if (element) {
+              if (element.tagName === "SELECT") {
+                // Mise à jour pour les sélecteurs
+                const activeOption = item.items.find((subItem) =>
+                  state.editor.isActive(subItem.name)
+                );
+                if (activeOption) {
+                  element.value = activeOption.name;
+                }
               } else {
-                element.classList.remove('text-white', 'bg-rc-info', 'rounded');
+                // Mise à jour pour les boutons
+                if (state.editor.isActive(item.name)) {
+                  element.classList.add("text-white", "bg-rc-info", "rounded");
+                } else {
+                  element.classList.remove(
+                    "text-white",
+                    "bg-rc-info",
+                    "rounded"
+                  );
+                }
               }
             }
-          }
-        });
-        
-      },up ? 0:300)
+          });
+        },
+        up ? 0 : 300
+      );
     }
     el.render();
   },

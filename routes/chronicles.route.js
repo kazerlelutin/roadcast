@@ -87,8 +87,12 @@ module.exports = [
         const { value } = schema.validate(JSON.parse(req.payload));
 
         await updateChronicle(id, editor, { ...value });
-        req.server.publish("/chronicle/update/" + id, { userId });
-
+        req.server.publish("/broadcast/editor/" + editor, {
+          userId,
+          type: "update",
+          context: "chronicle",
+          id,
+        });
         return h.response({ message: "ok" }).type("json").code(200);
       } catch (e) {
         console.log("update chronicle: ", e);

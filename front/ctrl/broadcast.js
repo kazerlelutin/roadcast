@@ -1,3 +1,4 @@
+import { getUserId } from "../utils/createXinfos";
 import { fetcher } from "../utils/fetcher";
 
 export const broadcast = {
@@ -7,17 +8,31 @@ export const broadcast = {
     loading: true,
     error: null,
     controller: new AbortController(),
+    channel: null,
+    message: null,
   },
   async onInit(state) {
     const signal = state.controller.signal;
     state.loading = true;
+
     try {
       const response = await fetcher.get("/api/broadcast", signal);
       const { broadcast, editors } = await response.json();
 
       state.broadcast = broadcast;
       state.editors = editors;
+      state.channel = `/broadcast/editor/${broadcast.editor}`;
+      const app = document.querySelector("#app");
+      const client = app._socket;
+      if (client._subscriptions?.[state.channel]?.length > 0) {
+        client.unsubscribe(state.channel, handler);
+      }
 
+      client.subscribe(state.channel, (msg) => {
+        const userId = getUserId();
+        if (userId === msg.userId) return;
+        state.message = msg;
+      });
     } catch (e) {
       console.log(e);
     } finally {
@@ -25,8 +40,11 @@ export const broadcast = {
       state.loading = false;
     }
   },
-  onClean(state){
-    state.controller.abort()
+  onClean(state) {
+    const app = document.querySelector("#app");
+    const client = app._socket;
+    client.unsubscribe(state.channel);
+    state.controller.abort();
   },
   render() {},
 };
