@@ -2,7 +2,8 @@ const Joi = require('joi')
 const {
   createChronicle,
   updateChronicle,
-  getChronicle
+  getChronicle,
+  deleteChronicle
 } = require('../services/chronicles.service')
 const { getXInfo } = require('../services/get-x--info')
 
@@ -90,6 +91,36 @@ module.exports = [
         req.server.publish('/broadcast/editor/' + editor, {
           userId,
           type: 'update',
+          context: 'chronicle',
+          id
+        })
+        return h.response({ message: 'ok' }).type('json').code(200)
+      } catch (e) {
+        console.log('update chronicle: ', e)
+        return h
+          .response({
+            error: 'Error updating chronicle'
+          })
+          .code(500)
+          .type('json')
+      }
+    }
+  },
+  {
+    /**
+     * Delete a chronicle
+     **/
+    method: 'DELETE',
+    path: '/api/chronicle/{id}',
+    handler: async (req, h) => {
+      const { id } = req.params
+      const { editor, userId } = getXInfo(req)
+
+      try {
+        await deleteChronicle(id, editor)
+        req.server.publish('/broadcast/editor/' + editor, {
+          userId,
+          type: 'delete',
           context: 'chronicle',
           id
         })

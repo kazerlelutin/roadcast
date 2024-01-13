@@ -65,6 +65,21 @@ export const chronicleLock = {
       }, 5000)
     }
 
+    if (
+      listen?.key === 'message' &&
+      listen?.value?.type === 'delete' &&
+      listen?.value?.id === state.chronicle_id
+    ) {
+      const broadcastEl = document.querySelector(`[kll-id='broadcast']`)
+      broadcastEl.state.broadcast = {
+        ...broadcastEl.state.broadcast,
+        chronicles: broadcastEl.state.broadcast.chronicles.filter(
+          (c) => c.id !== state.chronicle_id
+        )
+      }
+      el.remove()
+    }
+
     if (state.lock) el.classList.remove('hidden')
     else el.classList.add('hidden')
     kll.plugins.translate(el)

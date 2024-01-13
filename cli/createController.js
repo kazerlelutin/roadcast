@@ -3,7 +3,7 @@ const path = require('path')
 
 function createController(id) {
   const ctrlContent = [
-    `export const input = {`,
+    `export const ${id} = {`,
     `\n`,
     `    state: {`,
     `\n`,

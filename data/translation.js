@@ -370,5 +370,9 @@ export const translation = {
   lock_edit_chronicle: {
     fr: "Un chroniqueur est en train d'éditer cette chronique",
     en: 'A reporter is editing this chronicle'
+  },
+  confirm_delete_chronicle: {
+    fr: 'Confirmer la suppression de la chronique',
+    en: 'Confirm chronicle deletion'
   }
 }

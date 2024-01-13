@@ -16,3 +16,5 @@ export * from './lastBroadcast'
 export * from './lock'
 export * from './rupteur'
 export * from './translate'
+
+export * from "./chronicleDelete"

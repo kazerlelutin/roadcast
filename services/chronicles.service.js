@@ -45,5 +45,12 @@ module.exports = {
     await knex(tableName)
       .where({ id, broadcast_id: broadcast.id })
       .update(payload)
+  },
+  async deleteChronicle(id, editor) {
+    const broadcast = await knex('broadcasts').where({ editor }).first()
+
+    if (!broadcast) return null
+
+    await knex(tableName).where({ id, broadcast_id: broadcast.id }).delete()
   }
 }

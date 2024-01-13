@@ -42,6 +42,11 @@ export async function createChronicleElement(chronicle) {
   lock.setAttribute('kll-b', `broadcast.message`)
   lock.setAttribute('kll-s-chronicle_id', chronicle.id)
 
+  // === Remove ===
+  const remove = container.querySelector('[data-type=delete]')
+  remove.setAttribute('kll-id', `remove_${chronicle.id}`)
+  remove.setAttribute('kll-s-chronicle_id', chronicle.id)
+
   // === Inject Values ===
   if (chronicle.title) titleEl.setAttribute('kll-s-value', chronicle.title)
 
