@@ -16,5 +16,9 @@ export * from './lastBroadcast'
 export * from './lock'
 export * from './rupteur'
 export * from './translate'
+export * from './chronicleDelete'
+export * from './confirmDialog'
+export * from './tree'
+export * from './chronicleTree'
 
-export * from "./chronicleDelete"
+export * from "./chronicleTreeDropZone"

@@ -1,11 +1,6 @@
 import { kll } from '../main'
 
-export function createConfirmModal(
-  msg,
-  subMsg,
-  confirmCallback,
-  cancelCallback
-) {
+function createConfirmModal(msg, subMsg, confirmCallback, cancelCallback) {
   // create elements
   const dialog = document.createElement('dialog')
 
@@ -56,4 +51,15 @@ export function createConfirmModal(
   kll.plugins.translate(dialog)
   document.body.appendChild(dialog)
   return dialog
+}
+
+export const confirmDialog = {
+  state: {
+    confirm: false
+  },
+  async onClick(state) {
+    const dialog = createConfirmModal(state.text, state.subText, state.callback)
+    dialog.showModal()
+  },
+  render() {}
 }

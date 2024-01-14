@@ -6,6 +6,7 @@ const {
   deleteChronicle
 } = require('../services/chronicles.service')
 const { getXInfo } = require('../services/get-x--info')
+const { getBroadcastByEditor } = require('../services/broadcasts.service')
 
 module.exports = [
   {

@@ -17,3 +17,7 @@ export * as lock from './lock.html?raw'
 export * as miniLock from './mini-lock.html?raw'
 export * as rupteur from './rupteur.html?raw'
 export * as trash from './trash.html?raw'
+
+export * as tree from "./tree.html?raw"
+export * as chronicleTree from "./chronicleTree.html?raw"
+export * as chronicleTreeDropZone from "./chronicleTreeDropZone.html?raw"

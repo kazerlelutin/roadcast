@@ -18,7 +18,7 @@ export const chronicle = {
   },
   onInit(state, el) {
     // ===== STATE =====
-    const broadcastEl = document.querySelector('[kll-ctrl=broadcast]')
+    const broadcastEl = document.querySelector('[kll-id=broadcast]')
     if (!broadcastEl) return
 
     const chronicle = broadcastEl.state.broadcast.chronicles.find(
@@ -120,7 +120,7 @@ export const chronicle = {
     }
 
     const editor = new Editor({
-      element: el.querySelector('[data-type=editor]'),
+      element: el.querySelector('[data-editor]'),
       id: `editor_${state.chronicle.id}`,
       extensions: [
         StarterKit,
@@ -219,12 +219,15 @@ export const chronicle = {
 
     if (listen?.name.match(/title|source/)) {
       const [key] = listen.name.split('_')
+      state.chronicle = {
+        ...state.chronicle,
+        [key]: listen.value
+      }
       await fetcher.put(
         `/api/chronicle/${state.chronicle.id}`,
         state.controller.signal,
         { [key]: listen.value }
       )
     }
-    //console.log("chronicle", state, state.chronicle?.id, listen);
   }
 }
