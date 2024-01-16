@@ -22,3 +22,5 @@ export * from './tree'
 export * from './chronicleTree'
 
 export * from "./chronicleTreeDropZone"
+export * from "./medias"
+export * from "./addMedia"

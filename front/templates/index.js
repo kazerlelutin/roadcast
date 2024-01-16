@@ -21,3 +21,5 @@ export * as trash from './trash.html?raw'
 export * as tree from "./tree.html?raw"
 export * as chronicleTree from "./chronicleTree.html?raw"
 export * as chronicleTreeDropZone from "./chronicleTreeDropZone.html?raw"
+export * as medias from "./medias.html?raw"
+export * as addMedia from "./addMedia.html?raw"

@@ -41,20 +41,13 @@ export const addFirstChronicle = {
   render(_, el, listen) {
     kll.plugins.translate(el)
 
-    if (
-      listen &&
-      listen.key === 'broadcast' &&
-      listen.value.chronicles.length === 0
-    ) {
+    if (!listen) return
+    if (listen.key === 'broadcast' && listen.value.chronicles.length === 0) {
       el.classList.remove('hidden')
       el.classList.add('flex')
     }
 
-    if (
-      listen &&
-      listen.key === 'broadcast' &&
-      listen.value.chronicles.length > 0
-    ) {
+    if (listen.key === 'broadcast' && listen.value.chronicles.length > 0) {
       el.remove()
     }
   }

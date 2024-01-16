@@ -62,6 +62,14 @@ export async function createChronicleElement(chronicle) {
         'kll-s-chronicle_id': chronicle.id,
         'kll-m': 'confirmDialog'
       }
+    ],
+    [
+      'medias',
+      undefined,
+      {
+        'kll-id': `medias_${chronicle.id}`,
+        'kll-s-chronicle_id': chronicle.id
+      }
     ]
   ])
   // === Inject Values ===
