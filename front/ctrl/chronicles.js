@@ -6,6 +6,7 @@ export const chronicles = {
     // ===== LISTEN =====
     if (listen && listen.key === 'broadcast') {
       const broadcast = listen.value
+
       if (!broadcast.id) return
 
       if (broadcast.chronicles.length === 0) {

@@ -3,7 +3,8 @@ const {
   createChronicle,
   updateChronicle,
   getChronicle,
-  deleteChronicle
+  deleteChronicle,
+  updateChroniclePosition
 } = require('../services/chronicles.service')
 const { getXInfo } = require('../services/get-x--info')
 const { getBroadcastByEditor } = require('../services/broadcasts.service')
@@ -88,13 +89,24 @@ module.exports = [
       try {
         const { value } = schema.validate(JSON.parse(req.payload))
 
-        await updateChronicle(id, editor, { ...value })
-        req.server.publish('/broadcast/editor/' + editor, {
-          userId,
-          type: 'update',
-          context: 'chronicle',
-          id
-        })
+        if (value.position !== undefined && value.position !== null) {
+          await updateChroniclePosition(id, editor, value.position)
+          req.server.publish('/broadcast/editor/' + editor, {
+            userId,
+            type: 'update_position',
+            context: 'chronicle',
+            id
+          })
+        } else {
+          await updateChronicle(id, editor, { ...value })
+          req.server.publish('/broadcast/editor/' + editor, {
+            userId,
+            type: 'update',
+            context: 'chronicle',
+            id
+          })
+        }
+
         return h.response({ message: 'ok' }).type('json').code(200)
       } catch (e) {
         console.log('update chronicle: ', e)

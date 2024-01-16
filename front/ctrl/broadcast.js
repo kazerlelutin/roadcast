@@ -28,9 +28,21 @@ export const broadcast = {
         client.unsubscribe(state.channel, handler)
       }
 
-      client.subscribe(state.channel, (msg) => {
+      client.subscribe(state.channel, async (msg) => {
         const userId = getUserId()
+
         if (userId === msg.userId) return
+        if (msg.type === 'update_position') {
+          try {
+            const response = await fetcher.get('/api/broadcast', signal)
+            const { broadcast, editors } = await response.json()
+            state.broadcast = broadcast
+            state.editors = editors
+          } catch (e) {
+            console.log(e)
+          }
+        }
+
         state.message = msg
       })
     } catch (e) {
@@ -45,6 +57,5 @@ export const broadcast = {
     const client = app._socket
     client.unsubscribe(state.channel)
     state.controller.abort()
-  },
-  render() {}
+  }
 }

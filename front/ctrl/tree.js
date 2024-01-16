@@ -4,8 +4,7 @@ import { setElement, setElementbyKllTc } from '../utils/setElement'
 export const tree = {
   state: {},
 
-  async render(state, el, listen) {
-    console.log('tree render', listen)
+  async render(_state, el) {
     const broadcastEl = document.querySelector(`[kll-id='broadcast']`)
     const container = el.querySelector('[data-tree]')
     if (!broadcastEl || !container) return
@@ -15,9 +14,20 @@ export const tree = {
     for (const chronicle of chronicles) {
       const chronicleTreeEl = await kll.processTemplate('chronicleTree')
 
+      chronicleTreeEl.setAttribute('id', `tree_${chronicle.id}`)
+      chronicleTreeEl.setAttribute('kll-b', `${chronicle.id}.chronicle`)
+
       setElementbyKllTc(chronicleTreeEl, 'chronicleTreeDropZone', null, {
-        'kll-id': `dropzone_${chronicle.position}`,
-        'kll-s-position': chronicle.position
+        'kll-id': `dropzone_${chronicle.position + 1}`,
+        'kll-s-position': chronicle.position + 1,
+        id: `dropzone_${chronicle.id}`
+      })
+
+      setElement(chronicleTreeEl, 'grab', undefined, {
+        'kll-b': `${chronicle.id}.chronicle`,
+        'kll-id': `chronicle_tree_title_${chronicle.id}`,
+        'kll-s-position': chronicle.position,
+        'kll-s-chronicle_id': chronicle.id
       })
 
       setElement(
@@ -25,12 +35,9 @@ export const tree = {
         'title',
         chronicle.title ? chronicle.title : undefined,
         {
-          'kll-b': `${chronicle.id}.chronicle`,
-          'kll-ctrl': 'chronicleTree',
-          'kll-id': `chronicle_tree_title_${chronicle.id}`
+          'data-title': chronicle.id
         }
       )
-
       container.appendChild(chronicleTreeEl)
     }
 
