@@ -1,0 +1,87 @@
+const Joi = require('joi')
+const { getXInfo } = require('../services/get-x--info')
+const { getBroadcastByEditor } = require('../services/broadcasts.service')
+const { createMedia } = require('../services/medias.service')
+const path = require('node:path')
+const fs = require('node:fs')
+const { v4: uuidv4 } = require('uuid')
+
+module.exports = [
+  {
+    /**
+     * create a media
+     **/
+    method: 'POST',
+    path: '/api/media/chronicle/{chronicleId}',
+    options: {
+      payload: {
+        parse: true,
+        output: 'stream',
+        multipart: true,
+        maxBytes: 300 * 1024 * 1024 //300 mb
+      }
+    },
+    handler: async (req, h) => {
+      const { editor, userId } = getXInfo(req)
+
+      const data = req.payload
+      const chronicle_id = req.params.chronicleId
+      const files = Array.isArray(data.files) ? data.files : [data.files]
+
+      const filesToSave = []
+
+      const dir = path.join(__dirname, '../uploads')
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir)
+
+      for (const file of files) {
+        const extension = path.extname(file.hapi.filename)
+        const id = uuidv4()
+        const uuidName = id + extension
+        const destination = path.join(dir, uuidName)
+        const fileStream = fs.createWriteStream(destination)
+
+        await new Promise((resolve, reject) => {
+          file.pipe(fileStream)
+
+          file.on('end', resolve)
+          file.on('error', reject)
+          filesToSave.push({
+            id,
+            name: file.hapi.filename.split('.')[0],
+            size: file._data.length,
+            type: file.hapi.headers['content-type'],
+            url: `/uploads/${uuidName}`,
+            chronicle_id,
+            source: '',
+            cover: ''
+          })
+        })
+      }
+
+      /*
+
+    */
+      //   await saveFiles(filesToSave)
+
+      //TODO faire comme pour les dons, save dans un dossiers en .gitignore
+
+      try {
+        await createMedia({ editor, medias: filesToSave })
+
+        const broadcast = await getBroadcastByEditor(editor)
+        console.log('broadcast: ', broadcast)
+
+        return h.response(broadcast.chronicles).type('json').code(201)
+      } catch (e) {
+        console.log('create media: ', e)
+        return h
+          .response({
+            error: 'Error creating media'
+          })
+          .code(500)
+          .type('json')
+      }
+      //TODO brancher les SOCKETS
+    }
+  }
+]

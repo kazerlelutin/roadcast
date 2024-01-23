@@ -19,6 +19,16 @@ async function _fetch(verb, signal, url, body) {
   })
 }
 
+async function _postFile(signal, url, body) {
+  const xInfo = createHeaderXInfo()
+  return await fetch(url, {
+    method: 'POST',
+    signal,
+    body,
+    ...xInfo
+  })
+}
+
 /**
  * Objet contenant des fonctions pour effectuer des requêtes fetch.
  */
@@ -28,6 +38,9 @@ export const fetcher = {
   },
   async post(url, signal, body) {
     return await _fetch('POST', signal, url, body)
+  },
+  async postFile(url, signal, body) {
+    return await _postFile(signal, url, body)
   },
   async put(url, signal, body) {
     return await _fetch('PUT', signal, url, body)

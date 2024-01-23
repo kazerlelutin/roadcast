@@ -1,5 +1,7 @@
 import { kll } from '../main'
+import { getMediaType } from '../utils/getMediaType'
 import { getState } from '../utils/getState'
+import { kebabToCamel } from '../utils/kebabToCamel'
 import { setAttributes } from '../utils/setElement'
 
 export const medias = {
@@ -16,11 +18,16 @@ export const medias = {
     el.innerHTML = ''
 
     for (const media of chronicle.medias) {
-      const template = await kll.processTemplate('media')
+      const type = getMediaType(media.type)
+      const tc = kebabToCamel(`media-${type}`)
+
+      const template = await kll.processTemplate(tc)
 
       setAttributes(template, {
         'kll-id': media.id,
-        'kll-s-id': media.id
+        'kll-s-id': media.id,
+        'kll-s-chronicle_id': chronicle.id,
+        'kll-ctrl': tc
       })
 
       el.appendChild(template)

@@ -42,15 +42,15 @@ function getBroadcastWithDetails(broadcast) {
       if (row.media_id) {
         const mediaItem = {
           id: row.media_id,
-          source: row.source,
-          name: row.name,
-          type: row.type,
-          url: row.url,
-          cover: row.cover,
-          size: row.size,
+          source: row.media_source,
+          name: row.media_name,
+          type: row.media_type,
+          url: row.media_url,
+          cover: row.media_cover,
+          size: row.media_size,
           createdAt: row.media_createdAt
         }
-        chronicle.media.push(mediaItem)
+        chronicle.medias.push(mediaItem)
       }
 
       // Ajoutez la chronique au broadcast
