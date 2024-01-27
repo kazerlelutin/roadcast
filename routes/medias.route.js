@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const { getXInfo } = require('../services/get-x--info')
 const { getBroadcastByEditor } = require('../services/broadcasts.service')
-const { createMedia } = require('../services/medias.service')
+const { createMedia, getMedia } = require('../services/medias.service')
 const path = require('node:path')
 const fs = require('node:fs')
 const { v4: uuidv4 } = require('uuid')
@@ -71,6 +71,13 @@ module.exports = [
         const broadcast = await getBroadcastByEditor(editor)
         console.log('broadcast: ', broadcast)
 
+        req.server.publish('/broadcast/editor/' + editor, {
+          userId,
+          type: 'addMedia',
+          context: 'chronicle',
+          id
+        })
+
         return h.response(broadcast.chronicles).type('json').code(201)
       } catch (e) {
         console.log('create media: ', e)
@@ -82,6 +89,32 @@ module.exports = [
           .type('json')
       }
       //TODO brancher les SOCKETS
+    }
+  },
+  {
+    /**
+     * create a media
+     **/
+    method: 'GET',
+    path: '/api/media/slider/{mediaId}',
+    handler: async (req, h) => {
+      //TODO if reader,send editor ? or other endpoint
+      const { editor, userId } = getXInfo(req)
+
+      const mediaId = req.params.mediaId
+
+      const broadcast = await getBroadcastByEditor(editor)
+
+      //TODO send just good media keys
+      const media = await getMedia(mediaId, broadcast.id)
+      req.server.publish('/slider/' + broadcast.reader, {
+        userId,
+        type: 'castMedia',
+        context: 'chronicle',
+        media
+      })
+
+      return h.response({ msg: 'send' }).type('json').code(201)
     }
   }
 ]

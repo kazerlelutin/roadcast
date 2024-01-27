@@ -1,3 +1,5 @@
+import { fetcher } from '../utils/fetcher'
+
 export const mediaImage = {
   state: {
     chronicle_id: null,
@@ -6,6 +8,17 @@ export const mediaImage = {
   },
   onInit(state, el, e) {
     el.render()
+  },
+  async onClick(state, el, e) {
+    const chronicleEl = document.querySelector(
+      `[kll-id="${state.chronicle_id}"]`
+    )
+    if (!chronicleEl) return
+    const media = chronicleEl.state.chronicle.medias.find(
+      (m) => m.id === state.id
+    )
+    if (!media) return
+    fetcher.get(`/api/media/slider/${media.id}`, state.controller.signal)
   },
   render(state, el, _listen) {
     const chronicleEl = document.querySelector(

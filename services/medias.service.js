@@ -1,3 +1,4 @@
+const { join } = require('../routes/medias.route.js')
 const { knex } = require('./db.service.js')
 const { v4: uuidv4 } = require('uuid')
 
@@ -12,5 +13,12 @@ module.exports = {
     }
 
     await knex(tableName).insert(medias)
+  },
+  async getMedia(mediaId, broadcast_id) {
+    return await knex(tableName)
+      .join('chronicles', 'chronicles.id', '=', 'medias.chronicle_id')
+      .join('broadcasts', 'broadcasts.id', '=', 'chronicles.broadcast_id')
+      .where({ 'medias.id': mediaId, 'broadcasts.id': broadcast_id })
+      .first()
   }
 }

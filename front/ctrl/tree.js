@@ -36,7 +36,9 @@ export const tree = {
         'title',
         chronicle.title ? chronicle.title : undefined,
         {
-          'data-title': chronicle.id
+          'data-title': chronicle.id,
+          'kll-id': `tree_title_${chronicle.id}`,
+          'kll-s-chronicle_id': chronicle.id
         }
       )
       container.appendChild(chronicleTreeEl)

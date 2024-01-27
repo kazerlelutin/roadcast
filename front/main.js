@@ -27,7 +27,8 @@ const params = {
     '/legal': import('./pages/legal.html?raw').then((m) => m.default),
     '/bc/editor/:editor': import('./pages/broadcast-editor.html?raw').then(
       (m) => m.default
-    )
+    ),
+    '/slider/:reader': import('./pages/slider.html?raw').then((m) => m.default)
   },
   plugins: [
     CreateComponentPlugin,

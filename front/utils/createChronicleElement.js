@@ -20,6 +20,8 @@ export async function createChronicleElement(chronicle) {
     b: `${titleId}.value,${sourceId}.value`
   })
 
+  chronicleEl.setAttribute('id', chronicle.id)
+
   setElements(chronicleEl, [
     [
       'title',
@@ -42,6 +44,7 @@ export async function createChronicleElement(chronicle) {
       undefined,
       {
         'kll-id': `add_${chronicle.id}`,
+
         'kll-s-position': chronicle.position + 1
       }
     ],

@@ -5,22 +5,6 @@
 
 * {
   box-sizing: border-box;
-  scrollbar-color: theme('colors.rc.highlight') theme('colors.rc.highlight');
-  scroll-behavior: smooth;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-  background: theme('colors.rc.highlight');
-  transition: 200ms ease-in-out;
-  border-radius: 10px;
 }
 
 @layer base {
@@ -141,6 +125,19 @@
 
   .underline {
     text-decoration: underline;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.rc.card');
+    border-radius: 5px;
   }
 }
 
