@@ -202,3 +202,7 @@ dialog::backdrop {
 .btn-cancel {
   @apply rounded-2xl border  px-2 py-1  dark:text-rc-text outline-none border-rc-warning  text-rc-card-dark focus:border-rc-highlight disabled:cursor-not-allowed disabled:opacity-50;
 }
+
+video.object-cover {
+  object-fit: cover;
+}

@@ -28,3 +28,5 @@ export * from './mediaImage'
 export * from './slider'
 export * from './titleTree'
 export * from './textareaAutoResize'
+
+export * from "./mediaVideo"

@@ -23,6 +23,10 @@ export const medias = {
 
       const template = await kll.processTemplate(tc)
 
+      if (!template) continue
+
+      //TODO ajouter un middleware d'ouverture de la modale
+
       setAttributes(template, {
         'kll-id': media.id,
         'kll-s-id': media.id,
@@ -39,7 +43,8 @@ export const medias = {
       'kll-id': `add_media_${chronicle.id}`,
       'kll-ctrl': 'addMedia',
       id: `add_media_${chronicle.id}`,
-      'kll-s-chronicle_id': chronicle.id
+      'kll-s-chronicle_id': chronicle.id,
+      'kll-b': 'lock.lock'
     })
 
     el.appendChild(addMedias)

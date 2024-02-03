@@ -474,5 +474,10 @@ export const translation = {
     fr: 'Confirmer la suppression de la chronique',
     en: 'Confirm chronicle deletion',
     ko: '크로니클 삭제 확인'
+  },
+  format_not_supported: {
+    fr: 'Format non supporté',
+    en: 'Format not supported',
+    ko: '지원되지 않는 포맷'
   }
 }

@@ -1,5 +1,8 @@
+import { kll } from '../main'
 import { fetcher } from '../utils/fetcher'
 import { switchClasses } from '../utils/switchClasses'
+import { toast } from '../utils/toast'
+import { getLsLock } from './lock'
 
 async function sendFiles(formData, state) {
   try {
@@ -27,6 +30,27 @@ async function sendFiles(formData, state) {
   }
 }
 
+function checkFileType(items, state) {
+  if (items.length === 0) return
+
+  const formData = new FormData()
+
+  for (const item of items) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile()
+      const isSupportedFileType = file.type.match(
+        /^(audio\/(mpeg|mp3|ogg|wav)|video\/(mp4|webm|ogg)|image\/(jpeg|png|gif|webp|avif))$/
+      )
+
+      isSupportedFileType
+        ? formData.append('files', file, file.name)
+        : toast('format_not_supported', 'error')
+    }
+  }
+
+  sendFiles(formData, state)
+}
+
 export const addMedia = {
   state: {
     chronicle_id: null,
@@ -34,32 +58,15 @@ export const addMedia = {
   },
   async onChange(state, el, ev) {
     ev.preventDefault()
-
-    const formData = new FormData()
-    ;[...el.files].forEach((file) => {
-      formData.append('files', file, file.name)
-    })
-    sendFiles(formData, state)
+    checkFileType([...el.files], state)
   },
   async onDrop(state, _el, ev) {
     ev.preventDefault()
 
-    const formData = new FormData()
-
-    if (ev.dataTransfer.items) {
-      ;[...ev.dataTransfer.items].forEach((item) => {
-        if (item.kind === 'file') {
-          const file = item.getAsFile()
-          formData.append('files', file, file.name)
-        }
-      })
-    } else {
-      ;[...ev.dataTransfer.files].forEach((file) => {
-        formData.append('files', file, file.name)
-      })
-    }
-
-    sendFiles(formData, state)
+    checkFileType(
+      ev.dataTransfer.items ? ev.dataTransfer.items : ev.dataTransfer.files,
+      state
+    )
   },
   onDragOver(_state, el, ev) {
     ev.preventDefault()
@@ -70,5 +77,15 @@ export const addMedia = {
     ev.preventDefault()
     if (!el.classList.contains('opacity-50'))
       switchClasses(el, 'opacity-50', 'opacity-100')
+  },
+  onInit(_state, el) {
+    getLsLock() === 'lock'
+      ? el.classList.add('hidden')
+      : el.classList.remove('hidden')
+  },
+  render(_state, el, listen) {
+    if (listen.key === 'lock') {
+      listen.value ? el.classList.add('hidden') : el.classList.remove('hidden')
+    }
   }
 }

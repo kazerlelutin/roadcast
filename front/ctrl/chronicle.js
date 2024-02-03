@@ -215,7 +215,7 @@ export const chronicle = {
       state.init = true
     }
 
-    if (listen?.name.match(/title|source/)) {
+    if (listen?.name?.match(/title|source/)) {
       const [key] = listen.name.split('_')
       state.chronicle = {
         ...state.chronicle,

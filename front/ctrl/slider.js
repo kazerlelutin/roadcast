@@ -1,5 +1,4 @@
 import { kll } from '../main'
-import { getUserId } from '../utils/createXinfos'
 
 export const slider = {
   state: {
@@ -20,8 +19,6 @@ export const slider = {
       }
 
       client.subscribe(state.channel, async (msg) => {
-        const userId = getUserId()
-
         if (!msg.media) return
         const media = msg.media
         console.log(media)
@@ -30,6 +27,28 @@ export const slider = {
           imgEl.src = media.url
           imgEl.classList.add('object-cover', 'w-full', 'h-full')
           el.innerHTML = imgEl.outerHTML
+        }
+
+        if (media.type.match(/video/i)) {
+          const videoContainer = document.createElement('div')
+          videoContainer.classList.add('video-container')
+
+          const videoEl = document.createElement('video')
+          const sourceEl = document.createElement('source')
+          sourceEl.src = media.url
+          sourceEl.type = media.type
+
+          videoEl.appendChild(sourceEl)
+          videoEl.setAttribute('loop', true)
+          videoEl.setAttribute('autoplay', true) // Assurez-vous que l'autoplay est autorisé par le navigateur
+          videoEl.classList.add('object-cover', 'w-full', 'h-full')
+
+          videoContainer.appendChild(videoEl)
+
+          el.innerHTML = '' // Nettoyez le contenu précédent
+          el.appendChild(videoContainer) // Ajoutez le conteneur de vidéo
+
+          videoEl.play() // Tentez de jouer la vidéo
         }
 
         state.message = msg
