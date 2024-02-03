@@ -208,12 +208,10 @@ export const chronicle = {
     if (!state.init) {
       const editor = el.querySelector('.ProseMirror')
       if (!editor) return
-      const ls = getLsLock()
-      if (ls === 'lock') {
-        editor.setAttribute('contenteditable', 'false')
-      } else {
-        editor.setAttribute('contenteditable', 'true')
-      }
+      getLsLock()
+        ? editor.setAttribute('contenteditable', 'false')
+        : editor.setAttribute('contenteditable', 'true')
+
       state.init = true
     }
 

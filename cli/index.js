@@ -11,3 +11,5 @@ if (argv['tc']) {
   createTemplate(argv['id'])
   createController(argv['id'])
 }
+
+//node ./cli -tc --id="name"

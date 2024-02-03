@@ -1,5 +1,7 @@
 import { kll } from '../main'
+import { checkListen } from '../utils/checkListen'
 import { fetcher } from '../utils/fetcher'
+import { switchClasses } from '../utils/switchClasses'
 
 export const addFirstChronicle = {
   state: {
@@ -40,14 +42,16 @@ export const addFirstChronicle = {
   },
   render(_, el, listen) {
     kll.plugins.translate(el)
-
-    if (!listen) return
-    if (listen.key === 'broadcast' && listen.value.chronicles.length === 0) {
-      el.classList.remove('hidden')
-      el.classList.add('flex')
-    }
-
-    if (listen.key === 'broadcast' && listen.value.chronicles.length > 0) {
+    // ===== LISTEN  FOR BROADCAST =====
+    if (listen.key !== 'broadcast') return
+    if (
+      checkListen(listen, {
+        key: 'broadcast',
+        value: { chronicles: [] }
+      })
+    ) {
+      switchClasses(el, 'hidden', 'flex')
+    } else {
       el.remove()
     }
   }

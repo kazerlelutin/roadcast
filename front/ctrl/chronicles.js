@@ -3,8 +3,7 @@ import { createChronicleElement } from '../utils/createChronicleElement'
 
 export const chronicles = {
   async render(_state, el, listen) {
-    // ===== LISTEN =====
-    if (listen && listen.key === 'broadcast') {
+    if (listen.key === 'broadcast') {
       const broadcast = listen.value
 
       if (!broadcast.id) return

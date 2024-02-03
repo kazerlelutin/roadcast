@@ -6,6 +6,5 @@ export const input = {
   onInput(state, _el, e) {
     state.value = e.target.value
     state.error = ''
-  },
-  render() {}
+  }
 }

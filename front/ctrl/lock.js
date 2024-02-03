@@ -1,3 +1,5 @@
+import { switchClasses } from '../utils/switchClasses'
+
 export const LS_KEY_LOCK = 'rc___lock'
 
 function toogleEditors(status) {
@@ -22,14 +24,9 @@ function toogle(status, el) {
 
   elToHide.classList.add('hidden')
   elToKeep.classList.remove('hidden')
-
-  if (status === 'lock') {
-    document.documentElement.classList.remove('unlock')
-    document.documentElement.classList.add('lock')
-  } else {
-    document.documentElement.classList.remove('lock')
-    document.documentElement.classList.add('unlock')
-  }
+  status === 'lock'
+    ? switchClasses(document.documentElement, 'lock', 'unlock')
+    : switchClasses(document.documentElement, 'unlock', 'lock')
 
   toogleEditors(status)
   localStorage.setItem(LS_KEY_LOCK, status)
@@ -48,6 +45,5 @@ export const lock = {
     const status = el.getAttribute('data-type')
     toogle(status === 'lock' ? 'unlock' : 'lock', el.parentElement)
     state.lock = !state.lock
-  },
-  render() {}
+  }
 }

@@ -1,4 +1,5 @@
 import { fetcher } from '../utils/fetcher'
+import { switchClasses } from '../utils/switchClasses'
 import { getLsLock } from './lock'
 
 export const addChronicleButton = {
@@ -8,26 +9,18 @@ export const addChronicleButton = {
   },
 
   onInit(state, el) {
-    // ===== STATE =====
     state.position = Number(state.position) || 0
 
-    // ===== RENDER =====
-    const ls = getLsLock()
-    if (ls === 'lock') {
-      el.classList.remove('opacity-5')
-      el.classList.add('opacity-0', 'pointer-events-none')
-    }
+    if (getLsLock() === 'lock')
+      switchClasses(el, 'opacity-0 pointer-events-none', 'opacity-5')
+
     el.render()
   },
-  async onClick(state) {
+  async onClick({ controller, position }) {
     try {
-      const res = await fetcher.post(
-        '/api/chronicle',
-        state.controller.signal,
-        {
-          position: state.position
-        }
-      )
+      const res = await fetcher.post('/api/chronicle', controller.signal, {
+        position
+      })
 
       if (res.status !== 201) {
         state.error = 'error_create_broadcast'
@@ -47,15 +40,10 @@ export const addChronicleButton = {
     }
   },
   render(_, el, listen) {
-    // ===== LISTEN =====
-    if (listen && listen.key === 'lock') {
-      if (listen.value) {
-        el.classList.remove('opacity-5')
-        el.classList.add('opacity-0', 'pointer-events-none')
-      } else {
-        el.classList.remove('opacity-0', 'pointer-events-none')
-        el.classList.add('opacity-5')
-      }
+    if (listen.key === 'lock') {
+      listen.value
+        ? switchClasses(el, 'opacity-0 pointer-events-none', 'opacity-5')
+        : switchClasses(el, 'opacity-5', 'opacity-0 pointer-events-none')
     }
   }
 }

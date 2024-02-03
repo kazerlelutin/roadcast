@@ -11,10 +11,7 @@ export const chronicleDelete = {
     subText: ''
   },
   onInit(state, el) {
-    const ls = getLsLock()
-    if (ls === 'lock') {
-      el.classList.add('hidden')
-    }
+    if (getLsLock() === 'lock') el.classList.add('hidden')
 
     const chronicleEl = document.querySelector(
       `[kll-id='${state.chronicle_id}']`
@@ -46,11 +43,7 @@ export const chronicleDelete = {
   },
   render(_, el, listen) {
     if (listen && listen.key === 'lock') {
-      if (listen.value) {
-        el.classList.add('hidden')
-      } else {
-        el.classList.remove('hidden')
-      }
+      listen.value ? el.classList.add('hidden') : el.classList.remove('hidden')
     }
   }
 }

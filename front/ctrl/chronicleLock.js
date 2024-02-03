@@ -1,4 +1,5 @@
 import { kll } from '../main'
+import { checkListen } from '../utils/checkListen'
 import { createChronicleElement } from '../utils/createChronicleElement'
 import { fetcher } from '../utils/fetcher'
 
@@ -65,10 +66,15 @@ export const chronicleLock = {
       }, 5000)
     }
 
+    //TODO make a func for check listen
     if (
-      listen?.key === 'message' &&
-      listen?.value?.type === 'delete' &&
-      listen?.value?.id === state.chronicle_id
+      checkListen(listen, {
+        key: 'message',
+        value: {
+          type: 'delete',
+          id: state.chronicle_id
+        }
+      })
     ) {
       const broadcastEl = document.querySelector(`[kll-id='broadcast']`)
       broadcastEl.state.broadcast = {

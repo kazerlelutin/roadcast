@@ -1,11 +1,10 @@
+import { getResume } from '../utils/getResume'
 import { getLsLock } from './lock'
 
 export const chronicleTree = {
   onInit(_state, el) {
-    const ls = getLsLock()
-    if (ls === 'lock') {
+    if (getLsLock() === 'lock') {
       const grabIcon = el.querySelector('[data-grab-icon')
-
       if (grabIcon) grabIcon.classList.add('hidden')
     }
   },
@@ -23,8 +22,9 @@ export const chronicleTree = {
         `[data-title="${state.chronicle_id}"]`
       )
       if (!titleEl) return
-      if (titleEl.innerText === listen.value.title) return
-      titleEl.innerText = listen.value.title
+      const resume = getResume(listen.value.title, 25)
+      if (titleEl.innerText === resume) return
+      titleEl.innerText = resume
     }
   }
 }

@@ -1,4 +1,4 @@
-import { kll } from '../main'
+import { switchClasses } from '../utils/switchClasses'
 
 export const lsKEY = 'rc__theme'
 
@@ -15,13 +15,9 @@ function rupteurTheme(theme, el) {
   elToHide.classList.add('hidden')
   elToKeep.classList.remove('hidden')
 
-  if (theme === 'dark') {
-    document.documentElement.classList.remove('light')
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-    document.documentElement.classList.add('light')
-  }
+  theme === 'dark'
+    ? switchClasses(document.documentElement, 'dark', 'light')
+    : switchClasses(document.documentElement, 'light', 'dark')
 
   localStorage.setItem(lsKEY, theme)
 }

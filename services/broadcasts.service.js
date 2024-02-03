@@ -24,7 +24,10 @@ function getBroadcastWithDetails(broadcast) {
     }
 
     // Si une chronique existe pour cette ligne, traitez-la
-    if (row.chronicle_id) {
+    if (
+      row.chronicle_id &&
+      !acc[row.id].chronicles.find((c) => c.id === row.chronicle_id)
+    ) {
       const chronicle = {
         id: row.chronicle_id,
         editorDetails: {
@@ -38,23 +41,32 @@ function getBroadcastWithDetails(broadcast) {
         medias: []
       }
 
-      // Ajouter des médias à la chronique si disponibles
-      if (row.media_id) {
-        const mediaItem = {
-          id: row.media_id,
-          source: row.media_source,
-          name: row.media_name,
-          type: row.media_type,
-          url: row.media_url,
-          cover: row.media_cover,
-          size: row.media_size,
-          createdAt: row.media_createdAt
-        }
-        chronicle.medias.push(mediaItem)
-      }
-
       // Ajoutez la chronique au broadcast
       acc[row.id].chronicles.push(chronicle)
+    }
+
+    // Ajouter des médias à la chronique si disponibles
+    if (row.media_id) {
+      const mediaItem = {
+        id: row.media_id,
+        source: row.media_source,
+        name: row.media_name,
+        type: row.media_type,
+        url: row.media_url,
+        cover: row.media_cover,
+        size: row.media_size,
+        createdAt: row.media_createdAt
+      }
+
+      const chronicle = acc?.[row.id]?.chronicles.find(
+        (c) => c.id === row.chronicle_id
+      )
+      if (
+        row.media_id &&
+        !chronicle.medias.find((media) => media.id === row.media_id)
+      ) {
+        chronicle.medias.push(mediaItem)
+      }
     }
 
     return acc
@@ -133,7 +145,6 @@ module.exports = {
           // Alias pour les champs de editor
           'editors.id as editor_id',
           'editors.name as editor_name'
-          // ... autres champs de editors ...
         ])
 
       return getBroadcastWithDetails(broadcast)

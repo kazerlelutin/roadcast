@@ -1,6 +1,4 @@
-const { join } = require('../routes/medias.route.js')
 const { knex } = require('./db.service.js')
-const { v4: uuidv4 } = require('uuid')
 
 const tableName = 'medias'
 
@@ -19,6 +17,7 @@ module.exports = {
       .join('chronicles', 'chronicles.id', '=', 'medias.chronicle_id')
       .join('broadcasts', 'broadcasts.id', '=', 'chronicles.broadcast_id')
       .where({ 'medias.id': mediaId, 'broadcasts.id': broadcast_id })
+      .select('medias.*')
       .first()
   }
 }

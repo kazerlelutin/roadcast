@@ -11,7 +11,7 @@ export const medias = {
   onInit(_state, el) {
     el.render()
   },
-  async render(state, el, listen) {
+  async render(state, el) {
     const { chronicle } = getState(state.chronicle_id)
 
     if (!chronicle) return

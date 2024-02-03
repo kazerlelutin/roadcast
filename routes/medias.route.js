@@ -75,7 +75,7 @@ module.exports = [
           userId,
           type: 'addMedia',
           context: 'chronicle',
-          id
+          id: chronicle_id
         })
 
         return h.response(broadcast.chronicles).type('json').code(201)

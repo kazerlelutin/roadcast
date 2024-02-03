@@ -32,8 +32,6 @@ export const invisibleInput = {
     clearTimeout(state.timeout)
   },
   render(_, el, listen) {
-    if (listen && listen.key === 'lock') {
-      el.disabled = listen.value
-    }
+    if (listen.key === 'lock') el.disabled = listen.value
   }
 }

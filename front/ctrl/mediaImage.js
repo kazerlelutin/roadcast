@@ -6,10 +6,10 @@ export const mediaImage = {
     id: null,
     controller: new AbortController()
   },
-  onInit(state, el, e) {
+  onInit(_state, el) {
     el.render()
   },
-  async onClick(state, el, e) {
+  async onClick(state) {
     const chronicleEl = document.querySelector(
       `[kll-id="${state.chronicle_id}"]`
     )
@@ -33,6 +33,5 @@ export const mediaImage = {
     const imgEl = el.querySelector('img')
     imgEl.src = media.url
     imgEl.alt = media.name
-    console.log(media.url)
   }
 }

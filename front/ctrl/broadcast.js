@@ -24,6 +24,7 @@ export const broadcast = {
       state.channel = `/broadcast/editor/${broadcast.editor}`
       const app = document.querySelector('#app')
       const client = app._socket
+
       if (client._subscriptions?.[state.channel]?.length > 0) {
         client.unsubscribe(state.channel, handler)
       }
@@ -54,8 +55,8 @@ export const broadcast = {
   },
   onClean(state) {
     const app = document.querySelector('#app')
-    const client = app._socket
-    client.unsubscribe(state.channel)
+    if (!app._socket) return
+    app._socket.unsubscribe(state.channel)
     state.controller.abort()
   }
 }

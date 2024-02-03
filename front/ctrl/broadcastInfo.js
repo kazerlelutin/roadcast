@@ -53,14 +53,8 @@ export const broadcastInfo = {
     state.controller.abort()
   },
   render(state, el, listen) {
-    // Listen broadcast (broadcast.broadcast)
-    if (listen.key === 'broadcast') {
-      renderBroadcast(listen.value, el)
-    }
-
-    // Listen broadcast name (broadcast_info_title.value)
-    if (listen.name === 'broadcast_info_title') {
+    if (listen.key === 'broadcast') renderBroadcast(listen.value, el)
+    if (listen.name === 'broadcast_info_title')
       updateName(listen.value, state.controller.signal)
-    }
   }
 }

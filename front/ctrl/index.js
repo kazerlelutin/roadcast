@@ -21,9 +21,10 @@ export * from './confirmDialog'
 export * from './tree'
 export * from './chronicleTree'
 
-export * from "./chronicleTreeDropZone"
-export * from "./medias"
-export * from "./addMedia"
-export * from "./mediaImage"
-export * from "./slider"
-export * from "./titleTree"
+export * from './chronicleTreeDropZone'
+export * from './medias'
+export * from './addMedia'
+export * from './mediaImage'
+export * from './slider'
+export * from './titleTree'
+export * from './textareaAutoResize'

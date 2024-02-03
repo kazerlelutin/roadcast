@@ -1,4 +1,5 @@
 import { fetcher } from '../utils/fetcher'
+import { switchClasses } from '../utils/switchClasses'
 
 export const chronicleTreeDropZone = {
   state: {
@@ -17,10 +18,8 @@ export const chronicleTreeDropZone = {
   },
   onDragleave(_state, el, e) {
     e.preventDefault()
-    if (el.classList.contains('opacity-100')) {
-      el.classList.remove('opacity-100')
-      el.classList.add('opacity-0')
-    }
+    if (el.classList.contains('opacity-100'))
+      switchClasses(el, 'opacity-100', 'opacity-0')
   },
   async onDrop(state, el, e) {
     e.preventDefault()
@@ -55,10 +54,8 @@ export const chronicleTreeDropZone = {
     )
     const dropZoneEle = document.querySelectorAll(`[data-dropzone]`)
     dropZoneEle.forEach((ele) => {
-      if (ele.classList.contains('opacity-100')) {
-        ele.classList.remove('opacity-100')
-        ele.classList.add('opacity-0')
-      }
+      if (ele.classList.contains('opacity-100'))
+        switchClasses(ele, 'opacity-100', 'opacity-0')
     })
   },
   onClean(state) {

@@ -5,7 +5,7 @@ export const slider = {
   state: {
     channel: null
   },
-  onInit(state) {
+  onInit(state, el) {
     const {
       params: { reader }
     } = kll.parseRoute()
@@ -22,9 +22,14 @@ export const slider = {
       client.subscribe(state.channel, async (msg) => {
         const userId = getUserId()
 
-        console.log(msg)
-        if (userId === msg.userId) return
-        if (msg.type === 'img') {
+        if (!msg.media) return
+        const media = msg.media
+        console.log(media)
+        if (media.type.match(/image/i)) {
+          const imgEl = new Image()
+          imgEl.src = media.url
+          imgEl.classList.add('object-cover', 'w-full', 'h-full')
+          el.innerHTML = imgEl.outerHTML
         }
 
         state.message = msg
@@ -35,7 +40,7 @@ export const slider = {
   },
   onClean(state) {
     const app = document.querySelector('#app')
-    const client = app._socket
-    client.unsubscribe(state.channel)
+    if (!app._socket) return
+    app._socket.unsubscribe(state.channel)
   }
 }
