@@ -3,7 +3,7 @@ const r=`<div kll-t="basicLayout">\r
 \r
     <div>\r
       <div kll-tc="createBroadcastForm" kll-id="createBroadcast"></div>\r
-      <div kll-tc="errorMsg" kll-b="createBroadcast.error,createBroadcastName.error"></div>    \r
+      <div kll-tc="errorMsg" kll-b="createBroadcast.error,createBroadcastName.error"></div>\r
       <div kll-tc="lastBroadcast"></div>\r
     </div>\r
 \r

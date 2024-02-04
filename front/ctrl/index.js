@@ -30,3 +30,5 @@ export * from './titleTree'
 export * from './textareaAutoResize'
 
 export * from "./mediaVideo"
+export * from "./sendMediaToSlider"
+export * from "./mediaName"

@@ -9,21 +9,7 @@ export const mediaVideo = {
   onInit(_state, el) {
     el.render()
   },
-  onClick(state, el) {
-    el.paused ? el.play() : el.pause()
-  },
 
-  async onClick(state) {
-    const chronicleEl = document.querySelector(
-      `[kll-id="${state.chronicle_id}"]`
-    )
-    if (!chronicleEl) return
-    const media = chronicleEl.state.chronicle.medias.find(
-      (m) => m.id === state.id
-    )
-    if (!media) return
-    fetcher.get(`/api/media/slider/${media.id}`, state.controller.signal)
-  },
   render(state, el) {
     const chronicleEl = document.querySelector(
       `[kll-id="${state.chronicle_id}"]`

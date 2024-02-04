@@ -26,14 +26,15 @@ export const addChronicleButton = {
         state.error = 'error_create_broadcast'
         return
       }
-      const chronicles = await res.json()
+      const { chronicles, chronicleId } = await res.json()
 
       const broadcastEl = document.querySelector('[kll-ctrl=broadcast]')
       if (!broadcastEl) return
 
       broadcastEl.state.broadcast = {
         ...broadcastEl.state.broadcast,
-        chronicles
+        chronicles,
+        scrollTo: chronicleId
       }
     } catch (e) {
       console.log('broadcast creation: ', e)

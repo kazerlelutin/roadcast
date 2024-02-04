@@ -20,7 +20,7 @@
     "@hapi/inert": "^7.1.0",
     "@hapi/nes": "^13.0.1",
     "@kll_/basic": "^0.1.2",
-    "@kll_/core": "^0.1.55",
+    "@kll_/core": "^0.1.60",
     "@kll_/translate": "^0.1.4",
     "@tiptap/extension-bubble-menu": "^2.1.15",
     "@tiptap/extension-collaboration": "^2.0.0-beta.220",

@@ -24,6 +24,7 @@ module.exports = {
       .andWhere('position', '>=', position)
       .andWhere('id', '!=', chronicleId)
       .increment('position', 1)
+    return chronicleId
   },
   async getChronicle(id, editor) {
     const broadcast = await knex('broadcasts').where({ editor }).first()

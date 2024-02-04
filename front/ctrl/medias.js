@@ -22,18 +22,16 @@ export const medias = {
       const tc = kebabToCamel(`media-${type}`)
 
       const template = await kll.processTemplate(tc)
-
       if (!template) continue
-
-      //TODO ajouter un middleware d'ouverture de la modale
 
       setAttributes(template, {
         'kll-id': media.id,
-        'kll-s-id': media.id,
+        'kll-ctrl': tc,
         'kll-s-chronicle_id': chronicle.id,
-        'kll-ctrl': tc
+        'kll-s-id': media.id
       })
 
+      //TODO add attrs for controls
       el.appendChild(template)
     }
 

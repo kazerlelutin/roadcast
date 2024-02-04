@@ -1,20 +1,20 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    "./public/*.css",
-    "./front/pages/*.html",
-    "./front/templates/**/*.html",
-    "./front/ctrl/**/*.js",
-    "./front/index.html",
-    "./libs/*.js",
+    './public/*.css',
+    './front/pages/*.html',
+    './front/templates/**/*.html',
+    './front/ctrl/**/*.js',
+    './front/index.html',
+    './libs/*.js',
+    './front/utils/**/*.js'
   ],
   theme: {
- 
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         serif: ['Inter', 'sans-serif'],
-        mono: ['Inter', 'sans-serif'],
+        mono: ['Inter', 'sans-serif']
       },
       colors: {
         rc: {
@@ -31,7 +31,7 @@ module.exports = {
           'warning-light': '#e64c65',
           light: '#fcb150',
           info: '#1a4e95',
-          'info-light': '#3468af',
+          'info-light': '#3468af'
         },
         light: {
           bg: '#f7f6f3',
@@ -40,17 +40,17 @@ module.exports = {
           'text-invert': '#fff',
           'highlight-dark': '#015657',
           card: '#d4dadd',
-          'card-dark': '#8690b3',
+          'card-dark': '#8690b3'
         },
 
         twitch: {
-          primary: '#5c16c5',
+          primary: '#5c16c5'
         },
         canvas: {
-          default: '#121523',
-        },
-      },
-    },
+          default: '#121523'
+        }
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 }

@@ -50,14 +50,17 @@ module.exports = [
       try {
         const { value } = schema.validate(JSON.parse(req.payload))
 
-        await createChronicle({
+        const chronicleId = await createChronicle({
           editor,
           ...value
         })
 
         const broadcast = await getBroadcastByEditor(editor)
 
-        return h.response(broadcast.chronicles).type('json').code(201)
+        return h
+          .response({ chronicles: broadcast.chronicles, chronicleId })
+          .type('json')
+          .code(201)
       } catch (e) {
         console.log('create chronicle: ', e)
         return h

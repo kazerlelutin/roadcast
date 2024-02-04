@@ -4,7 +4,7 @@ import { setElement, setElementbyKllTc } from '../utils/setElement'
 export const tree = {
   state: {},
 
-  async render(_state, el) {
+  async render(_state, el, listen) {
     const broadcastEl = document.querySelector(`[kll-id='broadcast']`)
     const container = el.querySelector('[data-tree]')
     if (!broadcastEl || !container) return
@@ -36,14 +36,13 @@ export const tree = {
         'title',
         chronicle.title ? chronicle.title : undefined,
         {
-          'data-title': chronicle.id,
           'kll-id': `tree_title_${chronicle.id}`,
-          'kll-s-chronicle_id': chronicle.id
+          'kll-s-chronicle_id': chronicle.id,
+          'kll-b': `${chronicle.id}.chronicle`
         }
       )
       container.appendChild(chronicleTreeEl)
     }
-
     kll.reload(el)
     kll.plugins.translate(el)
   }

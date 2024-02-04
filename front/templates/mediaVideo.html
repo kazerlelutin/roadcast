@@ -1,8 +1,20 @@
 <template id="mediaVideo">
 
-    <div class="w-[100px] h-[70px] overflow-hidden">
-        <video data-video class="object-cover w-full h-full">
-            <source>
-        </video>
+    <div class="flex flex-col gap-1 w-[120px] relative" kll-l>
+        <!-- Template, avec 2, on passe au template le media ID, preview, ouvre la modal, trash ouvre aussi une modal pour supp TC, -->
+        <div class="absolute top-1 left-1 right-1 flex justify-between text-xs">
+            <div>preview</div>
+            <div>TRASH</div>
+        </div>
+        <div class="w-[120px] h-[80px] overflow-hidden ease-in-out">
+            <video class="object-cover w-full h-full ease-in-out duration-100 cursor-pointer"
+                kll-ctrl="sendMediaToSlider">
+                <source>
+            </video>
+        </div>
+        <div class="text-xs text-rc-info-light">
+            <!-- passer les infos-->
+            <input data-name kll-tc="invisibleInput" kll-b="lock.lock" id="broadcastName" />
+        </div>
     </div>
 </template>

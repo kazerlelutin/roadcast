@@ -30,7 +30,7 @@ export function toast(message, type = 'info') {
     closeBtnEl.classList.add('text-rc-text-dark')
   }
 
-  contentEl.classList.add('p-1', 'text-left')
+  contentEl.classList.add('p-1', 'text-left', 'text-sm')
   closeBtnEl.classList.add('self-end', 'text-rc-text-dark', 'text-sm')
 
   // Contents
@@ -40,7 +40,7 @@ export function toast(message, type = 'info') {
   closeBtnEl.textContent = '×'
 
   // events
-  closeBtnEl.onclick = function () {
+  closeBtnEl.onclick = () => {
     toast.remove()
   }
 
