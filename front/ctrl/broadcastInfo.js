@@ -27,7 +27,6 @@ function renderBroadcast(broadcast, el) {
 
 async function updateName(name, signal) {
   if (!name) return
-
   // get the state of the broadcast
   const broadcastEl = document.querySelector("[kll-id='broadcast']")
   const broadcastName = broadcastEl?.state?.broadcast?.name

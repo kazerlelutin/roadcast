@@ -1,5 +1,6 @@
 import { fetcher } from '../utils/fetcher'
 import { kll } from '../main'
+import { setAttributes } from '../utils/setElement'
 
 export const lastBroadcast = {
   state: {
@@ -37,10 +38,15 @@ export const lastBroadcast = {
         const li = document.createElement('li')
         const link = document.createElement('a')
         link.innerText = broadcast.name
-        link.setAttribute('kll-ctrl', 'link')
-        link.setAttribute('kll-id', broadcast.editor)
-        link.setAttribute('href', `/bc/editor/${broadcast.editor}`)
-        link.setAttribute('alt', broadcast.name)
+        //TODO - Totu mettre
+
+        setAttributes(link, {
+          'kll-ctrl': 'link',
+          'kll-id': broadcast.editor,
+          href: `/bc/editor/${broadcast.editor}`,
+          alt: broadcast.name
+        })
+
         li.classList.add('text-xs')
         kll.hydrate(link)
         li.appendChild(link)

@@ -57,19 +57,10 @@ module.exports = [
           })
         })
       }
-
-      /*
-
-    */
-      //   await saveFiles(filesToSave)
-
-      //TODO faire comme pour les dons, save dans un dossiers en .gitignore
-
       try {
         await createMedia({ editor, medias: filesToSave })
 
         const broadcast = await getBroadcastByEditor(editor)
-        console.log('broadcast: ', broadcast)
 
         req.server.publish('/broadcast/editor/' + editor, {
           userId,
@@ -88,7 +79,6 @@ module.exports = [
           .code(500)
           .type('json')
       }
-      //TODO brancher les SOCKETS
     }
   },
   {

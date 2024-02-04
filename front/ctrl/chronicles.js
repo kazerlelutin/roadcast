@@ -3,8 +3,6 @@ import { createChronicleElement } from '../utils/createChronicleElement'
 
 export const chronicles = {
   async render(_state, el, listen) {
-    console.log('chronicles.js render', listen.key, listen.value)
-
     if (listen.key === 'broadcast') {
       const broadcast = listen.value
 
@@ -31,9 +29,8 @@ export const chronicles = {
         kll.reload(el)
 
         const broadcastEl = document.querySelector('[kll-id="broadcast"]')
-        if (!broadcastEl) return
 
-        if (broadcastEl.state.scrollTo) {
+        if (broadcastEl?.state?.scrollTo) {
           const scrollTo = document.querySelector(
             `[kll-id="${broadcastEl.state.scrollTo}"]`
           )

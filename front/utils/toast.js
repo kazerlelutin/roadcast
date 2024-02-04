@@ -1,6 +1,6 @@
 import { kll } from '../main'
 
-export function toast(message, type = 'info') {
+export function toast(message, type = 'info', timeout = 6000) {
   // containers
   const container = document.getElementById('toasts')
   const toast = document.createElement('div')
@@ -74,5 +74,5 @@ export function toast(message, type = 'info') {
   // delete toast
   setTimeout(() => {
     if (container.contains(toast)) toast.remove()
-  }, 6000)
+  }, timeout)
 }

@@ -1,4 +1,3 @@
-import { kll } from '../main'
 import { fetcher } from '../utils/fetcher'
 import { switchClasses } from '../utils/switchClasses'
 import { toast } from '../utils/toast'
@@ -18,13 +17,12 @@ async function sendFiles(formData, state) {
 
     const chronicles = await response.json()
 
-    const broadcastEl = document.querySelector('[kll-id="broadcast"]')
-    if (!broadcastEl) return
-    broadcastEl.state.broadcast = {
-      ...broadcastEl.state.broadcast,
-      chronicles
-    }
-    console.log(chronicles) // Traiter la réponse
+    const chronicle = chronicles.find((c) => c.id === state.chronicle_id)
+    const chronicleEl = document.querySelector(
+      `[kll-id="${state.chronicle_id}"]`
+    )
+    if (!chronicleEl) return
+    chronicleEl.state.chronicle = chronicle
   } catch (error) {
     console.error("Erreur lors de l'envoi des fichiers : ", error)
   }
@@ -36,19 +34,29 @@ function checkFileType(items, state) {
   const formData = new FormData()
 
   for (const item of items) {
-    if (item.kind === 'file') {
+    if (item.kind && item.kind === 'file') {
       const file = item.getAsFile()
-      const isSupportedFileType = file.type.match(
-        /^(audio\/(mpeg|mp3|ogg|wav)|video\/(mp4|webm|ogg)|image\/(jpeg|png|gif|webp|avif))$/
-      )
-
-      isSupportedFileType
-        ? formData.append('files', file, file.name)
-        : toast('format_not_supported', 'error')
+      processFile(file, formData)
+    } else if (item instanceof File) {
+      processFile(item, formData)
     }
   }
 
-  sendFiles(formData, state)
+  if (formData.has('files')) sendFiles(formData, state)
+}
+
+function processFile(file, formData) {
+  if (!file) return // S'assure que le fichier existe
+
+  const isSupportedFileType = file.type.match(
+    /^(audio\/(mpeg|mp3|ogg|wav)|video\/(mp4|webm|ogg)|image\/(jpeg|png|gif|webp|avif))$/
+  )
+
+  if (isSupportedFileType) {
+    formData.append('files', file, file.name)
+  } else {
+    toast('format_not_supported', 'error')
+  }
 }
 
 export const addMedia = {
@@ -58,7 +66,8 @@ export const addMedia = {
   },
   async onChange(state, el, ev) {
     ev.preventDefault()
-    checkFileType([...el.files], state)
+
+    checkFileType(Array.from(el.files), state)
   },
   async onDrop(state, _el, ev) {
     ev.preventDefault()

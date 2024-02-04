@@ -481,8 +481,8 @@ export const translation = {
     ko: '지원되지 않는 포맷'
   },
   media_send_to_slider: {
-    fr: 'Envoyer au slider',
-    en: 'Send to slider',
-    ko: '슬라이더로 전송'
+    fr: 'Envoyé au slider',
+    en: 'Sent to the slider',
+    ko: '슬라이더로 전송됨'
   }
 }

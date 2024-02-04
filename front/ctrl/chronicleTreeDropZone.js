@@ -11,15 +11,13 @@ export const chronicleTreeDropZone = {
   ondragover(_state, el, e) {
     e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
-    if (el.classList.contains('opacity-0')) {
-      el.classList.remove('opacity-0')
-      el.classList.add('opacity-100')
-    }
+    if (el.classList.contains('opacity-0'))
+      switchClasses(el, 'opacity-100', 'opacity-0')
   },
   onDragleave(_state, el, e) {
     e.preventDefault()
     if (el.classList.contains('opacity-100'))
-      switchClasses(el, 'opacity-100', 'opacity-0')
+      switchClasses(el, 'opacity-0', 'opacity-100')
   },
   async onDrop(state, el, e) {
     e.preventDefault()

@@ -17,7 +17,7 @@ export const sendMediaToSlider = {
     )
 
     if (res.status === 201) {
-      toast('media_send_to_slider')
+      toast('media_send_to_slider', 'info', 1000)
     } else {
       toast('media_send_to_slider_error', 'error')
     }

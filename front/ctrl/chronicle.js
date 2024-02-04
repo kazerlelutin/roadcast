@@ -30,8 +30,9 @@ export const chronicle = {
     }
 
     state.chronicle = chronicle
+    const medias = el.querySelector('[data-medias]')
+    if (medias) medias.setAttribute('kll-b', `${state.chronicle.id}.chronicle`)
 
-    //TODO exract this
     // ===== EDITOR =====
 
     const bubbleMenuElement = createEditorMenu()
@@ -209,8 +210,8 @@ export const chronicle = {
       const editor = el.querySelector('.ProseMirror')
       if (!editor) return
       getLsLock()
-        ? editor.setAttribute('contenteditable', 'false')
-        : editor.setAttribute('contenteditable', 'true')
+        ? editor.setAttribute('contenteditable', 'true')
+        : editor.setAttribute('contenteditable', 'false')
 
       state.init = true
     }
