@@ -60,6 +60,5 @@ export const confirmDialog = {
   async onClick(state) {
     const dialog = createConfirmModal(state.text, state.subText, state.callback)
     dialog.showModal()
-  },
-  render() {}
+  }
 }

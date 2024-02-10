@@ -484,5 +484,10 @@ export const translation = {
     fr: 'Envoyé au slider',
     en: 'Sent to the slider',
     ko: '슬라이더로 전송됨'
+  },
+  confirm_delete_media: {
+    fr: 'Confirmer la suppression du média',
+    en: 'Confirm media deletion',
+    ko: '미디어 삭제 확인'
   }
 }

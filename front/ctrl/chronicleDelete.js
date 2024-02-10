@@ -1,3 +1,4 @@
+import { kll } from '../main'
 import { fetcher } from '../utils/fetcher'
 import { getLsLock } from './lock'
 
@@ -13,16 +14,14 @@ export const chronicleDelete = {
   onInit(state, el) {
     if (getLsLock() === 'lock') el.classList.add('hidden')
 
-    const chronicleEl = document.querySelector(
-      `[kll-id='${state.chronicle_id}']`
-    )
+    const { chronicle } = kll.getLegacyState(el)
 
-    state.subText = chronicleEl.state.chronicle.title
+    state.subText = chronicle.title
 
     state.callback = async () => {
       try {
         await fetcher.delete(
-          `/api/chronicle/${state.chronicle_id}`,
+          `/api/chronicle/${chronicle.id}`,
           state.controller.signal
         )
         const broadcastEl = document.querySelector(`[kll-id='broadcast']`)
@@ -42,7 +41,7 @@ export const chronicleDelete = {
     state.controller.abort()
   },
   render(_, el, listen) {
-    if (listen && listen.key === 'lock') {
+    if (listen.key === 'lock') {
       listen.value ? el.classList.add('hidden') : el.classList.remove('hidden')
     }
   }

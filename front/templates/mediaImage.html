@@ -1,10 +1,10 @@
 <template id="mediaImage">
 
-    <div class="flex flex-col gap-1 w-[120px] relative" kll-l>
+    <div class="flex flex-col gap-1 w-[120px] relative">
         <!-- Template, avec 2, on passe au template le media ID, preview, ouvre la modal, trash ouvre aussi une modal pour supp TC, -->
-        <div class="absolute top-1 left-1 right-1 flex justify-between text-xs">
+        <div class="absolute top-0 left-0 right-0  p-1 flex justify-between text-xs bg-opacity-25 bg-black">
             <div>preview</div>
-            <div>TRASH</div>
+            <div kll-t="trash" kll-ctrl="mediaDelete" kll-m="confirmDialog" kll-b="lock.lock"></div>
         </div>
         <!-- attacher ici le ctrl de send-->
         <div class="w-[120px] h-[80px] overflow-hidden cursor-pointer">

@@ -1,20 +1,17 @@
 import { kll } from '../main'
 import { getMediaType } from '../utils/getMediaType'
-import { getState } from '../utils/getState'
 import { kebabToCamel } from '../utils/kebabToCamel'
 import { setAttributes } from '../utils/setElement'
 
 export const medias = {
-  state: {
-    chronicle_id: null
-  },
+  state: {},
   onInit(_state, el) {
     el.render()
   },
-  async render(state, el) {
+  async render(_state, el) {
     if (el._updating) return
     el._updating = true
-    const { chronicle } = getState(state.chronicle_id)
+    const { chronicle } = kll.getLegacyState(el)
     if (!chronicle) return
 
     const wrapper = document.createElement('div')
@@ -29,14 +26,16 @@ export const medias = {
       setAttributes(template, {
         'kll-id': media.id,
         'kll-ctrl': tc,
+        'kll-s-id': media.id,
         'kll-s-chronicle_id': chronicle.id,
-        'kll-s-id': media.id
+        'kll-l': 'true'
       })
       const nameEl = template.querySelector('[data-name]')
 
       setAttributes(nameEl, {
         'kll-id': `media_name_${media.id}`,
-        'kll-s-value': media.name
+        'kll-s-value': media.name,
+        'kll-l': true
       })
 
       nameEl.classList.add(
@@ -61,14 +60,11 @@ export const medias = {
       'kll-ctrl': 'addMedia',
       id: `add_media_${chronicle.id}`,
       'kll-s-chronicle_id': chronicle.id,
+      'kll-l': true,
       'kll-b': 'lock.lock'
     })
 
     el.appendChild(addMedias)
-
-    const idsEl = el.querySelectorAll('[kll-id]')
-    const ids = [...idsEl].map((el) => el.getAttribute('kll-id'))
-
     kll.reload(el)
     el._updating = false
   }

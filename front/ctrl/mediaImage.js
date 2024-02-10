@@ -1,6 +1,3 @@
-import { fetcher } from '../utils/fetcher'
-import { toast } from '../utils/toast'
-
 export const mediaImage = {
   state: {
     chronicle_id: null,

@@ -32,3 +32,5 @@ export * from './textareaAutoResize'
 export * from "./mediaVideo"
 export * from "./sendMediaToSlider"
 export * from "./mediaName"
+export * from "./mediaDelete"
+export * from "./fullScreenMedia"

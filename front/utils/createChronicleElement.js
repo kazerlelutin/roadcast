@@ -56,23 +56,6 @@ export async function createChronicleElement(chronicle) {
         'kll-b': `broadcast.message`,
         'kll-s-chronicle_id': chronicle.id
       }
-    ],
-    [
-      'delete',
-      undefined,
-      {
-        'kll-id': `remove_${chronicle.id}`,
-        'kll-s-chronicle_id': chronicle.id,
-        'kll-m': 'confirmDialog'
-      }
-    ],
-    [
-      'medias',
-      undefined,
-      {
-        'kll-id': `medias_${chronicle.id}`,
-        'kll-s-chronicle_id': chronicle.id
-      }
     ]
   ])
   // === Inject Values ===

@@ -19,5 +19,10 @@ module.exports = {
       .where({ 'medias.id': mediaId, 'broadcasts.id': broadcast_id })
       .select('medias.*')
       .first()
+  },
+  async deleteMedia(mediaId, editor) {
+    const broadcast = await knex('broadcasts').where({ editor }).first()
+    if (!broadcast) return null
+    return await knex(tableName).where({ id: mediaId }).delete()
   }
 }

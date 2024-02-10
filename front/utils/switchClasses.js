@@ -1,4 +1,13 @@
 export function switchClasses(el, add, remove) {
-  el.classList.add(add)
-  el.classList.remove(remove)
+  if (Array.isArray(add)) {
+    el.classList.add(...add)
+  } else {
+    el.classList.add(add)
+  }
+
+  if (Array.isArray(remove)) {
+    el.classList.remove(...remove)
+  } else {
+    el.classList.remove(remove)
+  }
 }

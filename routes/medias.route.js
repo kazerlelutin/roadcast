@@ -1,7 +1,11 @@
 const Joi = require('joi')
 const { getXInfo } = require('../services/get-x--info')
 const { getBroadcastByEditor } = require('../services/broadcasts.service')
-const { createMedia, getMedia } = require('../services/medias.service')
+const {
+  createMedia,
+  getMedia,
+  deleteMedia
+} = require('../services/medias.service')
 const path = require('node:path')
 const fs = require('node:fs')
 const { v4: uuidv4 } = require('uuid')
@@ -105,6 +109,36 @@ module.exports = [
       })
 
       return h.response({ msg: 'send' }).type('json').code(201)
+    }
+  },
+  {
+    /**
+     * Delete a chronicle
+     **/
+    method: 'DELETE',
+    path: '/api/media/{id}',
+    handler: async (req, h) => {
+      const { id } = req.params
+      const { editor, userId } = getXInfo(req)
+
+      try {
+        await deleteMedia(id, editor)
+        req.server.publish('/broadcast/editor/' + editor, {
+          userId,
+          type: 'delete',
+          context: 'media',
+          id
+        })
+        return h.response({ message: 'ok' }).type('json').code(200)
+      } catch (e) {
+        console.log('update chronicle: ', e)
+        return h
+          .response({
+            error: 'Error updating chronicle'
+          })
+          .code(500)
+          .type('json')
+      }
     }
   }
 ]

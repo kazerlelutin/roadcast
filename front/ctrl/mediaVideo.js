@@ -1,5 +1,3 @@
-import { fetcher } from '../utils/fetcher'
-
 export const mediaVideo = {
   state: {
     chronicle_id: null,

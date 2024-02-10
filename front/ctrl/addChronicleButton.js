@@ -12,7 +12,7 @@ export const addChronicleButton = {
     state.position = Number(state.position) || 0
 
     if (getLsLock() === 'lock')
-      switchClasses(el, 'opacity-0 pointer-events-none', 'opacity-5')
+      switchClasses(el, ['opacity-0', 'pointer-events-none'], 'opacity-5')
 
     el.render()
   },
