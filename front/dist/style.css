@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  html {
+    font-family: Inter, cursive;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color-scheme: dark;
+    transition: color-scheme 500ms ease-in-out;
+    @apply text-light-text dark:text-rc-text;
+  }
+
+  h1,
+  h2 {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-weight: bold;
+  }
+
+  ul {
+    list-style-type: square;
+    margin: 5px 0 30px 0;
+    padding-left: 25px;
+  }
+
+  li {
+    padding: 8px 0;
+  }
+
+  li::marker {
+    color: theme('colors.rc.highlight');
+  }
+
+  a,
+  a:visited {
+    color: theme('colors.rc.highlight');
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  code {
+    font-family: Menlo, Monaco, Courier New, monospace;
+    font-size: 0.9em;
+    background-color: theme('colors.rc.bg-dark');
+    padding: 2px 4px;
+    border-radius: 3px;
+    border-bottom: 2px solid theme('colors.rc.bg');
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .emoticon {
+    width: 20px;
+    height: auto;
+  }
+
+  .icon {
+    fill: theme('colors.rc.highlight');
+    width: 20px;
+  }
+
+  .small {
+    font-size: 0.7em;
+    text-transform: lowercase;
+  }
+
+  .card-separate:not(.card-separate:last-child) {
+    border-bottom: 1px solid theme('colors.rc.bg');
+    --card-separate-margin: calc(
+      var(--dms-padding) - var(--dms-padding) - var(--dms-padding)
+    );
+    padding: var(--dms-padding);
+    margin-left: var(--card-separate-margin);
+    margin-right: var(--card-separate-margin);
+    width: calc(
+      100% - var(--card-separate-margin) * 2 - var(--dms-padding) * 2
+    );
+  }
+
+  .layout {
+    width: 100%;
+    height: 100%;
+  }
+
+  .edit {
+    cursor: pointer;
+  }
+
+  .underline {
+    text-decoration: underline !important;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 0 var(--dms-padding-sm);
+    gap: var(--dms-gap-sm);
+    align-items: center;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.rc.card');
+    border-radius: 5px;
+  }
+}
+
+@layer components {
+  .label {
+    @apply text-center text-sm text-[var(--dms-text)];
+  }
+
+  .input {
+    @apply w-full rounded-md border border-rc-bg-dark bg-rc-card px-2 py-1 dark:text-rc-text outline-none  focus:border-rc-highlight disabled:cursor-text disabled:bg-transparent;
+  }
+
+  .btn {
+    @apply rounded-2xl border dark:border-rc-text px-2 py-1  dark:text-rc-text outline-none border-rc-card-dark  text-rc-card-dark focus:border-rc-highlight disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+@layer utilities {
+  .container img,
+  .container video {
+    @apply h-auto w-full object-cover;
+  }
+}
+
+.tiptap.ProseMirror {
+  transition: color 200ms ease-in-out;
+  @apply p-1 min-h-16 outline-none;
+}
+
+.tiptap.ProseMirror[contenteditable='true']:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+blockquote {
+  border-left: 3px solid theme('colors.rc.highlight');
+  padding-left: 10px;
+  margin-left: 0;
+  @apply text-sm m-0 pl-3 italic;
+}
+
+hr {
+  border-top: 1px solid theme('colors.rc.card');
+  margin: 10px 0;
+}
+
+.locked {
+  @apply opacity-60 pointer-events-none relative;
+}
+
+dialog {
+  @apply bg-rc-bg-dark rounded-md shadow-lg p-4 border border-rc-card-dark;
+}
+
+dialog::backdrop {
+  @apply bg-black opacity-60;
+}
+
+.btn-confirm {
+  @apply rounded-2xl border  px-2 py-1  dark:text-rc-text outline-none border-rc-highlight  text-rc-card-dark focus:border-rc-highlight disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-cancel {
+  @apply rounded-2xl border  px-2 py-1  dark:text-rc-text outline-none border-rc-warning  text-rc-card-dark focus:border-rc-highlight disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+video.object-cover {
+  object-fit: cover;
+}

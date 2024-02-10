@@ -1,0 +1,11 @@
+<template id="basicLayout">
+    <div class="dark:bg-rc-bg bg-light-bg grid grid-rows-[auto_1fr_auto] h-[100dvh]">
+        <header kll-tc="header"></header>
+        <main kll-ctrl="translate" class="h-full relative">
+            <div class="inset-0 absolute overflow-y-auto">
+                <slot></slot>
+            </div>
+        </main>
+        <footer kll-t="footer" kll-ctrl="translate"></footer>
+    </div>
+</template>

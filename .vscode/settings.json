@@ -14,5 +14,9 @@
     "Rafraichir",
     "Télécharger",
     "uuidv"
-  ]
+  ],
+  "prettier.trailingComma": "none",
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 120,
+  "editor.formatOnSave": true
 }

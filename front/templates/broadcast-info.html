@@ -1,0 +1,28 @@
+<template id="broadcastInfo">
+    <div class="h-full grid grid-rows-[1fr_auto] overflow-x-hidden">
+        <div kll-t="loader" kll-id="broadcast_info_loader"></div>
+        <div kll-id="broadcast_info" class="hidden p-3">
+
+            <div class="flex flex-col gap-3 text-sm">
+                <div class="flex gap-3 flex-wrap">
+                    <label data-trans="Title" class="text-rc-highlight" for="broadcastName"></label>
+                    <input kll-id="broadcast_info_title" kll-tc="invisibleInput" kll-b="lock.lock" name="broadcastName"
+                        id="broadcastName" />
+                </div>
+                <div class="">
+                    <label data-trans="slider_link" class="text-rc-highlight" for="sliderLink"></label>
+                    <input disabled kll-id="broadcast_info_slider" class="input w-full text-xs" name="sliderLink"
+                        id="sliderLink" />
+                </div>
+                <div class="">
+                    <label data-trans="reader_link" class="text-rc-highlight" for="readerLink"></label>
+                    <input disabled kll-id="broadcast_info_reader" class="input w-full text-xs" name="readerLink"
+                        id="readerLink" />
+                </div>
+            </div>
+        </div>
+        <div class="flex p-4 ">
+            <div kll-tc="lock" kll-id="lock"></div>
+        </div>
+    </div>
+</template>

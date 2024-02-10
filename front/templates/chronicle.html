@@ -1,0 +1,24 @@
+<template id="chronicle">
+    <div class="flex flex-col gap-2" kll-ctrl="chronicle" kll-l>
+        <div class="self-end">
+            <div kll-t="miniLock" kll-b="lock.lock" kll-ctrl="chronicleLock" data-lock></div>
+        </div>
+
+        <div class="gap-2 text-3xl font-bold flex justify-between">
+            <div kll-c="invisibleInput" kll-t="invisibleTextarea" kll-m="textareaAutoResize" kll-b="lock.lock"
+                data-title placeholder="no_title" data-theme="light">
+            </div>
+            <div kll-t="trash" kll-ctrl="chronicleDelete" data-delete kll-b="lock.lock" kll-m="confirmDialog"></div>
+        </div>
+
+        <div>
+            <span>Source: </span>
+            <div kll-tc="invisibleInput" kll-b="lock.lock" data-source placeholder="no_source"></div>
+        </div>
+
+        <div data-editor></div>
+
+        <div kll-tc="medias" kll-b="lock.lock,broadcast.broadcast" data-medias></div>
+        <div kll-tc="addChronicleButton" kll-b="lock.lock" kll-s-position="0" data-add></div>
+    </div>
+</template>

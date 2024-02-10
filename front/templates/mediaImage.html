@@ -1,0 +1,18 @@
+<template id="mediaImage">
+
+    <div class="flex flex-col gap-1 w-[120px] relative">
+        <!-- Template, avec 2, on passe au template le media ID, preview, ouvre la modal, trash ouvre aussi une modal pour supp TC, -->
+        <div class="absolute top-0 left-0 right-0  p-1 flex justify-between text-xs bg-opacity-25 bg-black">
+            <div>preview</div>
+            <div kll-t="trash" kll-ctrl="mediaDelete" kll-m="confirmDialog" kll-b="lock.lock"></div>
+        </div>
+        <!-- attacher ici le ctrl de send-->
+        <div class="w-[120px] h-[80px] overflow-hidden cursor-pointer">
+            <img class="object-cover w-full h-full ease-in-out duration-100" kll-ctrl="sendMediaToSlider" />
+        </div>
+        <div class="text-xs text-rc-info-light">
+            <input data-name kll-tc="invisibleInput" kll-b="lock.lock" id="broadcastName" />
+        </div>
+    </div>
+
+</template>
