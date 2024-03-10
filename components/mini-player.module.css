@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--dms-gap);
+}
+
+.title {
+  color: var(--dms-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dms-gap-sm);
+  font-size: var(--dms-font-size-xs);
+}
+
+.icon {
+  cursor: pointer;
+}

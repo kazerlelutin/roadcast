@@ -3,8 +3,12 @@ import { useState } from 'react'
 import { TriggerTypes, useSocketTrigger } from '@/components'
 import { IMedia } from '@/entities'
 import ReactPlayer from 'react-player'
+import styles from './mini-player.module.css'
+import { useTranslate } from '@/hooks'
+import { CloseIcon } from '@/ui'
 
 export function MiniPlayer() {
+  const t = useTranslate()
   const [media, setMedia] = useState<IMedia | undefined>(undefined)
   useSocketTrigger(TriggerTypes.SLIDER, (message: IMedia) => {
     if (JSON.stringify(media) === JSON.stringify(message)) return
@@ -19,7 +23,13 @@ export function MiniPlayer() {
 
   if (!media) return null
   return (
-    <div className="flex w-full items-center flex-col gap-2">
+    <div className={styles.container}>
+      <div className={styles.title}>
+        {t('onLive')}
+        <div className={styles.icon} onClick={() => setMedia(undefined)}>
+          <CloseIcon />
+        </div>
+      </div>
       {media && media.type.match(/image/) && (
         <div className="w-full h-auto m-auto">
           {media.url && <img src={media.url} alt={media.name} />}
@@ -35,6 +45,7 @@ export function MiniPlayer() {
             playing={true}
             width={'100%'}
             height={'auto'}
+            pip={true}
           />
         </div>
       )}

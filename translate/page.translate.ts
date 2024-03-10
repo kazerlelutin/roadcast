@@ -280,4 +280,12 @@ export const pageTranslate = {
     fr: 'conducteur',
     en: 'broadcast',
   },
+  preview: {
+    fr: 'Aperçu',
+    en: 'Preview',
+  },
+  onLive: {
+    fr: 'En direct',
+    en: 'On live',
+  },
 }
