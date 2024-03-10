@@ -10,6 +10,7 @@ import { Resume, Actions, StringEditor } from '@/components'
 import styles from './editor.module.css'
 import { Gridbox, HeaderNoAuth, Col, LabelBox } from '@/ui'
 import { useIsMobile, useBroadcastLocalSave, useTranslate } from '@/hooks'
+import { MiniPlayer } from '@/components/mini-player'
 
 export const Editor: React.FC = () => {
   useBroadcastLocalSave()
@@ -41,6 +42,7 @@ export const Editor: React.FC = () => {
               <Chronicles />
             </div>
           </Gridbox>
+
           <div className={styles.actionsMobile}>
             <Actions />
           </div>
@@ -62,6 +64,9 @@ export const Editor: React.FC = () => {
               <BroadcastCreateNewWithHistory />
             </div>
           </Col>
+          <div className="self-end">
+            <MiniPlayer />
+          </div>
           <BroadcastChronicleHistory />
         </div>
 
