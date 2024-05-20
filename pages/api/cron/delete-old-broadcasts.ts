@@ -7,7 +7,7 @@ export default async function DeleteOldBroadcasts(
   response: NextApiResponse
 ) {
   //45 days ago
-  const date = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 45)
+  const date = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365)
   const broadcasts = await prisma.broadcast.findMany({
     where: {
       updatedAt: {
@@ -30,7 +30,7 @@ export default async function DeleteOldBroadcasts(
   for (const broadcast of broadcasts) {
     for (const chronicle of broadcast.chronicles) {
       for (const media of chronicle.medias) {
-        s3.deleteMedia(media.url)
+        //s3.deleteMedia(media.url)
         mediaIds.push(media.id)
       }
     }
