@@ -288,4 +288,8 @@ export const pageTranslate = {
     fr: 'En direct',
     en: 'On live',
   },
+  Slider: {
+    fr: 'Slider (pour OBS)',
+    en: 'Slider (for OBS)',
+  }
 }

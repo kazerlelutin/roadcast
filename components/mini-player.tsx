@@ -17,9 +17,12 @@ export function MiniPlayer() {
       ...message,
     }))
   })
+
+  /*
   const regexProviders = new RegExp(
     /youtu|vimeo|facebook|twitter|dailymotion|twitch/
   )
+  */
 
   if (!media) return null
   return (
@@ -39,7 +42,7 @@ export function MiniPlayer() {
         <div className="w-full h-auto">
           <ReactPlayer
             url={media.url}
-            volume={0.3}
+            volume={0.1}
             loop={true}
             controls={true}
             playing={true}
