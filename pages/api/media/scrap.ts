@@ -71,10 +71,7 @@ async function media_scrap(
       })
 
       medias.push(media)
-    }
-
-    // treat link video  ______________________________________________________
-    if (res.headers.get('content-type').match(/video/g)) {
+    } else if (res.headers.get('content-type').match(/video/g)) {
       const name = link.split('/').at(-1)
       const media = await prisma.media.create({
         data: {
@@ -88,9 +85,7 @@ async function media_scrap(
       })
 
       medias.push(media)
-    }
-    // treat Youtube videos ______________________________________________________
-    if (isYouTubeLink) {
+    } else if (isYouTubeLink) {
       const isShortLink = link.match(shortLinkRgx)
       const parsedLink = queryString.parseUrl(link)
       const videoId = (parsedLink?.query?.v as string) || ''
@@ -102,7 +97,7 @@ async function media_scrap(
           size: 0,
           type: 'video',
           source: link,
-          cover: cover?.content || '',
+          cover: cover?.content ||'',
           url: `https://youtube.com/watch?v=${
             isShortLink ? link.split('/').at(-1) : videoId
           }&t=${time}`,
@@ -111,10 +106,26 @@ async function media_scrap(
       })
 
       medias.push(media)
+    } else {
+
+      const imgs = Array.from(dom.window.document.querySelectorAll('img'))
+     // const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
+
+
+      const media = await prisma.media.create({
+        data: {
+          name: title || 'Iframe',
+          size: 0,
+          type: 'iframe',
+          source: link,
+          cover: cover?.content ||  imgs?.[0]?.src ||'',
+          url: link,
+          chronicle_id: chronicleId,
+        },
+      })
+      medias.push(media)
     }
 
-    const imgs = Array.from(dom.window.document.querySelectorAll('img'))
-    const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
     await trigger(broadcast.reader, TriggerTypes.CHRONICLE, {
       message: chronicleId,

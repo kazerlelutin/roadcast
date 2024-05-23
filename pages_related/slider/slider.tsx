@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TriggerTypes, useSocketTrigger } from '@/components'
 import { MediaSliderVideo, IMedia, MediaSliderImg } from '@/entities'
+import { MediaSliderIframe } from '@/entities/media/media-slider-iframe'
 
 export const Slider: React.FC = () => {
   const [media, setMedia] = useState<IMedia | undefined>(undefined)
@@ -16,6 +17,9 @@ export const Slider: React.FC = () => {
     <>
       {media && media.type.match(/image/) && <MediaSliderImg media={media} />}
       {media && media.type.match(/video/) && <MediaSliderVideo media={media} />}
+      {media && media.type.match(/iframe/) && (
+        <MediaSliderIframe media={media} />
+      )}
     </>
   )
 }

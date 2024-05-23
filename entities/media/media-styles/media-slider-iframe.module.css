@@ -1,0 +1,10 @@
+.iframe {
+  height: calc(100dvh - 5px);
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+}
+
+.iframe[data-preview="true"] {
+  height: 150px
+}

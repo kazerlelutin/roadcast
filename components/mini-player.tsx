@@ -6,6 +6,7 @@ import ReactPlayer from 'react-player'
 import styles from './mini-player.module.css'
 import { useTranslate } from '@/hooks'
 import { CloseIcon } from '@/ui'
+import { MediaSliderIframe } from '@/entities/media/media-slider-iframe'
 
 export function MiniPlayer() {
   const t = useTranslate()
@@ -51,6 +52,9 @@ export function MiniPlayer() {
             pip={true}
           />
         </div>
+      )}
+      {media && media.type.match(/iframe/) && (
+        <MediaSliderIframe media={media} isPreview={true} />
       )}
     </div>
   )

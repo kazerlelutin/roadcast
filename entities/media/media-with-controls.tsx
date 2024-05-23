@@ -19,6 +19,9 @@ export function MediaWithControls() {
           {media.type.match(/image/) && (
             <img src={media.url} alt={media.name} />
           )}
+          {media.type.match(/iframe/) && (
+            <img src={media.cover} alt={media.name} />
+          )}
           {media.type.match(/video/) && !media?.cover && (
             <ReactPlayer url={media.url} width={'100%'} height={'auto'} />
           )}
