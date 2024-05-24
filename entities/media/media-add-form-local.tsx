@@ -9,16 +9,13 @@ export function MediaAddFormLocal() {
   const { chronicle, addMedia } = useChronicles()
   const [error, setError] = useState<string | null>(null)
   const { closeModale } = useFullscreenPopin()
-  const { upload, loading } = useUpload<{ media: IMedia }>(
+  const { upload, loading } = useUpload<{ media: IMedia[] }>(
     MediaRoutes.upload,
-    (data) => {
-      setFile(null)
+    (data: any) => {
       addMedia(data.media)
-      setError(null)
-      closeModale()
     }
   )
-  const [file, setFile] = useState<File>(null)
+  const [files, setFiles] = useState<File[]>([])
   const t = useTranslate({
     addLocalMedia: {
       en: 'Add local media',
@@ -38,26 +35,34 @@ export function MediaAddFormLocal() {
     },
   })
 
-  const handleUpload = () => {
-    const data = new FormData()
-    data.append('file', file)
-    data.append('name', file.name)
-    data.append('type', file.type)
-    data.append('size', file.size.toString())
-    data.append('chronicleId', chronicle.id)
-    data.append('broadcastId', id)
-    data.append('editor', editor)
-    upload(data)
+  const handleUpload = async () => {
+    for (const file of files) {
+      const data = new FormData()
+      data.append('file', file)
+      data.append('name', file.name)
+      data.append('type', file.type)
+      data.append('size', file.size.toString())
+      data.append('chronicleId', chronicle.id)
+      data.append('broadcastId', id)
+      data.append('editor', editor)
+      await upload(data)
+    }
+
+    setError(null)
+    closeModale()
   }
 
   const handleAddMedia = (e: any) => {
     setError(null)
-    const size = e.target.files[0].size / 1024 / 1024
-    if (size > 4) {
+    const newFiles = Array.from(e.target.files)
+    const hasLargeFile = newFiles.some(
+      (file: any) => file.size / 1024 / 1024 > 4
+    )
+    if (hasLargeFile) {
       setError('sizeError')
       return
     }
-    setFile(e.target.files[0])
+    setFiles(newFiles as File[])
   }
 
   return (
@@ -67,7 +72,7 @@ export function MediaAddFormLocal() {
       {loading ? (
         <p>{t('loading')}</p>
       ) : (
-        <input type="file" onChange={handleAddMedia} />
+        <input type="file" multiple onChange={handleAddMedia} />
       )}
       {error && <ErrorMsg error={t(error)} />}
       <Button onClick={handleUpload}>{t('upload')}</Button>
