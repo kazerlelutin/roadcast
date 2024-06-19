@@ -16,7 +16,12 @@ export function MediaBroadcastButton() {
   })
 
   const handleBroadcast = () => {
-    post({ media })
+    post({
+      media: {
+        url: media.url,
+        type: media.type,
+      },
+    })
     closeModale()
   }
 
