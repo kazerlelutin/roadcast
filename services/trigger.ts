@@ -25,24 +25,24 @@ export const trigger = async (
   await pusher.trigger(room, type, { ...body, type })
 }
 
+const pusher = new Pusher({
+  appId: PUSHER_API_ID,
+  key: PUSHER_KEY,
+  secret: PUSHER_SECRET,
+  cluster: PUSHER_REGION,
+  useTLS: true,
+  timeout: 500,
+})
+
 export const triggerSlider = async (
   room: string,
   body: {
     message: unknown
   }
 ) => {
-  const pusher = new Pusher({
-    appId: PUSHER_API_ID,
-    key: PUSHER_KEY,
-    secret: PUSHER_SECRET,
-    cluster: PUSHER_REGION,
-    useTLS: true,
-    timeout: 500,
-  })
-  await pusher.trigger(room, TriggerTypes.SLIDER, {
+
+  return await pusher.trigger(room, TriggerTypes.SLIDER, {
     ...body,
     type: TriggerTypes.SLIDER,
   })
-
-  return true
 }
