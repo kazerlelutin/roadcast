@@ -9,6 +9,7 @@ import {
 import styles from './chronicle-styles/chronicle-read.module.css'
 import { Col } from '@/ui'
 import { LinkPreview } from '@/components'
+import { MediaInText } from '../media/media-in-text'
 
 export function ChronicleRead() {
   const t = useTranslate()
@@ -28,11 +29,10 @@ export function ChronicleRead() {
             {getReadTime(getTextInHtml(chronicle.text))}
           </span>
         </h2>
-
         <p className={styles.editor}>
           {chronicle?.editor?.name || t('noEditor')}
         </p>
-
+        <MediaInText />
         <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
         {chronicle.source && chronicle.source.match(/http/) && (
           <Col center>

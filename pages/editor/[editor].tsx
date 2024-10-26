@@ -1,65 +1,40 @@
-import { SocketProvider } from '@/components'
-import {
-  BroadcastFocusModeProvider,
-  BroadcastProvider,
-  BroadcastReadModeProvider,
-  ChronicleRefreshButtonProvider,
-  ChronicleToScreenProvider,
-  ChroniclesProvider,
-  EditorsProvider,
-} from '@/entities'
 import { prisma } from '@/db'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 
-const Editor = dynamic(
-  () => import('@/pages_related').then((comp) => comp.Editor),
+const WriterWrapper = dynamic(
+  () =>
+    import('@/components/Writer/WriterWrapper').then(
+      (comp) => comp.WriterWrapper
+    ),
   {
     ssr: false,
   }
 )
 
 export default function EditorPage({
-  broadcast,
   title,
+  editorToken,
 }: {
-  broadcast: string
+  editorToken: string
+  readerToken: string
   title: string
 }) {
   return (
-    <ChronicleToScreenProvider>
-      <BroadcastReadModeProvider>
-        <BroadcastFocusModeProvider>
-          <BroadcastProvider broadcast={JSON.parse(broadcast)}>
-            <SocketProvider>
-              <ChronicleRefreshButtonProvider>
-                <ChroniclesProvider>
-                  <EditorsProvider>
-                    <Head>
-                      <title>{title}</title>
-                    </Head>
-                    <Editor />
-                  </EditorsProvider>
-                </ChroniclesProvider>
-              </ChronicleRefreshButtonProvider>
-            </SocketProvider>
-          </BroadcastProvider>
-        </BroadcastFocusModeProvider>
-      </BroadcastReadModeProvider>
-    </ChronicleToScreenProvider>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <WriterWrapper editorToken={editorToken} />
+    </>
   )
 }
 
 export async function getServerSideProps({ query }) {
   const broadcast = await prisma.broadcast.findFirst({
     where: { editor: query.editor },
-    include: {
-      chronicles: {
-        include: {
-          medias: true,
-          editor: true,
-        },
-      },
+    select: {
+      title: true,
     },
   })
 
@@ -70,6 +45,6 @@ export async function getServerSideProps({ query }) {
   }
 
   return {
-    props: { broadcast: JSON.stringify(broadcast), title: broadcast.title },
+    props: { title: broadcast.title, editorToken: query.editor },
   }
 }

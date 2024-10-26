@@ -14,7 +14,64 @@ import {
   ReturnIcon,
   UndoIcon,
 } from '@/ui/icons'
+import Image from '@tiptap/extension-image'
+
 import { CodeIcon } from '@/ui/icons/code-icon'
+
+import { Node, mergeAttributes, PasteRule } from '@tiptap/core'
+
+const AutoImage = Node.create({
+  name: 'autoImage',
+
+  group: 'inline',
+
+  inline: true,
+
+  selectable: true,
+
+  atom: true,
+
+  addAttributes() {
+    return {
+      src: {},
+      alt: { default: null },
+      title: { default: null },
+      class: { default: 'chronicle-img' },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'img[src]',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+  },
+
+  addPasteRules() {
+    return [
+      new PasteRule({
+        find: /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif|svg))/g,
+        handler: ({ state, range, match }) => {
+          const url = match[0]
+          const { tr } = state
+
+          tr.replaceWith(
+            range.from,
+            range.to,
+            state.schema.nodes.autoImage.create({ src: url })
+          )
+
+          return tr
+        },
+      }),
+    ]
+  },
+})
 interface EditorProps {
   onChange: (value: string) => void
   defaultValue: string
@@ -23,6 +80,12 @@ interface EditorProps {
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
   const editor = useEditor({
     extensions: [
+      Image.configure({
+        inline: true,
+        HTMLAttributes: { class: 'chronicle-img' },
+        allowBase64: true,
+      }),
+      AutoImage,
       Underline.configure({
         HTMLAttributes: {
           class: 'underline',
@@ -40,7 +103,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
       }),
     ],
     content: defaultValue,
-    onUpdate(props) {
+    async onUpdate(props) {
       onChange(props.editor.getHTML())
     },
   })

@@ -11,6 +11,10 @@
   opacity: 1;
 }
 
+.container[data-visible='true'] :global(.chronicle-img ){
+  cursor: pointer;
+}
+
 .editor {
   color: var(--dms-light);
   padding-bottom: var(--dms-padding);

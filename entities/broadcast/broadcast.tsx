@@ -143,7 +143,6 @@ export const useBroadcast = () => {
     createBroadcastWithHistory,
     updateTitle,
     broadcast,
-    ...broadcast,
   }
 }
 
