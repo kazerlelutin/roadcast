@@ -28,7 +28,12 @@ export function MediaWithControls() {
             <img src={media.cover} alt={media.name} />
           )}
           {media.type.match(/iframe/) && (
-            <iframe width={'100%'} height={'100%'} src={media.url} />
+            <iframe
+              width={'100%'}
+              height={'100%'}
+              src={media.url}
+              style={{ pointerEvents: 'none' }}
+            />
           )}
           <div className={styles.label}>{media.name}</div>
         </div>
