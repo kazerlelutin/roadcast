@@ -97,19 +97,21 @@ async function media_scrap(
           size: 0,
           type: 'video',
           source: link,
-          cover: cover?.content ||'',
-          url: `https://youtube.com/watch?v=${
-            isShortLink ? link.split('/').at(-1) : videoId
-          }&t=${time}`,
+          cover: cover?.content || '',
+          url: `https://youtube.com/watch?v=${isShortLink ? link.split('/').at(-1) : videoId
+            }&t=${time}`,
           chronicle_id: chronicleId,
         },
       })
 
       medias.push(media)
-    } else {
+    }
+
+
+    else {
 
       const imgs = Array.from(dom.window.document.querySelectorAll('img'))
-     // const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
+      // const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
 
 
       const media = await prisma.media.create({
@@ -118,7 +120,7 @@ async function media_scrap(
           size: 0,
           type: 'iframe',
           source: link,
-          cover: cover?.content ||  imgs?.[0]?.src ||'',
+          cover: cover?.content || imgs?.[0]?.src || '',
           url: link,
           chronicle_id: chronicleId,
         },

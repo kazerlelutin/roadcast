@@ -14,6 +14,9 @@ export function MediaDisplay() {
       {media.type.match(/video/) && (
         <ReactPlayer url={media.url} width={'400px'} height={'400px'} />
       )}
+      {media.type.match(/iframe/) && (
+        <iframe width={'100%'} height={'100%'} src={media.url} />
+      )}
     </div>
   )
 }
