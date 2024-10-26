@@ -33,7 +33,7 @@ export function ChronicleRead() {
           {chronicle?.editor?.name || t('noEditor')}
         </p>
         <MediaInText />
-        <div dangerouslySetInnerHTML={{ __html: chronicle.text || '' }} />
+
         {chronicle.source && chronicle.source.match(/http/) && (
           <Col center>
             <h3>{t('source')}</h3>
