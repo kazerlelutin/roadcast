@@ -57,7 +57,7 @@ const AutoImage = Node.create({
   addPasteRules() {
     return [
       new PasteRule({
-        find: /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif|svg))/g,
+        find: /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif|svg|webp))/g,
         handler: ({ state, range, match }) => {
           const url = match[0]
           const { tr } = state
