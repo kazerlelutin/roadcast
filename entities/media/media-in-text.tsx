@@ -21,8 +21,22 @@ export function MediaInText() {
         dangerouslySetInnerHTML={{ __html: chronicle.text || '' }}
         onClick={(e) => {
           // @ts-ignore
-          if (e.target.tagName !== 'IMG') return
+          const isYoutube = e.target.getAttribute('data-youtube-video') !== null
 
+          if (isYoutube) {
+            // @ts-ignore
+            const iframe = e.target.getElementsByTagName('iframe')[0]
+            const src = iframe.src
+            setMedia({
+              url: src,
+              key: new Date().getTime(),
+              type: 'video',
+            })
+            ref.current?.click()
+          }
+
+          // @ts-ignore
+          if (e.target.tagName !== 'IMG') return
           const img = e.target as HTMLImageElement
           const src = img.src
 

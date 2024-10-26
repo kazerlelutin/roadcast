@@ -11,8 +11,13 @@
   opacity: 1;
 }
 
-.container[data-visible='true'] :global(.chronicle-img ){
-  cursor: pointer;
+.container[data-visible='true'] :global(.chronicle-img ),
+.container[data-visible='true'] :global([data-youtube-video] ){
+ cursor: pointer;
+}
+
+.container[data-visible='true'] :global([data-youtube-video] iframe ){
+  pointer-events: none;
 }
 
 .editor {

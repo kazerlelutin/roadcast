@@ -11,10 +11,10 @@ import {
 } from '@/entities'
 import { SocketProvider } from '@/components'
 import { Editor } from '@/pages_related'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGetMyLocalId } from '@/hooks'
 import { getObjectToBase64 } from '@/utils'
-import { LineLoader, LoadingView } from '@/ui'
+import { LoadingView } from '@/ui'
 
 type WriterWrapperProps = {
   editorToken: string

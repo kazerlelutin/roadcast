@@ -15,6 +15,7 @@ import {
   UndoIcon,
 } from '@/ui/icons'
 import Image from '@tiptap/extension-image'
+import Youtube from '@tiptap/extension-youtube'
 
 import { CodeIcon } from '@/ui/icons/code-icon'
 
@@ -80,6 +81,13 @@ interface EditorProps {
 export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
   const editor = useEditor({
     extensions: [
+      Youtube.configure({
+        controls: false,
+        nocookie: true,
+        HTMLAttributes: {
+          class: 'youtube',
+        },
+      }),
       Image.configure({
         inline: true,
         HTMLAttributes: { class: 'chronicle-img' },
