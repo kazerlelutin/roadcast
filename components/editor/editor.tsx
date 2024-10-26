@@ -83,7 +83,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
       Image.configure({
         inline: true,
         HTMLAttributes: { class: 'chronicle-img' },
-        allowBase64: true,
+        allowBase64: false,
       }),
       AutoImage,
       Underline.configure({
