@@ -5,7 +5,6 @@ import { useChronicles, useBroadcast, IMedia, MediaRoutes } from '@/entities'
 
 export function MediaAddOnline() {
   const [link, setLink] = useState<string>('')
-  const { id, editor } = useBroadcast()
   const { chronicle, addMedia } = useChronicles()
   const { closeModale } = useFullscreenPopin()
 
@@ -41,8 +40,6 @@ export function MediaAddOnline() {
     post({
       link,
       chronicleId: chronicle.id,
-      broadcastId: id,
-      editor,
     })
   }
 

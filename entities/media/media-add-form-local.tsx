@@ -1,20 +1,14 @@
 import { useState } from 'react'
-import { useBroadcast, useChronicles } from '@/entities'
+import { useChronicles } from '@/entities'
 import { useUpload, useTranslate } from '@/hooks'
 import { IMedia, MediaRoutes } from './media'
 import { Button, Col, ErrorMsg, Info, useFullscreenPopin } from '@/ui'
 
 export function MediaAddFormLocal() {
-  const { id, editor } = useBroadcast()
   const { chronicle, addMedia } = useChronicles()
   const [error, setError] = useState<string | null>(null)
   const { closeModale } = useFullscreenPopin()
-  const { upload, loading } = useUpload<{ media: IMedia[] }>(
-    MediaRoutes.upload,
-    (data: any) => {
-      addMedia(data.media)
-    }
-  )
+  const { upload, loading } = useUpload<{ media: IMedia[] }>(MediaRoutes.upload)
   const [files, setFiles] = useState<File[]>([])
   const t = useTranslate({
     addLocalMedia: {
@@ -43,9 +37,13 @@ export function MediaAddFormLocal() {
       data.append('type', file.type)
       data.append('size', file.size.toString())
       data.append('chronicleId', chronicle.id)
-      data.append('broadcastId', id)
-      data.append('editor', editor)
-      await upload(data)
+
+      try {
+        const { media } = await upload(data)
+        addMedia(media as any)
+      } catch (res) {
+        console.log(res)
+      }
     }
 
     setError(null)

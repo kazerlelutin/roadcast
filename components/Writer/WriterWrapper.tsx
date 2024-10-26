@@ -22,9 +22,7 @@ type WriterWrapperProps = {
 export function WriterWrapper({ editorToken }: WriterWrapperProps) {
   const [loading, setLoading] = useState<boolean>(true)
   const [broadcast, setBroadcast] = useState<IBroadcast>()
-  const [error, setError] = useState<any>()
-  const refSignal = useRef<any>()
-
+  const [setError] = useState<any>()
   const myLocalId = useGetMyLocalId()
 
   const handleFetch = async () => {
@@ -53,6 +51,8 @@ export function WriterWrapper({ editorToken }: WriterWrapperProps) {
     } catch (e) {
       console.error(e)
       setError(e)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -60,7 +60,7 @@ export function WriterWrapper({ editorToken }: WriterWrapperProps) {
     handleFetch()
   }, [])
 
-  if (!broadcast?.id) return <LoadingView />
+  if (!broadcast?.id && loading) return <LoadingView />
 
   return (
     <ChronicleToScreenProvider>

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { usePost, useLocalState, useLazyFetch, useFetch } from '@/hooks'
 import { TEntity } from '@/types'
 import { IChronicle, BroadcastChronicleHistory } from '@/entities'
@@ -85,6 +85,10 @@ export const BroadcastProvider: React.FC<BroadcastProviderProps> = ({
   broadcast,
 }) => {
   const ctx = useState<IBroadcast>(broadcast)
+
+  useEffect(() => {
+    ctx[1](broadcast)
+  }, [broadcast])
 
   return (
     <BroadcastContext.Provider value={ctx}>
