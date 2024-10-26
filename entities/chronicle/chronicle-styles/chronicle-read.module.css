@@ -20,6 +20,13 @@
   pointer-events: none;
 }
 
+.container a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .editor {
   color: var(--dms-light);
   padding-bottom: var(--dms-padding);

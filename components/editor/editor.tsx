@@ -16,6 +16,7 @@ import {
 } from '@/ui/icons'
 import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
+import Link from '@tiptap/extension-link'
 
 import { CodeIcon } from '@/ui/icons/code-icon'
 
@@ -87,6 +88,11 @@ export const Editor: React.FC<EditorProps> = ({ onChange, defaultValue }) => {
         HTMLAttributes: {
           class: 'youtube',
         },
+      }),
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: 'https',
       }),
       Image.configure({
         inline: true,
