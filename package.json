@@ -1,6 +1,6 @@
 {
   "name": "roadcast",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "private": false,
   "scripts": {
     "dev": "next dev",
