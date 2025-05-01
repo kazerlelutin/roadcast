@@ -16,9 +16,18 @@ export function MediaBroadcastButton() {
   })
 
   const handleBroadcast = () => {
+
+    const url = new URL(media.url)
+    const time = url.searchParams.get('t')
+    if (time && media.time) {
+      url.searchParams.delete('t')
+    }
+
+    url.searchParams.set('t', media.time?.toString() || '0')
+
     post({
       media: {
-        url: media.url + `?t=${media.time}`,
+        url: url.toString(),
         type: media.type,
       },
     })
