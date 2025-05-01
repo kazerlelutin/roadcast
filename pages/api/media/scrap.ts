@@ -45,10 +45,9 @@ async function media_scrap(
     if (res.status !== 200)
       return response.status(400).send({ message: 'Error while fetching' })
 
+
+
     const dom = new JSDOM(resText)
-
-    const isYouTubeLink = isYouTubeLinkRgx.test(link)
-
     // Manipulate the DOM _______________________________________________________
 
     const cover = dom.window.document.querySelector(
@@ -57,7 +56,38 @@ async function media_scrap(
     const title = dom.window.document.querySelector('title')?.textContent
 
     // treat link image  ______________________________________________________
-    if (res.headers.get('content-type').match(/image/g)) {
+    if (isYouTubeLinkRgx.test(link)) {
+
+      try {
+        const resMeta = await fetch(
+          `https://www.youtube.com/oembed?url=${link}&format=json`
+        )
+        const meta = await resMeta.json()
+
+        const isShortLink = link.match(shortLinkRgx)
+        const parsedLink = queryString.parseUrl(link)
+        const videoId = (parsedLink?.query?.v as string) || ''
+        const time = (parsedLink?.query?.t as string) || '0'
+        const media = await prisma.media.create({
+          data: {
+            name: meta.title || 'YouTube video',
+            size: 0,
+            type: 'video',
+            source: link,
+            cover: meta?.thumbnail_url || '',
+            url: `https://youtube.com/watch?v=${isShortLink ? link.split('/').at(-1) : videoId
+              }&t=${time}`,
+            chronicle_id: chronicleId,
+          },
+        })
+
+        medias.push(media)
+      } catch (e) {
+        console.log(e)
+        return response.status(400).send({ message: 'Error while fetching' })
+      }
+    }
+    else if (res.headers.get('content-type').match(/image/g)) {
       const name = link.split('/').at(-1)
       const media = await prisma.media.create({
         data: {
@@ -85,35 +115,12 @@ async function media_scrap(
       })
 
       medias.push(media)
-    } else if (isYouTubeLink) {
-      const isShortLink = link.match(shortLinkRgx)
-      const parsedLink = queryString.parseUrl(link)
-      const videoId = (parsedLink?.query?.v as string) || ''
-      const time = (parsedLink?.query?.t as string) || '0'
-      //IF Youtube Video, it's a single media
-      const media = await prisma.media.create({
-        data: {
-          name: title || 'YouTube video',
-          size: 0,
-          type: 'video',
-          source: link,
-          cover: cover?.content || '',
-          url: `https://youtube.com/watch?v=${isShortLink ? link.split('/').at(-1) : videoId
-            }&t=${time}`,
-          chronicle_id: chronicleId,
-        },
-      })
-
-      medias.push(media)
     }
-
 
     else {
 
       const imgs = Array.from(dom.window.document.querySelectorAll('img'))
       // const embeds = Array.from(dom.window.document.querySelectorAll('iframe'))
-
-
       const media = await prisma.media.create({
         data: {
           name: title || 'Iframe',

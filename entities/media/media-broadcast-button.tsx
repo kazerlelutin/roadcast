@@ -18,7 +18,7 @@ export function MediaBroadcastButton() {
   const handleBroadcast = () => {
     post({
       media: {
-        url: media.url,
+        url: media.url + `?t=${media.time}`,
         type: media.type,
       },
     })

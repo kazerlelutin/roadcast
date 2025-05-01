@@ -4,7 +4,7 @@ import { useMedia } from '@/entities'
 import ReactPlayer from 'react-player'
 
 export function MediaDisplay() {
-  const { media } = useMedia()
+  const { media, setTime } = useMedia()
 
   return (
     <div className={styles.container}>
@@ -12,7 +12,7 @@ export function MediaDisplay() {
         <img src={media.url} alt={media.name} className={styles.img} />
       )}
       {media.type.match(/video/) && (
-        <ReactPlayer url={media.url} width={'400px'} height={'400px'} />
+        <ReactPlayer url={media.url} width={'400px'} height={'400px'} controls onProgress={(d) => setTime(d.playedSeconds)} />
       )}
       {media.type.match(/iframe/) && (
         <iframe width={'100%'} height={'100%'} src={media.url} />

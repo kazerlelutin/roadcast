@@ -8,7 +8,9 @@ import { Media } from '@prisma/client'
 // INTERFACES ---------------------------------------------------------------
 interface MediaProviderProps {
   children: ReactNode
-  media: IMedia
+  media: IMedia & {
+    time?: number
+  }
 }
 
 export interface IMedia extends Media {
@@ -18,7 +20,7 @@ export interface IMedia extends Media {
 
 // CONTEXT ------------------------------------------------------------------
 
-export const MediaContext = createContext<TEntity<IMedia>>(null)
+export const MediaContext = createContext<TEntity<IMedia & { time?: number }>>(null)
 
 // PROVIDER -----------------------------------------------------------------
 
@@ -26,7 +28,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   children,
   media,
 }) => {
-  const value = useState<IMedia>(media)
+  const value = useState<IMedia & { time?: number }>(media)
 
   return <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
 }
@@ -53,9 +55,14 @@ export const useMedia = () => {
     throw new Error('useMedias must be used within a MediaProvider')
   }
 
-  const [media] = ctx
+  const [media, setMedia] = ctx
+
+  const setTime = (time: number) => {
+    setMedia({ ...media, time })
+  }
 
   return {
     media,
+    setTime,
   }
 }
