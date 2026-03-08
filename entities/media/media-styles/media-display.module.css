@@ -1,6 +1,0 @@
-.container {
-  max-height: calc(100vh - 120px);
-  overflow: hidden;
-  max-width: 400px;
-  margin: var(--dms-padding-sm) auto;
-}

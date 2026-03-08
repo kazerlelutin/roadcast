@@ -1,8 +1,0 @@
-.container {
-  display: flex;
-  gap: var(--dms-gap-sm);
-}
-
-.hour {
-  font-weight: bold;
-}

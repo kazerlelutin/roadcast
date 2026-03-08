@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <title>ROADCAST</title>
+  <link rel="stylesheet" href="public/style.css" />
+  <link rel="icon" href="public/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+  <main class="app-main"></main>
+
+  <!-- Templates -->
+  <template id="about-item-template">
+    <article class="about-item">
+      <h2 data-role="text"></h2>
+      <p data-role="text"></p>
+      <a href="data-role=" link" target="_blank" rel="noopener noreferrer"></a>
+    </article>
+  </template>
+
+  <!-- PAGES-->
+  <template id="home">
+    <div class="home">
+      <header class="header-app">
+        <a href="/" class="app-logo" data-internal>
+          <h1 class="app-name"><span class="app-name-road">ROAD</span><span class="app-name-cast">CAST</span></h1>
+        </a>
+      </header>
+      <div class="home-page" id="home-container">
+    </div>
+  </template>
+
+  <template id="about">
+    <div class="about-page" id="about-container">
+      <h1></h1>
+      <div class="about-items-container" id="about-items-container"></div>
+    </div>
+  </template>
+  <script type="module" src="src/app.ts"></script>
+</body>
+</html>
