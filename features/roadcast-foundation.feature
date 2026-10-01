@@ -51,4 +51,9 @@ Feature: Préparer une chronique Roadcast
   Scenario: Organiser les chroniques avec les chroniqueurs
     Given un roadcast contenant des chroniques de plusieurs auteurs
     When je crée ou sélectionne un chroniqueur et filtre les chroniques
-    Then seules les chroniques correspondantes sont affichées et je peux en ajouter au-dessus ou en dessous de la chronique active
+    Then seules les chroniques correspondantes sont affichées et je peux créer une nouvelle chronique depuis l’arbre
+
+  Scenario: Conserver une version d’une chronique
+    Given une chronique modifiée dans l’éditeur
+    When j’enregistre une version puis choisis une version antérieure
+    Then son contenu est restauré et seules les dernières versions sont conservées localement

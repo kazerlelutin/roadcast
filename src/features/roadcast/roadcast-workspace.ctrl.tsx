@@ -1,4 +1,8 @@
-import { createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Editor } from "@tiptap/core";
+import Link from "@tiptap/extension-link";
+import StarterKit from "@tiptap/starter-kit";
+import type { ChronicleEditorElement } from "../chronicle/chronicle-editor.view";
 import { MediaDialogView } from "../media/media-dialog.view";
 import { type Slider } from "../presentation/slider-preview.view";
 import { type ShareMode } from "../sharing/share-dialog.view";
@@ -7,9 +11,11 @@ import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspace
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
-  { id: "welcome", title: "Bienvenue", document: seed, author: "Camille" },
-  { id: "conclusion", title: "Conclusion", document: "Préparez ici la conclusion de votre roadcast.", author: "Alex" },
+  { id: "welcome", title: "Bienvenue", document: `<p>${seed.replaceAll("\n\n", "</p><p>")}</p>`, author: "Camille", versions: [] },
+  { id: "conclusion", title: "Conclusion", document: "<p>Préparez ici la conclusion de votre roadcast.</p>", author: "Alex", versions: [] },
 ];
+const maxVersions = 12;
+type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; };
 
 export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [title, setTitle] = createSignal("Démo de chronique");
@@ -17,7 +23,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [selectedChronicleId, setSelectedChronicleId] = createSignal(initialChronicles[0].id);
   const [chronicleFilter, setChronicleFilter] = createSignal("all");
   const [authors, setAuthors] = createSignal(["Camille", "Alex"]);
-  const [newAuthor, setNewAuthor] = createSignal("");
+  const [authorQuery, setAuthorQuery] = createSignal(initialChronicles[0].author);
+  const [hydrated, setHydrated] = createSignal(false);
   const [slider, setSlider] = createSignal<Slider>("alpha");
   const [broadcastSlider, setBroadcastSlider] = createSignal<Slider | null>(null);
   const [mediaOpen, setMediaOpen] = createSignal(false);
@@ -25,6 +32,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [shareMode, setShareMode] = createSignal<ShareMode>("edit");
   const [notice, setNotice] = createSignal("");
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
+  let editor: Editor | undefined;
+  let editorChronicleId = "";
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
@@ -49,36 +58,37 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   const pictureInPicture = async () => {
     const candidate = globalThis.document?.querySelector("[data-slider-preview]") as HTMLElement | null;
-    if (candidate && "requestPictureInPicture" in candidate) await (candidate as unknown as { requestPictureInPicture(): Promise<void> }).requestPictureInPicture();
-    else setNotice("Le Picture-in-Picture est disponible dans un navigateur compatible.");
+    const documentPiP = (globalThis as typeof globalThis & { documentPictureInPicture?: { requestWindow: (options: { width: number; height: number }) => Promise<NonNullable<ReturnType<typeof globalThis.open>>>; }; }).documentPictureInPicture;
+    if (candidate && documentPiP) {
+      const pipWindow = await documentPiP.requestWindow({ width: 480, height: 270 });
+      pipWindow.document.head.innerHTML = globalThis.document.head.innerHTML;
+      pipWindow.document.body.append(candidate.cloneNode(true));
+      return;
+    }
+    const opened = globalThis.open(publicLink("slider"), "RoadcastPreview", "popup,width=640,height=420");
+    if (!opened) setNotice("Autorisez les fenêtres surgissantes pour ouvrir l’aperçu dans une fenêtre séparée.");
   };
 
   const format = (formatName: "bold" | "italic" | "heading" | "list" | "link" | "separator") => {
-    const editor = globalThis.document?.querySelector("[data-chronicle-editor]") as HTMLElement | null;
-    editor?.focus();
     if (!editor) return;
     if (formatName === "link") {
       const url = globalThis.prompt("Adresse du lien");
-      if (url) globalThis.document.execCommand("createLink", false, url);
-    } else if (formatName === "heading") globalThis.document.execCommand("formatBlock", false, "h2");
-    else if (formatName === "list") globalThis.document.execCommand("insertUnorderedList");
-    else if (formatName === "separator") globalThis.document.execCommand("insertHorizontalRule");
-    else globalThis.document.execCommand(formatName);
-    updateSelectedChronicle({ document: editor.textContent ?? "" });
+      if (url) editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+    } else if (formatName === "heading") editor.chain().focus().toggleHeading({ level: 2 }).run();
+    else if (formatName === "list") editor.chain().focus().toggleBulletList().run();
+    else if (formatName === "separator") editor.chain().focus().setHorizontalRule().run();
+    else if (formatName === "bold") editor.chain().focus().toggleBold().run();
+    else editor.chain().focus().toggleItalic().run();
   };
 
-  const insertChronicle = (position: "above" | "below") => {
+  const addChronicle = () => {
     const current = selectedChronicle();
     const author = current?.author ?? authors()[0];
-    const chronicle: WorkspaceChronicle = { id: `chronicle-${Date.now()}`, title: "Nouvelle chronique", document: "", author };
-    setChronicles((items) => {
-      const index = Math.max(0, items.findIndex((item) => item.id === selectedChronicleId()));
-      const next = [...items];
-      next.splice(index + (position === "below" ? 1 : 0), 0, chronicle);
-      return next;
-    });
+    const chronicle: WorkspaceChronicle = { id: `chronicle-${Date.now()}`, title: "Nouvelle chronique", document: "<p></p>", author, versions: [] };
+    setChronicles((items) => [...items, chronicle]);
     setSelectedChronicleId(chronicle.id);
-    setNotice(`Nouvelle chronique ajoutée ${position === "above" ? "au-dessus" : "en dessous"}.`);
+    setAuthorQuery(author);
+    setNotice("Nouvelle chronique ajoutée.");
   };
 
   const moveChronicle = (direction: "up" | "down") => setChronicles((items) => {
@@ -90,22 +100,86 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     return next;
   });
 
-  const createAuthor = () => {
-    const author = newAuthor().trim();
+  const applyAuthor = () => {
+    const author = authorQuery().trim();
     if (!author) { setNotice("Saisissez un nom de chroniqueur."); return; }
     if (!authors().includes(author)) setAuthors((current) => [...current, author]);
     updateSelectedChronicle({ author });
-    setNewAuthor("");
     setNotice(`${author} est maintenant chroniqueur.`);
   };
+
+  const selectChronicle = (id: string) => {
+    const chronicle = chronicles().find((item) => item.id === id);
+    if (!chronicle) return;
+    setSelectedChronicleId(id);
+    setAuthorQuery(chronicle.author);
+  };
+
+  const editorReady = (element: ChronicleEditorElement) => {
+    editor?.destroy();
+    const current = selectedChronicle();
+    editorChronicleId = current.id;
+    editor = new Editor({
+      element,
+      extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true })],
+      content: current.document,
+      onUpdate: ({ editor: instance }) => updateSelectedChronicle({ document: instance.getHTML() }),
+    });
+  };
+
+  const saveVersion = () => {
+    const chronicle = selectedChronicle();
+    if (chronicle.versions.at(-1)?.document === chronicle.document) { setNotice("Cette version est déjà enregistrée."); return; }
+    const version = { id: `version-${Date.now()}`, savedAt: new Date().toISOString(), document: chronicle.document };
+    updateSelectedChronicle({ versions: [...chronicle.versions, version].slice(-maxVersions) });
+    setNotice("Version enregistrée.");
+  };
+
+  const restoreVersion = (versionId: string) => {
+    if (!versionId) return;
+    const version = selectedChronicle().versions.find((item) => item.id === versionId);
+    if (!version) return;
+    updateSelectedChronicle({ document: version.document });
+    editor?.commands.setContent(version.document);
+    setNotice("Version restaurée. Enregistrez une nouvelle version pour la conserver.");
+  };
+
+  createEffect(() => {
+    const chronicle = selectedChronicle();
+    if (editor && editorChronicleId !== chronicle.id) {
+      editorChronicleId = chronicle.id;
+      editor.commands.setContent(chronicle.document);
+    }
+  });
+
+  createEffect(() => {
+    if (!hydrated()) return;
+    const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors() };
+    globalThis.localStorage.setItem(`roadcast-workspace:${props.slug}`, JSON.stringify(workspace));
+  });
 
   onMount(() => {
     const savedTheme = globalThis.localStorage.getItem("roadcast-theme");
     if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
+    try {
+      const savedWorkspace = JSON.parse(globalThis.localStorage.getItem(`roadcast-workspace:${props.slug}`) ?? "null") as PersistedWorkspace | null;
+      if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && savedWorkspace.chronicles.length > 0 && Array.isArray(savedWorkspace.authors)) {
+        const savedChronicles = savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions) : [] }));
+        setTitle(savedWorkspace.title);
+        setChronicles(savedChronicles);
+        setAuthors(savedWorkspace.authors);
+        editorChronicleId = "";
+        setSelectedChronicleId(savedChronicles[0].id);
+        setAuthorQuery(savedChronicles[0].author);
+      }
+    } catch { globalThis.localStorage.removeItem(`roadcast-workspace:${props.slug}`); }
+    setHydrated(true);
   });
 
+  onCleanup(() => editor?.destroy());
+
   return <>
-    <RoadcastWorkspaceView slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document)} chronicleFilter={chronicleFilter()} authors={authors()} newAuthor={newAuthor()} slider={slider()} broadcastSlider={broadcastSlider()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onChronicleAuthorChange={(author) => updateSelectedChronicle({ author })} onDocumentInput={(value) => updateSelectedChronicle({ document: value })} onFormat={format} onMove={moveChronicle} onInsert={insertChronicle} onSelectChronicle={setSelectedChronicleId} onFilterChange={setChronicleFilter} onNewAuthorInput={setNewAuthor} onCreateAuthor={createAuthor} onOpenMedia={() => setMediaOpen(true)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme} />
+    <RoadcastWorkspaceView slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document)} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} slider={slider()} broadcastSlider={broadcastSlider()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={setAuthorQuery} onApplyAuthor={applyAuthor} onEditorReady={editorReady} onFormat={format} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenMedia={() => setMediaOpen(true)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme} />
     <MediaDialogView open={mediaOpen()} onClose={() => setMediaOpen(false)} onDelete={() => { setMediaOpen(false); setNotice("Média supprimé."); }} onSend={(target) => { setMediaOpen(false); setSlider(target); setBroadcastSlider(target); setNotice(`Média envoyé à ${target}.`); }} />
   </>;
 }

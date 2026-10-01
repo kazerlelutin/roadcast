@@ -14,7 +14,7 @@
   align-items: start;
 }
 
-.editor input {
+.editor header input {
   max-width: 100%;
   padding: 0;
   border: 0;
@@ -57,21 +57,21 @@
 
 .canvas {
   min-height: 23rem;
-  padding: .2rem 0;
-  outline: 0;
+  padding: .75rem 0;
   color: var(--text, #f7f8fc);
-  font-family: Georgia, serif;
-  font-size: 1.15rem;
-  line-height: 1.75;
-  white-space: pre-wrap;
 }
 
-.canvas:empty::before { content: attr(data-placeholder); color: var(--muted, #aebbd3); }
+.canvas :global(.ProseMirror) { min-height: 21rem; outline: 0; font-family: Georgia, serif; font-size: 1.15rem; line-height: 1.75; }
+.canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: var(--muted, #aebbd3); content: "Écrivez librement, ou utilisez la barre d’outils."; pointer-events: none; }
+.canvas :global(.ProseMirror a) { color: var(--accent, #00a6b1); text-decoration: underline; }
+.canvas :global(.ProseMirror hr) { margin: 1.5rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
 
 kbd { padding: .05rem .25rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; font: inherit; }
 
 .editor footer {
   display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
   justify-content: space-between;
   padding-top: .8rem;
   border-top: 1px solid var(--line, #3c4968);
@@ -79,4 +79,13 @@ kbd { padding: .05rem .25rem; border: 1px solid var(--line, #3c4968); border-rad
   font-size: .8rem;
 }
 
-.actions { display: flex; flex-wrap: wrap; justify-content: end; gap: .4rem; }
+.metadata { display: flex; align-items: end; gap: .5rem; margin: 1rem 0 0; }
+.metadata label { display: grid; gap: .3rem; color: var(--muted, #aebbd3); font-size: .75rem; }
+.metadata input { min-width: min(100%, 15rem); padding: .42rem .55rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: transparent; color: inherit; }
+.versions, .moveActions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.versions label, .moveActions span { font-size: .72rem; font-weight: 700; }
+.versions select { padding: .42rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: var(--surface, #1b2338); color: inherit; }
+.moveActions { padding: .35rem; border: 1px solid color-mix(in srgb, var(--accent, #00a6b1) 60%, var(--line, #3c4968)); border-radius: .3rem; background: color-mix(in srgb, var(--accent, #00a6b1) 11%, transparent); color: var(--text, #f7f8fc); }
+.moveActions button { border-color: var(--accent, #00a6b1); font-weight: 700; }
+
+@media (max-width: 640px) { .metadata, .editor footer { align-items: stretch; flex-direction: column; } }

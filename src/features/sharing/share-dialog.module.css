@@ -1,5 +1,12 @@
 .dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
   width: min(94vw, 580px);
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  margin: auto;
   border: 1px solid #40516e;
   border-radius: .6rem;
   padding: 1.25rem;

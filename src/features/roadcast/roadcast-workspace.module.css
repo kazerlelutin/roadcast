@@ -127,12 +127,15 @@
 }
 
 .tree {
-  padding: .85rem;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: .3rem;
   background: var(--surface);
   color: var(--muted);
 }
+
+.treeIdentity, .treeContent { padding: 1rem; }
+.treeContent { border-top: 1px solid var(--line); background: color-mix(in srgb, var(--editor-canvas) 55%, transparent); }
 
 .roadcastTitleLabel {
   display: block;
@@ -145,7 +148,7 @@
 
 .roadcastTitle {
   width: 100%;
-  margin: 0 0 .8rem;
+  margin: 0;
   padding: .2rem 0;
   border: 0;
   border-bottom: 1px solid var(--line);
@@ -159,8 +162,10 @@
 
 .roadcastTitle:focus { border-bottom-color: var(--accent); }
 
-.filterRow { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .45rem; margin: .55rem 0; font-size: .75rem; }
-.filterRow select, .authorCreator input { min-width: 0; padding: .36rem; border: 1px solid var(--line); border-radius: .2rem; background: var(--editor-canvas); color: var(--text); }
+.treeSectionHeader { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .4rem; margin-bottom: .75rem; }
+.treeSectionHeader h2 { grid-row: span 2; margin: 0; color: var(--text); font-size: .92rem; }
+.treeSectionHeader label { color: var(--muted); font-size: .68rem; }
+.treeSectionHeader select { min-width: 0; width: 7.8rem; padding: .36rem; border: 1px solid var(--line); border-radius: .2rem; background: var(--editor-canvas); color: var(--text); }
 
 .tree ol {
   padding: 0;
@@ -197,20 +202,6 @@
   color: var(--text);
 }
 
-.tree hr {
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 1rem 0;
-}
-
-.tree small {
-  display: block;
-  line-height: 1.5;
-}
-
-.authorCreator { display: grid; gap: .4rem; font-size: .76rem; color: var(--text); }
-.authorCreator button { justify-self: start; padding: .38rem .55rem; border: 1px solid var(--line); border-radius: .2rem; background: transparent; color: var(--text); cursor: pointer; }
-.authorCreator button:hover { border-color: var(--accent); }
 
 @media (max-width: 980px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }
