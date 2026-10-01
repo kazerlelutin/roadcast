@@ -1,6 +1,7 @@
 .dialog { position: fixed; inset: 0; z-index: 25; width: min(94vw, 560px); max-height: calc(100vh - 2rem); margin: auto; overflow: auto; border: 1px solid #40516e; border-radius: .6rem; padding: 1.2rem; background: #172135; color: #eef4ff; box-shadow: 0 20px 70px #0009; }
 .dialog::backdrop { background: #07101dbb; }
 .dialog header, .dialog footer { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.dialog header { justify-content: end; }
 .dialog header p { margin: 0 0 .35rem; color: #5fd2da; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
 .dialog h2 { margin: 0; font-size: 1.3rem; }
 .dialog header button { border: 0; background: transparent; color: inherit; font-size: 1.4rem; cursor: pointer; }
