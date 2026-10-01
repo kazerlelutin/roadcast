@@ -1,91 +1,48 @@
-.editor {
-  min-width: 0;
-  padding: clamp(1rem, 3vw, 2.25rem);
-  border: 1px solid var(--line, #3c4968);
-  border-radius: .25rem;
-  background: var(--surface, #1b2338);
-  color: var(--text, #f7f8fc);
-}
-
-.editor header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: start;
-}
-
-.editor header input {
-  max-width: 100%;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: inherit;
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
-  font-weight: 750;
-}
-
-.editor button {
-  padding: .42rem .6rem;
-  border: 1px solid var(--line, #3c4968);
-  border-radius: .2rem;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-}
-
-.editor button:hover {
-  border-color: var(--accent, #00a6b1);
-}
-
-.kicker {
-  margin: 0 0 .45rem;
-  color: var(--accent, #00a6b1);
-  font-size: .7rem;
-  font-weight: 800;
-  letter-spacing: .1em;
-}
-
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .4rem;
-  margin: 1.25rem 0;
-  padding-bottom: .75rem;
-  border-bottom: 1px solid var(--line, #3c4968);
-}
-
-.canvas {
-  min-height: 23rem;
-  padding: .75rem 0;
-  color: var(--text, #f7f8fc);
-}
-
-.canvas :global(.ProseMirror) { min-height: 21rem; outline: 0; font-family: Georgia, serif; font-size: 1.15rem; line-height: 1.75; }
-.canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: var(--muted, #aebbd3); content: "Écrivez librement, ou utilisez la barre d’outils."; pointer-events: none; }
-.canvas :global(.ProseMirror a) { color: var(--accent, #00a6b1); text-decoration: underline; }
-.canvas :global(.ProseMirror hr) { margin: 1.5rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
-
-kbd { padding: .05rem .25rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; font: inherit; }
-
-.editor footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .75rem;
-  justify-content: space-between;
-  padding-top: .8rem;
-  border-top: 1px solid var(--line, #3c4968);
-  color: var(--muted, #aebbd3);
-  font-size: .8rem;
-}
-
-.metadata { display: flex; align-items: end; gap: .5rem; margin: 1rem 0 0; }
-.metadata label { display: grid; gap: .3rem; color: var(--muted, #aebbd3); font-size: .75rem; }
-.metadata input { min-width: min(100%, 15rem); padding: .42rem .55rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: transparent; color: inherit; }
-.versions, .moveActions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
-.versions label, .moveActions span { font-size: .72rem; font-weight: 700; }
-.versions select { padding: .42rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: var(--surface, #1b2338); color: inherit; }
-.moveActions { padding: .35rem; border: 1px solid color-mix(in srgb, var(--accent, #00a6b1) 60%, var(--line, #3c4968)); border-radius: .3rem; background: color-mix(in srgb, var(--accent, #00a6b1) 11%, transparent); color: var(--text, #f7f8fc); }
-.moveActions button { border-color: var(--accent, #00a6b1); font-weight: 700; }
-
-@media (max-width: 640px) { .metadata, .editor footer { align-items: stretch; flex-direction: column; } }
+.editor { min-width: 0; border: 1px solid var(--line, #3c4968); border-radius: .45rem; overflow: visible; background: #16191e; color: #f2f2f0; }
+.topbar { display: flex; align-items: center; justify-content: space-between; min-height: 2.8rem; padding: 0 .85rem; border-bottom: 1px solid #32363e; color: #9da4ae; font-size: .75rem; }
+.topbar div { display: flex; gap: .25rem; }
+.topbar button, .toolbar button, .versions button, .moveActions button { border: 1px solid #3b4049; border-radius: .25rem; padding: .38rem .55rem; background: transparent; color: inherit; cursor: pointer; }
+.topbar button:hover, .toolbar button:hover, .versions button:hover { border-color: #00a6b1; color: #fff; }
+.documentShell { position: relative; padding: clamp(1.5rem, 5vw, 3.4rem) clamp(1.2rem, 6vw, 6.5rem); }
+.document { width: min(100%, 720px); margin-inline: auto; }
+.blockRail { position: absolute; top: 8rem; left: clamp(.5rem, 2vw, 2rem); display: flex; gap: .3rem; opacity: .68; }
+.blockRail button { width: 1.65rem; height: 1.65rem; border: 0; background: transparent; color: #b7bec8; font-size: 1rem; cursor: pointer; }
+.blockRail button:hover { color: #fff; }
+.kicker { margin: 0 0 .65rem; color: #75d7dd; font-size: .68rem; font-weight: 800; letter-spacing: .1em; }
+.title { width: 100%; padding: 0; border: 0; outline: 0; background: transparent; color: #f8f9fb; font-size: clamp(1.75rem, 3vw, 2.35rem); font-weight: 760; }
+.metaRow { display: flex; flex-wrap: wrap; align-items: end; gap: .65rem; margin: 1rem 0; }
+.authorPicker { position: relative; display: grid; gap: .35rem; }
+.authorPicker label, .mediaInput { color: #a9b1bd; font-size: .72rem; }
+.authorPicker input { min-width: 14rem; padding: .48rem .6rem; border: 1px solid #3b4049; border-radius: .25rem; background: #202329; color: #f2f2f0; }
+.authorOptions { position: absolute; z-index: 4; top: 100%; left: 0; display: none; width: 100%; margin-top: .3rem; padding: .25rem; border: 1px solid #4b5665; border-radius: .3rem; background: #252931; box-shadow: 0 .75rem 2rem #0007; }
+.authorOptions.open { display: grid; }
+.authorOptions button { padding: .45rem .5rem; border: 0; border-radius: .2rem; background: transparent; color: #f2f2f0; text-align: left; cursor: pointer; }
+.authorOptions button:hover { background: #35445e; }
+.mediaInput { display: inline-flex; align-items: center; min-height: 2.1rem; padding: 0 .6rem; border: 1px solid #3b4049; border-radius: .25rem; cursor: pointer; }
+.mediaInput:hover { border-color: #00a6b1; color: #fff; }
+.mediaInput input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1.2rem 0 .6rem; padding: .55rem 0; border-top: 1px solid #32363e; border-bottom: 1px solid #32363e; }
+.canvas { position: relative; min-height: 25rem; padding: 1rem 0 2rem; }
+.canvas :global(.ProseMirror) { min-height: 22rem; outline: 0; color: #e9ebee; font-size: 1.03rem; line-height: 1.72; }
+.canvas :global(.ProseMirror > :first-child) { margin-top: 0; }
+.canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: #828a96; content: "Commencez à écrire ou tapez / pour les commandes…"; pointer-events: none; }
+.canvas :global(.ProseMirror blockquote) { margin: 1.25rem 0; padding-left: .85rem; border-left: 3px solid #e6e8eb; color: #e6e8eb; }
+.canvas :global(.ProseMirror pre) { padding: 1rem; border: 1px solid #3b4049; border-radius: .35rem; background: #202227; color: #dfe3e8; }
+.canvas :global(.ProseMirror img) { display: block; max-width: 100%; margin: 1.25rem 0; border-radius: .35rem; }
+.canvas :global(.ProseMirror a) { color: #75d7dd; text-decoration: underline; }
+.canvas :global(.ProseMirror hr) { margin: 2rem 0; border: 0; border-top: 1px solid #32363e; }
+.commandMenu { display: none; position: absolute; z-index: 3; bottom: 1rem; left: 0; width: min(100%, 19rem); padding: .45rem; border: 1px solid #4b5665; border-radius: .35rem; background: #272b32; box-shadow: 0 1rem 2rem #0008; }
+.commandMenu.open { display: grid; gap: .2rem; }
+.commandMenu strong { padding: .25rem .35rem; color: #a9b1bd; font-size: .7rem; }
+.commandMenu button { padding: .45rem; border: 0; border-radius: .2rem; background: transparent; color: #f2f2f0; text-align: left; cursor: pointer; }
+.commandMenu button:hover { background: #35445e; }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; padding-top: .8rem; border-top: 1px solid #32363e; }
+.versions, .moveActions, .broadcast { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.versions label, .moveActions span, .broadcast label { color: #a9b1bd; font-size: .7rem; font-weight: 700; }
+.versions select, .broadcast select { padding: .4rem; border: 1px solid #3b4049; border-radius: .25rem; background: #202329; color: #f2f2f0; }
+.moveActions { padding: .35rem; border: 1px solid #00a6b1; border-radius: .3rem; background: #00a6b11c; }
+.moveActions button { border-color: #00a6b1; font-weight: 700; }
+.broadcast { gap: .55rem; padding: .75rem clamp(1rem, 3vw, 2rem); border-top: 1px solid #32363e; background: #1c2027; }
+.broadcast > strong { margin-right: .25rem; color: #75d7dd; }
+.broadcast > button { padding: .45rem .7rem; border: 1px solid #00a6b1; border-radius: .25rem; background: #00a6b1; color: #08151a; font-weight: 800; cursor: pointer; }
+@media (max-width: 640px) { .documentShell { padding-inline: 1.2rem; } .blockRail { display: none; } footer { align-items: stretch; flex-direction: column; } .broadcast { align-items: stretch; flex-direction: column; } .authorPicker input { min-width: 0; width: 100%; } }

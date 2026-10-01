@@ -162,10 +162,10 @@
 
 .roadcastTitle:focus { border-bottom-color: var(--accent); }
 
-.treeSectionHeader { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .4rem; margin-bottom: .75rem; }
-.treeSectionHeader h2 { grid-row: span 2; margin: 0; color: var(--text); font-size: .92rem; }
-.treeSectionHeader label { color: var(--muted); font-size: .68rem; }
-.treeSectionHeader select { min-width: 0; width: 7.8rem; padding: .36rem; border: 1px solid var(--line); border-radius: .2rem; background: var(--editor-canvas); color: var(--text); }
+.treeContent h2 { margin: 0 0 1rem; color: var(--text); font-size: .95rem; }
+.filterLabel { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .72rem; }
+.filterSelect { width: 100%; padding: .5rem .55rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--editor-canvas); color: var(--text); }
+.treeDivider { margin: 1rem 0; border: 0; border-top: 1px solid var(--line); }
 
 .tree ol {
   padding: 0;

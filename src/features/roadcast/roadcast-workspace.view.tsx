@@ -1,4 +1,4 @@
-import { type ChronicleEditorElement, type ChronicleVersion, ChronicleEditorView } from "../chronicle/chronicle-editor.view";
+import { type BroadcastSelection, type ChronicleEditorElement, type ChronicleFormat, type ChronicleVersion, type MediaFile, ChronicleEditorView } from "../chronicle/chronicle-editor.view";
 import { type Slider, SliderPreviewView } from "../presentation/slider-preview.view";
 import { type ShareMode, ShareDialogView } from "../sharing/share-dialog.view";
 import styles from "./roadcast-workspace.module.css";
@@ -15,6 +15,9 @@ export type RoadcastWorkspaceViewProps = {
   chronicleFilter: string;
   authors: string[];
   authorQuery: string;
+  authorPickerOpen: boolean;
+  commandMenuOpen: boolean;
+  broadcastSelection: BroadcastSelection;
   slider: Slider;
   broadcastSlider: Slider | null;
   notice: string;
@@ -25,16 +28,22 @@ export type RoadcastWorkspaceViewProps = {
   onTitleInput: (value: string) => void;
   onChronicleTitleInput: (value: string) => void;
   onAuthorQueryInput: (value: string) => void;
-  onApplyAuthor: () => void;
+  onAuthorPickerOpen: (open: boolean) => void;
+  onSelectAuthor: (author: string) => void;
   onEditorReady: (element: ChronicleEditorElement) => void;
-  onFormat: (format: "bold" | "italic" | "heading" | "list" | "link" | "separator") => void;
+  onFormat: (format: ChronicleFormat) => void;
+  onMediaInput: (file: MediaFile | undefined) => void;
+  onUndo: () => void;
+  onRedo: () => void;
   onMove: (direction: "up" | "down") => void;
   onAddChronicle: () => void;
   onSelectChronicle: (id: string) => void;
   onFilterChange: (author: string) => void;
   onSaveVersion: () => void;
   onRestoreVersion: (versionId: string) => void;
-  onOpenMedia: () => void;
+  onBroadcastSelectionChange: (selection: BroadcastSelection) => void;
+  onBroadcastSliderChange: (slider: Slider) => void;
+  onBroadcast: () => void;
   onSelectSlider: (slider: Slider) => void;
   onPictureInPicture: () => void;
   onShare: () => void;
@@ -66,13 +75,13 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     <div class={styles.workspace}>
       <nav class={styles.tree} aria-label="Arbre des chroniques">
         <section class={styles.treeIdentity}><label class={styles.roadcastTitleLabel} for="roadcast-name">Titre du roadcast</label><input id="roadcast-name" class={styles.roadcastTitle} value={props.title} onInput={(event) => props.onTitleInput(event.currentTarget.value)} /></section>
-        <section class={styles.treeContent}><div class={styles.treeSectionHeader}><h2>Chroniques</h2><label for="author-filter">Filtrer</label><select id="author-filter" value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select></div><ol>
+        <section class={styles.treeContent}><h2>Chroniques</h2><label class={styles.filterLabel} for="author-filter">Filtrer les chroniques</label><select id="author-filter" class={styles.filterSelect} value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous les chroniqueurs</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select><hr class={styles.treeDivider} /><ol>
           {filteredChronicles().map((chronicle) => <li><button type="button" aria-current={chronicle.id === props.selectedChronicleId ? "page" : undefined} onClick={() => props.onSelectChronicle(chronicle.id)}><span>{chronicle.title}</span><small>{chronicle.author}</small></button></li>)}
         </ol>
         <button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} versions={selectedChronicle().versions} openMedia={props.onOpenMedia} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onApplyAuthor={props.onApplyAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} commandMenuOpen={props.commandMenuOpen} broadcastSelection={props.broadcastSelection} broadcastSlider={props.slider} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onBroadcastSelectionChange={props.onBroadcastSelectionChange} onBroadcastSliderChange={props.onBroadcastSliderChange} onBroadcast={props.onBroadcast} />
 
       <div data-slider-preview>
         <SliderPreviewView active={props.slider} broadcasting={props.broadcastSlider === props.slider} interactive={props.slider === "bravo"} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />

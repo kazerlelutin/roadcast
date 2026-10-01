@@ -57,3 +57,8 @@ Feature: Préparer une chronique Roadcast
     Given une chronique modifiée dans l’éditeur
     When j’enregistre une version puis choisis une version antérieure
     Then son contenu est restauré et seules les dernières versions sont conservées localement
+
+  Scenario: Diffuser une sélection depuis l’éditeur
+    Given une chronique contenant du texte sélectionné et une image
+    When je choisis le contenu à diffuser et un slider depuis l’éditeur
+    Then la sélection est envoyée vers le slider choisi
