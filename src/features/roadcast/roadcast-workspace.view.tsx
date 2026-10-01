@@ -27,7 +27,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
       <div class={styles.links}>
-        <a href={`/roadcast/${props.slug}/read`}>Lecture</a>
+        <a href={`/${props.slug}/read`}>Lecture</a>
         <a href={`/slider/${props.slug}-alpha`}>Slider</a>
         <button type="button" onClick={props.onShare}>Partager</button>
         <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>{isLight() ? "☾" : "☼"}</button>

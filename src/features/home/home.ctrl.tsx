@@ -24,6 +24,6 @@ export function HomeCtrl() {
     // Laisser Solid finir l'hydratation SSR avant de remplacer la liste vide par la réponse PostgreSQL.
     setTimeout(() => void listRoadcasts().then(setRoadcasts), 0);
   });
-  const onCreate = async (title: string) => { setError(""); setPending(true); try { const created = await create({ title }); await navigate(`/roadcast/${created.slug}`); } catch { setError("La création nécessite une base PostgreSQL configurée. Vérifiez DATABASE_URL puis réessayez."); } finally { setPending(false); } };
+  const onCreate = async (title: string) => { setError(""); setPending(true); try { const created = await create({ title }); await navigate(`/${created.slug}`); } catch { setError("La création nécessite une base PostgreSQL configurée. Vérifiez DATABASE_URL puis réessayez."); } finally { setPending(false); } };
   return <HomeView roadcasts={roadcasts()} pending={pending()} error={error()} theme={theme()} onCreate={onCreate} onThemeChange={toggleTheme} />;
 }

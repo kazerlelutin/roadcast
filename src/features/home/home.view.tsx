@@ -38,7 +38,7 @@ export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; e
         </form>
 
         <div class={styles.list}>
-          <For each={props.roadcasts}>{(roadcast) => <a class={styles.roadcast} href={`/roadcast/${roadcast.slug}`}>
+          <For each={props.roadcasts}>{(roadcast) => <a class={styles.roadcast} href={`/${roadcast.slug}`}>
             <span class={styles.roadcastContent}>
               <strong>{roadcast.title}</strong>
               <small>Dernière activité {roadcast.lastActivityAt ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(new Date(roadcast.lastActivityAt)) : "aujourd’hui"}</small>

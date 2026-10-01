@@ -19,7 +19,7 @@ Feature: Préparer une chronique Roadcast
     Then l'arbre, l'éditeur et l'aperçu restent lisibles
 
   Scenario: Ouvrir un lien direct vers un roadcast
-    Given le lien de modification d'un roadcast
+    Given le lien de modification /mon-roadcast
     When je l'ouvre dans le navigateur
     Then l'arbre et l'éditeur de la chronique sont affichés
 
