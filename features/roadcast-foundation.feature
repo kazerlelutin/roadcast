@@ -8,6 +8,16 @@ Feature: Préparer une chronique Roadcast
     When je saisis le titre de mon roadcast
     Then je peux accéder à son espace d'écriture
 
+  Scenario: Choisir un contraste adapté depuis l'accueil
+    Given la page d'accueil Roadcast est en mode sombre
+    When je bascule vers le mode clair
+    Then l'accueil reste lisible et le choix est conservé
+
+  Scenario: Préparer une chronique avec le contraste choisi
+    Given une chronique ouverte dans un roadcast
+    When je choisis le mode clair ou sombre
+    Then l'arbre, l'éditeur et l'aperçu restent lisibles
+
   Scenario: Estimer la durée pendant l'écriture
     Given une chronique ouverte en mode concentration
     When je modifie le texte de la chronique

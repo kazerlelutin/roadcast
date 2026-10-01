@@ -1,1 +1,201 @@
-.page { min-height: 100vh; padding: 1rem; background: #101725; }.header { max-width: 1500px; margin: 0 auto 1rem; display: flex; justify-content: space-between; align-items: center; }.brand { font-weight: 850; font-size: 1.3rem; text-decoration: none; }.links { display: flex; gap: .7rem; align-items: center; }.links a, .links button { color: #d8e2f3; background: transparent; border: 1px solid #334661; border-radius: .4rem; padding: .45rem .65rem; text-decoration: none; }.status { min-height: 1.3rem; max-width: 1500px; margin: auto; color: #ffd666; font-size: .85rem; }.workspace { display: grid; grid-template-columns: 220px minmax(0, 1fr) 280px; gap: 1rem; max-width: 1500px; margin: auto; }.tree { color: #b7c4d8; }.tree p { font-size: .7rem; font-weight: 800; letter-spacing: .1em; }.tree h1 { font-size: 1rem; letter-spacing: 0; line-height: 1.2; }.tree ol { padding: 0; list-style: none; }.tree li button, .add { width: 100%; text-align: left; color: inherit; border: 0; background: transparent; padding: .55rem; border-radius: .3rem; }.tree li button[aria-current="page"] { background: #263653; color: white; }.tree hr { border: 0; border-top: 1px solid #2f405d; margin: 1rem 0; }.tree small { line-height: 1.5; display: block; } @media (max-width: 980px) { .workspace { grid-template-columns: 1fr; }.tree { display: none; } }.header { gap: .7rem; }.links { flex-wrap: wrap; justify-content: end; }
+.page {
+  --page-background: #20283f;
+  --surface: #1b2338;
+  --editor-canvas: #20283f;
+  --text: #f7f8fc;
+  --muted: #aebbd3;
+  --line: #3c4968;
+  --soft-surface: #2a3652;
+  --accent: #00a6b1;
+  --button-hover: #f7f8fc;
+  min-height: 100vh;
+  padding: .5rem clamp(.75rem, 3vw, 2.5rem) 2rem;
+  background: var(--page-background);
+  color: var(--text);
+}
+
+.light {
+  --page-background: #edf1f6;
+  --surface: #f8fafc;
+  --editor-canvas: #fff;
+  --text: #172039;
+  --muted: #4e5d73;
+  --line: #c7d0dc;
+  --soft-surface: #e3e9f1;
+  --accent: #007f8a;
+  --button-hover: #172039;
+}
+
+.header,
+.status,
+.workspace {
+  max-width: 1500px;
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.firstLetter,
+.logoText {
+  position: relative;
+  display: inline-block;
+}
+
+.firstLetter {
+  color: #e64c65;
+}
+
+.firstLetter::before,
+.logoText::after {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 1px;
+  content: "";
+  background: #e64c65;
+  animation: logoLine .55s ease-out forwards;
+}
+
+.firstLetter::before { top: -.16em; }
+.logoText::after { bottom: -.16em; animation-delay: .14s; }
+
+@keyframes logoLine { to { width: 100%; } }
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  align-items: center;
+  gap: .35rem;
+}
+
+.links a,
+.links button {
+  padding: .38rem .5rem;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: .8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.links a:hover,
+.links button:hover {
+  border-bottom-color: var(--accent);
+  color: var(--text);
+}
+
+.links .themeButton {
+  width: 1.65rem;
+  height: 1.65rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  color: var(--text);
+}
+
+.status {
+  min-height: 1.3rem;
+  margin-top: .65rem;
+  color: var(--accent);
+  font-size: .8rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 270px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.tree {
+  padding: .65rem .75rem 0 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.tree p {
+  margin: 0;
+  color: var(--accent);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+.tree h1 {
+  margin: .55rem 0 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.tree ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.tree li button,
+.add {
+  width: 100%;
+  padding: .52rem .6rem;
+  border: 1px solid transparent;
+  border-radius: .2rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tree li button:hover,
+.tree li button[aria-current="page"],
+.add:hover {
+  border-color: var(--line);
+  background: var(--soft-surface);
+  color: var(--text);
+}
+
+.add {
+  margin-top: .65rem;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.tree hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1rem 0;
+}
+
+.tree small {
+  display: block;
+  line-height: 1.5;
+}
+
+@media (max-width: 980px) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .tree { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .firstLetter::before,
+  .logoText::after { width: 100%; animation: none; }
+}
