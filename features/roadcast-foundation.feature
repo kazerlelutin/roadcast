@@ -3,6 +3,11 @@ Feature: Préparer une chronique Roadcast
   Je veux écrire, diffuser et partager une chronique depuis le même espace
   Afin de garder une présentation fluide et accessible.
 
+  Scenario: Créer un roadcast depuis l'accueil
+    Given la page d'accueil Roadcast
+    When je saisis le titre de mon roadcast
+    Then je peux accéder à son espace d'écriture
+
   Scenario: Estimer la durée pendant l'écriture
     Given une chronique ouverte en mode concentration
     When je modifie le texte de la chronique

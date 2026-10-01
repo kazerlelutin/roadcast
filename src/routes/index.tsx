@@ -1,2 +1,2 @@
-import { HomeView } from "../features/home/home.view";
-export default function HomeRoute() { return <HomeView />; }
+import { HomeCtrl } from "../features/home/home.ctrl";
+export default function HomeRoute() { return <HomeCtrl />; }
