@@ -83,6 +83,10 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       if (url) editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
     }
     else if (formatName === "bold") editor.chain().focus().toggleBold().run();
+    else if (formatName === "heading") editor.chain().focus().toggleHeading({ level: 2 }).run();
+    else if (formatName === "list") editor.chain().focus().toggleBulletList().run();
+    else if (formatName === "quote") editor.chain().focus().toggleBlockquote().run();
+    else if (formatName === "separator") editor.chain().focus().setHorizontalRule().run();
     else editor.chain().focus().toggleItalic().run();
   };
 
