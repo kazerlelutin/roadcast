@@ -19,6 +19,7 @@ export type RoadcastWorkspaceViewProps = {
   authorPickerOpen: boolean;
   bubble: { top: number; left: number } | null;
   slider: Slider;
+  sliderLink: string;
   broadcasts: Partial<Record<Slider, BroadcastPayload>>;
   broadcastOpen: boolean;
   broadcastDraft: BroadcastDraft | null;
@@ -62,7 +63,6 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const isLight = () => props.theme === "light";
   const selectedChronicle = () => props.chronicles.find((chronicle) => chronicle.id === props.selectedChronicleId) ?? props.chronicles[0];
   const filteredChronicles = () => props.chronicleFilter === "all" ? props.chronicles : props.chronicles.filter((chronicle) => chronicle.author === props.chronicleFilter);
-  const sliderLink = () => `/slider/${props.slug}-${props.slider}`;
 
   return <main classList={{ [styles.page]: true, [styles.light]: isLight() }}>
     <header class={styles.header}>
@@ -88,7 +88,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
 
       <div data-slider-preview>
-        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
+        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
       </div>
     </div>
     <ShareDialogView open={props.shareOpen} mode={props.shareMode} link={props.shareLink} onModeChange={props.onShareModeChange} onCopy={props.onCopyShareLink} onClose={props.onCloseShare} />
