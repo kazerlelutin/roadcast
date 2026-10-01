@@ -62,3 +62,8 @@ Feature: Préparer une chronique Roadcast
     Given une chronique contenant du texte sélectionné et une image
     When j’ouvre la commande Diffuser de la bubble et choisis un slider dans la fenêtre de confirmation
     Then seule ma sélection est envoyée vers le slider choisi
+
+  Scenario: Mettre à jour un slider ouvert en direct
+    Given le lien du slider Bravo est ouvert dans OBS
+    When une sélection est diffusée vers Bravo depuis un autre navigateur
+    Then le slider reçoit cette sélection sans rechargement de page

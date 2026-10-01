@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import { type BroadcastPayload } from "./slider-preview.view";
+import { type BroadcastPayload } from "./slider-realtime.ctrl";
 import styles from "./slider-output.module.css";
 
 export function SliderOutputView(props: { payload: BroadcastPayload | null }) {

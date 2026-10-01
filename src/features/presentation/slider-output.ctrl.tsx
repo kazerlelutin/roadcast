@@ -1,14 +1,13 @@
-import { createSignal, onMount } from "solid-js";
-import { type BroadcastPayload } from "./slider-preview.view";
+import { createSignal, onCleanup, onMount } from "solid-js";
+import { connectSliderRealtime, type SliderRealtimeClient, type BroadcastPayload } from "./slider-realtime.ctrl";
 import { SliderOutputView } from "./slider-output.view";
 
 export function SliderOutputCtrl(props: { token: string }) {
   const [payload, setPayload] = createSignal<BroadcastPayload | null>(null);
+  let realtime: SliderRealtimeClient | undefined;
   onMount(() => {
-    try {
-      const saved = JSON.parse(globalThis.localStorage.getItem(`roadcast-broadcast:${props.token}`) ?? "null") as BroadcastPayload | null;
-      if (saved && typeof saved.text === "string" && Array.isArray(saved.images)) setPayload(saved);
-    } catch { setPayload(null); }
+    realtime = connectSliderRealtime(props.token, setPayload);
   });
+  onCleanup(() => realtime?.close());
   return <SliderOutputView payload={payload()} />;
 }

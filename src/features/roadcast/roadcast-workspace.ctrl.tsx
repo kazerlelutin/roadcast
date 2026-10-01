@@ -5,8 +5,7 @@ import Link from "@tiptap/extension-link";
 import StarterKit from "@tiptap/starter-kit";
 import type { ChronicleEditorElement, ChronicleFormat, MediaFile } from "../chronicle/chronicle-editor.view";
 import type { BroadcastDraft } from "../presentation/broadcast-dialog.view";
-import { type Slider } from "../presentation/slider-preview.view";
-import type { BroadcastPayload } from "../presentation/slider-preview.view";
+import { connectSliderRealtime, type Slider, type SliderRealtimeClient, type BroadcastPayload } from "../presentation/slider-realtime.ctrl";
 import { type ShareMode } from "../sharing/share-dialog.view";
 import { estimateChronicleMinutes } from "../chronicle/reading-time.ctrl";
 import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspaceView } from "./roadcast-workspace.view";
@@ -41,6 +40,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
   let editor: Editor | undefined;
   let editorChronicleId = "";
+  const realtime = new Map<Slider, SliderRealtimeClient>();
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
@@ -160,7 +160,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     const draft = broadcastDraft();
     if (!draft) return;
     setBroadcasts((current) => ({ ...current, [broadcastTarget()]: draft }));
-    globalThis.localStorage.setItem(`roadcast-broadcast:${props.slug}-${broadcastTarget()}`, JSON.stringify(draft));
+    realtime.get(broadcastTarget())?.publish(draft);
     setLastBroadcastSlider(broadcastTarget());
     setSlider(broadcastTarget());
     setBroadcastOpen(false);
@@ -231,10 +231,16 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         setAuthorQuery(savedChronicles[0].author);
       }
     } catch { globalThis.localStorage.removeItem(`roadcast-workspace:${props.slug}`); }
+    (['alpha', 'bravo', 'charly'] as const).forEach((target) => {
+      realtime.set(target, connectSliderRealtime(`${props.slug}-${target}`, (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
+    });
     setHydrated(true);
   });
 
-  onCleanup(() => editor?.destroy());
+  onCleanup(() => {
+    editor?.destroy();
+    realtime.forEach((client) => client.close());
+  });
 
   return <>
     <RoadcastWorkspaceView
