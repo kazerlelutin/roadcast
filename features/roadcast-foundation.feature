@@ -37,3 +37,18 @@ Feature: Préparer une chronique Roadcast
     Given le slider Alpha est interactif
     When une personne ajoute un élément à son résumé
     Then elle peut télécharger son résumé à la fin de la présentation
+
+  Scenario: Partager le bon accès au roadcast
+    Given un roadcast ouvert dans l’espace d’écriture
+    When j’ouvre le partage et choisis Écrire, Lire ou Diffuser
+    Then le lien correspondant est affiché et peut être copié
+
+  Scenario: Garder un aperçu lisible sans diffusion
+    Given aucun média n’est envoyé vers le slider Alpha
+    When je consulte son aperçu
+    Then un encart au ratio 16:9 indique qu’aucune diffusion n’est en cours et son lien peut être copié
+
+  Scenario: Organiser les chroniques avec les chroniqueurs
+    Given un roadcast contenant des chroniques de plusieurs auteurs
+    When je crée ou sélectionne un chroniqueur et filtre les chroniques
+    Then seules les chroniques correspondantes sont affichées et je peux en ajouter au-dessus ou en dessous de la chronique active

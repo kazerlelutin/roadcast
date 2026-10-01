@@ -10,3 +10,19 @@ test("le corps d'un roadcast est accessible dans les deux thèmes @a11y", async 
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
+
+test("partage et organise les chroniques depuis l'espace de travail", async ({ page }) => {
+  await page.goto("/demo");
+  await page.getByRole("button", { name: "Partager" }).click();
+  await expect(page.getByRole("dialog", { name: "Choisir un lien" })).toBeVisible();
+  await page.getByLabel("Lire").check();
+  await expect(page.getByLabel("Lien à partager")).toHaveValue(/\/demo\/read$/);
+  await page.getByRole("button", { name: "Fermer le partage" }).click();
+
+  await page.getByPlaceholder("Nom du chroniqueur").fill("Nora");
+  await page.getByRole("button", { name: "Ajouter" }).click();
+  await expect(page.getByLabel("Auteur")).toHaveValue("Nora");
+  await page.getByRole("button", { name: "+ En dessous" }).click();
+  await expect(page.getByRole("button", { name: /Nouvelle chronique/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Aucune diffusion en cours" })).toBeVisible();
+});

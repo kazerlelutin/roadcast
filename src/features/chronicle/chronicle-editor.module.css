@@ -48,6 +48,7 @@
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: .4rem;
   margin: 1.25rem 0;
   padding-bottom: .75rem;
@@ -65,6 +66,10 @@
   white-space: pre-wrap;
 }
 
+.canvas:empty::before { content: attr(data-placeholder); color: var(--muted, #aebbd3); }
+
+kbd { padding: .05rem .25rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; font: inherit; }
+
 .editor footer {
   display: flex;
   justify-content: space-between;
@@ -73,3 +78,5 @@
   color: var(--muted, #aebbd3);
   font-size: .8rem;
 }
+
+.actions { display: flex; flex-wrap: wrap; justify-content: end; gap: .4rem; }

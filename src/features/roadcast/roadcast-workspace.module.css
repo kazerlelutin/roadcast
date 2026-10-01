@@ -127,25 +127,40 @@
 }
 
 .tree {
-  padding: .65rem .75rem 0 0;
-  border-right: 1px solid var(--line);
+  padding: .85rem;
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+  background: var(--surface);
   color: var(--muted);
 }
 
-.tree p {
-  margin: 0;
+.roadcastTitleLabel {
+  display: block;
+  margin-bottom: .35rem;
   color: var(--accent);
   font-size: .68rem;
   font-weight: 800;
   letter-spacing: .1em;
 }
 
-.tree h1 {
-  margin: .55rem 0 1rem;
+.roadcastTitle {
+  width: 100%;
+  margin: 0 0 .8rem;
+  padding: .2rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  outline: 0;
+  background: transparent;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   line-height: 1.25;
 }
+
+.roadcastTitle:focus { border-bottom-color: var(--accent); }
+
+.filterRow { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .45rem; margin: .55rem 0; font-size: .75rem; }
+.filterRow select, .authorCreator input { min-width: 0; padding: .36rem; border: 1px solid var(--line); border-radius: .2rem; background: var(--editor-canvas); color: var(--text); }
 
 .tree ol {
   padding: 0;
@@ -164,6 +179,9 @@
   text-align: left;
   cursor: pointer;
 }
+
+.tree li button { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.tree li small { color: var(--muted); font-size: .68rem; }
 
 .tree li button:hover,
 .tree li button[aria-current="page"],
@@ -190,9 +208,13 @@
   line-height: 1.5;
 }
 
+.authorCreator { display: grid; gap: .4rem; font-size: .76rem; color: var(--text); }
+.authorCreator button { justify-self: start; padding: .38rem .55rem; border: 1px solid var(--line); border-radius: .2rem; background: transparent; color: var(--text); cursor: pointer; }
+.authorCreator button:hover { border-color: var(--accent); }
+
 @media (max-width: 980px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }
-  .tree { display: none; }
+  .tree { order: 2; }
 }
 
 @media (prefers-reduced-motion: reduce) {

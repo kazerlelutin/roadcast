@@ -36,7 +36,7 @@
 }
 
 .frame {
-  min-height: 210px;
+  aspect-ratio: 16 / 9;
   display: grid;
   align-content: center;
   padding: 1rem;
@@ -44,6 +44,9 @@
   border-radius: .2rem;
   background: linear-gradient(145deg, #126c7a, #263f75);
 }
+
+.empty { background: linear-gradient(145deg, #27344e, #111a2d); text-align: center; }
+.tv { display: block; margin-bottom: .25rem; color: #aebbd3; font-size: 2.5rem; letter-spacing: -.45em; }
 
 .frame p {
   margin: 0;
@@ -56,3 +59,8 @@
   margin: .5rem 0;
   font-size: 1.8rem;
 }
+
+.link { margin-top: .85rem; }
+.link label { display: block; margin-bottom: .35rem; color: var(--muted, #aebbd3); font-size: .72rem; font-weight: 700; }
+.link div { display: flex; gap: .4rem; }
+.link input { min-width: 0; flex: 1; padding: .4rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: transparent; color: inherit; font-size: .75rem; }

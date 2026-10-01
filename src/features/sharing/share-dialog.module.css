@@ -1,0 +1,29 @@
+.dialog {
+  width: min(94vw, 580px);
+  border: 1px solid #40516e;
+  border-radius: .6rem;
+  padding: 1.25rem;
+  background: #172135;
+  color: #eef4ff;
+  box-shadow: 0 20px 70px #0009;
+}
+
+.dialog::backdrop { background: #07101dbb; }
+
+.header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.header p { margin: 0 0 .35rem; color: #5fd2da; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
+.header h2 { margin: 0; font-size: 1.35rem; }
+.header > button { border: 0; background: transparent; color: inherit; font-size: 1.5rem; cursor: pointer; }
+
+fieldset { margin: 1.25rem 0; padding: 0; border: 0; }
+legend, .linkLabel { font-size: .8rem; font-weight: 700; }
+.choices { display: grid; gap: .5rem; margin-top: .55rem; }
+.choices label { display: flex; gap: .65rem; align-items: start; padding: .7rem; border: 1px solid #40516e; border-radius: .35rem; cursor: pointer; }
+.choices label.selected { border-color: #00a6b1; background: #1d3a50; }
+.choices small { display: block; margin-top: .2rem; color: #b6c4da; }
+
+.copyRow { display: flex; gap: .5rem; margin-top: .35rem; }
+.copyRow input { min-width: 0; flex: 1; padding: .6rem; border: 1px solid #40516e; border-radius: .3rem; background: #101827; color: inherit; }
+.copyRow button { border: 1px solid #00a6b1; border-radius: .3rem; padding: .55rem .7rem; background: #00a6b1; color: #07131f; font-weight: 750; cursor: pointer; }
+
+@media (max-width: 500px) { .copyRow { flex-direction: column; } }
