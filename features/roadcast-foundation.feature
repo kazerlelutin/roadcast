@@ -18,6 +18,11 @@ Feature: Préparer une chronique Roadcast
     When je choisis le mode clair ou sombre
     Then l'arbre, l'éditeur et l'aperçu restent lisibles
 
+  Scenario: Ouvrir un lien direct vers un roadcast
+    Given le lien de modification d'un roadcast
+    When je l'ouvre dans le navigateur
+    Then l'arbre et l'éditeur de la chronique sont affichés
+
   Scenario: Estimer la durée pendant l'écriture
     Given une chronique ouverte en mode concentration
     When je modifie le texte de la chronique
