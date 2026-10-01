@@ -1,0 +1,12 @@
+.page { max-width: 1120px; margin: auto; padding: 1.5rem clamp(1.25rem, 5vw, 4rem) 4rem; }
+.header { display: flex; justify-content: space-between; align-items: center; color: #aebbd3; font-size: .9rem; }
+.brand { color: #fff; font-weight: 800; text-decoration: none; letter-spacing: -.05em; font-size: 1.3rem; }
+.hero { padding: clamp(5rem, 15vw, 11rem) 0 5rem; max-width: 760px; }
+.eyebrow { color: #ffd666; letter-spacing: .14em; font-size: .75rem; font-weight: 800; }
+h1 { font-size: clamp(3rem, 8vw, 6.4rem); letter-spacing: -.075em; line-height: .93; margin: .8rem 0 1.5rem; }
+.hero > p:not(.eyebrow) { color: #b9c5d9; font-size: 1.25rem; line-height: 1.6; max-width: 570px; }
+.primary { display: inline-block; margin-top: 1.5rem; padding: .9rem 1.2rem; background: #ffd666; color: #171200; border-radius: .55rem; font-weight: 800; text-decoration: none; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.cards article { border: 1px solid #2a3851; border-radius: .8rem; padding: 1.25rem; background: #151e2d; }
+.cards strong { color: #ffd666; font-size: .8rem; }.cards p { color: #b9c5d9; line-height: 1.5; }
+@media (max-width: 640px) { .header span { display: none; }.cards { grid-template-columns: 1fr; } }

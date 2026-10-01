@@ -1,0 +1,5 @@
+import styles from "./home.module.css";
+
+export function HomeView() {
+  return <main class={styles.page}><header class={styles.header}><a class={styles.brand} href="/">roadcast</a><span>Chroniques, sans distraction.</span></header><section class={styles.hero}><p class={styles.eyebrow}>MODE CONCENTRATION</p><h1>Écrire une chronique.<br />La faire vivre partout.</h1><p>Un même contenu pour la régie, les lecteurs et les personnes qui suivent à leur rythme.</p><a class={styles.primary} href="/roadcast/demo">Ouvrir la démo <span aria-hidden="true">→</span></a></section><section class={styles.cards} aria-label="Principes Roadcast"><article><strong>01 · Écrire</strong><p>Blocs libres, estimation de temps et médias dans le texte.</p></article><article><strong>02 · Diffuser</strong><p>Alpha, Bravo, Charly : chaque slider reçoit exactement ce que vous choisissez.</p></article><article><strong>03 · Partager</strong><p>Liens de modification, lecture et diffusion séparés, sans compte imposé.</p></article></section></main>;
+}

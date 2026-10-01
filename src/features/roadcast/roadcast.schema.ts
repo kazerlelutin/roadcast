@@ -1,0 +1,12 @@
+import { boolean, integer, jsonb, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+
+export const planEnum = pgEnum("plan", ["free", "complete"]);
+export const accessModeEnum = pgEnum("access_mode", ["edit", "read", "slider"]);
+export const sliderEnum = pgEnum("slider", ["alpha", "bravo", "charly"]);
+export const mediaProviderEnum = pgEnum("media_provider", ["local", "s3", "youtube"]);
+
+export const roadcasts = pgTable("roadcasts", { id: uuid("id").primaryKey().defaultRandom(), title: varchar("title", { length: 140 }).notNull(), slug: varchar("slug", { length: 90 }).notNull().unique(), plan: planEnum("plan").notNull().default("free"), interactiveSlider: sliderEnum("interactive_slider"), lastActivityAt: timestamp("last_activity_at", { withTimezone: true }).notNull().defaultNow(), createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow() });
+export const accessLinks = pgTable("access_links", { id: uuid("id").primaryKey().defaultRandom(), roadcastId: uuid("roadcast_id").notNull().references(() => roadcasts.id, { onDelete: "cascade" }), token: varchar("token", { length: 80 }).notNull().unique(), mode: accessModeEnum("mode").notNull(), expiresAt: timestamp("expires_at", { withTimezone: true }) });
+export const chronicles = pgTable("chronicles", { id: uuid("id").primaryKey().defaultRandom(), roadcastId: uuid("roadcast_id").notNull().references(() => roadcasts.id, { onDelete: "cascade" }), title: varchar("title", { length: 180 }).notNull(), position: integer("position").notNull(), document: jsonb("document").notNull().$type<Record<string, unknown>>(), estimatedMinutes: integer("estimated_minutes").notNull().default(1) });
+export const media = pgTable("media", { id: uuid("id").primaryKey().defaultRandom(), roadcastId: uuid("roadcast_id").notNull().references(() => roadcasts.id, { onDelete: "cascade" }), provider: mediaProviderEnum("provider").notNull(), key: text("key").notNull(), mimeType: varchar("mime_type", { length: 120 }), bytes: integer("bytes"), deletedAt: timestamp("deleted_at", { withTimezone: true }) });
+export const sliderItems = pgTable("slider_items", { id: uuid("id").primaryKey().defaultRandom(), chronicleId: uuid("chronicle_id").notNull().references(() => chronicles.id, { onDelete: "cascade" }), slider: sliderEnum("slider").notNull(), position: integer("position").notNull(), enabled: boolean("enabled").notNull().default(true) });
