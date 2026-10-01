@@ -9,8 +9,7 @@ FROM oven/bun:1.3.14-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production PORT=3000
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/server.mjs ./server.mjs
+COPY --from=build /app/.output ./.output
 USER bun
 EXPOSE 3000
-CMD ["bun", "server.mjs"]
+CMD ["bun", ".output/server/index.mjs"]
