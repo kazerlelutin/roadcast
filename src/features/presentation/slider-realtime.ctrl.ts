@@ -31,6 +31,12 @@ export function connectSliderRealtime(token: string, onBroadcast: (payload: Broa
   let pending: BroadcastPayload | undefined;
   let retry: ReturnType<typeof setTimeout> | undefined;
   let closed = false;
+  const localChannel = typeof globalThis.BroadcastChannel === "function" ? new globalThis.BroadcastChannel(`roadcast-slider:${token}`) : undefined;
+
+  localChannel?.addEventListener("message", (event) => {
+    const message = parseSliderBroadcastMessage(event.data);
+    if (message) onBroadcast(message.payload);
+  });
 
   const sendPending = () => {
     if (!pending || socket?.readyState !== globalThis.WebSocket.OPEN) return;
@@ -54,16 +60,18 @@ export function connectSliderRealtime(token: string, onBroadcast: (payload: Broa
     });
   };
 
-  connect();
+  if (!import.meta.env.DEV) connect();
   return {
     publish(payload) {
       pending = payload;
+      localChannel?.postMessage({ type: "broadcast", payload });
       sendPending();
     },
     close() {
       closed = true;
       if (retry) globalThis.clearTimeout(retry);
       socket?.close();
+      localChannel?.close();
     },
   };
 }
