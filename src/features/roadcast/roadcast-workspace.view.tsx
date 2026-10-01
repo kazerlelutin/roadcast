@@ -20,6 +20,7 @@ export type RoadcastWorkspaceViewProps = {
   broadcastSelection: BroadcastSelection;
   slider: Slider;
   broadcastSlider: Slider | null;
+  broadcastSummary: string;
   notice: string;
   theme: RoadcastWorkspaceTheme;
   shareOpen: boolean;
@@ -84,7 +85,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} commandMenuOpen={props.commandMenuOpen} broadcastSelection={props.broadcastSelection} broadcastSlider={props.slider} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onBroadcastSelectionChange={props.onBroadcastSelectionChange} onBroadcastSliderChange={props.onBroadcastSliderChange} onBroadcast={props.onBroadcast} />
 
       <div data-slider-preview>
-        <SliderPreviewView active={props.slider} broadcasting={props.broadcastSlider === props.slider} interactive={props.slider === "bravo"} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
+        <SliderPreviewView active={props.slider} broadcasting={props.broadcastSlider === props.slider} interactive={props.slider === "bravo"} summary={props.broadcastSummary} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
       </div>
     </div>
     <ShareDialogView open={props.shareOpen} mode={props.shareMode} link={props.shareLink} onModeChange={props.onShareModeChange} onCopy={props.onCopyShareLink} onClose={props.onCloseShare} />
