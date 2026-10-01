@@ -60,5 +60,5 @@ Feature: Préparer une chronique Roadcast
 
   Scenario: Diffuser une sélection depuis l’éditeur
     Given une chronique contenant du texte sélectionné et une image
-    When je choisis le contenu à diffuser et un slider depuis l’éditeur
-    Then la sélection est envoyée vers le slider choisi
+    When j’ouvre la commande Diffuser de la bubble et choisis un slider dans la fenêtre de confirmation
+    Then seule ma sélection est envoyée vers le slider choisi

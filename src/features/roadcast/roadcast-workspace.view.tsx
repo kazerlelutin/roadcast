@@ -1,5 +1,6 @@
-import { type BroadcastSelection, type ChronicleEditorElement, type ChronicleFormat, type ChronicleVersion, type MediaFile, ChronicleEditorView } from "../chronicle/chronicle-editor.view";
-import { type Slider, SliderPreviewView } from "../presentation/slider-preview.view";
+import { type ChronicleEditorElement, type ChronicleFormat, type ChronicleVersion, type MediaFile, ChronicleEditorView } from "../chronicle/chronicle-editor.view";
+import { type BroadcastDraft, BroadcastDialogView } from "../presentation/broadcast-dialog.view";
+import { type BroadcastPayload, type Slider, SliderPreviewView } from "../presentation/slider-preview.view";
 import { type ShareMode, ShareDialogView } from "../sharing/share-dialog.view";
 import styles from "./roadcast-workspace.module.css";
 
@@ -16,11 +17,12 @@ export type RoadcastWorkspaceViewProps = {
   authors: string[];
   authorQuery: string;
   authorPickerOpen: boolean;
-  commandMenuOpen: boolean;
-  broadcastSelection: BroadcastSelection;
+  bubble: { top: number; left: number } | null;
   slider: Slider;
-  broadcastSlider: Slider | null;
-  broadcastSummary: string;
+  broadcasts: Partial<Record<Slider, BroadcastPayload>>;
+  broadcastOpen: boolean;
+  broadcastDraft: BroadcastDraft | null;
+  broadcastTarget: Slider;
   notice: string;
   theme: RoadcastWorkspaceTheme;
   shareOpen: boolean;
@@ -42,9 +44,10 @@ export type RoadcastWorkspaceViewProps = {
   onFilterChange: (author: string) => void;
   onSaveVersion: () => void;
   onRestoreVersion: (versionId: string) => void;
-  onBroadcastSelectionChange: (selection: BroadcastSelection) => void;
-  onBroadcastSliderChange: (slider: Slider) => void;
-  onBroadcast: () => void;
+  onOpenBroadcast: () => void;
+  onBroadcastTargetChange: (slider: Slider) => void;
+  onConfirmBroadcast: () => void;
+  onCloseBroadcast: () => void;
   onSelectSlider: (slider: Slider) => void;
   onPictureInPicture: () => void;
   onShare: () => void;
@@ -82,12 +85,13 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
         <button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} commandMenuOpen={props.commandMenuOpen} broadcastSelection={props.broadcastSelection} broadcastSlider={props.slider} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onBroadcastSelectionChange={props.onBroadcastSelectionChange} onBroadcastSliderChange={props.onBroadcastSliderChange} onBroadcast={props.onBroadcast} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
 
       <div data-slider-preview>
-        <SliderPreviewView active={props.slider} broadcasting={props.broadcastSlider === props.slider} interactive={props.slider === "bravo"} summary={props.broadcastSummary} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
+        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={sliderLink()} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
       </div>
     </div>
     <ShareDialogView open={props.shareOpen} mode={props.shareMode} link={props.shareLink} onModeChange={props.onShareModeChange} onCopy={props.onCopyShareLink} onClose={props.onCloseShare} />
+    <BroadcastDialogView open={props.broadcastOpen} draft={props.broadcastDraft} slider={props.broadcastTarget} onSliderChange={props.onBroadcastTargetChange} onConfirm={props.onConfirmBroadcast} onClose={props.onCloseBroadcast} />
   </main>;
 }
