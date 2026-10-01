@@ -87,7 +87,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     if (index < 0 || destination < 0 || destination >= items.length) return items;
     const next = [...items];
     [next[index], next[destination]] = [next[destination], next[index]];
-    setNotice(`Chronique déplacée vers le ${direction === "up" ? "haut" : "bas"}.`);
     return next;
   });
 
