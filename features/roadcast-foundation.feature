@@ -73,6 +73,11 @@ Feature: Préparer une chronique Roadcast
     When une sélection est diffusée vers Bravo depuis un autre navigateur
     Then le slider reçoit cette sélection sans rechargement de page
 
+  Scenario: Ouvrir un slider dans une fenêtre PiP
+    Given l’aperçu du slider Alpha
+    When j’ouvre l’image dans l’image
+    Then une fenêtre PiP affiche la sortie du slider et reçoit les diffusions suivantes
+
   Scenario: Lire un roadcast sans pouvoir le modifier
     Given le jeton de lecture distinct du jeton d’édition d’un roadcast
     When je consulte une chronique

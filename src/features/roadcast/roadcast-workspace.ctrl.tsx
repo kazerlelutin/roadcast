@@ -10,6 +10,7 @@ import { type ShareMode } from "../sharing/share-dialog.view";
 import { estimateChronicleMinutes } from "../chronicle/reading-time.ctrl";
 import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspaceView } from "./roadcast-workspace.view";
 import { createRoadcastAccessLinks, isRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
+import { openSliderPictureInPicture, type SliderPictureInPicture } from "../presentation/picture-in-picture.ctrl";
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
@@ -42,6 +43,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [notice, setNotice] = createSignal("");
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
   const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(createRoadcastAccessLinks());
+  const [pip, setPip] = createSignal<SliderPictureInPicture>();
   let editor: Editor | undefined;
   let editorChronicleId = "";
   const realtime = new Map<Slider, SliderRealtimeClient>();
@@ -69,11 +71,16 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   };
 
   const pictureInPicture = async () => {
-    const documentPiP = (globalThis as typeof globalThis & { documentPictureInPicture?: { requestWindow: (options: { width: number; height: number }) => Promise<NonNullable<ReturnType<typeof globalThis.open>>>; }; }).documentPictureInPicture;
-    if (documentPiP) {
-      const pipWindow = await documentPiP.requestWindow({ width: 480, height: 270 });
-      pipWindow.location.href = publicLink("slider");
+    const activePip = pip();
+    if (activePip?.isOpen()) {
+      activePip.focus();
       return;
+    }
+    try {
+      const openedPip = await openSliderPictureInPicture(broadcasts()[slider()] ?? null);
+      if (openedPip) { setPip(openedPip); return; }
+    } catch {
+      // Un navigateur peut exposer l’API tout en refusant la fenêtre PiP.
     }
     const opened = globalThis.open(publicLink("slider"), "RoadcastPreview", "popup,width=640,height=420");
     if (!opened) setNotice("Autorisez les fenêtres surgissantes pour ouvrir l’aperçu dans une fenêtre séparée.");
@@ -252,6 +259,13 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     if (!hydrated()) return;
     const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors() };
     globalThis.localStorage.setItem(`roadcast-workspace:${props.slug}`, JSON.stringify(workspace));
+  });
+
+  createEffect(() => {
+    const activePip = pip();
+    if (!activePip) return;
+    if (!activePip.isOpen()) { setPip(); return; }
+    activePip.update(broadcasts()[slider()] ?? null);
   });
 
   onMount(() => {
