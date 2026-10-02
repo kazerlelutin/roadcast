@@ -1,20 +1,26 @@
 export type Slider = "alpha" | "bravo" | "charly";
-export type BroadcastPayload = { text: string; images: string[]; };
+export type BroadcastPayload = { text: string; images: string[]; videos: string[]; };
 export type SliderBroadcastMessage = { type: "broadcast"; payload: BroadcastPayload; };
 
 const maximumTextLength = 20_000;
 const maximumImages = 12;
+const maximumVideos = 3;
 const maximumImageSourceLength = 8_000_000;
 
 function isImageSource(value: unknown): value is string {
   return typeof value === "string" && value.length <= maximumImageSourceLength && (/^https?:\/\//.test(value) || /^data:image\/(png|jpe?g|webp|gif);base64,/.test(value));
 }
 
+function isVideoSource(value: unknown): value is string {
+  return typeof value === "string" && value.length <= 2_000 && /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}\?/.test(value);
+}
+
 export function parseSliderBroadcastMessage(value: unknown): SliderBroadcastMessage | null {
   if (!value || typeof value !== "object") return null;
-  const message = value as { type?: unknown; payload?: { text?: unknown; images?: unknown; }; };
-  if (message.type !== "broadcast" || !message.payload || typeof message.payload.text !== "string" || message.payload.text.length > maximumTextLength || !Array.isArray(message.payload.images) || message.payload.images.length > maximumImages || !message.payload.images.every(isImageSource)) return null;
-  return { type: "broadcast", payload: { text: message.payload.text, images: message.payload.images } };
+  const message = value as { type?: unknown; payload?: { text?: unknown; images?: unknown; videos?: unknown; }; };
+  const videos = message.payload?.videos ?? [];
+  if (message.type !== "broadcast" || !message.payload || typeof message.payload.text !== "string" || message.payload.text.length > maximumTextLength || !Array.isArray(message.payload.images) || message.payload.images.length > maximumImages || !message.payload.images.every(isImageSource) || !Array.isArray(videos) || videos.length > maximumVideos || !videos.every(isVideoSource)) return null;
+  return { type: "broadcast", payload: { text: message.payload.text, images: message.payload.images, videos } };
 }
 
 export type SliderRealtimeClient = { publish: (payload: BroadcastPayload) => void; close: () => void; };

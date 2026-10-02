@@ -41,6 +41,8 @@ export type ChronicleEditorViewProps = {
   onInsertBlock: (block: ChronicleInsertBlock) => void;
   onOpenBroadcast: () => void;
   onMediaInput: (file: MediaFile | undefined) => void;
+  onRemoteImage: () => void;
+  onYoutube: () => void;
   onUndo: () => void;
   onRedo: () => void;
   onMove: (direction: "up" | "down") => void;
@@ -91,6 +93,8 @@ export function ChronicleEditorView(props: ChronicleEditorViewProps) {
       <button type="button" class={styles.insertButton} aria-label="Ajouter au contenu" aria-expanded={props.insertMenuOpen} onMouseDown={preserveSelection} onClick={() => props.onInsertMenuOpen(!props.insertMenuOpen)}><Plus size={18} /></button>
       <div classList={{ [styles.insertMenu]: true, [styles.open]: props.insertMenuOpen }} role="menu" aria-label="Ajouter au contenu">
         <label role="menuitem" onMouseDown={preserveSelection}><ImagePlus size={16} />Image<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onCancel={() => props.onInsertMenuOpen(false)} onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) props.onMediaInput(file); props.onInsertMenuOpen(false); }} /></label>
+        <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onRemoteImage(); props.onInsertMenuOpen(false); }}>Image depuis un lien</button>
+        <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onYoutube(); props.onInsertMenuOpen(false); }}>Vidéo YouTube</button>
         <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onInsertBlock("quote"); props.onInsertMenuOpen(false); }}><Quote size={16} />Citation</button>
         <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onInsertBlock("separator"); props.onInsertMenuOpen(false); }}><Minus size={16} />Séparateur</button>
       </div>
