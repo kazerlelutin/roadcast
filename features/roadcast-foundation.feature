@@ -53,6 +53,16 @@ Feature: Préparer une chronique Roadcast
     When j’ouvre l’espace de travail et le menu d’ajout
     Then je peux ajouter un média, accéder aux actions de sauvegarde, à l’arbre et à l’aperçu en faisant défiler la page
 
+  Scenario: Diffuser rapidement une vidéo depuis son bloc
+    Given une vidéo YouTube dans une chronique ouverte
+    When j’active le bouton Diffuser en haut à droite de cette vidéo
+    Then la fenêtre de diffusion s’ouvre avec cette seule vidéo sélectionnée
+
+  Scenario: Parcourir tout l’espace de travail sur un écran mobile
+    Given un écran de largeur mobile et une chronique longue
+    When je fais défiler l’espace de travail
+    Then je peux atteindre le bas de l’éditeur, l’arbre des chroniques et l’aperçu du slider
+
   Scenario: Partager une lecture asynchrone
     Given le slider Alpha est interactif
     When une personne ajoute un élément à son résumé
