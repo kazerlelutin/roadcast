@@ -400,13 +400,19 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       try { savedWorkspace = await loadRoadcastWorkspace(props.slug); } catch { setNotice("Impossible de charger ce roadcast depuis la base."); }
       if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && savedWorkspace.chronicles.length > 0 && Array.isArray(savedWorkspace.authors)) {
         const savedChronicles = savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions).map((version) => ({ ...version, title: typeof version.title === "string" ? version.title : chronicle.title, author: typeof version.author === "string" ? version.author : chronicle.author })) : [] }));
+        // The editor exists before this asynchronous load. Clear its identity first,
+        // otherwise a chronicle with the same id keeps the initial empty document.
+        editorChronicleId = "";
         setTitle(savedWorkspace.title);
         setChronicles(savedChronicles);
         setAuthors(savedWorkspace.authors);
         if (typeof savedWorkspace.lastActivityAt === "string" && !Number.isNaN(new Date(savedWorkspace.lastActivityAt).getTime())) setLastActivityAt(savedWorkspace.lastActivityAt);
-        editorChronicleId = "";
         setSelectedChronicleId(savedChronicles[0].id);
         setAuthorQuery(savedChronicles[0].author);
+        if (editor) {
+          editorChronicleId = savedChronicles[0].id;
+          editor.commands.setContent(savedChronicles[0].document, { emitUpdate: false });
+        }
       }
       if (savedWorkspace?.links) {
         setAccessLinks(savedWorkspace.links);
