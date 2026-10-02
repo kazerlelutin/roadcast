@@ -1,4 +1,6 @@
 import { For, Show } from "solid-js";
+import Moon from "lucide-solid/icons/moon";
+import Sun from "lucide-solid/icons/sun";
 import styles from "./home.module.css";
 
 export type HomeRoadcast = { slug: string; title: string; lastActivityAt?: string | null };
@@ -21,7 +23,7 @@ export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; e
       </a>
       <div class={styles.headerActions}>
         <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>
-          {isLight() ? "☾" : "☼"}
+          {isLight() ? <Moon size={16} /> : <Sun size={16} />}
         </button>
       </div>
     </header>

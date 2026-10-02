@@ -16,7 +16,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Choisir un contraste adapté depuis l'accueil
     Given la page d'accueil Roadcast est en mode sombre
     When je bascule vers le mode clair
-    Then l'accueil reste lisible et le choix est conservé
+    Then l'accueil reste lisible, utilise la même icône de thème que l'espace Roadcast et le choix est conservé
 
   Scenario: Préparer une chronique avec le contraste choisi
     Given une chronique ouverte dans un roadcast

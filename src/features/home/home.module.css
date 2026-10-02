@@ -123,6 +123,7 @@
 .themeButton:hover {
   border-color: var(--text);
 }
+.themeButton svg { display: block; }
 
 .layout {
   width: min(1040px, 100%);
