@@ -1,4 +1,4 @@
-.editor { position: relative; min-width: 0; height: 100%; overflow: hidden; border: 1px solid var(--line, #3c4968); border-radius: .35rem; background: var(--surface, #1b2338); color: var(--text, #f7f8fc); }
+.editor { position: relative; min-width: 0; height: 100%; overflow: hidden; background: var(--surface, #1b2338); color: var(--text, #f7f8fc); }
 .topbar { display: flex; align-items: center; justify-content: space-between; min-height: 2.8rem; padding: 0 .85rem; border-bottom: 1px solid var(--line, #3c4968); color: var(--accent, #00a6b1); font-size: .75rem; }
 .topbarActions { display: flex; align-items: center; gap: .25rem; }
 .topbar button, .topbar select, .moveActions button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 1.9rem; border: 1px solid var(--line, #3c4968); border-radius: .25rem; padding: .35rem .5rem; background: transparent; color: var(--text, #f7f8fc); cursor: pointer; }
