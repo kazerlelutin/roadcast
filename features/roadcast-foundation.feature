@@ -78,6 +78,11 @@ Feature: Préparer une chronique Roadcast
     When je consulte son aperçu
     Then un encart au ratio 16:9 indique qu’aucune diffusion n’est en cours et son lien peut être copié
 
+  Scenario: Lire clairement un texte diffusé dans l’aperçu
+    Given une sélection de texte diffusée vers le slider Alpha
+    When je consulte son aperçu dans l’espace de travail
+    Then la composition reprend la sortie du slider avec un zoom adapté au cadre de prévisualisation
+
   Scenario: Enregistrer un roadcast avec des médias
     Given une chronique contenant une image volumineuse
     When sa sauvegarde automatique se déclenche
