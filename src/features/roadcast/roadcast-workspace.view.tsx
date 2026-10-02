@@ -5,6 +5,7 @@ import { type ShareMode, ShareDialogView } from "../sharing/share-dialog.view";
 import Moon from "lucide-solid/icons/moon";
 import Sun from "lucide-solid/icons/sun";
 import Trash2 from "lucide-solid/icons/trash";
+import Lock from "lucide-solid/icons/lock";
 import styles from "./roadcast-workspace.module.css";
 
 export type RoadcastWorkspaceTheme = "dark" | "light";
@@ -38,8 +39,13 @@ export type RoadcastWorkspaceViewProps = {
   shareMode: ShareMode;
   shareLink: string;
   chronicleToDelete: WorkspaceChronicle | null;
+  collaboratorName: string;
+  collaboratorId: string;
+  chronicleLocks: Array<{ chronicleId: string; name: string; ownerId: string; }>;
+  lockedBy: string | null;
   onTitleInput: (value: string) => void;
   onChronicleTitleInput: (value: string) => void;
+  onCollaboratorNameInput: (value: string) => void;
   onAuthorQueryInput: (value: string) => void;
   onAuthorPickerOpen: (open: boolean) => void;
   onInsertMenuOpen: (open: boolean) => void;
@@ -79,6 +85,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const isLight = () => props.theme === "light";
   const selectedChronicle = () => props.chronicles.find((chronicle) => chronicle.id === props.selectedChronicleId) ?? props.chronicles[0];
   const filteredChronicles = () => props.chronicleFilter === "all" ? props.chronicles : props.chronicles.filter((chronicle) => chronicle.author === props.chronicleFilter);
+  const lockFor = (chronicleId: string) => props.chronicleLocks.find((lock) => lock.chronicleId === chronicleId);
   const dateFormatter = new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" });
   const formatBytes = (bytes: number) => bytes < 1_000_000 ? `${Math.ceil(bytes / 1_000)} Ko` : bytes < 1_000_000_000 ? `${(bytes / 1_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo` : `${(bytes / 1_000_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Go`;
   const formatCharacters = (characters: number) => characters.toLocaleString("fr-FR");
@@ -87,6 +94,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
       <div class={styles.links}>
+        <label class={styles.collaboratorName}><span>Vous</span><input aria-label="Votre nom de collaborateur" value={props.collaboratorName} maxlength={60} placeholder="Votre nom" onInput={(event) => props.onCollaboratorNameInput(event.currentTarget.value)} /></label>
         <a href={props.readLink}>Lecture</a>
         <button type="button" onClick={props.onShare}>Partager</button>
         <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>{isLight() ? <Moon size={16} /> : <Sun size={16} />}</button>
@@ -99,11 +107,11 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <nav class={styles.tree} aria-label="Arbre des chroniques">
         <section class={styles.treeIdentity}><label class={styles.roadcastTitleLabel} for="roadcast-name">Titre du roadcast</label><input id="roadcast-name" class={styles.roadcastTitle} value={props.title} onInput={(event) => props.onTitleInput(event.currentTarget.value)} /></section>
         <section class={styles.treeContent}><div class={styles.treeFilter}><label class={styles.filterLabel} for="author-filter">Filtrer les chroniques</label><select id="author-filter" class={styles.filterSelect} value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous les chroniqueurs</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select></div><hr class={styles.treeDivider} /><div class={styles.treeList}><h2>Chroniques</h2><ol>
-          {filteredChronicles().map((chronicle) => <li class={styles.chronicleItem}><button class={styles.selectChronicle} type="button" aria-current={chronicle.id === props.selectedChronicleId ? "page" : undefined} onClick={() => props.onSelectChronicle(chronicle.id)}><span>{chronicle.title}</span><small>{chronicle.author}</small></button><button class={styles.deleteChronicle} type="button" disabled={props.chronicles.length <= 1} onClick={() => props.onRequestChronicleDeletion(chronicle.id)} aria-label={`Supprimer ${chronicle.title}`} title="Supprimer la chronique"><Trash2 size={14} /></button></li>)}
+          {filteredChronicles().map((chronicle) => { const lock = lockFor(chronicle.id); return <li class={styles.chronicleItem}><button class={styles.selectChronicle} type="button" aria-current={chronicle.id === props.selectedChronicleId ? "page" : undefined} onClick={() => props.onSelectChronicle(chronicle.id)}><span>{chronicle.title}</span><span class={styles.chronicleMeta}><small>{chronicle.author}</small>{lock && <span class={styles.lockStatus} title={lock.ownerId === props.collaboratorId ? "Vous éditez cette chronique" : `${lock.name} édite cette chronique`}><Lock size={12} /><span class={styles.visuallyHidden}>{lock.ownerId === props.collaboratorId ? "Vous éditez cette chronique" : `${lock.name} édite cette chronique`}</span></span>}</span></button><button class={styles.deleteChronicle} type="button" disabled={props.chronicles.length <= 1} onClick={() => props.onRequestChronicleDeletion(chronicle.id)} aria-label={`Supprimer ${chronicle.title}`} title="Supprimer la chronique"><Trash2 size={14} /></button></li>; })}
         </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button><aside class={styles.usage} aria-label="Limites du roadcast"><div class={styles.deletion}><span>Suppression prévue</span><strong>{dateFormatter.format(new Date(props.usage.expiresAt))}</strong></div><div class={styles.quota}><div><span>Caractères</span><strong>{formatCharacters(props.usage.characterCount)} / {formatCharacters(props.usage.characterLimit)}</strong></div><progress value={props.usage.characterCount} max={props.usage.characterLimit} aria-label="Caractères de l’ensemble du roadcast" /></div><div class={styles.quota}><div><span>Médias</span><strong>{formatBytes(props.usage.mediaBytes)} / {formatBytes(props.usage.mediaBytesLimit)}</strong></div><progress value={props.usage.mediaBytes} max={props.usage.mediaBytesLimit} aria-label="Taille des médias de l’ensemble du roadcast" /></div></aside></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} lockedBy={props.lockedBy} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
 
       <div data-slider-preview>
         <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />

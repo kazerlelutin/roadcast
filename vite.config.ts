@@ -31,6 +31,9 @@ export default defineConfig(({ command }) => ({
   nitro: {
     preset: "bun",
     features: { websocket: true },
-    handlers: [{ route: "/ws/slider", handler: "src/features/presentation/slider-realtime.server.ts" }],
+    handlers: [
+      { route: "/ws/slider", handler: "src/features/presentation/slider-realtime.server.ts" },
+      { route: "/ws/collaboration", handler: "src/features/collaboration/chronicle-lock.server.ts" },
+    ],
   },
 }));

@@ -88,6 +88,11 @@ Feature: Préparer une chronique Roadcast
     When je confirme la suppression d’une chronique depuis l’arbre
     Then la chronique et ses versions disparaissent et une chronique restante est sélectionnée
 
+  Scenario: Verrouiller une chronique en cours d’édition
+    Given deux personnes ont renseigné leur nom dans le même roadcast
+    When la première modifie une chronique pendant plus de 400 millisecondes
+    Then la seconde voit son nom et ne peut pas modifier cette chronique tant que le verrou est actif
+
   Scenario: Mettre à jour un slider ouvert en direct
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur
