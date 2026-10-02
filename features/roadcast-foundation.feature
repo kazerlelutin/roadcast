@@ -183,6 +183,11 @@ Feature: Préparer une chronique Roadcast
     When une sélection est diffusée vers Bravo depuis un autre navigateur
     Then le slider reçoit cette sélection sans rechargement de page
 
+  Scenario: Effacer un slider en direct
+    Given le slider Bravo affiche une sélection diffusée
+    When je choisis Effacer dans son aperçu
+    Then l’aperçu et le slider Bravo redeviennent vides sans rechargement
+
   Scenario: Ouvrir un slider dans une fenêtre PiP
     Given l’aperçu du slider Alpha
     When j’ouvre l’image dans l’image

@@ -9,6 +9,7 @@
   justify-content: space-between;
   gap: .5rem;
 }
+.headerActions { display: flex; gap: .35rem; }
 
 .preview button {
   padding: .35rem .5rem;
@@ -20,6 +21,7 @@
 }
 
 .preview button:hover { border-color: var(--accent, #00a6b1); }
+.preview button:disabled { cursor: not-allowed; opacity: .45; }
 .preview header button { display: grid; place-items: center; min-width: 2rem; min-height: 2rem; padding: 0; }
 .preview header button svg { display: block; }
 

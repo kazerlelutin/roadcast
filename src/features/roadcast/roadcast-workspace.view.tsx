@@ -81,6 +81,7 @@ export type RoadcastWorkspaceViewProps = {
   onConfirmBroadcast: () => void;
   onCloseBroadcast: () => void;
   onSelectSlider: (slider: Slider) => void;
+  onClearSlider: () => void;
   onPictureInPicture: () => void;
   onShare: () => void;
   onCloseShare: () => void;
@@ -131,7 +132,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} lockedBy={props.lockedBy} workspaceSynced={props.workspaceSynced} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onRemoteImage={props.onRemoteImage} onYoutube={props.onYoutube} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onRequestVersionCleanup={props.onRequestVersionCleanup} />
 
       <div data-slider-preview>
-        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
+        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onClear={props.onClearSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
       </div>
     </div>
     <ShareDialogView open={props.shareOpen} mode={props.shareMode} link={props.shareLink} onModeChange={props.onShareModeChange} onCopy={props.onCopyShareLink} onClose={props.onCloseShare} />
