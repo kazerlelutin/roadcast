@@ -7,6 +7,7 @@ import Plus from "lucide-solid/icons/plus";
 import Quote from "lucide-solid/icons/quote";
 import Redo2 from "lucide-solid/icons/redo-2";
 import Save from "lucide-solid/icons/save";
+import Trash2 from "lucide-solid/icons/trash";
 import Undo2 from "lucide-solid/icons/undo-2";
 import styles from "./chronicle-editor.module.css";
 
@@ -45,6 +46,7 @@ export type ChronicleEditorViewProps = {
   onMove: (direction: "up" | "down") => void;
   onSaveVersion: () => void;
   onRestoreVersion: (versionId: string) => void;
+  onRequestVersionCleanup: () => void;
 };
 
 export function ChronicleEditorView(props: ChronicleEditorViewProps) {
@@ -61,6 +63,7 @@ export function ChronicleEditorView(props: ChronicleEditorViewProps) {
       <div class={styles.topbarActions}>
         <button type="button" class={styles.saveVersion} disabled={locked()} onClick={props.onSaveVersion}><Save size={15} />Sauvegarder</button>
         <select disabled={locked()} aria-label="Historique" onChange={(event) => props.onRestoreVersion(event.currentTarget.value)}><option value="">Historique</option>{props.versions.slice().reverse().map((version) => <option value={version.id}>{new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(new Date(version.savedAt))}</option>)}</select>
+        <button type="button" class={styles.clearVersions} disabled={locked() || props.versions.length === 0} onClick={props.onRequestVersionCleanup} aria-label="Nettoyer l’historique" title="Nettoyer l’historique"><Trash2 size={16} /></button>
         <button type="button" disabled={locked()} onClick={props.onUndo} aria-label="Annuler"><Undo2 size={16} /></button>
         <button type="button" disabled={locked()} onClick={props.onRedo} aria-label="Rétablir"><Redo2 size={16} /></button>
       </div>

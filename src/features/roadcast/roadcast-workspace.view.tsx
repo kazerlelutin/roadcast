@@ -40,6 +40,7 @@ export type RoadcastWorkspaceViewProps = {
   shareMode: ShareMode;
   shareLink: string;
   chronicleToDelete: WorkspaceChronicle | null;
+  versionCleanupOpen: boolean;
   collaboratorName: string;
   collaboratorId: string;
   chronicleLocks: Array<{ chronicleId: string; name: string; ownerId: string; }>;
@@ -69,6 +70,9 @@ export type RoadcastWorkspaceViewProps = {
   onFilterChange: (author: string) => void;
   onSaveVersion: () => void;
   onRestoreVersion: (versionId: string) => void;
+  onRequestVersionCleanup: () => void;
+  onConfirmVersionCleanup: () => void;
+  onCloseVersionCleanup: () => void;
   onOpenBroadcast: () => void;
   onBroadcastTargetChange: (slider: Slider) => void;
   onConfirmBroadcast: () => void;
@@ -117,7 +121,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
         </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button><aside class={styles.usage} aria-label="Limites du roadcast"><div class={styles.deletion}><span>Suppression prévue</span><strong>{dateFormatter.format(new Date(props.usage.expiresAt))}</strong></div><div class={styles.quota}><div><span>Caractères</span><strong>{formatCharacters(props.usage.characterCount)} / {formatCharacters(props.usage.characterLimit)}</strong></div><progress value={props.usage.characterCount} max={props.usage.characterLimit} aria-label="Caractères de l’ensemble du roadcast" /></div><div class={styles.quota}><div><span>Médias</span><strong>{formatBytes(props.usage.mediaBytes)} / {formatBytes(props.usage.mediaBytesLimit)}</strong></div><progress value={props.usage.mediaBytes} max={props.usage.mediaBytesLimit} aria-label="Taille des médias de l’ensemble du roadcast" /></div></aside></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} lockedBy={props.lockedBy} workspaceSynced={props.workspaceSynced} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} lockedBy={props.lockedBy} workspaceSynced={props.workspaceSynced} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onRequestVersionCleanup={props.onRequestVersionCleanup} />
 
       <div data-slider-preview>
         <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
@@ -129,6 +133,11 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <h2 id="delete-chronicle-title">Supprimer cette chronique ?</h2>
       <p><strong>{props.chronicleToDelete?.title}</strong> et ses versions seront supprimées de ce roadcast.</p>
       <div><button type="button" onClick={props.onCloseChronicleDeletion}>Annuler</button><button class={styles.deleteConfirm} type="button" onClick={props.onConfirmChronicleDeletion}>Supprimer</button></div>
+    </dialog>
+    <dialog class={styles.deleteDialog} open={props.versionCleanupOpen} aria-labelledby="cleanup-versions-title">
+      <h2 id="cleanup-versions-title">Nettoyer l’historique ?</h2>
+      <p>{selectedChronicle().versions.length} version{selectedChronicle().versions.length > 1 ? "s seront" : " sera"} supprimée{selectedChronicle().versions.length > 1 ? "s" : ""}. La chronique courante est conservée.</p>
+      <div><button type="button" onClick={props.onCloseVersionCleanup}>Annuler</button><button class={styles.deleteConfirm} type="button" onClick={props.onConfirmVersionCleanup}>Nettoyer</button></div>
     </dialog>
   </main>;
 }

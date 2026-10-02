@@ -78,6 +78,11 @@ Feature: Préparer une chronique Roadcast
     When je recharge l’espace d’édition
     Then le document courant réapparaît avec ses versions sans que je doive en sélectionner une, l’état indique qu’il est sauvegardé et aucune action Recharger ne m’est proposée
 
+  Scenario: Nettoyer les versions d’une chronique
+    Given une chronique contient des versions enregistrées
+    When je confirme le nettoyage de son historique
+    Then ses versions sont supprimées de la base et le contenu courant est conservé
+
   Scenario: Éviter les envois de sauvegarde en boucle
     Given la saisie courante est déjà enregistrée
     When l’éditeur émet plusieurs mises à jour identiques

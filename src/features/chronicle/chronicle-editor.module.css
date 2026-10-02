@@ -5,6 +5,7 @@
 .topbar select { max-width: 10rem; background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); cursor: pointer; }
 .topbar select option { background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); }
 .topbar .saveVersion { border-color: var(--accent, #00a6b1); color: var(--accent, #00a6b1); font-weight: 800; }
+.topbar .clearVersions { color: var(--muted, #aebbd3); }
 .topbar .unsaved { color: #e5a53c; }
 .topbar button:disabled, .topbar select:disabled, .moveActions button:disabled { cursor: not-allowed; opacity: .45; }
 .document { width: 100%; height: 100%; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr); column-gap: .8rem; border: 0; padding: clamp(.9rem, 2.4vw, 1.5rem) clamp(1.2rem, 6vw, 4rem); }
