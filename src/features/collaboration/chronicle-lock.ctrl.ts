@@ -34,8 +34,7 @@ function sessionId() { return globalThis.crypto?.randomUUID?.() ?? `session-${Da
 
 export type ChronicleLockClient = { sessionId: string; claim: (chronicleId: string, name: string) => void; release: (chronicleId: string) => void; announceWorkspaceUpdate: () => void; close: () => void; };
 
-export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void, onWorkspaceUpdated?: (sourceId?: string) => void): ChronicleLockClient {
-  const ownerId = sessionId();
+export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void, onWorkspaceUpdated?: (sourceId?: string) => void, ownerId: string = sessionId()): ChronicleLockClient {
   let locks: ChronicleLock[] = [];
   let socket: InstanceType<typeof globalThis.WebSocket> | undefined;
   let pending: ChronicleLockMessage | undefined;

@@ -27,7 +27,7 @@ export type ChronicleEditorViewProps = {
   versions: ChronicleVersion[];
   bubble: { top: number; left: number } | null;
   lockedBy: string | null;
-  versionSynced: boolean;
+  workspaceSynced: boolean;
   onTitleInput: (value: string) => void;
   onAuthorQueryInput: (value: string) => void;
   onAuthorPickerOpen: (open: boolean) => void;
@@ -57,7 +57,7 @@ export function ChronicleEditorView(props: ChronicleEditorViewProps) {
 
   return <section class={styles.editor} aria-label="Éditeur de chronique" onMouseMove={(event) => props.onEditorPointerMove({ left: event.clientX, top: event.clientY })} onMouseLeave={props.onEditorPointerLeave}>
     <header class={styles.topbar}>
-      <strong classList={{ [styles.unsaved]: !props.lockedBy && !props.versionSynced }}>{props.lockedBy ? `Verrouillée par ${props.lockedBy}` : props.versionSynced ? "✓ Version enregistrée à jour" : "Modifications non enregistrées"}</strong>
+      <strong classList={{ [styles.unsaved]: !props.lockedBy && !props.workspaceSynced }}>{props.lockedBy ? `Verrouillée par ${props.lockedBy}` : props.workspaceSynced ? "✓ Sauvegardé automatiquement" : "Modifications en cours"}</strong>
       <div class={styles.topbarActions}>
         <button type="button" class={styles.saveVersion} disabled={locked()} onClick={props.onSaveVersion}><Save size={15} />Sauvegarder</button>
         <select disabled={locked()} aria-label="Historique" onChange={(event) => props.onRestoreVersion(event.currentTarget.value)}><option value="">Historique</option>{props.versions.slice().reverse().map((version) => <option value={version.id}>{new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(new Date(version.savedAt))}</option>)}</select>

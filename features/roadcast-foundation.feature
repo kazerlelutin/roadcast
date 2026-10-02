@@ -76,7 +76,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Retrouver la saisie courante sans choisir une version
     Given une chronique a été enregistrée automatiquement
     When je recharge l’espace d’édition
-    Then le document courant réapparaît avec ses versions sans que je doive en sélectionner une
+    Then le document courant réapparaît avec ses versions sans que je doive en sélectionner une, l’état indique qu’il est sauvegardé et aucune action Recharger ne m’est proposée
 
   Scenario: Éviter les envois de sauvegarde en boucle
     Given la saisie courante est déjà enregistrée

@@ -52,6 +52,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [chronicleLocks, setChronicleLocks] = createSignal<ChronicleLock[]>([]);
   const [notice, setNotice] = createSignal("");
   const [workspaceUpdateAvailable, setWorkspaceUpdateAvailable] = createSignal(false);
+  const [workspaceSynced, setWorkspaceSynced] = createSignal(false);
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
   const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(emptyRoadcastAccessLinks);
   const [pip, setPip] = createSignal<SliderPictureInPicture>();
@@ -67,7 +68,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
-  const versionSynced = () => isChronicleVersionSynced(selectedChronicle(), selectedChronicle().versions.at(-1));
   const usage = () => {
     const expiresAt = new Date(new Date(lastActivityAt()).getTime() + planLimits.free.inactiveDays * 24 * 60 * 60 * 1000).toISOString();
     return { ...calculateRoadcastUsage(chronicles()), characterLimit: planLimits.free.charactersPerRoadcast, mediaBytesLimit: planLimits.free.mediaBytes, expiresAt };
@@ -124,7 +124,9 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       const saved = await saveWorkspace({ slug: props.slug, sourceId: collaboration?.sessionId, title: title(), chronicles: chronicles() });
       if (saved?.links) setAccessLinks(saved.links);
       collaboration?.announceWorkspaceUpdate();
+      setWorkspaceSynced(true);
     } catch {
+      setWorkspaceSynced(false);
       setNotice("Impossible d’enregistrer ce roadcast en base.");
       throw new Error("Workspace save failed");
     }
@@ -132,6 +134,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const workspaceSaveQueue = createWorkspaceSaveQueue(persistWorkspace);
   const scheduleWorkspaceSave = () => {
     if (!hydrated()) return;
+    setWorkspaceSynced(false);
     workspaceSaveQueue.markChanged();
   };
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => {
@@ -419,9 +422,18 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         connectRealtime(savedWorkspace.links);
       }
       workspaceSaveQueue.markHydrated();
+      setWorkspaceSynced(true);
       setHydrated(true);
     })();
-    collaboration = connectChronicleLocks(props.slug, setChronicleLocks, (sourceId) => { if (sourceId !== collaboration?.sessionId) setWorkspaceUpdateAvailable(true); });
+    let collaborationSessionId: string;
+    try {
+      const key = `roadcast-collaboration-session:${props.slug}`;
+      collaborationSessionId = globalThis.sessionStorage.getItem(key) ?? globalThis.crypto.randomUUID();
+      globalThis.sessionStorage.setItem(key, collaborationSessionId);
+    } catch {
+      collaborationSessionId = globalThis.crypto.randomUUID();
+    }
+    collaboration = connectChronicleLocks(props.slug, setChronicleLocks, (sourceId) => { if (hydrated() && sourceId !== collaboration?.sessionId) setWorkspaceUpdateAvailable(true); }, collaborationSessionId);
     lockExpiry = globalThis.setInterval(() => setChronicleLocks((locks) => locks.filter((lock) => lock.expiresAt > Date.now())), 1_000);
   });
 
@@ -436,7 +448,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   return <>
     <RoadcastWorkspaceView
-      slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} usage={usage()} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} workspaceUpdateAvailable={workspaceUpdateAvailable()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} chronicleToDelete={chronicles().find((chronicle) => chronicle.id === chronicleToDeleteId()) ?? null} collaboratorName={collaboratorName()} chronicleLocks={chronicleLocks()} collaboratorId={collaboration?.sessionId ?? ""} lockedBy={selectedLockByOther()?.name ?? null} versionSynced={versionSynced()}
+      slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} usage={usage()} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} workspaceUpdateAvailable={workspaceUpdateAvailable()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} chronicleToDelete={chronicles().find((chronicle) => chronicle.id === chronicleToDeleteId()) ?? null} collaboratorName={collaboratorName()} chronicleLocks={chronicleLocks()} collaboratorId={collaboration?.sessionId ?? ""} lockedBy={selectedLockByOther()?.name ?? null} workspaceSynced={workspaceSynced()}
       onTitleInput={(value) => { if (value !== title()) { setTitle(value); scheduleWorkspaceSave(); } }} onChronicleTitleInput={(value) => { markChronicleAsEditing(); updateSelectedChronicle({ title: value }); }} onCollaboratorNameInput={(value) => { const name = value.slice(0, 60); setCollaboratorName(name); globalThis.localStorage.setItem("roadcast-collaborator-name", name); if (!name.trim()) releaseEditingLock(); else if (editingChronicleId) collaboration?.claim(editingChronicleId, name.trim()); }} onAuthorQueryInput={(value) => { markChronicleAsEditing(); setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuVisibility} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onRequestChronicleDeletion={requestChronicleDeletion} onConfirmChronicleDeletion={confirmChronicleDeletion} onCloseChronicleDeletion={() => setChronicleToDeleteId(null)} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme} onReloadWorkspace={() => globalThis.location.reload()}
     />
   </>;
