@@ -139,8 +139,6 @@
   flex-direction: column;
   overflow: hidden;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: .3rem;
   background: var(--surface);
   color: var(--muted);
 }

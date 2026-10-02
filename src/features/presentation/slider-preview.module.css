@@ -1,7 +1,5 @@
 .preview {
   padding: .85rem;
-  border: 1px solid var(--line, #3c4968);
-  border-radius: .25rem;
   background: var(--surface, #1b2338);
   color: var(--text, #f7f8fc);
 }
