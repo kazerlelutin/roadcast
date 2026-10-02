@@ -13,6 +13,7 @@ import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspace
 import { createRoadcastAccessLinks, isRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
 import { openSliderPictureInPicture, type SliderPictureInPicture } from "../presentation/picture-in-picture.ctrl";
 import { removeChronicle } from "./chronicle-removal.ctrl";
+import { calculateRoadcastUsage } from "./roadcast-usage.ctrl";
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
@@ -21,19 +22,6 @@ const initialChronicles: WorkspaceChronicle[] = [
 ];
 const maxVersions = 12;
 type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; };
-
-function countTextBlocks(document: string): number {
-  return (document.match(/<(p|h[1-6]|li|blockquote)\b/gi) ?? []).length;
-}
-
-function mediaSources(document: string): string[] {
-  return [...document.matchAll(/<img\b[^>]*\bsrc=["']([^"']+)["']/gi)].map((match) => match[1]);
-}
-
-function mediaBytes(source: string): number {
-  const base64 = source.match(/^data:[^;]+;base64,(.+)$/i)?.[1];
-  return base64 ? Math.floor((base64.length * 3) / 4) : 0;
-}
 
 export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [title, setTitle] = createSignal("Démo de chronique");
@@ -67,9 +55,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
   const usage = () => {
-    const sources = chronicles().flatMap((chronicle) => mediaSources(chronicle.document));
     const expiresAt = new Date(new Date(lastActivityAt()).getTime() + planLimits.free.inactiveDays * 24 * 60 * 60 * 1000).toISOString();
-    return { textBlocks: countTextBlocks(selectedChronicle().document), mediaCount: sources.length, mediaBytes: sources.reduce((total, source) => total + mediaBytes(source), 0), expiresAt };
+    return { ...calculateRoadcastUsage(chronicles()), characterLimit: planLimits.free.charactersPerRoadcast, mediaBytesLimit: planLimits.free.mediaBytes, expiresAt };
   };
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
   const publicLink = (mode: ShareMode = shareMode()) => {

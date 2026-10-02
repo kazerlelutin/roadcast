@@ -66,7 +66,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Consulter la rétention et les limites d’un roadcast
     Given un roadcast en plan gratuit
     When je consulte son arbre de chroniques
-    Then je vois sa date de suppression prévue ainsi que les jauges de texte, médias et stockage
+    Then je vois sa date de suppression prévue ainsi que les jauges globales de caractères et de taille média
 
   Scenario: Diffuser une sélection depuis l’éditeur
     Given une chronique contenant du texte sélectionné et une image
