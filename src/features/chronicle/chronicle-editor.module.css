@@ -2,7 +2,8 @@
 .topbar { display: flex; align-items: center; justify-content: space-between; min-height: 2.8rem; padding: 0 .85rem; border-bottom: 1px solid var(--line, #3c4968); color: var(--accent, #00a6b1); font-size: .75rem; }
 .topbarActions { display: flex; align-items: center; gap: .25rem; }
 .topbar button, .topbar select, .moveActions button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 1.9rem; border: 1px solid var(--line, #3c4968); border-radius: .25rem; padding: .35rem .5rem; background: transparent; color: var(--text, #f7f8fc); cursor: pointer; }
-.topbar select { max-width: 10rem; cursor: pointer; }
+.topbar select { max-width: 10rem; background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); cursor: pointer; }
+.topbar select option { background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); }
 .topbar .saveVersion { border-color: var(--accent, #00a6b1); color: var(--accent, #00a6b1); font-weight: 800; }
 .topbar .unsaved { color: #e5a53c; }
 .topbar button:disabled, .topbar select:disabled, .moveActions button:disabled { cursor: not-allowed; opacity: .45; }
