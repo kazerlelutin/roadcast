@@ -1,10 +1,12 @@
 import { For, Show } from "solid-js";
+import Moon from "lucide-solid/icons/moon";
+import Sun from "lucide-solid/icons/sun";
 import styles from "./home.module.css";
 
 export type HomeRoadcast = { slug: string; title: string; lastActivityAt?: string | null };
 export type HomeTheme = "dark" | "light";
 
-export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; error: string; theme: HomeTheme; onCreate: (title: string) => void; onThemeChange: () => void }) {
+export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; error: string; theme: HomeTheme; onCreate: (title: string) => void; onThemeChange: () => void; onOpenConsent: () => void }) {
   let titleInput!: HTMLInputElement;
 
   const submit = (event: SubmitEvent) => {
@@ -21,7 +23,7 @@ export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; e
       </a>
       <div class={styles.headerActions}>
         <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>
-          {isLight() ? "☾" : "☼"}
+          {isLight() ? <Moon size={16} /> : <Sun size={16} />}
         </button>
       </div>
     </header>
@@ -56,5 +58,11 @@ export function HomeView(props: { roadcasts: HomeRoadcast[]; pending: boolean; e
         <p class={styles.account}>Commencez tout de suite, sans création de compte.</p>
       </section>
     </div>
+
+    <footer class={styles.footer}>
+      <a href="/mentions-legales">Mentions légales</a>
+      <a href="/confidentialite">Confidentialité</a>
+      <button type="button" onClick={props.onOpenConsent}>Préférences de mesure</button>
+    </footer>
   </main>;
 }

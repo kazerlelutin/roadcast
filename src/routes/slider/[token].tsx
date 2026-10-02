@@ -1,3 +1,3 @@
 import { useParams } from "@solidjs/router";
-import { PresentationView } from "../../features/presentation/presentation.view";
-export default function SliderRoute() { const params = useParams<{ token: string }>(); return <PresentationView token={params.token} />; }
+import { SliderOutputCtrl } from "../../features/presentation/slider-output.ctrl";
+export default function SliderRoute() { const params = useParams<{ token: string }>(); return <SliderOutputCtrl token={params.token} />; }

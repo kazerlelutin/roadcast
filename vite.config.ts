@@ -3,7 +3,7 @@ import { nitro } from "nitro/vite";
 import { solidStart } from "@solidjs/start/config";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(() => ({
   resolve: { dedupe: ["solid-js", "solid-js/web", "@solidjs/router"] },
   optimizeDeps: {
     include: [
@@ -20,7 +20,7 @@ export default defineConfig(({ command }) => ({
   },
   plugins: [
     solidStart({ ssr: false, devOverlay: false, serialization: { mode: "json" }, middleware: "src/middleware/security.ctrl.ts" }),
-    command === "build" && nitro(),
+    nitro(),
     VitePWA({
       registerType: "autoUpdate",
       manifest: { name: "Roadcast", short_name: "Roadcast", description: "Chroniques collaboratives et diffusion multi-slider.", display: "standalone", start_url: "/", background_color: "#101725", theme_color: "#101725", icons: [{ src: "/logo.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }] },
@@ -28,5 +28,13 @@ export default defineConfig(({ command }) => ({
       devOptions: { enabled: false },
     }),
   ],
-  nitro: { preset: "bun" },
+  nitro: {
+    preset: "bun",
+    features: { websocket: true },
+    plugins: ["src/features/roadcast/expired-roadcasts.plugin.ts"],
+    handlers: [
+      { route: "/ws/slider", handler: "src/features/presentation/slider-realtime.server.ts" },
+      { route: "/ws/collaboration", handler: "src/features/collaboration/chronicle-lock.server.ts" },
+    ],
+  },
 }));

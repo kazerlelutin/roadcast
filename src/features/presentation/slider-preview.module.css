@@ -1,7 +1,5 @@
 .preview {
   padding: .85rem;
-  border: 1px solid var(--line, #3c4968);
-  border-radius: .25rem;
   background: var(--surface, #1b2338);
   color: var(--text, #f7f8fc);
 }
@@ -22,6 +20,8 @@
 }
 
 .preview button:hover { border-color: var(--accent, #00a6b1); }
+.preview header button { display: grid; place-items: center; min-width: 2rem; min-height: 2rem; padding: 0; }
+.preview header button svg { display: block; }
 
 .tabs {
   display: flex;
@@ -36,23 +36,27 @@
 }
 
 .frame {
-  min-height: 210px;
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
   display: grid;
-  align-content: center;
-  padding: 1rem;
-  border: 1px solid color-mix(in srgb, var(--accent, #00a6b1) 55%, transparent);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line, #3c4968);
   border-radius: .2rem;
-  background: linear-gradient(145deg, #126c7a, #263f75);
+  background: transparent;
 }
 
-.frame p {
-  margin: 0;
-  font-size: .7rem;
-  font-weight: 800;
-  letter-spacing: .1em;
-}
+.empty { text-align: center; }
+.tv { display: block; margin-bottom: .25rem; color: #aebbd3; font-size: 2.5rem; letter-spacing: -.45em; }
 
-.frame h2 {
+.emptyMessage { display: grid; place-items: center; }
+.emptyMessage h2 {
   margin: .5rem 0;
   font-size: 1.8rem;
 }
+.link { margin-top: .85rem; }
+.link label { display: block; margin-bottom: .35rem; color: var(--muted, #aebbd3); font-size: .72rem; font-weight: 700; }
+.link div { display: flex; gap: .4rem; }
+.link input { min-width: 0; flex: 1; padding: .4rem; border: 1px solid var(--line, #3c4968); border-radius: .2rem; background: transparent; color: inherit; font-size: .75rem; }
