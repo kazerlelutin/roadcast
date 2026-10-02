@@ -16,6 +16,7 @@ import { removeChronicle } from "./chronicle-removal.ctrl";
 import { calculateRoadcastUsage } from "./roadcast-usage.ctrl";
 import { connectChronicleLocks, type ChronicleLock, type ChronicleLockClient } from "../collaboration/chronicle-lock.ctrl";
 import { isChronicleVersionSynced } from "../chronicle/chronicle-version.ctrl";
+import { isStorageQuotaExceeded, loadLegacyWorkspace, loadWorkspace, removeLegacyWorkspace, saveWorkspace } from "./workspace-storage.ctrl";
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
@@ -59,6 +60,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   let lockStart: ReturnType<typeof setTimeout> | undefined;
   let lockIdle: ReturnType<typeof setTimeout> | undefined;
   let lockExpiry: ReturnType<typeof globalThis.setInterval> | undefined;
+  let workspaceSave: ReturnType<typeof globalThis.setTimeout> | undefined;
   let collaboration: ChronicleLockClient | undefined;
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
@@ -348,7 +350,10 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     const activityAt = new Date().toISOString();
     setLastActivityAt(activityAt);
     const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors(), lastActivityAt: activityAt };
-    globalThis.localStorage.setItem(`roadcast-workspace:${props.slug}`, JSON.stringify(workspace));
+    if (workspaceSave) globalThis.clearTimeout(workspaceSave);
+    workspaceSave = globalThis.setTimeout(() => {
+      void saveWorkspace(props.slug, workspace).catch((error: unknown) => setNotice(isStorageQuotaExceeded(error) ? "Le stockage du navigateur est plein. Libérez de l’espace avant d’ajouter des médias." : "Impossible d’enregistrer ce roadcast dans ce navigateur."));
+    }, 300);
   });
 
   createEffect(() => {
@@ -363,8 +368,16 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
     const savedCollaboratorName = globalThis.localStorage.getItem("roadcast-collaborator-name");
     if (savedCollaboratorName) setCollaboratorName(savedCollaboratorName.slice(0, 60));
-    try {
-      const savedWorkspace = JSON.parse(globalThis.localStorage.getItem(`roadcast-workspace:${props.slug}`) ?? "null") as PersistedWorkspace | null;
+    void (async () => {
+      let savedWorkspace: PersistedWorkspace | null = null;
+      try { savedWorkspace = await loadWorkspace<PersistedWorkspace>(props.slug); } catch { savedWorkspace = loadLegacyWorkspace<PersistedWorkspace>(props.slug); }
+      if (!savedWorkspace) {
+        const legacyWorkspace = loadLegacyWorkspace<PersistedWorkspace>(props.slug);
+        if (legacyWorkspace) {
+          savedWorkspace = legacyWorkspace;
+          try { await saveWorkspace(props.slug, legacyWorkspace); removeLegacyWorkspace(props.slug); } catch { setNotice("Le roadcast reste disponible ici, mais le stockage du navigateur ne peut pas encore être migré."); }
+        }
+      }
       if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && savedWorkspace.chronicles.length > 0 && Array.isArray(savedWorkspace.authors)) {
         const savedChronicles = savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions).map((version) => ({ ...version, title: typeof version.title === "string" ? version.title : chronicle.title, author: typeof version.author === "string" ? version.author : chronicle.author })) : [] }));
         setTitle(savedWorkspace.title);
@@ -375,7 +388,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         setSelectedChronicleId(savedChronicles[0].id);
         setAuthorQuery(savedChronicles[0].author);
       }
-    } catch { globalThis.localStorage.removeItem(`roadcast-workspace:${props.slug}`); }
+      setHydrated(true);
+    })();
     try {
       const storedLinks = JSON.parse(globalThis.localStorage.getItem(`roadcast-access-links:${props.slug}`) ?? "null");
       const links = isRoadcastAccessLinks(storedLinks) ? storedLinks : accessLinks();
@@ -388,11 +402,11 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     });
     collaboration = connectChronicleLocks(props.slug, setChronicleLocks);
     lockExpiry = globalThis.setInterval(() => setChronicleLocks((locks) => locks.filter((lock) => lock.expiresAt > Date.now())), 1_000);
-    setHydrated(true);
   });
 
   onCleanup(() => {
     releaseEditingLock();
+    if (workspaceSave) globalThis.clearTimeout(workspaceSave);
     if (lockExpiry) globalThis.clearInterval(lockExpiry);
     collaboration?.close();
     editor?.destroy();

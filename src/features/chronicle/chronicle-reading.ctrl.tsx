@@ -1,5 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import { ChronicleReadingView, type ReadonlyChronicle } from "./chronicle-reading.view";
+import { loadLegacyWorkspace, loadWorkspace } from "../roadcast/workspace-storage.ctrl";
 
 type StoredChronicle = ReadonlyChronicle & { versions?: unknown; };
 type StoredWorkspace = { title?: unknown; chronicles?: unknown; };
@@ -18,9 +19,9 @@ function safeDocument(document: string): string {
   return template.innerHTML;
 }
 
-function readWorkspace(slug: string): ReadonlyWorkspace | null {
+async function readWorkspace(slug: string): Promise<ReadonlyWorkspace | null> {
   try {
-    const stored = JSON.parse(globalThis.localStorage.getItem(`roadcast-workspace:${slug}`) ?? "null") as StoredWorkspace | null;
+    const stored = await loadWorkspace<StoredWorkspace>(slug) ?? loadLegacyWorkspace<StoredWorkspace>(slug);
     if (!stored || typeof stored.title !== "string" || !Array.isArray(stored.chronicles)) return null;
     const chronicles = stored.chronicles.filter((chronicle): chronicle is StoredChronicle => !!chronicle && typeof chronicle === "object" && typeof (chronicle as StoredChronicle).id === "string" && typeof (chronicle as StoredChronicle).title === "string" && typeof (chronicle as StoredChronicle).author === "string" && typeof (chronicle as StoredChronicle).document === "string").map((chronicle) => ({ ...chronicle, document: safeDocument(chronicle.document) }));
     return chronicles.length ? { title: stored.title, chronicles } : null;
@@ -30,11 +31,11 @@ function readWorkspace(slug: string): ReadonlyWorkspace | null {
 export function ChronicleReadingCtrl(props: { token: string }) {
   const [workspace, setWorkspace] = createSignal<ReadonlyWorkspace | null>(null);
   const [selectedChronicleId, setSelectedChronicleId] = createSignal("");
-  onMount(() => {
+  onMount(() => { void (async () => {
     const slug = globalThis.localStorage.getItem(`roadcast-read-token:${props.token}`);
-    const nextWorkspace = slug ? readWorkspace(slug) : null;
+    const nextWorkspace = slug ? await readWorkspace(slug) : null;
     setWorkspace(nextWorkspace);
     setSelectedChronicleId(nextWorkspace?.chronicles[0]?.id ?? "");
-  });
+  })(); });
   return <ChronicleReadingView workspace={workspace()} selectedChronicleId={selectedChronicleId()} onSelectChronicle={setSelectedChronicleId} />;
 }

@@ -48,6 +48,11 @@ Feature: Préparer une chronique Roadcast
     When je consulte son aperçu
     Then un encart au ratio 16:9 indique qu’aucune diffusion n’est en cours et son lien peut être copié
 
+  Scenario: Enregistrer un roadcast avec des médias
+    Given une chronique contenant une image volumineuse
+    When sa sauvegarde automatique se déclenche
+    Then le roadcast est conservé dans le stockage IndexedDB sans faire échouer l’éditeur
+
   Scenario: Adapter le contenu à une sortie fixe
     Given une sélection contenant du texte et plusieurs médias
     When elle est diffusée vers un slider
