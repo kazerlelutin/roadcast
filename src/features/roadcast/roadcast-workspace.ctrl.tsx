@@ -315,7 +315,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   const saveVersion = () => {
     const chronicle = selectedChronicle();
-    if (isChronicleVersionSynced(chronicle, chronicle.versions.at(-1))) { setNotice("Cette version est déjà enregistrée."); return; }
+    if (isChronicleVersionSynced(chronicle, chronicle.versions.at(-1))) return;
     const version = { id: `version-${Date.now()}`, savedAt: new Date().toISOString(), title: chronicle.title, author: chronicle.author, document: chronicle.document };
     updateSelectedChronicle({ versions: [...chronicle.versions, version].slice(-maxVersions) });
     setNotice("Version enregistrée.");
