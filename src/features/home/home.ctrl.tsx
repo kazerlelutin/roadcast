@@ -25,6 +25,6 @@ export function HomeCtrl() {
     if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
     setRoadcasts(readRecentRoadcasts());
   });
-  const onCreate = async (title: string) => { setError(""); setPending(true); try { const created = await create({ title }); setRoadcasts(rememberRecentRoadcast(created)); await navigate(`/${created.slug}`); } catch { setError("La création nécessite une base PostgreSQL configurée. Vérifiez DATABASE_URL puis réessayez."); } finally { setPending(false); } };
+  const onCreate = async (title: string) => { setError(""); setPending(true); try { const created = await create({ title }); setRoadcasts(rememberRecentRoadcast(created)); await navigate(`/${created.slug}`, { state: { initialTitle: created.title } }); } catch { setError("La création nécessite une base PostgreSQL configurée. Vérifiez DATABASE_URL puis réessayez."); } finally { setPending(false); } };
   return <HomeView roadcasts={roadcasts()} pending={pending()} error={error()} theme={theme()} onCreate={onCreate} onThemeChange={toggleTheme} onOpenConsent={openConsent} />;
 }

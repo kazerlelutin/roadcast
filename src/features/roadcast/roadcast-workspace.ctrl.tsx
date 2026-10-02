@@ -28,8 +28,8 @@ const initialChronicles: WorkspaceChronicle[] = [
 const maxVersions = 12;
 type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; links?: RoadcastAccessLinks; };
 
-export function RoadcastWorkspaceCtrl(props: { slug: string }) {
-  const [title, setTitle] = createSignal("Démo de chronique");
+export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: string }) {
+  const [title, setTitle] = createSignal(props.initialTitle?.trim() || "Roadcast");
   const [chronicles, setChronicles] = createSignal(initialChronicles);
   const [selectedChronicleId, setSelectedChronicleId] = createSignal(initialChronicles[0].id);
   const [chronicleFilter, setChronicleFilter] = createSignal("all");
@@ -411,8 +411,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     void (async () => {
       let savedWorkspace: PersistedWorkspace | null = null;
       try { savedWorkspace = await loadRoadcastWorkspace(props.slug); } catch { setNotice("Impossible de charger ce roadcast depuis la base."); }
-      if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && savedWorkspace.chronicles.length > 0 && Array.isArray(savedWorkspace.authors)) {
-        const savedChronicles = savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions).map((version) => ({ ...version, title: typeof version.title === "string" ? version.title : chronicle.title, author: typeof version.author === "string" ? version.author : chronicle.author })) : [] }));
+      if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && Array.isArray(savedWorkspace.authors)) {
+        const savedChronicles = savedWorkspace.chronicles.length > 0 ? savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions).map((version) => ({ ...version, title: typeof version.title === "string" ? version.title : chronicle.title, author: typeof version.author === "string" ? version.author : chronicle.author })) : [] })) : initialChronicles.map((chronicle) => ({ ...chronicle, versions: [] }));
         // The editor exists before this asynchronous load. Clear its identity first,
         // otherwise a chronicle with the same id keeps the initial empty document.
         editorChronicleId = "";

@@ -11,7 +11,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Créer un roadcast depuis l'accueil
     Given la page d'accueil Roadcast
     When je saisis le titre de mon roadcast
-    Then je peux accéder à son espace d'écriture
+    Then je peux accéder à son espace d'écriture avec ce titre et une chronique initiale vide
 
   Scenario: Choisir un contraste adapté depuis l'accueil
     Given la page d'accueil Roadcast est en mode sombre
