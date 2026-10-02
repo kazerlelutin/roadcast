@@ -26,10 +26,11 @@ export default defineWebSocketHandler({
     const token = tokenFor(peer);
     if (!token) { peer.close(1008, "Invalid slider token"); return; }
     try {
-      const broadcast = parseSliderBroadcastMessage(message.json());
-      if (!broadcast) { peer.close(1008, "Invalid broadcast payload"); return; }
-      latestPayloadByToken.set(token, broadcast.payload);
-      peer.publish(topic(token), JSON.stringify(broadcast));
+      const update = parseSliderBroadcastMessage(message.json());
+      if (!update) { peer.close(1008, "Invalid broadcast payload"); return; }
+      if (update.type === "clear") latestPayloadByToken.delete(token);
+      else latestPayloadByToken.set(token, update.payload);
+      peer.publish(topic(token), JSON.stringify(update));
     } catch { peer.close(1008, "Invalid broadcast payload"); }
   },
 });
