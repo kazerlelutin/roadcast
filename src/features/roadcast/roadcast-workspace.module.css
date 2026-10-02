@@ -197,7 +197,7 @@
   list-style: none;
 }
 
-.tree li button,
+.selectChronicle,
 .add {
   width: 100%;
   padding: .52rem .6rem;
@@ -209,16 +209,30 @@
   cursor: pointer;
 }
 
-.tree li button { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.chronicleItem { display: flex; align-items: stretch; gap: .1rem; }
+.selectChronicle { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-width: 0; }
 .tree li small { color: var(--muted); font-size: .68rem; }
 
-.tree li button:hover,
-.tree li button[aria-current="page"],
+.selectChronicle:hover,
+.selectChronicle[aria-current="page"],
 .add:hover {
   border-color: var(--line);
   background: var(--soft-surface);
   color: var(--text);
 }
+
+.deleteChronicle { width: 1.8rem; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: .2rem; background: transparent; color: var(--muted); cursor: pointer; opacity: 0; }
+.chronicleItem:hover .deleteChronicle, .deleteChronicle:focus-visible { opacity: 1; }
+.deleteChronicle:hover { border-color: #c55b64; color: #e8727e; }
+.deleteChronicle:disabled { cursor: not-allowed; opacity: 0; }
+
+.deleteDialog { position: fixed; inset: 0; z-index: 30; width: min(94vw, 410px); height: fit-content; margin: auto; padding: 1.15rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); color: var(--text); box-shadow: 0 20px 70px rgb(0 0 0 / .5); }
+.deleteDialog::backdrop { background: rgb(7 16 29 / .75); }
+.deleteDialog h2 { margin: 0; font-size: 1.1rem; }
+.deleteDialog p { margin: .7rem 0 1.2rem; color: var(--muted); font-size: .86rem; line-height: 1.45; }
+.deleteDialog > div { display: flex; justify-content: end; gap: .5rem; }
+.deleteDialog button { padding: .5rem .7rem; border: 1px solid var(--line); border-radius: .25rem; background: transparent; color: var(--text); cursor: pointer; }
+.deleteDialog .deleteConfirm { border-color: #bd4c58; background: #ad4350; color: #fff; }
 
 .add {
   margin-top: .65rem;

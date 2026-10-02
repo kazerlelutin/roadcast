@@ -83,6 +83,11 @@ Feature: Préparer une chronique Roadcast
     When j’annule le sélecteur de fichiers
     Then le menu se ferme et le bouton d’insertion reste disponible sur ce bloc
 
+  Scenario: Supprimer une chronique
+    Given un roadcast contenant plusieurs chroniques
+    When je confirme la suppression d’une chronique depuis l’arbre
+    Then la chronique et ses versions disparaissent et une chronique restante est sélectionnée
+
   Scenario: Mettre à jour un slider ouvert en direct
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur
