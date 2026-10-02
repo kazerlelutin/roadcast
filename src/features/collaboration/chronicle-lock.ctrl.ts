@@ -30,11 +30,14 @@ function socketUrl(workspace: string): string {
   return url.toString();
 }
 
-function sessionId() { return globalThis.crypto?.randomUUID?.() ?? `session-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
+export function createChronicleLockSessionId(webCrypto: Pick<typeof globalThis.crypto, "randomUUID"> | null | undefined = globalThis.crypto) {
+  if (typeof webCrypto?.randomUUID !== "function") throw new Error("Web Crypto randomUUID is required for collaboration sessions.");
+  return webCrypto.randomUUID();
+}
 
 export type ChronicleLockClient = { sessionId: string; claim: (chronicleId: string, name: string) => void; release: (chronicleId: string) => void; announceWorkspaceUpdate: () => void; close: () => void; };
 
-export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void, onWorkspaceUpdated?: (sourceId?: string) => void, ownerId: string = sessionId()): ChronicleLockClient {
+export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void, onWorkspaceUpdated?: (sourceId?: string) => void, ownerId: string = createChronicleLockSessionId()): ChronicleLockClient {
   let locks: ChronicleLock[] = [];
   let socket: InstanceType<typeof globalThis.WebSocket> | undefined;
   let pending: ChronicleLockMessage | undefined;
