@@ -262,9 +262,9 @@
 
 
 @media (max-width: 980px) {
-  .page { height: auto; min-height: 100dvh; overflow: visible; padding-bottom: 1rem; }
+  .page { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; padding-bottom: 1rem; }
   .header { align-items: start; }
-  .workspace { grid-template-columns: minmax(0, 1fr); height: auto; gap: .75rem; }
+  .workspace { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; gap: .75rem; }
   .tree { order: 2; min-height: auto; overflow: visible; }
   .treeContent, .treeList { overflow: visible; }
   .workspace > [data-slider-preview] { order: 3; }
@@ -282,6 +282,7 @@
   .treeIdentity, .treeContent { padding: .8rem; }
   .deleteChronicle { width: 2.3rem; opacity: 1; }
   .add { min-height: 2.7rem; }
+  .workspace > [data-slider-preview] { min-width: 0; padding-bottom: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

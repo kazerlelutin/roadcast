@@ -61,6 +61,7 @@ export type RoadcastWorkspaceViewProps = {
   onMediaInput: (file: MediaFile | undefined) => void;
   onRemoteImage: () => void;
   onYoutube: () => void;
+  onVideoBroadcast: (source: string) => void;
   onUndo: () => void;
   onRedo: () => void;
   onMove: (direction: "up" | "down") => void;
@@ -99,7 +100,11 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const formatBytes = (bytes: number) => bytes < 1_000_000 ? `${Math.ceil(bytes / 1_000)} Ko` : bytes < 1_000_000_000 ? `${(bytes / 1_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo` : `${(bytes / 1_000_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Go`;
   const formatCharacters = (characters: number) => characters.toLocaleString("fr-FR");
 
-  return <main classList={{ [styles.page]: true, [styles.light]: isLight() }}>
+  return <main classList={{ [styles.page]: true, [styles.light]: isLight() }} onClick={(event) => {
+    const target = event.target instanceof HTMLElement ? event.target.closest("button[data-broadcast-video]") : null;
+    const source = target?.getAttribute("data-broadcast-video");
+    if (source) props.onVideoBroadcast(source);
+  }}>
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
       <div class={styles.links}>
