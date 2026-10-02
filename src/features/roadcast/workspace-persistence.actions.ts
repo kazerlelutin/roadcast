@@ -4,12 +4,13 @@ import { chronicles, chronicleVersions, roadcasts } from "./roadcast.schema";
 import { createRoadcastDatabase } from "./database.ctrl";
 import { workspaceInput } from "./workspace-persistence.types";
 import { workspaceForRoadcast } from "./workspace-persistence.server";
+import { announceWorkspaceUpdate } from "../collaboration/workspace-updates.server";
 
 export const saveRoadcastWorkspace = action(async (raw: unknown) => {
   "use server";
   const input = workspaceInput.parse(raw);
   const database = createRoadcastDatabase();
-  return database.transaction(async (transaction) => {
+  const saved = await database.transaction(async (transaction) => {
     const [roadcast] = await transaction.select({ id: roadcasts.id }).from(roadcasts).where(eq(roadcasts.slug, input.slug));
     if (!roadcast) throw new Error("Roadcast introuvable.");
     await transaction.update(roadcasts).set({ title: input.title, lastActivityAt: new Date() }).where(eq(roadcasts.id, roadcast.id));
@@ -34,4 +35,6 @@ export const saveRoadcastWorkspace = action(async (raw: unknown) => {
     }
     return workspaceForRoadcast(transaction, roadcast.id);
   });
+  announceWorkspaceUpdate({ workspace: input.slug, sourceId: input.sourceId });
+  return saved;
 }, "roadcast.workspace.save");

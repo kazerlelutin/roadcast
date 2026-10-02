@@ -127,6 +127,8 @@
   color: var(--accent);
   font-size: .8rem;
 }
+.workspaceUpdate { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .45rem; color: var(--accent, #00a6b1); font-size: .85rem; }
+.workspaceUpdate button { border: 1px solid currentColor; border-radius: .3rem; background: transparent; color: inherit; padding: .2rem .45rem; }
 
 .workspace {
   display: grid;

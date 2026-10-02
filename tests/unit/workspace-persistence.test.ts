@@ -11,4 +11,8 @@ describe("persistance PostgreSQL du roadcast", () => {
   it("accepte une chronique initiale vide sans chroniqueur fictif", () => {
     expect(workspaceInput.parse({ slug: "demo-123", title: "Démo", chronicles: [{ id: "chronicle-initial", title: "Nouvelle chronique", author: "", document: "<p></p>", versions: [] }] }).chronicles[0]?.author).toBe("");
   });
+
+  it("accepte l’identifiant de la session qui a enregistré l’espace", () => {
+    expect(workspaceInput.parse({ slug: "demo-123", sourceId: "session-1", title: "Démo", chronicles: [chronicle] }).sourceId).toBe("session-1");
+  });
 });

@@ -2,7 +2,8 @@ export type ChronicleLock = { chronicleId: string; name: string; ownerId: string
 type LockRequest = { type: "lock"; payload: { chronicleId: string; name: string; ownerId: string; }; };
 type ReleaseRequest = { type: "release"; payload: { chronicleId: string; ownerId: string; }; };
 type SyncRequest = { type: "sync"; };
-export type ChronicleLockMessage = LockRequest | ReleaseRequest | SyncRequest | { type: "locks"; payload: { locks: ChronicleLock[]; }; };
+type WorkspaceUpdateMessage = { type: "workspace-updated"; payload: { sourceId?: string; }; };
+export type ChronicleLockMessage = LockRequest | ReleaseRequest | SyncRequest | WorkspaceUpdateMessage | { type: "locks"; payload: { locks: ChronicleLock[]; }; };
 
 const lockDurationMs = 12_000;
 
@@ -11,11 +12,12 @@ function validName(value: unknown): value is string { return typeof value === "s
 
 export function parseChronicleLockMessage(value: unknown): ChronicleLockMessage | null {
   if (!value || typeof value !== "object") return null;
-  const message = value as { type?: unknown; payload?: { chronicleId?: unknown; name?: unknown; ownerId?: unknown; locks?: unknown; }; };
+  const message = value as { type?: unknown; payload?: { chronicleId?: unknown; name?: unknown; ownerId?: unknown; sourceId?: unknown; locks?: unknown; }; };
   const payload = message.payload;
   if (message.type === "sync") return { type: "sync" };
   if (message.type === "lock" && payload && validId(payload.chronicleId) && validName(payload.name) && validId(payload.ownerId)) return { type: "lock", payload: { chronicleId: payload.chronicleId, name: payload.name.trim(), ownerId: payload.ownerId } };
   if (message.type === "release" && payload && validId(payload.chronicleId) && validId(payload.ownerId)) return { type: "release", payload: { chronicleId: payload.chronicleId, ownerId: payload.ownerId } };
+  if (message.type === "workspace-updated" && payload && (payload.sourceId === undefined || validId(payload.sourceId))) return { type: "workspace-updated", payload: { sourceId: payload.sourceId } };
   if (message.type !== "locks" || !payload || !Array.isArray(payload.locks)) return null;
   const locks = payload.locks.filter((lock): lock is ChronicleLock => !!lock && typeof lock === "object" && validId((lock as ChronicleLock).chronicleId) && validName((lock as ChronicleLock).name) && validId((lock as ChronicleLock).ownerId) && typeof (lock as ChronicleLock).expiresAt === "number");
   return locks.length === payload.locks.length ? { type: "locks", payload: { locks } } : null;
@@ -30,9 +32,9 @@ function socketUrl(workspace: string): string {
 
 function sessionId() { return globalThis.crypto?.randomUUID?.() ?? `session-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
 
-export type ChronicleLockClient = { sessionId: string; claim: (chronicleId: string, name: string) => void; release: (chronicleId: string) => void; close: () => void; };
+export type ChronicleLockClient = { sessionId: string; claim: (chronicleId: string, name: string) => void; release: (chronicleId: string) => void; announceWorkspaceUpdate: () => void; close: () => void; };
 
-export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void): ChronicleLockClient {
+export function connectChronicleLocks(workspace: string, onLocks: (locks: ChronicleLock[]) => void, onWorkspaceUpdated?: (sourceId?: string) => void): ChronicleLockClient {
   const ownerId = sessionId();
   let locks: ChronicleLock[] = [];
   let socket: InstanceType<typeof globalThis.WebSocket> | undefined;
@@ -62,6 +64,7 @@ export function connectChronicleLocks(workspace: string, onLocks: (locks: Chroni
     if (!message) return;
     if (message.type === "sync") { sendSnapshot(); return; }
     if (message.type === "locks") { replaceLocks(message.payload.locks); return; }
+    if (message.type === "workspace-updated") { onWorkspaceUpdated?.(message.payload.sourceId); return; }
     applyLocalRequest(message);
   });
 
@@ -75,6 +78,7 @@ export function connectChronicleLocks(workspace: string, onLocks: (locks: Chroni
       try {
         const message = parseChronicleLockMessage(JSON.parse(String(event.data)));
         if (message?.type === "locks") replaceLocks(message.payload.locks);
+        if (message?.type === "workspace-updated") onWorkspaceUpdated?.(message.payload.sourceId);
       } catch { /* Ignore malformed network messages. */ }
     });
     socket.addEventListener("close", () => { if (!closed) retry = setTimeout(connect, 1_000); });
@@ -86,6 +90,7 @@ export function connectChronicleLocks(workspace: string, onLocks: (locks: Chroni
     sessionId: ownerId,
     claim(chronicleId, name) { if (validId(chronicleId) && validName(name)) send({ type: "lock", payload: { chronicleId, name: name.trim(), ownerId } }); },
     release(chronicleId) { if (validId(chronicleId)) send({ type: "release", payload: { chronicleId, ownerId } }); },
+    announceWorkspaceUpdate() { localChannel?.postMessage({ type: "workspace-updated", payload: { sourceId: ownerId } }); },
     close() { closed = true; if (retry) globalThis.clearTimeout(retry); socket?.close(); localChannel?.close(); },
   };
 }

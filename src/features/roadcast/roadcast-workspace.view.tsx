@@ -34,6 +34,7 @@ export type RoadcastWorkspaceViewProps = {
   broadcastDraft: BroadcastDraft | null;
   broadcastTarget: Slider;
   notice: string;
+  workspaceUpdateAvailable: boolean;
   theme: RoadcastWorkspaceTheme;
   shareOpen: boolean;
   shareMode: ShareMode;
@@ -80,6 +81,7 @@ export type RoadcastWorkspaceViewProps = {
   onCopyShareLink: () => void;
   onCopySliderLink: () => void;
   onThemeChange: () => void;
+  onReloadWorkspace: () => void;
 };
 
 export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
@@ -103,6 +105,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     </header>
 
     <div class={styles.status} aria-live="polite">{props.notice}</div>
+    {props.workspaceUpdateAvailable && <div class={styles.workspaceUpdate} role="status">Modifications disponibles <button type="button" onClick={props.onReloadWorkspace}>Recharger</button></div>}
 
     <div class={styles.workspace}>
       <nav class={styles.tree} aria-label="Arbre des chroniques">

@@ -73,6 +73,16 @@ Feature: Préparer une chronique Roadcast
     When j’enregistre une version puis choisis une version antérieure
     Then son contenu est restauré, seules les dernières versions sont conservées dans la table des versions et l’état indique si la saisie correspond à la dernière version enregistrée
 
+  Scenario: Retrouver la saisie courante sans choisir une version
+    Given une chronique a été enregistrée automatiquement
+    When je recharge l’espace d’édition
+    Then le document courant réapparaît avec ses versions sans que je doive en sélectionner une
+
+  Scenario: Signaler une mise à jour à un autre collaborateur
+    Given deux collaborateurs ont ouvert le même roadcast
+    When le premier enregistre une modification
+    Then le second voit une action Recharger pour récupérer l’espace à jour
+
   Scenario: Consulter la rétention et les limites d’un roadcast
     Given un roadcast en plan gratuit
     When je consulte son arbre de chroniques

@@ -11,4 +11,12 @@ describe("verrou de chronique", () => {
     expect(parseChronicleLockMessage({ type: "lock", payload: { chronicleId: "welcome", ownerId: "session-1", name: "" } })).toBeNull();
     expect(parseChronicleLockMessage({ type: "lock", payload: { chronicleId: "welcome!", ownerId: "session-1", name: "Camille" } })).toBeNull();
   });
+
+  it("accepte la notification de modifications d’un autre collaborateur", () => {
+    expect(parseChronicleLockMessage({ type: "workspace-updated", payload: { sourceId: "session-2" } })).toEqual({ type: "workspace-updated", payload: { sourceId: "session-2" } });
+  });
+
+  it("refuse une notification de mise à jour malformée", () => {
+    expect(parseChronicleLockMessage({ type: "workspace-updated", payload: { sourceId: "session!2" } })).toBeNull();
+  });
 });
