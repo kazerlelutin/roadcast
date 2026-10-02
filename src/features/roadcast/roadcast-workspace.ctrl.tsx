@@ -9,6 +9,7 @@ import { connectSliderRealtime, type Slider, type SliderRealtimeClient, type Bro
 import { type ShareMode } from "../sharing/share-dialog.view";
 import { estimateChronicleMinutes } from "../chronicle/reading-time.ctrl";
 import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspaceView } from "./roadcast-workspace.view";
+import { createRoadcastAccessLinks, isRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
@@ -40,6 +41,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [shareMode, setShareMode] = createSignal<ShareMode>("edit");
   const [notice, setNotice] = createSignal("");
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
+  const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(createRoadcastAccessLinks());
   let editor: Editor | undefined;
   let editorChronicleId = "";
   let onEditorMouseMove: ((event: { clientX: number; clientY: number }) => void) | undefined;
@@ -48,7 +50,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
   const publicLink = (mode: ShareMode = shareMode()) => {
-    const path = mode === "edit" ? `/${props.slug}` : mode === "read" ? `/${props.slug}/read` : `/slider/${props.slug}-${slider()}`;
+    const links = accessLinks();
+    const path = mode === "edit" ? `/${props.slug}` : mode === "read" ? `/read/${links.read}` : `/slider/${links.sliders[slider()]}`;
     return `${globalThis.location?.origin ?? ""}${path}`;
   };
   const copy = async (link: string) => {
@@ -246,8 +249,15 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         setAuthorQuery(savedChronicles[0].author);
       }
     } catch { globalThis.localStorage.removeItem(`roadcast-workspace:${props.slug}`); }
+    try {
+      const storedLinks = JSON.parse(globalThis.localStorage.getItem(`roadcast-access-links:${props.slug}`) ?? "null");
+      const links = isRoadcastAccessLinks(storedLinks) ? storedLinks : accessLinks();
+      setAccessLinks(links);
+      globalThis.localStorage.setItem(`roadcast-access-links:${props.slug}`, JSON.stringify(links));
+      globalThis.localStorage.setItem(`roadcast-read-token:${links.read}`, props.slug);
+    } catch { /* A new in-memory token pair remains available for this session. */ }
     (['alpha', 'bravo', 'charly'] as const).forEach((target) => {
-      realtime.set(target, connectSliderRealtime(`${props.slug}-${target}`, (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
+      realtime.set(target, connectSliderRealtime(accessLinks().sliders[target], (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
     });
     setHydrated(true);
   });
@@ -260,7 +270,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   return <>
     <RoadcastWorkspaceView
-      slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
+      slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
       onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onFormat={format} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;

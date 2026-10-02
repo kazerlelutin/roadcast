@@ -16,7 +16,7 @@ test("partage et organise les chroniques depuis l'espace de travail", async ({ p
   await page.getByRole("button", { name: "Partager" }).click();
   await expect(page.getByRole("dialog", { name: "Choisir un lien" })).toBeVisible();
   await page.getByLabel("Lire").check();
-  await expect(page.getByLabel("Lien à partager")).toHaveValue(/\/demo\/read$/);
+  await expect(page.getByLabel("Lien à partager")).toHaveValue(/\/read\/[a-f0-9]{32}$/);
   await page.getByRole("button", { name: "Fermer le partage" }).click();
 
   await page.getByLabel("Chroniqueur").fill("Nora");

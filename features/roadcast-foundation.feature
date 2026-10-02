@@ -69,6 +69,6 @@ Feature: Préparer une chronique Roadcast
     Then le slider reçoit cette sélection sans rechargement de page
 
   Scenario: Lire un roadcast sans pouvoir le modifier
-    Given le lien de lecture d’un roadcast
+    Given le jeton de lecture distinct du jeton d’édition d’un roadcast
     When je consulte une chronique
     Then son contenu est affiché sans commande d’édition

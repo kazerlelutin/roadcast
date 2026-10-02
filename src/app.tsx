@@ -3,16 +3,15 @@ import { Router } from "@solidjs/router";
 import { Suspense } from "solid-js";
 import HomeRoute from "./routes/index";
 import RoadcastRoute from "./routes/[slug]";
-import ReadingRoute from "./routes/[slug]/read";
+import ReadingRoute from "./routes/read/[token]";
 import SliderRoute from "./routes/slider/[token]";
 import "./shared/styles/global.css";
 
 const routes = [
   { path: "/", component: HomeRoute },
-  { path: "/:slug/read", component: ReadingRoute },
+  { path: "/read/:token", component: ReadingRoute },
   { path: "/:slug", component: RoadcastRoute },
   { path: "/slider/:token", component: SliderRoute },
-  { path: "/roadcast/:slug/read", component: ReadingRoute },
   { path: "/roadcast/:slug", component: RoadcastRoute },
 ];
 

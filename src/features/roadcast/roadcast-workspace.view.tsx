@@ -11,6 +11,7 @@ export type WorkspaceChronicle = { id: string; title: string; document: string; 
 
 export type RoadcastWorkspaceViewProps = {
   slug: string;
+  readLink: string;
   title: string;
   chronicles: WorkspaceChronicle[];
   selectedChronicleId: string;
@@ -73,7 +74,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
       <div class={styles.links}>
-        <a href={`/${props.slug}/read`}>Lecture</a>
+        <a href={props.readLink}>Lecture</a>
         <button type="button" onClick={props.onShare}>Partager</button>
         <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>{isLight() ? <Moon size={16} /> : <Sun size={16} />}</button>
       </div>

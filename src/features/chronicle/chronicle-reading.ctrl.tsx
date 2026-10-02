@@ -1,13 +1,9 @@
 import { createSignal, onMount } from "solid-js";
 import { ChronicleReadingView, type ReadonlyChronicle } from "./chronicle-reading.view";
 
-const fallbackChronicles: ReadonlyChronicle[] = [
-  { id: "welcome", title: "Bienvenue", author: "Camille", document: "<p>Bienvenue dans la chronique.</p>" },
-  { id: "conclusion", title: "Conclusion", author: "Alex", document: "<p>Préparez ici la conclusion du roadcast.</p>" },
-];
-
 type StoredChronicle = ReadonlyChronicle & { versions?: unknown; };
 type StoredWorkspace = { title?: unknown; chronicles?: unknown; };
+type ReadonlyWorkspace = { title: string; chronicles: ReadonlyChronicle[]; };
 
 function safeDocument(document: string): string {
   const template = globalThis.document.createElement("template");
@@ -22,22 +18,23 @@ function safeDocument(document: string): string {
   return template.innerHTML;
 }
 
-function readWorkspace(slug: string): { title: string; chronicles: ReadonlyChronicle[]; } {
+function readWorkspace(slug: string): ReadonlyWorkspace | null {
   try {
     const stored = JSON.parse(globalThis.localStorage.getItem(`roadcast-workspace:${slug}`) ?? "null") as StoredWorkspace | null;
-    if (!stored || typeof stored.title !== "string" || !Array.isArray(stored.chronicles)) return { title: "Roadcast", chronicles: fallbackChronicles };
+    if (!stored || typeof stored.title !== "string" || !Array.isArray(stored.chronicles)) return null;
     const chronicles = stored.chronicles.filter((chronicle): chronicle is StoredChronicle => !!chronicle && typeof chronicle === "object" && typeof (chronicle as StoredChronicle).id === "string" && typeof (chronicle as StoredChronicle).title === "string" && typeof (chronicle as StoredChronicle).author === "string" && typeof (chronicle as StoredChronicle).document === "string").map((chronicle) => ({ ...chronicle, document: safeDocument(chronicle.document) }));
-    return { title: stored.title, chronicles: chronicles.length ? chronicles : fallbackChronicles };
-  } catch { return { title: "Roadcast", chronicles: fallbackChronicles }; }
+    return chronicles.length ? { title: stored.title, chronicles } : null;
+  } catch { return null; }
 }
 
-export function ChronicleReadingCtrl(props: { slug: string }) {
-  const [workspace, setWorkspace] = createSignal({ title: "Roadcast", chronicles: fallbackChronicles });
-  const [selectedChronicleId, setSelectedChronicleId] = createSignal(fallbackChronicles[0].id);
+export function ChronicleReadingCtrl(props: { token: string }) {
+  const [workspace, setWorkspace] = createSignal<ReadonlyWorkspace | null>(null);
+  const [selectedChronicleId, setSelectedChronicleId] = createSignal("");
   onMount(() => {
-    const nextWorkspace = readWorkspace(props.slug);
+    const slug = globalThis.localStorage.getItem(`roadcast-read-token:${props.token}`);
+    const nextWorkspace = slug ? readWorkspace(slug) : null;
     setWorkspace(nextWorkspace);
-    setSelectedChronicleId(nextWorkspace.chronicles[0].id);
+    setSelectedChronicleId(nextWorkspace?.chronicles[0]?.id ?? "");
   });
-  return <ChronicleReadingView title={workspace().title} chronicles={workspace().chronicles} selectedChronicleId={selectedChronicleId()} onSelectChronicle={setSelectedChronicleId} />;
+  return <ChronicleReadingView workspace={workspace()} selectedChronicleId={selectedChronicleId()} onSelectChronicle={setSelectedChronicleId} />;
 }

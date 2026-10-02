@@ -33,6 +33,7 @@
 .header,
 .status,
 .workspace {
+  width: 100%;
   max-width: 1500px;
   margin-inline: auto;
 }
