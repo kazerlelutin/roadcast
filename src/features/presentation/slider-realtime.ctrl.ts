@@ -60,7 +60,7 @@ export function connectSliderRealtime(token: string, onBroadcast: (payload: Broa
     });
   };
 
-  if (!import.meta.env.DEV) connect();
+  connect();
   return {
     publish(payload) {
       pending = payload;

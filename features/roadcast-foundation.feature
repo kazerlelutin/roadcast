@@ -118,6 +118,11 @@ Feature: Préparer une chronique Roadcast
     When la première modifie une chronique pendant plus de 400 millisecondes
     Then la seconde voit son nom et ne peut pas modifier cette chronique tant que le verrou est actif
 
+  Scenario: Collaborer depuis le serveur de développement
+    Given deux navigateurs ouverts sur le serveur de développement
+    When l’un modifie une chronique et qu’un verrou est émis
+    Then l’autre reçoit le verrou et les mises à jour via le WebSocket de collaboration
+
   Scenario: Mettre à jour un slider ouvert en direct
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur

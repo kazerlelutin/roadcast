@@ -84,7 +84,7 @@ export function connectChronicleLocks(workspace: string, onLocks: (locks: Chroni
     socket.addEventListener("close", () => { if (!closed) retry = setTimeout(connect, 1_000); });
   };
 
-  if (!import.meta.env.DEV) connect();
+  connect();
   localChannel?.postMessage({ type: "sync" });
   return {
     sessionId: ownerId,
