@@ -88,6 +88,11 @@ Feature: Préparer une chronique Roadcast
     When un ou plusieurs conteneurs démarrent
     Then les migrations manquantes sont appliquées une seule fois avant l’ouverture du serveur
 
+  Scenario: Limiter les roadcasts récents au navigateur
+    Given des roadcasts créés par plusieurs personnes
+    When j’ouvre l’accueil depuis mon navigateur
+    Then seuls les roadcasts créés ou ouverts dans mon stockage local sont listés
+
   Scenario: Éviter les envois de sauvegarde en boucle
     Given la saisie courante est déjà enregistrée
     When l’éditeur émet plusieurs mises à jour identiques
