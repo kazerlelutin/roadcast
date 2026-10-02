@@ -1,0 +1,2 @@
+import styles from "./presentation.module.css";
+export function PresentationView(props: { token: string }) { return <main class={styles.page}><header><a href="/">roadcast</a><span>slider public · {props.token}</span></header><section class={styles.slide}><p>ALPHA · EN DIRECT</p><h1>Bienvenue dans la chronique</h1><p>Le contenu choisi dans l’éditeur est affiché ici, sans les commandes de régie.</p><button type="button">Ajouter à mon résumé</button></section><footer>Le résumé asynchrone reste sur cet appareil jusqu’à son téléchargement.</footer></main>; }

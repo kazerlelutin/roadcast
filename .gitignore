@@ -14,6 +14,11 @@
 
 # production
 /build
+/dist
+/.output
+/test-results
+/playwright-report
+/data/media
 
 # misc
 .DS_Store

@@ -1,0 +1,274 @@
+.page {
+  --page-background: #20283f;
+  --surface: #1b2338;
+  --editor-canvas: #20283f;
+  --text: #f7f8fc;
+  --muted: #aebbd3;
+  --line: #3c4968;
+  --soft-surface: #2a3652;
+  --accent: #00a6b1;
+  --button-hover: #f7f8fc;
+  color-scheme: dark;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: .65rem;
+  padding: .5rem clamp(.75rem, 3vw, 2.5rem) 2rem;
+  background: var(--page-background);
+  color: var(--text);
+}
+
+.light {
+  --page-background: #edf1f6;
+  --surface: #f8fafc;
+  --editor-canvas: #fff;
+  --text: #172039;
+  --muted: #4e5d73;
+  --line: #c7d0dc;
+  --soft-surface: #e3e9f1;
+  --accent: #007f8a;
+  --button-hover: #172039;
+  color-scheme: light;
+}
+
+.header,
+.status,
+.workspace {
+  width: 100%;
+  max-width: 1500px;
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.firstLetter,
+.logoText {
+  position: relative;
+  display: inline-block;
+}
+
+.firstLetter {
+  color: #e64c65;
+}
+
+.firstLetter::before,
+.logoText::after {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 1px;
+  content: "";
+  background: #e64c65;
+  animation: logoLine .55s ease-out forwards;
+}
+
+.firstLetter::before { top: -.16em; }
+.logoText::after { bottom: -.16em; animation-delay: .14s; }
+
+@keyframes logoLine { to { width: 100%; } }
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  align-items: center;
+  gap: .35rem;
+}
+
+.links a,
+.links button {
+  padding: .38rem .5rem;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: .8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.links a:hover,
+.links button:hover {
+  border-bottom-color: var(--accent);
+  color: var(--text);
+}
+
+.links .themeButton {
+  width: 1.65rem;
+  height: 1.65rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  color: var(--text);
+}
+.links .themeButton svg { display: block; }
+.collaboratorName { display: flex; align-items: center; gap: .35rem; color: var(--muted); font-size: .72rem; }
+.collaboratorName input { width: 7.5rem; padding: .34rem .45rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--editor-canvas); color: var(--text); }
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 1.3rem;
+  color: var(--accent);
+  font-size: .8rem;
+}
+.workspaceUpdate { display: inline-flex; align-items: center; gap: .5rem; color: var(--accent, #00a6b1); font-size: .85rem; }
+.workspaceUpdate button { border: 1px solid currentColor; border-radius: .3rem; background: transparent; color: inherit; padding: .2rem .45rem; }
+
+.workspace {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 270px;
+  gap: 1rem;
+  min-height: 0;
+  height: 100%;
+  align-items: stretch;
+}
+
+.tree {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.treeIdentity, .treeContent { padding: 1rem; }
+.treeContent { min-height: 0; display: flex; flex: 1; flex-direction: column; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--editor-canvas) 55%, transparent); }
+
+.roadcastTitleLabel {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--accent);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+.roadcastTitle {
+  width: 100%;
+  margin: 0;
+  padding: .2rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.roadcastTitle:focus { border-bottom-color: var(--accent); }
+
+.treeFilter { flex: none; }
+.treeContent h2 { margin: 0 0 .7rem; color: var(--text); font-size: .95rem; }
+.filterLabel { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .72rem; }
+.filterSelect { width: 100%; padding: .5rem .55rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--editor-canvas); color: var(--text); }
+.treeDivider { margin: 1rem 0; border: 0; border-top: 1px solid var(--line); }
+.treeList {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent;
+}
+
+.treeList::-webkit-scrollbar { width: 7px; }
+.treeList::-webkit-scrollbar-track { background: transparent; }
+.treeList::-webkit-scrollbar-thumb { border-radius: 999px; background: color-mix(in srgb, var(--muted) 55%, transparent); }
+.treeList::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+.tree ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.selectChronicle,
+.add {
+  width: 100%;
+  padding: .52rem .6rem;
+  border: 1px solid transparent;
+  border-radius: .2rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chronicleItem { display: flex; align-items: stretch; gap: .1rem; }
+.selectChronicle { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-width: 0; }
+.chronicleMeta { display: flex; flex: none; align-items: center; gap: .25rem; }
+.lockStatus { display: inline-flex; align-items: center; gap: .2rem; max-width: 7rem; overflow: hidden; color: var(--accent); font-size: .68rem; white-space: nowrap; text-overflow: ellipsis; }
+.tree li small { color: var(--muted); font-size: .68rem; }
+
+.selectChronicle:hover,
+.selectChronicle[aria-current="page"],
+.add:hover {
+  border-color: var(--line);
+  background: var(--soft-surface);
+  color: var(--text);
+}
+
+.deleteChronicle { width: 1.8rem; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: .2rem; background: transparent; color: var(--muted); cursor: pointer; opacity: 0; }
+.chronicleItem:hover .deleteChronicle, .deleteChronicle:focus-visible { opacity: 1; }
+.deleteChronicle:hover { border-color: #c55b64; color: #e8727e; }
+.deleteChronicle:disabled { cursor: not-allowed; opacity: 0; }
+
+.deleteDialog { position: fixed; inset: 0; z-index: 30; width: min(94vw, 410px); height: fit-content; margin: auto; padding: 1.15rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); color: var(--text); box-shadow: 0 20px 70px rgb(0 0 0 / .5); }
+.deleteDialog::backdrop { background: rgb(7 16 29 / .75); }
+.deleteDialog h2 { margin: 0; font-size: 1.1rem; }
+.deleteDialog p { margin: .7rem 0 1.2rem; color: var(--muted); font-size: .86rem; line-height: 1.45; }
+.deleteDialog > div { display: flex; justify-content: end; gap: .5rem; }
+.deleteDialog button { padding: .5rem .7rem; border: 1px solid var(--line); border-radius: .25rem; background: transparent; color: var(--text); cursor: pointer; }
+.deleteDialog .deleteConfirm { border-color: #bd4c58; background: #ad4350; color: #fff; }
+
+.add {
+  margin-top: .65rem;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.usage { display: grid; gap: .6rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .7rem; }
+.deletion { display: grid; gap: .15rem; }
+.deletion strong { color: var(--text); font-size: .76rem; }
+.quota { display: grid; gap: .25rem; }
+.quota div { display: flex; justify-content: space-between; gap: .4rem; }
+.quota strong { color: var(--text); font-weight: 600; }
+.quota progress { width: 100%; height: .35rem; overflow: hidden; border: 0; border-radius: 999px; appearance: none; background: var(--soft-surface); }
+.quota progress::-webkit-progress-bar { background: var(--soft-surface); }
+.quota progress::-webkit-progress-value { background: var(--accent); }
+.quota progress::-moz-progress-bar { background: var(--accent); }
+
+
+@media (max-width: 980px) {
+  .page { height: auto; min-height: 100vh; overflow: visible; }
+  .workspace { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .tree { order: 2; }
+  .treeContent, .treeList { overflow: visible; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .firstLetter::before,
+  .logoText::after { width: 100%; animation: none; }
+}

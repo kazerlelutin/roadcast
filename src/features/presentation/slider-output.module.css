@@ -1,0 +1,3 @@
+:global(:root), :global(body) { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+.output { width: 100%; height: 100dvh; display: grid; place-items: center; overflow: hidden; background: transparent; color: #fff; }
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

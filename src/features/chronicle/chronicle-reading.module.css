@@ -1,0 +1,27 @@
+.page { min-height: 100vh; padding: .5rem clamp(.75rem, 3vw, 2.5rem) 2rem; background: #20283f; color: #f7f8fc; }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; max-width: 1500px; margin: 0 auto 1.5rem; }
+.brand { color: inherit; font-size: 1.05rem; font-weight: 650; line-height: 1; text-decoration: none; text-transform: uppercase; }
+.firstLetter, .logoText { position: relative; display: inline-block; }
+.firstLetter { color: #e64c65; }
+.firstLetter::before, .logoText::after { position: absolute; left: 0; width: 100%; height: 1px; content: ""; background: #e64c65; }
+.firstLetter::before { top: -.16em; }
+.logoText::after { bottom: -.16em; }
+.readState { padding: .38rem .5rem; color: #aebbd3; font-size: .8rem; }
+.layout { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+.readingTree { height: fit-content; padding: 1rem; border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
+.readingTree h1 { margin: 0 0 .75rem; font-size: 1rem; }
+.readingTree ol { margin: 0; padding: 0; list-style: none; }
+.readingTree button { display: flex; justify-content: space-between; gap: .5rem; width: 100%; padding: .55rem; border: 0; border-radius: .25rem; background: transparent; color: #aebbd3; text-align: left; cursor: pointer; }
+.readingTree button[aria-current="page"], .readingTree button:hover { background: #2a3652; color: #fff; }
+.readingTree small, .author { color: #aebbd3; }
+.readingContent { min-width: 0; padding: clamp(1.5rem, 5vw, 4rem); border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
+.kicker { margin: 0; color: #00a6b1; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
+.readingContent h2 { margin: .5rem 0 0; font-size: clamp(2rem, 4vw, 3rem); }
+.author { margin: .35rem 0 2rem; }
+.content { font-size: 1.05rem; line-height: 1.75; }
+.content img { display: block; max-width: 100%; margin: 1.5rem 0; border-radius: .35rem; }
+.content blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 3px solid #f7f8fc; }
+.content a { color: #00a6b1; }
+.unavailable { max-width: 44rem; margin: 12vh auto; padding: 2rem; border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
+.unavailable h1 { margin-top: 0; font-size: 1.3rem; }
+@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }

@@ -1,0 +1,102 @@
+import type { EditorOptions } from "@tiptap/core";
+import ArrowDown from "lucide-solid/icons/arrow-down";
+import ArrowUp from "lucide-solid/icons/arrow-up";
+import ImagePlus from "lucide-solid/icons/image-plus";
+import Minus from "lucide-solid/icons/minus";
+import Plus from "lucide-solid/icons/plus";
+import Quote from "lucide-solid/icons/quote";
+import Redo2 from "lucide-solid/icons/redo-2";
+import Save from "lucide-solid/icons/save";
+import Trash2 from "lucide-solid/icons/trash";
+import Undo2 from "lucide-solid/icons/undo-2";
+import styles from "./chronicle-editor.module.css";
+
+export type ChronicleVersion = { id: string; savedAt: string; title: string; author: string; document: string; };
+export type MediaFile = { type: string; size: number; arrayBuffer: () => Promise<ArrayBuffer>; };
+export type ChronicleEditorElement = Exclude<NonNullable<EditorOptions["element"]>, Function>;
+export type ChronicleFormat = "bold" | "italic" | "heading" | "list" | "quote" | "separator" | "link";
+export type ChronicleInsertBlock = "quote" | "separator";
+
+export type ChronicleEditorViewProps = {
+  title: string;
+  minutes: number;
+  authors: string[];
+  authorQuery: string;
+  authorPickerOpen: boolean;
+  insertMenuOpen: boolean;
+  blockMenu: { top: number; left: number; position: number; } | null;
+  versions: ChronicleVersion[];
+  bubble: { top: number; left: number } | null;
+  lockedBy: string | null;
+  workspaceSynced: boolean;
+  onTitleInput: (value: string) => void;
+  onAuthorQueryInput: (value: string) => void;
+  onAuthorPickerOpen: (open: boolean) => void;
+  onInsertMenuOpen: (open: boolean) => void;
+  onSelectAuthor: (author: string) => void;
+  onEditorReady: (element: ChronicleEditorElement) => void;
+  onEditorPointerMove: (coordinates: { left: number; top: number; }) => void;
+  onEditorPointerLeave: () => void;
+  onFormat: (format: ChronicleFormat) => void;
+  onInsertBlock: (block: ChronicleInsertBlock) => void;
+  onOpenBroadcast: () => void;
+  onMediaInput: (file: MediaFile | undefined) => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  onMove: (direction: "up" | "down") => void;
+  onSaveVersion: () => void;
+  onRestoreVersion: (versionId: string) => void;
+  onRequestVersionCleanup: () => void;
+};
+
+export function ChronicleEditorView(props: ChronicleEditorViewProps) {
+  const matchingAuthors = () => props.authors.filter((author) => author.toLocaleLowerCase().includes(props.authorQuery.toLocaleLowerCase()));
+  const canCreateAuthor = () => props.authorQuery.trim().length > 0 && !props.authors.some((author) => author.toLocaleLowerCase() === props.authorQuery.trim().toLocaleLowerCase());
+  const bubbleStyle = () => props.bubble ? { top: `${props.bubble.top}px`, left: `${props.bubble.left}px` } : {};
+  const blockMenuStyle = () => props.blockMenu ? { top: `${props.blockMenu.top}px`, left: `${props.blockMenu.left}px` } : {};
+  const preserveSelection = (event: { preventDefault: () => void }) => event.preventDefault();
+  const locked = () => !!props.lockedBy;
+
+  return <section class={styles.editor} aria-label="Éditeur de chronique" onMouseMove={(event) => props.onEditorPointerMove({ left: event.clientX, top: event.clientY })} onMouseLeave={props.onEditorPointerLeave}>
+    <header class={styles.topbar}>
+      <strong classList={{ [styles.unsaved]: !props.lockedBy && !props.workspaceSynced }}>{props.lockedBy ? `Verrouillée par ${props.lockedBy}` : props.workspaceSynced ? "✓ Sauvegardé automatiquement" : "Modifications en cours"}</strong>
+      <div class={styles.topbarActions}>
+        <button type="button" class={styles.saveVersion} disabled={locked()} onClick={props.onSaveVersion}><Save size={15} />Sauvegarder</button>
+        <select disabled={locked()} aria-label="Historique" onChange={(event) => props.onRestoreVersion(event.currentTarget.value)}><option value="">Historique</option>{props.versions.slice().reverse().map((version) => <option value={version.id}>{new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(new Date(version.savedAt))}</option>)}</select>
+        <button type="button" class={styles.clearVersions} disabled={locked() || props.versions.length === 0} onClick={props.onRequestVersionCleanup} aria-label="Nettoyer l’historique" title="Nettoyer l’historique"><Trash2 size={16} /></button>
+        <button type="button" disabled={locked()} onClick={props.onUndo} aria-label="Annuler"><Undo2 size={16} /></button>
+        <button type="button" disabled={locked()} onClick={props.onRedo} aria-label="Rétablir"><Redo2 size={16} /></button>
+      </div>
+    </header>
+    <article class={styles.document}>
+      <p class={styles.kicker}>CHRONIQUE · {props.minutes} MIN</p>
+      <input class={styles.title} disabled={locked()} aria-label="Titre de la chronique" value={props.title} onInput={(event) => props.onTitleInput(event.currentTarget.value)} />
+      <div class={styles.metaRow}>
+        <div class={styles.authorPicker}>
+          <label for="chronicle-author-search">Chroniqueur</label>
+          <input id="chronicle-author-search" disabled={locked()} role="combobox" aria-autocomplete="list" aria-expanded={props.authorPickerOpen} aria-controls="chronicle-author-options" value={props.authorQuery} placeholder="Rechercher ou créer" onFocus={() => props.onAuthorPickerOpen(true)} onBlur={() => props.onAuthorPickerOpen(false)} onInput={(event) => props.onAuthorQueryInput(event.currentTarget.value)} />
+          <div classList={{ [styles.authorOptions]: true, [styles.open]: props.authorPickerOpen && !locked() }} id="chronicle-author-options" role="listbox" aria-label="Chroniqueurs disponibles">
+            {matchingAuthors().map((author) => <button type="button" role="option" aria-selected={author === props.authorQuery} onMouseDown={preserveSelection} onClick={() => props.onSelectAuthor(author)}>{author}</button>)}
+            {canCreateAuthor() && <button type="button" role="option" onMouseDown={preserveSelection} onClick={() => props.onSelectAuthor(props.authorQuery.trim())}>Créer « {props.authorQuery.trim()} »</button>}
+          </div>
+        </div>
+        <div class={styles.moveActions} aria-label="Changer la position de la chronique">
+          <button type="button" disabled={locked()} onClick={() => props.onMove("up")} aria-label="Déplacer la chronique vers le haut" title="Vers le haut"><ArrowUp size={16} /></button>
+          <button type="button" disabled={locked()} onClick={() => props.onMove("down")} aria-label="Déplacer la chronique vers le bas" title="Vers le bas"><ArrowDown size={16} /></button>
+        </div>
+      </div>
+      <div class={styles.canvas}><div ref={props.onEditorReady} aria-label="Contenu de la chronique" /></div>
+    </article>
+    {!locked() && props.blockMenu && <div class={styles.insertControl} style={blockMenuStyle()}>
+      <button type="button" class={styles.insertButton} aria-label="Ajouter au contenu" aria-expanded={props.insertMenuOpen} onMouseDown={preserveSelection} onClick={() => props.onInsertMenuOpen(!props.insertMenuOpen)}><Plus size={18} /></button>
+      <div classList={{ [styles.insertMenu]: true, [styles.open]: props.insertMenuOpen }} role="menu" aria-label="Ajouter au contenu">
+        <label role="menuitem" onMouseDown={preserveSelection}><ImagePlus size={16} />Image<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onCancel={() => props.onInsertMenuOpen(false)} onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) props.onMediaInput(file); props.onInsertMenuOpen(false); }} /></label>
+        <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onInsertBlock("quote"); props.onInsertMenuOpen(false); }}><Quote size={16} />Citation</button>
+        <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onInsertBlock("separator"); props.onInsertMenuOpen(false); }}><Minus size={16} />Séparateur</button>
+      </div>
+    </div>}
+    {!locked() && props.bubble && <div class={styles.bubble} style={bubbleStyle()} role="toolbar" aria-label="Actions sur la sélection">
+      <button type="button" title="Gras" onMouseDown={preserveSelection} onClick={() => props.onFormat("bold")}><b>B</b></button><button type="button" title="Italique" onMouseDown={preserveSelection} onClick={() => props.onFormat("italic")}><i>I</i></button><button type="button" title="Titre" onMouseDown={preserveSelection} onClick={() => props.onFormat("heading")}>H</button><button type="button" title="Liste" onMouseDown={preserveSelection} onClick={() => props.onFormat("list")}>•</button><button type="button" title="Citation" onMouseDown={preserveSelection} onClick={() => props.onFormat("quote")}>❝</button><button type="button" title="Séparateur" onMouseDown={preserveSelection} onClick={() => props.onFormat("separator")}>—</button><button type="button" onMouseDown={preserveSelection} onClick={() => props.onFormat("link")}>Lien</button><button type="button" class={styles.broadcastButton} onMouseDown={preserveSelection} onClick={props.onOpenBroadcast}>Diffuser</button>
+    </div>}
+  </section>;
+}

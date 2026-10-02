@@ -1,0 +1,523 @@
+{
+  "id": "0d4c0055-4a5d-47b7-8d44-fd34572fb464",
+  "prevId": "b7905a5d-606b-4d39-9383-8558be610085",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.access_links": {
+      "name": "access_links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "roadcast_id": {
+          "name": "roadcast_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mode": {
+          "name": "mode",
+          "type": "access_mode",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slider": {
+          "name": "slider",
+          "type": "slider",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "access_links_roadcast_id_roadcasts_id_fk": {
+          "name": "access_links_roadcast_id_roadcasts_id_fk",
+          "tableFrom": "access_links",
+          "tableTo": "roadcasts",
+          "columnsFrom": [
+            "roadcast_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "access_links_token_unique": {
+          "name": "access_links_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.chronicle_versions": {
+      "name": "chronicle_versions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chronicle_id": {
+          "name": "chronicle_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "saved_at": {
+          "name": "saved_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(180)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author": {
+          "name": "author",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "document": {
+          "name": "document",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "chronicle_versions_chronicle_client_id_unique": {
+          "name": "chronicle_versions_chronicle_client_id_unique",
+          "columns": [
+            {
+              "expression": "chronicle_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chronicle_versions_chronicle_id_chronicles_id_fk": {
+          "name": "chronicle_versions_chronicle_id_chronicles_id_fk",
+          "tableFrom": "chronicle_versions",
+          "tableTo": "chronicles",
+          "columnsFrom": [
+            "chronicle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.chronicles": {
+      "name": "chronicles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "roadcast_id": {
+          "name": "roadcast_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(180)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author": {
+          "name": "author",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document": {
+          "name": "document",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estimated_minutes": {
+          "name": "estimated_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        }
+      },
+      "indexes": {
+        "chronicles_roadcast_client_id_unique": {
+          "name": "chronicles_roadcast_client_id_unique",
+          "columns": [
+            {
+              "expression": "roadcast_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chronicles_roadcast_id_roadcasts_id_fk": {
+          "name": "chronicles_roadcast_id_roadcasts_id_fk",
+          "tableFrom": "chronicles",
+          "tableTo": "roadcasts",
+          "columnsFrom": [
+            "roadcast_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.media": {
+      "name": "media",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "roadcast_id": {
+          "name": "roadcast_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "media_provider",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bytes": {
+          "name": "bytes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "media_roadcast_id_roadcasts_id_fk": {
+          "name": "media_roadcast_id_roadcasts_id_fk",
+          "tableFrom": "media",
+          "tableTo": "roadcasts",
+          "columnsFrom": [
+            "roadcast_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.roadcasts": {
+      "name": "roadcasts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(90)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plan": {
+          "name": "plan",
+          "type": "plan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'free'"
+        },
+        "interactive_slider": {
+          "name": "interactive_slider",
+          "type": "slider",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_activity_at": {
+          "name": "last_activity_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "roadcasts_slug_unique": {
+          "name": "roadcasts_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.slider_items": {
+      "name": "slider_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chronicle_id": {
+          "name": "chronicle_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slider": {
+          "name": "slider",
+          "type": "slider",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "slider_items_chronicle_id_chronicles_id_fk": {
+          "name": "slider_items_chronicle_id_chronicles_id_fk",
+          "tableFrom": "slider_items",
+          "tableTo": "chronicles",
+          "columnsFrom": [
+            "chronicle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.access_mode": {
+      "name": "access_mode",
+      "schema": "public",
+      "values": [
+        "edit",
+        "read",
+        "slider"
+      ]
+    },
+    "public.media_provider": {
+      "name": "media_provider",
+      "schema": "public",
+      "values": [
+        "local",
+        "s3",
+        "youtube"
+      ]
+    },
+    "public.plan": {
+      "name": "plan",
+      "schema": "public",
+      "values": [
+        "free",
+        "complete"
+      ]
+    },
+    "public.slider": {
+      "name": "slider",
+      "schema": "public",
+      "values": [
+        "alpha",
+        "bravo",
+        "charly"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

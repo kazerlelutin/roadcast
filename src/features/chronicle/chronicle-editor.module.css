@@ -1,0 +1,49 @@
+.editor { position: relative; min-width: 0; height: 100%; overflow: hidden; background: var(--surface, #1b2338); color: var(--text, #f7f8fc); }
+.topbar { display: flex; align-items: center; justify-content: space-between; min-height: 2.8rem; padding: 0 .85rem; border-bottom: 1px solid var(--line, #3c4968); color: var(--accent, #00a6b1); font-size: .75rem; }
+.topbarActions { display: flex; align-items: center; gap: .25rem; }
+.topbar button, .topbar select, .moveActions button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 1.9rem; border: 1px solid var(--line, #3c4968); border-radius: .25rem; padding: .35rem .5rem; background: transparent; color: var(--text, #f7f8fc); cursor: pointer; }
+.topbar select { max-width: 10rem; background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); cursor: pointer; }
+.topbar select option { background: var(--editor-canvas, #20283f); color: var(--text, #f7f8fc); }
+.topbar .saveVersion { border-color: var(--accent, #00a6b1); color: var(--accent, #00a6b1); font-weight: 800; }
+.topbar .clearVersions { color: var(--muted, #aebbd3); }
+.topbar .unsaved { color: #e5a53c; }
+.topbar button:disabled, .topbar select:disabled, .moveActions button:disabled { cursor: not-allowed; opacity: .45; }
+.document { width: 100%; height: 100%; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr); column-gap: .8rem; border: 0; padding: clamp(.9rem, 2.4vw, 1.5rem) clamp(1.2rem, 6vw, 4rem); }
+.kicker { display: none; }
+.title { grid-column: 1; grid-row: 1; min-width: 0; padding: 0; border: 0; outline: 0; background: transparent; color: inherit; font-size: clamp(1.45rem, 2.3vw, 2rem); font-weight: 760; }
+.metaRow { grid-column: 2; grid-row: 1; display: flex; align-items: center; gap: .45rem; margin: 0; }
+.authorPicker { position: relative; display: grid; }
+.authorPicker label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.authorPicker input { width: 10.5rem; padding: .42rem .55rem; border: 1px solid var(--line, #3c4968); border-radius: .25rem; background: var(--editor-canvas, #20283f); color: inherit; }
+.authorOptions { position: absolute; z-index: 4; top: 100%; left: 0; display: none; width: 100%; margin-top: .3rem; padding: .25rem; border: 1px solid var(--line, #3c4968); border-radius: .3rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 2rem #0007; }
+.authorOptions.open { display: grid; }
+.authorOptions button { padding: .45rem .5rem; border: 0; border-radius: .2rem; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.authorOptions button:hover { background: var(--soft-surface, #2a3652); }
+.canvas { grid-column: 1 / -1; grid-row: 2; min-height: 0; overflow-y: auto; padding: .75rem 0 1rem; scrollbar-width: thin; scrollbar-color: var(--accent, #00a6b1) var(--editor-canvas, #20283f); }
+.canvas::-webkit-scrollbar { width: .65rem; }
+.canvas::-webkit-scrollbar-track { background: var(--editor-canvas, #20283f); border-radius: 99px; }
+.canvas::-webkit-scrollbar-thumb { border: 2px solid var(--editor-canvas, #20283f); border-radius: 99px; background: var(--accent, #00a6b1); }
+.canvas :global(.ProseMirror) { width: min(100%, 720px); min-height: 22rem; margin-inline: auto; outline: 0; color: inherit; font-size: 1.03rem; line-height: 1.72; }
+.canvas :global(.ProseMirror > :first-child) { margin-top: 0; }
+.canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: var(--muted, #aebbd3); content: "Commencez à écrire…"; pointer-events: none; }
+.canvas :global(.ProseMirror blockquote) { margin: 1.25rem 0; padding-left: .85rem; border-left: 3px solid var(--text, #f7f8fc); }
+.canvas :global(.ProseMirror img) { display: block; max-width: 100%; margin: 1.25rem 0; border-radius: .35rem; }
+.canvas :global(.ProseMirror a) { color: var(--accent, #00a6b1); text-decoration: underline; }
+.canvas :global(.ProseMirror hr) { margin: 2rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
+.moveActions { display: flex; align-items: end; gap: .2rem; padding-bottom: .05rem; }
+.moveActions button { border-color: var(--accent, #00a6b1); color: var(--accent, #00a6b1); }
+.insertControl { position: fixed; z-index: 14; transform: translateY(-50%); }
+.insertButton { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; padding: 0; border: 1px solid transparent; border-radius: .3rem; background: transparent; color: var(--muted, #aebbd3); cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
+.insertControl:hover .insertButton, .insertButton:focus-visible { border-color: var(--line, #3c4968); background: var(--surface, #1b2338); }
+.insertButton:hover { border-color: var(--line, #3c4968); color: var(--text, #f7f8fc); }
+.insertMenu { position: absolute; top: 0; left: 2.15rem; display: grid; width: 11rem; padding: .3rem; border: 1px solid var(--line, #3c4968); border-radius: .4rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 1.5rem #0007; opacity: 0; pointer-events: none; transform: translateX(-.45rem); transition: opacity .15s, transform .15s; }
+.insertMenu.open { opacity: 1; pointer-events: auto; transform: translateX(0); }
+.insertMenu label, .insertMenu button { display: flex; align-items: center; gap: .5rem; width: 100%; padding: .48rem .55rem; border: 0; border-radius: .25rem; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.insertMenu label:hover, .insertMenu button:hover { background: var(--soft-surface, #2a3652); }
+.insertMenu input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.bubble { position: fixed; z-index: 15; display: flex; gap: .2rem; transform: translate(-50%, -100%); padding: .3rem; border: 1px solid var(--line, #3c4968); border-radius: .4rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 1.5rem #0007; }
+.bubble button { border: 0; border-radius: .25rem; padding: .42rem .55rem; background: transparent; color: var(--text, #f7f8fc); cursor: pointer; }
+.bubble button:hover { background: var(--soft-surface, #2a3652); }
+.bubble .broadcastButton { background: var(--accent, #00a6b1); color: #08151a; font-weight: 800; }
+@media (max-width: 980px) { .editor { height: auto; overflow: visible; } .document { min-height: 34rem; } .canvas { overflow: visible; } }
+@media (max-width: 640px) { .document { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); row-gap: .6rem; padding-inline: 1.2rem; } .title { grid-column: 1; grid-row: 1; } .metaRow { grid-column: 1; grid-row: 2; } .canvas { grid-column: 1; grid-row: 3; } .authorPicker { flex: 1; } .authorPicker input { width: 100%; } .topbarActions select { max-width: 7rem; } .insertMenu { left: 2rem; } }
