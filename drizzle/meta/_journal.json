@@ -22,6 +22,20 @@
       "when": 1790944964884,
       "tag": "0002_chunky_mentor",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790975400000,
+      "tag": "0003_opaque_editor_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790976300000,
+      "tag": "0004_repair_chronicle_versions",
+      "breakpoints": true
     }
   ]
 }

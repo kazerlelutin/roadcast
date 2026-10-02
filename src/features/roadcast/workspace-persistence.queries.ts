@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { query } from "@solidjs/router";
 import { accessLinks, roadcasts } from "./roadcast.schema";
 import { createRoadcastDatabase } from "./database.ctrl";
-import { workspaceForRoadcast } from "./workspace-persistence.actions";
+import { workspaceForRoadcast } from "./workspace-persistence.server";
 
 export const loadRoadcastWorkspace = query(async (slug: string) => {
   "use server";
