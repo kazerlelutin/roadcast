@@ -178,7 +178,18 @@
 .filterLabel { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .72rem; }
 .filterSelect { width: 100%; padding: .5rem .55rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--editor-canvas); color: var(--text); }
 .treeDivider { margin: 1rem 0; border: 0; border-top: 1px solid var(--line); }
-.treeList { min-height: 0; flex: 1; overflow-y: auto; }
+.treeList {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent;
+}
+
+.treeList::-webkit-scrollbar { width: 7px; }
+.treeList::-webkit-scrollbar-track { background: transparent; }
+.treeList::-webkit-scrollbar-thumb { border-radius: 999px; background: color-mix(in srgb, var(--muted) 55%, transparent); }
+.treeList::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
 .tree ol {
   padding: 0;
