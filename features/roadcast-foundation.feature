@@ -1,5 +1,10 @@
 Feature: Préparer une chronique Roadcast
 
+  Scenario: Exécuter Roadcast v2 sans application historique
+    Given le dépôt Roadcast v2
+    When je construis l’application de production
+    Then le code archivé legacy v1 n’est pas présent et Roadcast v2 reste fonctionnel
+
   Scenario: Ouvrir un roadcast sans contenu de démonstration
     Given un roadcast nouvellement créé
     When j’ouvre son espace d’édition
