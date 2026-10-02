@@ -106,7 +106,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Consulter la rétention et les limites d’un roadcast
     Given un roadcast en plan gratuit
     When je consulte son arbre de chroniques
-    Then je vois sa date de suppression prévue ainsi que les jauges globales de caractères et de taille média, limitée à 100 Mo
+    Then je vois sa date de suppression prévue après 45 jours d’inactivité ainsi que les jauges globales de caractères et de taille média, limitée à 100 Mo
 
   Scenario: Diffuser une sélection depuis l’éditeur
     Given une chronique contenant du texte sélectionné et une image
