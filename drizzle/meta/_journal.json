@@ -15,6 +15,13 @@
       "when": 1790973420000,
       "tag": "0001_persistent_workspace",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790944964884,
+      "tag": "0002_chunky_mentor",
+      "breakpoints": true
     }
   ]
 }

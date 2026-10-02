@@ -71,7 +71,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Conserver une version d’une chronique
     Given une chronique modifiée dans l’éditeur
     When j’enregistre une version puis choisis une version antérieure
-    Then son contenu est restauré, seules les dernières versions sont conservées localement et l’état indique si la saisie correspond à la dernière version enregistrée
+    Then son contenu est restauré, seules les dernières versions sont conservées dans la table des versions et l’état indique si la saisie correspond à la dernière version enregistrée
 
   Scenario: Consulter la rétention et les limites d’un roadcast
     Given un roadcast en plan gratuit

@@ -1,6 +1,6 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { action } from "@solidjs/router";
-import { accessLinks, chronicles, roadcasts } from "./roadcast.schema";
+import { accessLinks, chronicles, chronicleVersions, roadcasts } from "./roadcast.schema";
 import { createRoadcastDatabase } from "./database.ctrl";
 import { type PersistedRoadcastWorkspace, type WorkspaceSlider, workspaceInput } from "./workspace-persistence.types";
 
@@ -26,14 +26,21 @@ async function ensureLinks(database: Database | Transaction, roadcastId: string)
 export async function workspaceForRoadcast(database: Database | Transaction, roadcastId: string): Promise<PersistedRoadcastWorkspace | null> {
   const [roadcast] = await database.select({ title: roadcasts.title, lastActivityAt: roadcasts.lastActivityAt }).from(roadcasts).where(eq(roadcasts.id, roadcastId));
   if (!roadcast) return null;
-  const rows = await database.select({ clientId: chronicles.clientId, title: chronicles.title, author: chronicles.author, document: chronicles.document, versions: chronicles.versions }).from(chronicles).where(eq(chronicles.roadcastId, roadcastId)).orderBy(chronicles.position);
+  const rows = await database.select({ id: chronicles.id, clientId: chronicles.clientId, title: chronicles.title, author: chronicles.author, document: chronicles.document }).from(chronicles).where(eq(chronicles.roadcastId, roadcastId)).orderBy(chronicles.position);
+  const versions = rows.length ? await database.select({ chronicleId: chronicleVersions.chronicleId, clientId: chronicleVersions.clientId, savedAt: chronicleVersions.savedAt, title: chronicleVersions.title, author: chronicleVersions.author, document: chronicleVersions.document }).from(chronicleVersions).where(inArray(chronicleVersions.chronicleId, rows.map((chronicle) => chronicle.id))).orderBy(chronicleVersions.savedAt) : [];
+  const versionsByChronicle = new Map<string, PersistedRoadcastWorkspace["chronicles"][number]["versions"]>();
+  for (const version of versions) {
+    const current = versionsByChronicle.get(version.chronicleId) ?? [];
+    current.push({ id: version.clientId, savedAt: version.savedAt.toISOString(), title: version.title, author: version.author, document: typeof version.document.html === "string" ? version.document.html : "<p></p>" });
+    versionsByChronicle.set(version.chronicleId, current);
+  }
   const links = await ensureLinks(database, roadcastId);
   const savedChronicles = rows.map((chronicle) => ({
     id: chronicle.clientId,
     title: chronicle.title,
     author: chronicle.author,
     document: typeof chronicle.document.html === "string" ? chronicle.document.html : "<p></p>",
-    versions: Array.isArray(chronicle.versions) ? chronicle.versions.filter((version): version is PersistedRoadcastWorkspace["chronicles"][number]["versions"][number] => !!version && typeof version === "object" && typeof (version as { id?: unknown }).id === "string" && typeof (version as { savedAt?: unknown }).savedAt === "string" && typeof (version as { title?: unknown }).title === "string" && typeof (version as { author?: unknown }).author === "string" && typeof (version as { document?: unknown }).document === "string") : [],
+    versions: versionsByChronicle.get(chronicle.id) ?? [],
   }));
   return { title: roadcast.title, chronicles: savedChronicles, authors: [...new Set(savedChronicles.map((chronicle) => chronicle.author).filter(Boolean))], lastActivityAt: roadcast.lastActivityAt.toISOString(), links };
 }
@@ -49,7 +56,7 @@ export const saveRoadcastWorkspace = action(async (raw: unknown) => {
     const existing = await transaction.select({ clientId: chronicles.clientId }).from(chronicles).where(eq(chronicles.roadcastId, roadcast.id));
     const existingIds = new Set(existing.map((chronicle) => chronicle.clientId));
     await Promise.all(input.chronicles.map((chronicle, position) => {
-      const values = { title: chronicle.title, author: chronicle.author, position, document: { html: chronicle.document }, versions: chronicle.versions };
+      const values = { title: chronicle.title, author: chronicle.author, position, document: { html: chronicle.document } };
       return existingIds.has(chronicle.id)
         ? transaction.update(chronicles).set(values).where(and(eq(chronicles.roadcastId, roadcast.id), eq(chronicles.clientId, chronicle.id)))
         : transaction.insert(chronicles).values({ ...values, roadcastId: roadcast.id, clientId: chronicle.id });
@@ -57,6 +64,14 @@ export const saveRoadcastWorkspace = action(async (raw: unknown) => {
     const retainedIds = input.chronicles.map((chronicle) => chronicle.id);
     const removedIds = existing.map((chronicle) => chronicle.clientId).filter((id) => !retainedIds.includes(id));
     if (removedIds.length) await transaction.delete(chronicles).where(and(eq(chronicles.roadcastId, roadcast.id), inArray(chronicles.clientId, removedIds)));
+    const savedChronicles = await transaction.select({ id: chronicles.id, clientId: chronicles.clientId }).from(chronicles).where(eq(chronicles.roadcastId, roadcast.id));
+    const chronicleIds = new Map(savedChronicles.map((chronicle) => [chronicle.clientId, chronicle.id]));
+    for (const chronicle of input.chronicles) {
+      const chronicleId = chronicleIds.get(chronicle.id);
+      if (!chronicleId) continue;
+      await transaction.delete(chronicleVersions).where(eq(chronicleVersions.chronicleId, chronicleId));
+      if (chronicle.versions.length) await transaction.insert(chronicleVersions).values(chronicle.versions.map((version) => ({ chronicleId, clientId: version.id, savedAt: new Date(version.savedAt), title: version.title, author: version.author, document: { html: version.document } })));
+    }
     return workspaceForRoadcast(transaction, roadcast.id);
   });
 }, "roadcast.workspace.save");
