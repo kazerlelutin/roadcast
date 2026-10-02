@@ -62,6 +62,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   let lockIdle: ReturnType<typeof setTimeout> | undefined;
   let lockExpiry: ReturnType<typeof globalThis.setInterval> | undefined;
   let workspaceSave: ReturnType<typeof globalThis.setTimeout> | undefined;
+  let workspaceSaveInFlight = false;
+  let workspaceSaveQueued = false;
   let collaboration: ChronicleLockClient | undefined;
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
@@ -104,7 +106,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       keepLockAlive();
     }, 400);
   };
-  const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
   const publicLink = (mode: ShareMode = shareMode()) => {
     const links = accessLinks();
     const path = mode === "edit" ? `/${props.slug}` : mode === "read" ? `/read/${links.read}` : `/slider/${links.sliders[slider()]}`;
@@ -116,6 +117,30 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     (["alpha", "bravo", "charly"] as const).forEach((target) => {
       realtime.set(target, connectSliderRealtime(links.sliders[target], (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
     });
+  };
+  const persistWorkspace = async () => {
+    if (workspaceSaveInFlight) { workspaceSaveQueued = true; return; }
+    workspaceSaveInFlight = true;
+    const activityAt = new Date().toISOString();
+    setLastActivityAt(activityAt);
+    try {
+      const saved = await saveWorkspace({ slug: props.slug, title: title(), chronicles: chronicles() });
+      if (saved?.links) setAccessLinks(saved.links);
+    } catch {
+      setNotice("Impossible d’enregistrer ce roadcast en base.");
+    } finally {
+      workspaceSaveInFlight = false;
+      if (workspaceSaveQueued) { workspaceSaveQueued = false; scheduleWorkspaceSave(); }
+    }
+  };
+  const scheduleWorkspaceSave = () => {
+    if (!hydrated()) return;
+    if (workspaceSave) globalThis.clearTimeout(workspaceSave);
+    workspaceSave = globalThis.setTimeout(() => { workspaceSave = undefined; void persistWorkspace(); }, 600);
+  };
+  const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => {
+    setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
+    scheduleWorkspaceSave();
   };
   const copy = async (link: string) => {
     try {
@@ -169,17 +194,23 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     setChronicles((items) => [...items, chronicle]);
     setSelectedChronicleId(chronicle.id);
     setAuthorQuery(author);
+    scheduleWorkspaceSave();
     setNotice("Nouvelle chronique ajoutée.");
   };
 
-  const moveChronicle = (direction: "up" | "down") => setChronicles((items) => {
-    const index = items.findIndex((item) => item.id === selectedChronicleId());
-    const destination = direction === "up" ? index - 1 : index + 1;
-    if (index < 0 || destination < 0 || destination >= items.length) return items;
-    const next = [...items];
-    [next[index], next[destination]] = [next[destination], next[index]];
-    return next;
-  });
+  const moveChronicle = (direction: "up" | "down") => {
+    let moved = false;
+    setChronicles((items) => {
+      const index = items.findIndex((item) => item.id === selectedChronicleId());
+      const destination = direction === "up" ? index - 1 : index + 1;
+      if (index < 0 || destination < 0 || destination >= items.length) return items;
+      const next = [...items];
+      [next[index], next[destination]] = [next[destination], next[index]];
+      moved = true;
+      return next;
+    });
+    if (moved) scheduleWorkspaceSave();
+  };
 
   const requestChronicleDeletion = (id: string) => {
     if (chronicles().length <= 1) { setNotice("Un roadcast doit contenir au moins une chronique."); return; }
@@ -196,6 +227,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     setSelectedChronicleId(result.selectedChronicleId);
     const next = result.chronicles.find((chronicle) => chronicle.id === result.selectedChronicleId);
     if (next) setAuthorQuery(next.author);
+    scheduleWorkspaceSave();
     setChronicleToDeleteId(null);
     setNotice("Chronique supprimée.");
   };
@@ -354,19 +386,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   });
 
   createEffect(() => {
-    if (!hydrated()) return;
-    const activityAt = new Date().toISOString();
-    setLastActivityAt(activityAt);
-    const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors(), lastActivityAt: activityAt };
-    if (workspaceSave) globalThis.clearTimeout(workspaceSave);
-    workspaceSave = globalThis.setTimeout(() => {
-      void saveWorkspace({ slug: props.slug, title: workspace.title, chronicles: workspace.chronicles }).then((saved) => {
-        if (saved?.links) setAccessLinks(saved.links);
-      }).catch(() => setNotice("Impossible d’enregistrer ce roadcast en base."));
-    }, 300);
-  });
-
-  createEffect(() => {
     const activePip = pip();
     if (!activePip) return;
     if (!activePip.isOpen()) { setPip(); return; }
@@ -413,7 +432,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   return <>
     <RoadcastWorkspaceView
       slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} usage={usage()} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} chronicleToDelete={chronicles().find((chronicle) => chronicle.id === chronicleToDeleteId()) ?? null} collaboratorName={collaboratorName()} chronicleLocks={chronicleLocks()} collaboratorId={collaboration?.sessionId ?? ""} lockedBy={selectedLockByOther()?.name ?? null} versionSynced={versionSynced()}
-      onTitleInput={setTitle} onChronicleTitleInput={(value) => { markChronicleAsEditing(); updateSelectedChronicle({ title: value }); }} onCollaboratorNameInput={(value) => { const name = value.slice(0, 60); setCollaboratorName(name); globalThis.localStorage.setItem("roadcast-collaborator-name", name); if (!name.trim()) releaseEditingLock(); else if (editingChronicleId) collaboration?.claim(editingChronicleId, name.trim()); }} onAuthorQueryInput={(value) => { markChronicleAsEditing(); setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuVisibility} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onRequestChronicleDeletion={requestChronicleDeletion} onConfirmChronicleDeletion={confirmChronicleDeletion} onCloseChronicleDeletion={() => setChronicleToDeleteId(null)} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
+      onTitleInput={(value) => { setTitle(value); scheduleWorkspaceSave(); }} onChronicleTitleInput={(value) => { markChronicleAsEditing(); updateSelectedChronicle({ title: value }); }} onCollaboratorNameInput={(value) => { const name = value.slice(0, 60); setCollaboratorName(name); globalThis.localStorage.setItem("roadcast-collaborator-name", name); if (!name.trim()) releaseEditingLock(); else if (editingChronicleId) collaboration?.claim(editingChronicleId, name.trim()); }} onAuthorQueryInput={(value) => { markChronicleAsEditing(); setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuVisibility} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onRequestChronicleDeletion={requestChronicleDeletion} onConfirmChronicleDeletion={confirmChronicleDeletion} onCloseChronicleDeletion={() => setChronicleToDeleteId(null)} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;
 }
