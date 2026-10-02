@@ -1,8 +1,8 @@
 Feature: Protéger les limites de l'offre
   Scenario: Appliquer l'expiration Free
     Given un Roadcast Free inactif depuis plus de 45 jours
-    When aucune lecture ou écriture n'a lieu
-    Then il est éligible à l'expiration
+    When la purge quotidienne s'exécute
+    Then il est supprimé avec ses chroniques, ses versions, ses liens et ses médias
 
   Scenario: Préserver un Roadcast Complete
     Given un Roadcast Complete sans activité depuis plus de 45 jours

@@ -32,4 +32,6 @@ Le `Dockerfile` produit une image Bun/Nitro. Définir au minimum `DATABASE_URL`,
 
 Au démarrage du conteneur, les migrations Drizzle sont appliquées automatiquement avant le lancement du serveur. Un verrou consultatif PostgreSQL sérialise cette étape lorsqu’un déploiement démarre plusieurs conteneurs. En développement local, exécuter `bun run db:migrate` reste la commande explicite.
 
+Le serveur lance aussi la purge des roadcasts Free inactifs depuis 45 jours au démarrage, puis toutes les 24 heures. Les suppressions en base utilisent les cascades PostgreSQL et les médias locaux ou S3 associés sont ensuite supprimés.
+
 Les limites Free sont de 25 chroniques, 250 blocs par chronique, 100 médias et 1 Go ; Complete : 250 chroniques, 2 000 blocs, 2 000 médias et 25 Go. Les chiffres sont centralisés dans `src/features/billing/plan.const.ts`.

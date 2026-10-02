@@ -31,6 +31,7 @@ export default defineConfig(() => ({
   nitro: {
     preset: "bun",
     features: { websocket: true },
+    plugins: ["src/features/roadcast/expired-roadcasts.plugin.ts"],
     handlers: [
       { route: "/ws/slider", handler: "src/features/presentation/slider-realtime.server.ts" },
       { route: "/ws/collaboration", handler: "src/features/collaboration/chronicle-lock.server.ts" },
