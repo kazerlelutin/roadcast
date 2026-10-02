@@ -78,6 +78,11 @@ Feature: Préparer une chronique Roadcast
     When je recharge l’espace d’édition
     Then le document courant réapparaît avec ses versions sans que je doive en sélectionner une
 
+  Scenario: Éviter les envois de sauvegarde en boucle
+    Given la saisie courante est déjà enregistrée
+    When l’éditeur émet plusieurs mises à jour identiques
+    Then aucun nouvel envoi n’est effectué et une erreur ne déclenche pas de nouvelle tentative sans modification
+
   Scenario: Signaler une mise à jour à un autre collaborateur
     Given deux collaborateurs ont ouvert le même roadcast
     When le premier enregistre une modification
