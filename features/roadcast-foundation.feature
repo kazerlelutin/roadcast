@@ -48,6 +48,11 @@ Feature: Préparer une chronique Roadcast
     When je consulte son aperçu
     Then un encart au ratio 16:9 indique qu’aucune diffusion n’est en cours et son lien peut être copié
 
+  Scenario: Adapter le contenu à une sortie fixe
+    Given une sélection contenant du texte et plusieurs médias
+    When elle est diffusée vers un slider
+    Then l’aperçu, le slider et le PiP conservent leur cadre sans défilement et adaptent le contenu à l’espace disponible
+
   Scenario: Organiser les chroniques avec les chroniqueurs
     Given un roadcast contenant des chroniques de plusieurs auteurs
     When je crée ou sélectionne un chroniqueur et filtre les chroniques
