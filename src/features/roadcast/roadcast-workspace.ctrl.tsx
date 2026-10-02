@@ -8,6 +8,7 @@ import type { BroadcastDraft } from "../presentation/broadcast-dialog.view";
 import { connectSliderRealtime, type Slider, type SliderRealtimeClient, type BroadcastPayload } from "../presentation/slider-realtime.ctrl";
 import { type ShareMode } from "../sharing/share-dialog.view";
 import { estimateChronicleMinutes } from "../chronicle/reading-time.ctrl";
+import { planLimits } from "../billing/plan.const";
 import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspaceView } from "./roadcast-workspace.view";
 import { createRoadcastAccessLinks, isRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
 import { openSliderPictureInPicture, type SliderPictureInPicture } from "../presentation/picture-in-picture.ctrl";
@@ -18,7 +19,20 @@ const initialChronicles: WorkspaceChronicle[] = [
   { id: "conclusion", title: "Conclusion", document: "<p>Préparez ici la conclusion de votre roadcast.</p>", author: "Alex", versions: [] },
 ];
 const maxVersions = 12;
-type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; };
+type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; };
+
+function countTextBlocks(document: string): number {
+  return (document.match(/<(p|h[1-6]|li|blockquote)\b/gi) ?? []).length;
+}
+
+function mediaSources(document: string): string[] {
+  return [...document.matchAll(/<img\b[^>]*\bsrc=["']([^"']+)["']/gi)].map((match) => match[1]);
+}
+
+function mediaBytes(source: string): number {
+  const base64 = source.match(/^data:[^;]+;base64,(.+)$/i)?.[1];
+  return base64 ? Math.floor((base64.length * 3) / 4) : 0;
+}
 
 export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [title, setTitle] = createSignal("Démo de chronique");
@@ -44,11 +58,17 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
   const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(createRoadcastAccessLinks());
   const [pip, setPip] = createSignal<SliderPictureInPicture>();
+  const [lastActivityAt, setLastActivityAt] = createSignal(new Date().toISOString());
   let editor: Editor | undefined;
   let editorChronicleId = "";
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
+  const usage = () => {
+    const sources = chronicles().flatMap((chronicle) => mediaSources(chronicle.document));
+    const expiresAt = new Date(new Date(lastActivityAt()).getTime() + planLimits.free.inactiveDays * 24 * 60 * 60 * 1000).toISOString();
+    return { textBlocks: countTextBlocks(selectedChronicle().document), mediaCount: sources.length, mediaBytes: sources.reduce((total, source) => total + mediaBytes(source), 0), expiresAt };
+  };
   const updateSelectedChronicle = (updates: Partial<WorkspaceChronicle>) => setChronicles((current) => current.map((chronicle) => chronicle.id === selectedChronicleId() ? { ...chronicle, ...updates } : chronicle));
   const publicLink = (mode: ShareMode = shareMode()) => {
     const links = accessLinks();
@@ -264,7 +284,9 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   createEffect(() => {
     if (!hydrated()) return;
-    const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors() };
+    const activityAt = new Date().toISOString();
+    setLastActivityAt(activityAt);
+    const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors(), lastActivityAt: activityAt };
     globalThis.localStorage.setItem(`roadcast-workspace:${props.slug}`, JSON.stringify(workspace));
   });
 
@@ -285,6 +307,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         setTitle(savedWorkspace.title);
         setChronicles(savedChronicles);
         setAuthors(savedWorkspace.authors);
+        if (typeof savedWorkspace.lastActivityAt === "string" && !Number.isNaN(new Date(savedWorkspace.lastActivityAt).getTime())) setLastActivityAt(savedWorkspace.lastActivityAt);
         editorChronicleId = "";
         setSelectedChronicleId(savedChronicles[0].id);
         setAuthorQuery(savedChronicles[0].author);
@@ -310,7 +333,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   return <>
     <RoadcastWorkspaceView
-      slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
+      slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} usage={usage()} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
       onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuVisibility} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;

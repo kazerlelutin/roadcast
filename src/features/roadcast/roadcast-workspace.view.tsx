@@ -8,6 +8,7 @@ import styles from "./roadcast-workspace.module.css";
 
 export type RoadcastWorkspaceTheme = "dark" | "light";
 export type WorkspaceChronicle = { id: string; title: string; document: string; author: string; versions: ChronicleVersion[]; };
+export type RoadcastUsage = { textBlocks: number; mediaCount: number; mediaBytes: number; expiresAt: string; };
 
 export type RoadcastWorkspaceViewProps = {
   slug: string;
@@ -16,6 +17,7 @@ export type RoadcastWorkspaceViewProps = {
   chronicles: WorkspaceChronicle[];
   selectedChronicleId: string;
   minutes: number;
+  usage: RoadcastUsage;
   chronicleFilter: string;
   authors: string[];
   authorQuery: string;
@@ -72,6 +74,8 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const isLight = () => props.theme === "light";
   const selectedChronicle = () => props.chronicles.find((chronicle) => chronicle.id === props.selectedChronicleId) ?? props.chronicles[0];
   const filteredChronicles = () => props.chronicleFilter === "all" ? props.chronicles : props.chronicles.filter((chronicle) => chronicle.author === props.chronicleFilter);
+  const dateFormatter = new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" });
+  const formatBytes = (bytes: number) => bytes < 1_000_000 ? `${Math.ceil(bytes / 1_000)} Ko` : `${(bytes / 1_000_000_000).toFixed(2)} Go`;
 
   return <main classList={{ [styles.page]: true, [styles.light]: isLight() }}>
     <header class={styles.header}>
@@ -90,7 +94,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
         <section class={styles.treeIdentity}><label class={styles.roadcastTitleLabel} for="roadcast-name">Titre du roadcast</label><input id="roadcast-name" class={styles.roadcastTitle} value={props.title} onInput={(event) => props.onTitleInput(event.currentTarget.value)} /></section>
         <section class={styles.treeContent}><div class={styles.treeFilter}><label class={styles.filterLabel} for="author-filter">Filtrer les chroniques</label><select id="author-filter" class={styles.filterSelect} value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous les chroniqueurs</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select></div><hr class={styles.treeDivider} /><div class={styles.treeList}><h2>Chroniques</h2><ol>
           {filteredChronicles().map((chronicle) => <li><button type="button" aria-current={chronicle.id === props.selectedChronicleId ? "page" : undefined} onClick={() => props.onSelectChronicle(chronicle.id)}><span>{chronicle.title}</span><small>{chronicle.author}</small></button></li>)}
-        </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
+        </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button><aside class={styles.usage} aria-label="Limites du roadcast"><div class={styles.deletion}><span>Suppression prévue</span><strong>{dateFormatter.format(new Date(props.usage.expiresAt))}</strong></div><div class={styles.quota}><div><span>Texte</span><strong>{props.usage.textBlocks} / 250 blocs</strong></div><progress value={props.usage.textBlocks} max={250} aria-label="Blocs texte de la chronique" /></div><div class={styles.quota}><div><span>Médias</span><strong>{props.usage.mediaCount} / 100</strong></div><progress value={props.usage.mediaCount} max={100} aria-label="Médias du roadcast" /></div><div class={styles.quota}><div><span>Stockage</span><strong>{formatBytes(props.usage.mediaBytes)} / 1 Go</strong></div><progress value={props.usage.mediaBytes} max={1_000_000_000} aria-label="Stockage média du roadcast" /></div></aside></section>
       </nav>
 
       <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />

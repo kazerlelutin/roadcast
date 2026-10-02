@@ -63,6 +63,11 @@ Feature: Préparer une chronique Roadcast
     When j’enregistre une version puis choisis une version antérieure
     Then son contenu est restauré et seules les dernières versions sont conservées localement
 
+  Scenario: Consulter la rétention et les limites d’un roadcast
+    Given un roadcast en plan gratuit
+    When je consulte son arbre de chroniques
+    Then je vois sa date de suppression prévue ainsi que les jauges de texte, médias et stockage
+
   Scenario: Diffuser une sélection depuis l’éditeur
     Given une chronique contenant du texte sélectionné et une image
     When j’ouvre la commande Diffuser de la bubble et choisis un slider dans la fenêtre de confirmation
