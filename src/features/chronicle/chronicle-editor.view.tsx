@@ -10,7 +10,7 @@ import Save from "lucide-solid/icons/save";
 import Undo2 from "lucide-solid/icons/undo-2";
 import styles from "./chronicle-editor.module.css";
 
-export type ChronicleVersion = { id: string; savedAt: string; document: string; };
+export type ChronicleVersion = { id: string; savedAt: string; title: string; author: string; document: string; };
 export type MediaFile = { type: string; size: number; arrayBuffer: () => Promise<ArrayBuffer>; };
 export type ChronicleEditorElement = Exclude<NonNullable<EditorOptions["element"]>, Function>;
 export type ChronicleFormat = "bold" | "italic" | "heading" | "list" | "quote" | "separator" | "link";
@@ -27,6 +27,7 @@ export type ChronicleEditorViewProps = {
   versions: ChronicleVersion[];
   bubble: { top: number; left: number } | null;
   lockedBy: string | null;
+  versionSynced: boolean;
   onTitleInput: (value: string) => void;
   onAuthorQueryInput: (value: string) => void;
   onAuthorPickerOpen: (open: boolean) => void;
@@ -56,7 +57,7 @@ export function ChronicleEditorView(props: ChronicleEditorViewProps) {
 
   return <section class={styles.editor} aria-label="Éditeur de chronique" onMouseMove={(event) => props.onEditorPointerMove({ left: event.clientX, top: event.clientY })} onMouseLeave={props.onEditorPointerLeave}>
     <header class={styles.topbar}>
-      <strong>{props.lockedBy ? `Verrouillée par ${props.lockedBy}` : "✓ Sauvegardé automatiquement"}</strong>
+      <strong classList={{ [styles.unsaved]: !props.lockedBy && !props.versionSynced }}>{props.lockedBy ? `Verrouillée par ${props.lockedBy}` : props.versionSynced ? "✓ Version enregistrée à jour" : "Modifications non enregistrées"}</strong>
       <div class={styles.topbarActions}>
         <button type="button" class={styles.saveVersion} disabled={locked()} onClick={props.onSaveVersion}><Save size={15} />Sauvegarder</button>
         <select disabled={locked()} aria-label="Historique" onChange={(event) => props.onRestoreVersion(event.currentTarget.value)}><option value="">Historique</option>{props.versions.slice().reverse().map((version) => <option value={version.id}>{new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(new Date(version.savedAt))}</option>)}</select>
