@@ -21,7 +21,7 @@ export type RoadcastWorkspaceViewProps = {
   authorQuery: string;
   authorPickerOpen: boolean;
   insertMenuOpen: boolean;
-  blockMenu: { top: number; left: number } | null;
+  blockMenu: { top: number; left: number; position: number } | null;
   bubble: { top: number; left: number } | null;
   slider: Slider;
   sliderLink: string;
@@ -41,7 +41,10 @@ export type RoadcastWorkspaceViewProps = {
   onInsertMenuOpen: (open: boolean) => void;
   onSelectAuthor: (author: string) => void;
   onEditorReady: (element: ChronicleEditorElement) => void;
+  onEditorPointerMove: (coordinates: { left: number; top: number }) => void;
+  onEditorPointerLeave: () => void;
   onFormat: (format: ChronicleFormat) => void;
+  onInsertBlock: (block: "quote" | "separator") => void;
   onMediaInput: (file: MediaFile | undefined) => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -90,7 +93,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
         </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
 
       <div data-slider-preview>
         <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />

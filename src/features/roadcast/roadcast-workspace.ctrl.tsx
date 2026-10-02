@@ -3,7 +3,7 @@ import { Editor } from "@tiptap/core";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import StarterKit from "@tiptap/starter-kit";
-import type { ChronicleEditorElement, ChronicleFormat, MediaFile } from "../chronicle/chronicle-editor.view";
+import type { ChronicleEditorElement, ChronicleFormat, ChronicleInsertBlock, MediaFile } from "../chronicle/chronicle-editor.view";
 import type { BroadcastDraft } from "../presentation/broadcast-dialog.view";
 import { connectSliderRealtime, type Slider, type SliderRealtimeClient, type BroadcastPayload } from "../presentation/slider-realtime.ctrl";
 import { type ShareMode } from "../sharing/share-dialog.view";
@@ -28,7 +28,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [authorQuery, setAuthorQuery] = createSignal(initialChronicles[0].author);
   const [authorPickerOpen, setAuthorPickerOpen] = createSignal(false);
   const [insertMenuOpen, setInsertMenuOpen] = createSignal(false);
-  const [blockMenu, setBlockMenu] = createSignal<{ top: number; left: number } | null>(null);
+  const [blockMenu, setBlockMenu] = createSignal<{ top: number; left: number; position: number } | null>(null);
   const [bubble, setBubble] = createSignal<{ top: number; left: number } | null>(null);
   const [hydrated, setHydrated] = createSignal(false);
   const [slider, setSlider] = createSignal<Slider>("alpha");
@@ -44,7 +44,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(createRoadcastAccessLinks());
   let editor: Editor | undefined;
   let editorChronicleId = "";
-  let onEditorMouseMove: ((event: { clientX: number; clientY: number }) => void) | undefined;
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
@@ -137,11 +136,42 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const insertMedia = async (file: MediaFile | undefined) => {
     if (!file || !editor) return;
     if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) { setNotice("Choisissez une image de moins de 5 Mo."); return; }
+    const position = blockMenu()?.position ?? editor.state.selection.from;
     const bytes = new Uint8Array(await file.arrayBuffer());
     let binary = "";
     bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    editor.chain().focus().setImage({ src: `data:${file.type};base64,${globalThis.btoa(binary)}`, alt: "Image de la chronique" }).run();
+    editor.chain().focus().insertContentAt(position, { type: "image", attrs: { src: `data:${file.type};base64,${globalThis.btoa(binary)}`, alt: "Image de la chronique" } }).run();
     setNotice("Image ajoutée à la chronique.");
+  };
+
+  const insertBlock = (block: ChronicleInsertBlock) => {
+    if (!editor) return;
+    const position = blockMenu()?.position ?? editor.state.selection.from;
+    const content = block === "quote" ? { type: "blockquote", content: [{ type: "paragraph" }] } : { type: "horizontalRule" };
+    editor.chain().focus().insertContentAt(position, content).run();
+  };
+
+  const updateBlockMenu = (position: number) => {
+    if (!editor || insertMenuOpen()) return;
+    const resolved = editor.state.doc.resolve(position);
+    let blockPosition = position;
+    for (let depth = resolved.depth; depth > 0; depth -= 1) {
+      if (resolved.node(depth).isBlock) { blockPosition = resolved.before(depth); break; }
+    }
+    const nearby = editor.state.doc.childAfter(position);
+    if (resolved.depth === 0 && nearby.node?.isBlock) blockPosition = nearby.offset;
+    const node = editor.view.nodeDOM(blockPosition);
+    const fallback = editor.view.coordsAtPos(Math.min(blockPosition + 1, editor.state.doc.content.size));
+    const bounds = node instanceof HTMLElement ? node.getBoundingClientRect() : null;
+    const left = Math.max(8, (bounds?.left ?? fallback.left) - 34);
+    const top = bounds ? bounds.top + Math.min(18, Math.max(10, bounds.height / 2)) : fallback.top + 10;
+    setBlockMenu({ top, left, position: blockPosition });
+  };
+
+  const onEditorPointerMove = (coordinates: { left: number; top: number }) => {
+    if (!editor || insertMenuOpen()) return;
+    const found = editor.view.posAtCoords(coordinates);
+    if (found) updateBlockMenu(found.pos);
   };
 
   const captureSelection = (): BroadcastDraft | null => {
@@ -174,7 +204,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   };
 
   const editorReady = (element: ChronicleEditorElement) => {
-    if (editor && onEditorMouseMove) editor.view.dom.removeEventListener("mousemove", onEditorMouseMove);
     editor?.destroy();
     const current = selectedChronicle();
     editorChronicleId = current.id;
@@ -186,21 +215,12 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       onSelectionUpdate: ({ editor: instance }) => {
         const { from, to } = instance.state.selection;
         const position = instance.view.coordsAtPos(to);
-        if (from === to) { setBubble(null); setBlockMenu({ top: position.top, left: position.left }); return; }
+        if (from === to) { setBubble(null); updateBlockMenu(to); return; }
         setBlockMenu(null);
         setBubble({ top: position.top - 8, left: (position.left + position.right) / 2 });
       },
     });
-    onEditorMouseMove = (event) => {
-      if (insertMenuOpen()) return;
-      const found = editor?.view.posAtCoords({ left: event.clientX, top: event.clientY });
-      if (!found || !editor) return;
-      const position = editor.view.coordsAtPos(found.pos);
-      setBlockMenu({ top: position.top, left: position.left });
-    };
-    editor.view.dom.addEventListener("mousemove", onEditorMouseMove);
-    const position = editor.view.coordsAtPos(editor.state.selection.from);
-    setBlockMenu({ top: position.top, left: position.left });
+    updateBlockMenu(editor.state.selection.from);
   };
 
   const saveVersion = () => {
@@ -263,7 +283,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   });
 
   onCleanup(() => {
-    if (editor && onEditorMouseMove) editor.view.dom.removeEventListener("mousemove", onEditorMouseMove);
     editor?.destroy();
     realtime.forEach((client) => client.close());
   });
@@ -271,7 +290,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   return <>
     <RoadcastWorkspaceView
       slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
-      onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onFormat={format} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
+      onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;
 }

@@ -63,6 +63,11 @@ Feature: Préparer une chronique Roadcast
     When j’ouvre la commande Diffuser de la bubble et choisis un slider dans la fenêtre de confirmation
     Then seule ma sélection est envoyée vers le slider choisi
 
+  Scenario: Insérer depuis la gouttière de l’éditeur
+    Given une chronique contenant plusieurs blocs
+    When je survole un bloc et choisis une insertion dans la gouttière
+    Then le menu est aligné sur ce bloc et le nouvel élément est ajouté avant lui
+
   Scenario: Mettre à jour un slider ouvert en direct
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur

@@ -28,8 +28,9 @@
 .canvas :global(.ProseMirror hr) { margin: 2rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
 .moveActions { display: flex; align-items: end; gap: .2rem; padding-bottom: .05rem; }
 .moveActions button { border-color: var(--accent, #00a6b1); color: var(--accent, #00a6b1); }
-.insertControl { position: fixed; z-index: 14; transform: translate(-2.2rem, -8%); }
-.insertButton { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; padding: 0; border: 1px solid var(--line, #3c4968); border-radius: .3rem; background: var(--surface, #1b2338); color: var(--muted, #aebbd3); cursor: pointer; transition: border-color .15s, color .15s; }
+.insertControl { position: fixed; z-index: 14; transform: translateY(-50%); }
+.insertButton { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; padding: 0; border: 1px solid transparent; border-radius: .3rem; background: transparent; color: var(--muted, #aebbd3); cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
+.insertControl:hover .insertButton, .insertButton:focus-visible { border-color: var(--line, #3c4968); background: var(--surface, #1b2338); }
 .insertButton:hover { border-color: var(--line, #3c4968); color: var(--text, #f7f8fc); }
 .insertMenu { position: absolute; top: 0; left: 2.15rem; display: grid; width: 11rem; padding: .3rem; border: 1px solid var(--line, #3c4968); border-radius: .4rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 1.5rem #0007; opacity: 0; pointer-events: none; transform: translateX(-.45rem); transition: opacity .15s, transform .15s; }
 .insertMenu.open { opacity: 1; pointer-events: auto; transform: translateX(0); }
@@ -41,4 +42,4 @@
 .bubble button:hover { background: var(--soft-surface, #2a3652); }
 .bubble .broadcastButton { background: var(--accent, #00a6b1); color: #08151a; font-weight: 800; }
 @media (max-width: 980px) { .editor { height: auto; overflow: visible; } .document { min-height: 34rem; } .canvas { overflow: visible; } }
-@media (max-width: 640px) { .document { padding-inline: 1.2rem; } .authorPicker input { min-width: 0; width: 100%; } .topbarActions select { max-width: 7rem; } .insertControl { transform: translate(-.1rem, -8%); } .insertMenu { left: 2rem; } }
+@media (max-width: 640px) { .document { padding-inline: 1.2rem; } .authorPicker input { min-width: 0; width: 100%; } .topbarActions select { max-width: 7rem; } .insertMenu { left: 2rem; } }
