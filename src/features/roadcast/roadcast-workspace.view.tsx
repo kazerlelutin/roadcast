@@ -61,6 +61,7 @@ export type RoadcastWorkspaceViewProps = {
   onMediaInput: (file: MediaFile | undefined) => void;
   onRemoteImage: () => void;
   onYoutube: () => void;
+  onVideoBroadcast: (source: string) => void;
   onUndo: () => void;
   onRedo: () => void;
   onMove: (direction: "up" | "down") => void;
@@ -80,6 +81,7 @@ export type RoadcastWorkspaceViewProps = {
   onConfirmBroadcast: () => void;
   onCloseBroadcast: () => void;
   onSelectSlider: (slider: Slider) => void;
+  onClearSlider: () => void;
   onPictureInPicture: () => void;
   onShare: () => void;
   onCloseShare: () => void;
@@ -99,7 +101,11 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const formatBytes = (bytes: number) => bytes < 1_000_000 ? `${Math.ceil(bytes / 1_000)} Ko` : bytes < 1_000_000_000 ? `${(bytes / 1_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo` : `${(bytes / 1_000_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Go`;
   const formatCharacters = (characters: number) => characters.toLocaleString("fr-FR");
 
-  return <main classList={{ [styles.page]: true, [styles.light]: isLight() }}>
+  return <main classList={{ [styles.page]: true, [styles.light]: isLight() }} onClick={(event) => {
+    const target = event.target instanceof HTMLElement ? event.target.closest("button[data-broadcast-video]") : null;
+    const source = target?.getAttribute("data-broadcast-video");
+    if (source) props.onVideoBroadcast(source);
+  }}>
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
       <div class={styles.links}>
@@ -126,7 +132,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} blockMenu={props.blockMenu} versions={selectedChronicle().versions} bubble={props.bubble} lockedBy={props.lockedBy} workspaceSynced={props.workspaceSynced} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onEditorPointerMove={props.onEditorPointerMove} onEditorPointerLeave={props.onEditorPointerLeave} onFormat={props.onFormat} onInsertBlock={props.onInsertBlock} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onRemoteImage={props.onRemoteImage} onYoutube={props.onYoutube} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} onRequestVersionCleanup={props.onRequestVersionCleanup} />
 
       <div data-slider-preview>
-        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
+        <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onClear={props.onClearSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />
       </div>
     </div>
     <ShareDialogView open={props.shareOpen} mode={props.shareMode} link={props.shareLink} onModeChange={props.onShareModeChange} onCopy={props.onCopyShareLink} onClose={props.onCloseShare} />

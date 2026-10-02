@@ -48,6 +48,11 @@ Feature: Préparer une chronique Roadcast
     When je sélectionne cette vidéo et la diffuse vers le slider Alpha
     Then le slider Alpha lit automatiquement la vidéo sans afficher ses commandes
 
+  Scenario: Remplir le slider avec une vidéo diffusée
+    Given une vidéo YouTube diffusée vers le slider Alpha
+    When je consulte la sortie du slider Alpha
+    Then la vidéo occupe le cadre sans marge intérieure
+
   Scenario: Importer une image distante
     Given le menu d’ajout de média dans une chronique
     When je fournis une URL HTTPS vers une image autorisée
@@ -57,6 +62,16 @@ Feature: Préparer une chronique Roadcast
     Given un écran de largeur mobile
     When j’ouvre l’espace de travail et le menu d’ajout
     Then je peux ajouter un média, accéder aux actions de sauvegarde, à l’arbre et à l’aperçu en faisant défiler la page
+
+  Scenario: Diffuser rapidement une vidéo depuis son bloc
+    Given une vidéo YouTube dans une chronique ouverte
+    When j’active le bouton Diffuser en haut à droite de cette vidéo
+    Then la fenêtre de diffusion s’ouvre avec cette seule vidéo sélectionnée
+
+  Scenario: Parcourir tout l’espace de travail sur un écran mobile
+    Given un écran de largeur mobile et une chronique longue
+    When je fais défiler l’espace de travail
+    Then je peux atteindre le bas de l’éditeur, l’arbre des chroniques et l’aperçu du slider
 
   Scenario: Partager une lecture asynchrone
     Given le slider Alpha est interactif
@@ -72,6 +87,11 @@ Feature: Préparer une chronique Roadcast
     Given aucun média n’est envoyé vers le slider Alpha
     When je consulte son aperçu
     Then un encart au ratio 16:9 indique qu’aucune diffusion n’est en cours et son lien peut être copié
+
+  Scenario: Lire clairement un texte diffusé dans l’aperçu
+    Given une sélection de texte diffusée vers le slider Alpha
+    When je consulte son aperçu dans l’espace de travail
+    Then la composition reprend la sortie du slider avec un zoom adapté au cadre de prévisualisation
 
   Scenario: Enregistrer un roadcast avec des médias
     Given une chronique contenant une image volumineuse
@@ -167,6 +187,11 @@ Feature: Préparer une chronique Roadcast
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur
     Then le slider reçoit cette sélection sans rechargement de page
+
+  Scenario: Effacer un slider en direct
+    Given le slider Bravo affiche une sélection diffusée
+    When je choisis Effacer dans son aperçu
+    Then l’aperçu et le slider Bravo redeviennent vides sans rechargement
 
   Scenario: Ouvrir un slider dans une fenêtre PiP
     Given l’aperçu du slider Alpha
