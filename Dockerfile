@@ -10,6 +10,8 @@ WORKDIR /app
 ENV NODE_ENV=production PORT=3000
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/.output ./.output
+COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/scripts/migrate.mjs ./scripts/migrate.mjs
 USER bun
 EXPOSE 3000
-CMD ["bun", ".output/server/index.mjs"]
+CMD ["sh", "-c", "bun scripts/migrate.mjs && exec bun .output/server/index.mjs"]

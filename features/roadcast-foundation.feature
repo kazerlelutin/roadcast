@@ -83,6 +83,11 @@ Feature: Préparer une chronique Roadcast
     When je confirme le nettoyage de son historique
     Then ses versions sont supprimées de la base et le contenu courant est conservé
 
+  Scenario: Mettre à niveau la base au démarrage du conteneur
+    Given une image Roadcast et une base PostgreSQL configurée
+    When un ou plusieurs conteneurs démarrent
+    Then les migrations manquantes sont appliquées une seule fois avant l’ouverture du serveur
+
   Scenario: Éviter les envois de sauvegarde en boucle
     Given la saisie courante est déjà enregistrée
     When l’éditeur émet plusieurs mises à jour identiques
