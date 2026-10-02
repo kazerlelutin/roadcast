@@ -219,8 +219,7 @@
 .chronicleItem { display: flex; align-items: stretch; gap: .1rem; }
 .selectChronicle { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-width: 0; }
 .chronicleMeta { display: flex; flex: none; align-items: center; gap: .25rem; }
-.lockStatus { display: grid; place-items: center; color: var(--accent); }
-.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.lockStatus { display: inline-flex; align-items: center; gap: .2rem; max-width: 7rem; overflow: hidden; color: var(--accent); font-size: .68rem; white-space: nowrap; text-overflow: ellipsis; }
 .tree li small { color: var(--muted); font-size: .68rem; }
 
 .selectChronicle:hover,
