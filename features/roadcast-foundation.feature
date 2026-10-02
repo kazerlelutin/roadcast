@@ -97,3 +97,13 @@ Feature: Préparer une chronique Roadcast
     Given le jeton de lecture distinct du jeton d’édition d’un roadcast
     When je consulte une chronique
     Then son contenu est affiché sans commande d’édition
+
+  Scenario: Choisir la mesure d’audience
+    Given ma première visite sur Roadcast
+    When je refuse la mesure d’audience
+    Then aucun script de mesure n’est chargé et mon choix reste modifiable
+
+  Scenario: Consulter les informations légales
+    Given la page d’accueil Roadcast
+    When j’ouvre les mentions légales ou la page confidentialité
+    Then les informations d’édition, d’hébergement et de consentement sont disponibles

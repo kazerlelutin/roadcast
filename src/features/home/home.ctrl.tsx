@@ -18,6 +18,8 @@ export function HomeCtrl() {
     globalThis.localStorage.setItem("roadcast-theme", nextTheme);
   };
 
+  const openConsent = () => globalThis.dispatchEvent(new globalThis.Event("roadcast:open-consent"));
+
   onMount(() => {
     const savedTheme = globalThis.localStorage.getItem("roadcast-theme");
     if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
@@ -25,5 +27,5 @@ export function HomeCtrl() {
     setTimeout(() => void listRoadcasts().then(setRoadcasts), 0);
   });
   const onCreate = async (title: string) => { setError(""); setPending(true); try { const created = await create({ title }); await navigate(`/${created.slug}`); } catch { setError("La création nécessite une base PostgreSQL configurée. Vérifiez DATABASE_URL puis réessayez."); } finally { setPending(false); } };
-  return <HomeView roadcasts={roadcasts()} pending={pending()} error={error()} theme={theme()} onCreate={onCreate} onThemeChange={toggleTheme} />;
+  return <HomeView roadcasts={roadcasts()} pending={pending()} error={error()} theme={theme()} onCreate={onCreate} onThemeChange={toggleTheme} onOpenConsent={openConsent} />;
 }

@@ -12,7 +12,7 @@
   min-height: 100vh;
   padding: .5rem clamp(.75rem, 3vw, 2.5rem) 2rem;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   background: var(--page-background);
   color: var(--text);
   transition: background-color .18s ease, color .18s ease;
@@ -88,6 +88,24 @@
   align-items: center;
   gap: .7rem;
 }
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+  color: var(--muted);
+  font-size: .74rem;
+}
+
+.footer a,
+.footer button {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+}
+
+.footer button { padding: 0; border: 0; background: transparent; cursor: pointer; }
+.footer a:hover, .footer button:hover { color: var(--text); text-decoration: underline; }
 
 .themeButton {
   width: 1.65rem;
