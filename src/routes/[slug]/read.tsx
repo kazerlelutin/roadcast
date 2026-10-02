@@ -1,7 +1,7 @@
 import { useParams } from "@solidjs/router";
-import { PresentationView } from "../../features/presentation/presentation.view";
+import { ChronicleReadingCtrl } from "../../features/chronicle/chronicle-reading.ctrl";
 
 export default function ReadRoute() {
   const params = useParams<{ slug: string }>();
-  return <PresentationView token={`lecture-${params.slug}`} />;
+  return <ChronicleReadingCtrl slug={params.slug} />;
 }

@@ -8,7 +8,11 @@
   --soft-surface: #2a3652;
   --accent: #00a6b1;
   --button-hover: #f7f8fc;
-  min-height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: .65rem;
   padding: .5rem clamp(.75rem, 3vw, 2.5rem) 2rem;
   background: var(--page-background);
   color: var(--text);
@@ -111,10 +115,10 @@
   border-radius: .2rem;
   color: var(--text);
 }
+.links .themeButton svg { display: block; }
 
 .status {
   min-height: 1.3rem;
-  margin-top: .65rem;
   color: var(--accent);
   font-size: .8rem;
 }
@@ -123,10 +127,16 @@
   display: grid;
   grid-template-columns: 210px minmax(0, 1fr) 270px;
   gap: 1rem;
-  align-items: start;
+  min-height: 0;
+  height: 100%;
+  align-items: stretch;
 }
 
 .tree {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 0;
   border: 1px solid var(--line);
   border-radius: .3rem;
@@ -135,7 +145,7 @@
 }
 
 .treeIdentity, .treeContent { padding: 1rem; }
-.treeContent { border-top: 1px solid var(--line); background: color-mix(in srgb, var(--editor-canvas) 55%, transparent); }
+.treeContent { min-height: 0; display: flex; flex: 1; flex-direction: column; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--editor-canvas) 55%, transparent); }
 
 .roadcastTitleLabel {
   display: block;
@@ -162,10 +172,12 @@
 
 .roadcastTitle:focus { border-bottom-color: var(--accent); }
 
-.treeContent h2 { margin: 0 0 1rem; color: var(--text); font-size: .95rem; }
+.treeFilter { flex: none; }
+.treeContent h2 { margin: 0 0 .7rem; color: var(--text); font-size: .95rem; }
 .filterLabel { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .72rem; }
 .filterSelect { width: 100%; padding: .5rem .55rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--editor-canvas); color: var(--text); }
 .treeDivider { margin: 1rem 0; border: 0; border-top: 1px solid var(--line); }
+.treeList { min-height: 0; flex: 1; overflow-y: auto; }
 
 .tree ol {
   padding: 0;
@@ -204,8 +216,10 @@
 
 
 @media (max-width: 980px) {
-  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .page { height: auto; min-height: 100vh; overflow: visible; }
+  .workspace { grid-template-columns: minmax(0, 1fr); height: auto; }
   .tree { order: 2; }
+  .treeContent, .treeList { overflow: visible; }
 }
 
 @media (prefers-reduced-motion: reduce) {

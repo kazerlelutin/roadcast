@@ -22,6 +22,8 @@
 }
 
 .preview button:hover { border-color: var(--accent, #00a6b1); }
+.preview header button { display: grid; place-items: center; min-width: 2rem; min-height: 2rem; padding: 0; }
+.preview header button svg { display: block; }
 
 .tabs {
   display: flex;
@@ -48,17 +50,6 @@
 
 .empty { text-align: center; }
 .tv { display: block; margin-bottom: .25rem; color: #aebbd3; font-size: 2.5rem; letter-spacing: -.45em; }
-
-.frameLabel {
-  position: absolute;
-  align-self: start;
-  justify-self: start;
-  margin: 0;
-  color: var(--muted, #aebbd3);
-  font-size: .7rem;
-  font-weight: 800;
-  letter-spacing: .1em;
-}
 
 .emptyMessage { display: grid; place-items: center; }
 .emptyMessage h2 {

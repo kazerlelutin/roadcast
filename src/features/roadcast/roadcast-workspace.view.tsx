@@ -2,6 +2,8 @@ import { type ChronicleEditorElement, type ChronicleFormat, type ChronicleVersio
 import { type BroadcastDraft, BroadcastDialogView } from "../presentation/broadcast-dialog.view";
 import { type BroadcastPayload, type Slider, SliderPreviewView } from "../presentation/slider-preview.view";
 import { type ShareMode, ShareDialogView } from "../sharing/share-dialog.view";
+import Moon from "lucide-solid/icons/moon";
+import Sun from "lucide-solid/icons/sun";
 import styles from "./roadcast-workspace.module.css";
 
 export type RoadcastWorkspaceTheme = "dark" | "light";
@@ -17,6 +19,7 @@ export type RoadcastWorkspaceViewProps = {
   authors: string[];
   authorQuery: string;
   authorPickerOpen: boolean;
+  insertMenuOpen: boolean;
   bubble: { top: number; left: number } | null;
   slider: Slider;
   sliderLink: string;
@@ -33,6 +36,7 @@ export type RoadcastWorkspaceViewProps = {
   onChronicleTitleInput: (value: string) => void;
   onAuthorQueryInput: (value: string) => void;
   onAuthorPickerOpen: (open: boolean) => void;
+  onInsertMenuOpen: (open: boolean) => void;
   onSelectAuthor: (author: string) => void;
   onEditorReady: (element: ChronicleEditorElement) => void;
   onFormat: (format: ChronicleFormat) => void;
@@ -70,7 +74,7 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       <div class={styles.links}>
         <a href={`/${props.slug}/read`}>Lecture</a>
         <button type="button" onClick={props.onShare}>Partager</button>
-        <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>{isLight() ? "☾" : "☼"}</button>
+        <button class={styles.themeButton} type="button" onClick={props.onThemeChange} aria-label={isLight() ? "Passer au mode sombre" : "Passer au mode clair"} title={isLight() ? "Mode sombre" : "Mode clair"}>{isLight() ? <Moon size={16} /> : <Sun size={16} />}</button>
       </div>
     </header>
 
@@ -79,13 +83,12 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
     <div class={styles.workspace}>
       <nav class={styles.tree} aria-label="Arbre des chroniques">
         <section class={styles.treeIdentity}><label class={styles.roadcastTitleLabel} for="roadcast-name">Titre du roadcast</label><input id="roadcast-name" class={styles.roadcastTitle} value={props.title} onInput={(event) => props.onTitleInput(event.currentTarget.value)} /></section>
-        <section class={styles.treeContent}><h2>Chroniques</h2><label class={styles.filterLabel} for="author-filter">Filtrer les chroniques</label><select id="author-filter" class={styles.filterSelect} value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous les chroniqueurs</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select><hr class={styles.treeDivider} /><ol>
+        <section class={styles.treeContent}><div class={styles.treeFilter}><label class={styles.filterLabel} for="author-filter">Filtrer les chroniques</label><select id="author-filter" class={styles.filterSelect} value={props.chronicleFilter} onChange={(event) => props.onFilterChange(event.currentTarget.value)}><option value="all">Tous les chroniqueurs</option>{props.authors.map((author) => <option value={author}>{author}</option>)}</select></div><hr class={styles.treeDivider} /><div class={styles.treeList}><h2>Chroniques</h2><ol>
           {filteredChronicles().map((chronicle) => <li><button type="button" aria-current={chronicle.id === props.selectedChronicleId ? "page" : undefined} onClick={() => props.onSelectChronicle(chronicle.id)}><span>{chronicle.title}</span><small>{chronicle.author}</small></button></li>)}
-        </ol>
-        <button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
+        </ol></div><button type="button" class={styles.add} onClick={props.onAddChronicle}>+ Nouvelle chronique</button></section>
       </nav>
 
-      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
+      <ChronicleEditorView title={selectedChronicle().title} minutes={props.minutes} authors={props.authors} authorQuery={props.authorQuery} authorPickerOpen={props.authorPickerOpen} insertMenuOpen={props.insertMenuOpen} versions={selectedChronicle().versions} bubble={props.bubble} onTitleInput={props.onChronicleTitleInput} onAuthorQueryInput={props.onAuthorQueryInput} onAuthorPickerOpen={props.onAuthorPickerOpen} onInsertMenuOpen={props.onInsertMenuOpen} onSelectAuthor={props.onSelectAuthor} onEditorReady={props.onEditorReady} onFormat={props.onFormat} onOpenBroadcast={props.onOpenBroadcast} onMediaInput={props.onMediaInput} onUndo={props.onUndo} onRedo={props.onRedo} onMove={props.onMove} onSaveVersion={props.onSaveVersion} onRestoreVersion={props.onRestoreVersion} />
 
       <div data-slider-preview>
         <SliderPreviewView active={props.slider} payload={props.broadcasts[props.slider] ?? null} link={props.sliderLink} onSelect={props.onSelectSlider} onPictureInPicture={props.onPictureInPicture} onCopyLink={props.onCopySliderLink} />

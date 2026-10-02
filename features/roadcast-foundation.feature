@@ -67,3 +67,8 @@ Feature: Préparer une chronique Roadcast
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur
     Then le slider reçoit cette sélection sans rechargement de page
+
+  Scenario: Lire un roadcast sans pouvoir le modifier
+    Given le lien de lecture d’un roadcast
+    When je consulte une chronique
+    Then son contenu est affiché sans commande d’édition

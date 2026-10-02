@@ -26,6 +26,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [authors, setAuthors] = createSignal(["Camille", "Alex"]);
   const [authorQuery, setAuthorQuery] = createSignal(initialChronicles[0].author);
   const [authorPickerOpen, setAuthorPickerOpen] = createSignal(false);
+  const [insertMenuOpen, setInsertMenuOpen] = createSignal(false);
   const [bubble, setBubble] = createSignal<{ top: number; left: number } | null>(null);
   const [hydrated, setHydrated] = createSignal(false);
   const [slider, setSlider] = createSignal<Slider>("alpha");
@@ -64,12 +65,10 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   };
 
   const pictureInPicture = async () => {
-    const candidate = globalThis.document?.querySelector("[data-slider-preview]") as HTMLElement | null;
     const documentPiP = (globalThis as typeof globalThis & { documentPictureInPicture?: { requestWindow: (options: { width: number; height: number }) => Promise<NonNullable<ReturnType<typeof globalThis.open>>>; }; }).documentPictureInPicture;
-    if (candidate && documentPiP) {
+    if (documentPiP) {
       const pipWindow = await documentPiP.requestWindow({ width: 480, height: 270 });
-      pipWindow.document.head.innerHTML = globalThis.document.head.innerHTML;
-      pipWindow.document.body.append(candidate.cloneNode(true));
+      pipWindow.location.href = publicLink("slider");
       return;
     }
     const opened = globalThis.open(publicLink("slider"), "RoadcastPreview", "popup,width=640,height=420");
@@ -116,6 +115,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     updateSelectedChronicle({ author });
     setAuthorQuery(author);
     setAuthorPickerOpen(false);
+    setInsertMenuOpen(false);
     setBubble(null);
     setNotice(`${author} est associé à cette chronique.`);
   };
@@ -126,6 +126,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     setSelectedChronicleId(id);
     setAuthorQuery(chronicle.author);
     setAuthorPickerOpen(false);
+    setInsertMenuOpen(false);
   };
 
   const insertMedia = async (file: MediaFile | undefined) => {
@@ -244,8 +245,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
 
   return <>
     <RoadcastWorkspaceView
-      slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
-      onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onFormat={format} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
+      slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
+      onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onFormat={format} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;
 }
