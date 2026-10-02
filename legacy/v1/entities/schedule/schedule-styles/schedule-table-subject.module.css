@@ -1,8 +1,0 @@
-.container {
-  display: flex;
-  gap: var(--dms-gap-sm);
-}
-
-.subject {
-  font-size: 1.2em;
-}

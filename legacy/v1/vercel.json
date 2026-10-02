@@ -1,8 +1,0 @@
-{ 
-  "crons":[
-    {
-      "path": "/api/cron/delete-old-broadcasts",
-      "schedule": "0 5 * * *"
-    }
-  ]
-}
