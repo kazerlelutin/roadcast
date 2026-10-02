@@ -1,3 +1,4 @@
+import { useAction } from "@solidjs/router";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Editor } from "@tiptap/core";
 import Image from "@tiptap/extension-image";
@@ -10,13 +11,14 @@ import { type ShareMode } from "../sharing/share-dialog.view";
 import { estimateChronicleMinutes } from "../chronicle/reading-time.ctrl";
 import { planLimits } from "../billing/plan.const";
 import { type RoadcastWorkspaceTheme, type WorkspaceChronicle, RoadcastWorkspaceView } from "./roadcast-workspace.view";
-import { createRoadcastAccessLinks, isRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
+import { emptyRoadcastAccessLinks, type RoadcastAccessLinks } from "./access-links.ctrl";
 import { openSliderPictureInPicture, type SliderPictureInPicture } from "../presentation/picture-in-picture.ctrl";
 import { removeChronicle } from "./chronicle-removal.ctrl";
 import { calculateRoadcastUsage } from "./roadcast-usage.ctrl";
 import { connectChronicleLocks, type ChronicleLock, type ChronicleLockClient } from "../collaboration/chronicle-lock.ctrl";
 import { isChronicleVersionSynced } from "../chronicle/chronicle-version.ctrl";
-import { isStorageQuotaExceeded, loadLegacyWorkspace, loadWorkspace, removeLegacyWorkspace, saveWorkspace } from "./workspace-storage.ctrl";
+import { saveRoadcastWorkspace } from "./workspace-persistence.actions";
+import { loadRoadcastWorkspace } from "./workspace-persistence.queries";
 
 const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
@@ -24,7 +26,7 @@ const initialChronicles: WorkspaceChronicle[] = [
   { id: "conclusion", title: "Conclusion", document: "<p>Préparez ici la conclusion de votre roadcast.</p>", author: "Alex", versions: [] },
 ];
 const maxVersions = 12;
-type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; };
+type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; links?: RoadcastAccessLinks; };
 
 export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [title, setTitle] = createSignal("Démo de chronique");
@@ -51,9 +53,10 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [chronicleLocks, setChronicleLocks] = createSignal<ChronicleLock[]>([]);
   const [notice, setNotice] = createSignal("");
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
-  const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(createRoadcastAccessLinks());
+  const [accessLinks, setAccessLinks] = createSignal<RoadcastAccessLinks>(emptyRoadcastAccessLinks);
   const [pip, setPip] = createSignal<SliderPictureInPicture>();
   const [lastActivityAt, setLastActivityAt] = createSignal(new Date().toISOString());
+  const saveWorkspace = useAction(saveRoadcastWorkspace);
   let editor: Editor | undefined;
   let editorChronicleId = "";
   let editingChronicleId: string | undefined;
@@ -108,6 +111,13 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     const links = accessLinks();
     const path = mode === "edit" ? `/${props.slug}` : mode === "read" ? `/read/${links.read}` : `/slider/${links.sliders[slider()]}`;
     return `${globalThis.location?.origin ?? ""}${path}`;
+  };
+  const connectRealtime = (links: RoadcastAccessLinks) => {
+    realtime.forEach((client) => client.close());
+    realtime.clear();
+    (["alpha", "bravo", "charly"] as const).forEach((target) => {
+      realtime.set(target, connectSliderRealtime(links.sliders[target], (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
+    });
   };
   const copy = async (link: string) => {
     try {
@@ -352,7 +362,9 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     const workspace: PersistedWorkspace = { title: title(), chronicles: chronicles(), authors: authors(), lastActivityAt: activityAt };
     if (workspaceSave) globalThis.clearTimeout(workspaceSave);
     workspaceSave = globalThis.setTimeout(() => {
-      void saveWorkspace(props.slug, workspace).catch((error: unknown) => setNotice(isStorageQuotaExceeded(error) ? "Le stockage du navigateur est plein. Libérez de l’espace avant d’ajouter des médias." : "Impossible d’enregistrer ce roadcast dans ce navigateur."));
+      void saveWorkspace({ slug: props.slug, title: workspace.title, chronicles: workspace.chronicles }).then((saved) => {
+        if (saved?.links) setAccessLinks(saved.links);
+      }).catch(() => setNotice("Impossible d’enregistrer ce roadcast en base."));
     }, 300);
   });
 
@@ -370,14 +382,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
     if (savedCollaboratorName) setCollaboratorName(savedCollaboratorName.slice(0, 60));
     void (async () => {
       let savedWorkspace: PersistedWorkspace | null = null;
-      try { savedWorkspace = await loadWorkspace<PersistedWorkspace>(props.slug); } catch { savedWorkspace = loadLegacyWorkspace<PersistedWorkspace>(props.slug); }
-      if (!savedWorkspace) {
-        const legacyWorkspace = loadLegacyWorkspace<PersistedWorkspace>(props.slug);
-        if (legacyWorkspace) {
-          savedWorkspace = legacyWorkspace;
-          try { await saveWorkspace(props.slug, legacyWorkspace); removeLegacyWorkspace(props.slug); } catch { setNotice("Le roadcast reste disponible ici, mais le stockage du navigateur ne peut pas encore être migré."); }
-        }
-      }
+      try { savedWorkspace = await loadRoadcastWorkspace(props.slug); } catch { setNotice("Impossible de charger ce roadcast depuis la base."); }
       if (savedWorkspace && typeof savedWorkspace.title === "string" && Array.isArray(savedWorkspace.chronicles) && savedWorkspace.chronicles.length > 0 && Array.isArray(savedWorkspace.authors)) {
         const savedChronicles = savedWorkspace.chronicles.map((chronicle) => ({ ...chronicle, versions: Array.isArray(chronicle.versions) ? chronicle.versions.slice(-maxVersions).map((version) => ({ ...version, title: typeof version.title === "string" ? version.title : chronicle.title, author: typeof version.author === "string" ? version.author : chronicle.author })) : [] }));
         setTitle(savedWorkspace.title);
@@ -388,18 +393,12 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
         setSelectedChronicleId(savedChronicles[0].id);
         setAuthorQuery(savedChronicles[0].author);
       }
+      if (savedWorkspace?.links) {
+        setAccessLinks(savedWorkspace.links);
+        connectRealtime(savedWorkspace.links);
+      }
       setHydrated(true);
     })();
-    try {
-      const storedLinks = JSON.parse(globalThis.localStorage.getItem(`roadcast-access-links:${props.slug}`) ?? "null");
-      const links = isRoadcastAccessLinks(storedLinks) ? storedLinks : accessLinks();
-      setAccessLinks(links);
-      globalThis.localStorage.setItem(`roadcast-access-links:${props.slug}`, JSON.stringify(links));
-      globalThis.localStorage.setItem(`roadcast-read-token:${links.read}`, props.slug);
-    } catch { /* A new in-memory token pair remains available for this session. */ }
-    (['alpha', 'bravo', 'charly'] as const).forEach((target) => {
-      realtime.set(target, connectSliderRealtime(accessLinks().sliders[target], (payload) => setBroadcasts((current) => ({ ...current, [target]: payload }))));
-    });
     collaboration = connectChronicleLocks(props.slug, setChronicleLocks);
     lockExpiry = globalThis.setInterval(() => setChronicleLocks((locks) => locks.filter((lock) => lock.expiresAt > Date.now())), 1_000);
   });

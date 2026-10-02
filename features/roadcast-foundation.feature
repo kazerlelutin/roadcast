@@ -51,7 +51,7 @@ Feature: Préparer une chronique Roadcast
   Scenario: Enregistrer un roadcast avec des médias
     Given une chronique contenant une image volumineuse
     When sa sauvegarde automatique se déclenche
-    Then le roadcast est conservé dans le stockage IndexedDB sans faire échouer l’éditeur
+    Then ses chroniques et ses liens de lecture et slider sont conservés dans PostgreSQL sans faire échouer l’éditeur
 
   Scenario: Adapter le contenu à une sortie fixe
     Given une sélection contenant du texte et plusieurs médias
