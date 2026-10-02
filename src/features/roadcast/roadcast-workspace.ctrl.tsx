@@ -27,6 +27,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [authorQuery, setAuthorQuery] = createSignal(initialChronicles[0].author);
   const [authorPickerOpen, setAuthorPickerOpen] = createSignal(false);
   const [insertMenuOpen, setInsertMenuOpen] = createSignal(false);
+  const [blockMenu, setBlockMenu] = createSignal<{ top: number; left: number } | null>(null);
   const [bubble, setBubble] = createSignal<{ top: number; left: number } | null>(null);
   const [hydrated, setHydrated] = createSignal(false);
   const [slider, setSlider] = createSignal<Slider>("alpha");
@@ -41,6 +42,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [theme, setTheme] = createSignal<RoadcastWorkspaceTheme>("dark");
   let editor: Editor | undefined;
   let editorChronicleId = "";
+  let onEditorMouseMove: ((event: { clientX: number; clientY: number }) => void) | undefined;
   const realtime = new Map<Slider, SliderRealtimeClient>();
 
   const selectedChronicle = () => chronicles().find((chronicle) => chronicle.id === selectedChronicleId()) ?? chronicles()[0];
@@ -169,6 +171,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   };
 
   const editorReady = (element: ChronicleEditorElement) => {
+    if (editor && onEditorMouseMove) editor.view.dom.removeEventListener("mousemove", onEditorMouseMove);
     editor?.destroy();
     const current = selectedChronicle();
     editorChronicleId = current.id;
@@ -179,11 +182,22 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
       onUpdate: ({ editor: instance }) => updateSelectedChronicle({ document: instance.getHTML() }),
       onSelectionUpdate: ({ editor: instance }) => {
         const { from, to } = instance.state.selection;
-        if (from === to) { setBubble(null); return; }
         const position = instance.view.coordsAtPos(to);
+        if (from === to) { setBubble(null); setBlockMenu({ top: position.top, left: position.left }); return; }
+        setBlockMenu(null);
         setBubble({ top: position.top - 8, left: (position.left + position.right) / 2 });
       },
     });
+    onEditorMouseMove = (event) => {
+      if (insertMenuOpen()) return;
+      const found = editor?.view.posAtCoords({ left: event.clientX, top: event.clientY });
+      if (!found || !editor) return;
+      const position = editor.view.coordsAtPos(found.pos);
+      setBlockMenu({ top: position.top, left: position.left });
+    };
+    editor.view.dom.addEventListener("mousemove", onEditorMouseMove);
+    const position = editor.view.coordsAtPos(editor.state.selection.from);
+    setBlockMenu({ top: position.top, left: position.left });
   };
 
   const saveVersion = () => {
@@ -239,13 +253,14 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   });
 
   onCleanup(() => {
+    if (editor && onEditorMouseMove) editor.view.dom.removeEventListener("mousemove", onEditorMouseMove);
     editor?.destroy();
     realtime.forEach((client) => client.close());
   });
 
   return <>
     <RoadcastWorkspaceView
-      slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
+      slug={props.slug} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()}
       onTitleInput={setTitle} onChronicleTitleInput={(value) => updateSelectedChronicle({ title: value })} onAuthorQueryInput={(value) => { setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onInsertMenuOpen={setInsertMenuOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onFormat={format} onMediaInput={(file) => void insertMedia(file)} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme}
     />
   </>;
