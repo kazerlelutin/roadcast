@@ -48,6 +48,11 @@ Feature: Préparer une chronique Roadcast
     When je sélectionne cette vidéo et la diffuse vers le slider Alpha
     Then le slider Alpha lit automatiquement la vidéo sans afficher ses commandes
 
+  Scenario: Remplir le slider avec une vidéo diffusée
+    Given une vidéo YouTube diffusée vers le slider Alpha
+    When je consulte la sortie du slider Alpha
+    Then la vidéo occupe le cadre sans marge intérieure
+
   Scenario: Importer une image distante
     Given le menu d’ajout de média dans une chronique
     When je fournis une URL HTTPS vers une image autorisée
