@@ -73,6 +73,11 @@ Feature: Préparer une chronique Roadcast
     When je survole un bloc et choisis une insertion dans la gouttière
     Then le menu est aligné sur ce bloc et le nouvel élément est ajouté avant lui
 
+  Scenario: Annuler l’ajout d’un média depuis la gouttière
+    Given le menu d’insertion est ouvert sur un bloc
+    When j’annule le sélecteur de fichiers
+    Then le menu se ferme et le bouton d’insertion reste disponible sur ce bloc
+
   Scenario: Mettre à jour un slider ouvert en direct
     Given le lien du slider Bravo est ouvert dans OBS
     When une sélection est diffusée vers Bravo depuis un autre navigateur
