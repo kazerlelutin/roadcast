@@ -28,6 +28,8 @@
 .canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: var(--muted, #aebbd3); content: "Commencez à écrire…"; pointer-events: none; }
 .canvas :global(.ProseMirror blockquote) { margin: 1.25rem 0; padding-left: .85rem; border-left: 3px solid var(--text, #f7f8fc); }
 .canvas :global(.ProseMirror img) { display: block; max-width: 100%; margin: 1.25rem 0; border-radius: .35rem; }
+.canvas :global(.ProseMirror div[data-youtube-video]) { max-width: 100%; margin: 1.25rem 0; }
+.canvas :global(.ProseMirror iframe) { display: block; width: min(100%, 42rem); aspect-ratio: 16 / 9; height: auto; border: 0; border-radius: .35rem; }
 .canvas :global(.ProseMirror a) { color: var(--accent, #00a6b1); text-decoration: underline; }
 .canvas :global(.ProseMirror hr) { margin: 2rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
 .moveActions { display: flex; align-items: end; gap: .2rem; padding-bottom: .05rem; }
@@ -46,4 +48,4 @@
 .bubble button:hover { background: var(--soft-surface, #2a3652); }
 .bubble .broadcastButton { background: var(--accent, #00a6b1); color: #08151a; font-weight: 800; }
 @media (max-width: 980px) { .editor { height: auto; overflow: visible; } .document { min-height: 34rem; } .canvas { overflow: visible; } }
-@media (max-width: 640px) { .document { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); row-gap: .6rem; padding-inline: 1.2rem; } .title { grid-column: 1; grid-row: 1; } .metaRow { grid-column: 1; grid-row: 2; } .canvas { grid-column: 1; grid-row: 3; } .authorPicker { flex: 1; } .authorPicker input { width: 100%; } .topbarActions select { max-width: 7rem; } .insertMenu { left: 2rem; } }
+@media (max-width: 640px) { .topbar { align-items: start; gap: .5rem; padding: .55rem .75rem; } .topbarActions { flex-wrap: wrap; justify-content: end; } .saveVersion { font-size: .75rem; } .document { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); row-gap: .6rem; padding-inline: 1.2rem; } .title { grid-column: 1; grid-row: 1; } .metaRow { grid-column: 1; grid-row: 2; } .canvas { grid-column: 1; grid-row: 3; } .authorPicker { flex: 1; } .authorPicker input { width: 100%; } .topbarActions select { max-width: 7rem; } .insertControl { position: sticky; bottom: 1rem; left: auto !important; top: auto !important; width: max-content; margin: .5rem 1rem; transform: none; } .insertButton { width: 2.6rem; height: 2.6rem; border-color: var(--line, #3c4968); background: var(--surface, #1b2338); box-shadow: 0 .4rem 1rem #0005; } .insertMenu { bottom: 3rem; top: auto; left: 0; width: min(17rem, calc(100vw - 2rem)); transform: translateY(.45rem); } .insertMenu.open { transform: translateY(0); } }

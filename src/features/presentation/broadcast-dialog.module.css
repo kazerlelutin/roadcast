@@ -7,7 +7,8 @@
 .dialog header button { border: 0; background: transparent; color: inherit; font-size: 1.4rem; cursor: pointer; }
 .selection { display: grid; gap: .75rem; place-items: center; min-height: 10rem; margin: 1.15rem 0; padding: 1rem; border: 1px solid #40516e; border-radius: .35rem; background: #101827; }
 .selection p { max-width: 100%; margin: 0; white-space: pre-wrap; }
-.selection img { max-width: 100%; max-height: 15rem; border-radius: .25rem; object-fit: contain; }
+.selection img, .selection iframe { max-width: 100%; max-height: 15rem; border: 0; border-radius: .25rem; object-fit: contain; }
+.selection iframe { width: min(100%, 26rem); aspect-ratio: 16 / 9; }
 .dialog fieldset { margin: 0; padding: 0; border: 0; }
 .dialog legend { margin-bottom: .5rem; font-size: .8rem; font-weight: 700; }
 .sliders { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }

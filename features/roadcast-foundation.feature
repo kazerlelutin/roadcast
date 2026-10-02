@@ -38,6 +38,21 @@ Feature: Préparer une chronique Roadcast
     When je choisis le slider Bravo depuis sa fenêtre d'actions
     Then le slider Bravo affiche ce média en aperçu
 
+  Scenario: Diffuser une vidéo YouTube sans commandes spectateur
+    Given une URL YouTube ajoutée à une chronique
+    When je sélectionne cette vidéo et la diffuse vers le slider Alpha
+    Then le slider Alpha lit automatiquement la vidéo sans afficher ses commandes
+
+  Scenario: Importer une image distante
+    Given le menu d’ajout de média dans une chronique
+    When je fournis une URL HTTPS vers une image autorisée
+    Then limage est téléchargée, conservée lorsque le stockage est disponible et ajoutée à la chronique
+
+  Scenario: Utiliser l’espace de travail sur mobile
+    Given un écran de largeur mobile
+    When j’ouvre l’espace de travail et le menu d’ajout
+    Then je peux ajouter un média, accéder aux actions de sauvegarde, à l’arbre et à l’aperçu en faisant défiler la page
+
   Scenario: Partager une lecture asynchrone
     Given le slider Alpha est interactif
     When une personne ajoute un élément à son résumé
