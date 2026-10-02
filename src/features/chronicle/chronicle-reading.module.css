@@ -8,15 +8,15 @@
 .logoText::after { bottom: -.16em; }
 .readState { padding: .38rem .5rem; color: #aebbd3; font-size: .8rem; }
 .layout { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
-nav { height: fit-content; padding: 1rem; border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
-nav h1 { margin: 0 0 .75rem; font-size: 1rem; }
-nav ol { margin: 0; padding: 0; list-style: none; }
-nav button { display: flex; justify-content: space-between; gap: .5rem; width: 100%; padding: .55rem; border: 0; border-radius: .25rem; background: transparent; color: #aebbd3; text-align: left; cursor: pointer; }
-nav button[aria-current="page"], nav button:hover { background: #2a3652; color: #fff; }
-nav small, .author { color: #aebbd3; }
-article { min-width: 0; padding: clamp(1.5rem, 5vw, 4rem); border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
+.readingTree { height: fit-content; padding: 1rem; border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
+.readingTree h1 { margin: 0 0 .75rem; font-size: 1rem; }
+.readingTree ol { margin: 0; padding: 0; list-style: none; }
+.readingTree button { display: flex; justify-content: space-between; gap: .5rem; width: 100%; padding: .55rem; border: 0; border-radius: .25rem; background: transparent; color: #aebbd3; text-align: left; cursor: pointer; }
+.readingTree button[aria-current="page"], .readingTree button:hover { background: #2a3652; color: #fff; }
+.readingTree small, .author { color: #aebbd3; }
+.readingContent { min-width: 0; padding: clamp(1.5rem, 5vw, 4rem); border: 1px solid #3c4968; border-radius: .35rem; background: #1b2338; }
 .kicker { margin: 0; color: #00a6b1; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
-article h2 { margin: .5rem 0 0; font-size: clamp(2rem, 4vw, 3rem); }
+.readingContent h2 { margin: .5rem 0 0; font-size: clamp(2rem, 4vw, 3rem); }
 .author { margin: .35rem 0 2rem; }
 .content { font-size: 1.05rem; line-height: 1.75; }
 .content img { display: block; max-width: 100%; margin: 1.5rem 0; border-radius: .35rem; }

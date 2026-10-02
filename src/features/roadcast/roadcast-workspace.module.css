@@ -8,6 +8,7 @@
   --soft-surface: #2a3652;
   --accent: #00a6b1;
   --button-hover: #f7f8fc;
+  color-scheme: dark;
   height: 100dvh;
   overflow: hidden;
   display: grid;
@@ -28,6 +29,7 @@
   --soft-surface: #e3e9f1;
   --accent: #007f8a;
   --button-hover: #172039;
+  color-scheme: light;
 }
 
 .header,
