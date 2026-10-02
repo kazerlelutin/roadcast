@@ -104,8 +104,10 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
       </div>
     </header>
 
-    <div class={styles.status} aria-live="polite">{props.notice}</div>
-    {props.workspaceUpdateAvailable && <div class={styles.workspaceUpdate} role="status">Modifications disponibles <button type="button" onClick={props.onReloadWorkspace}>Recharger</button></div>}
+    <div class={styles.status} aria-live="polite">
+      <span>{props.notice}</span>
+      {props.workspaceUpdateAvailable && <span class={styles.workspaceUpdate}>Modifications disponibles <button type="button" onClick={props.onReloadWorkspace}>Recharger</button></span>}
+    </div>
 
     <div class={styles.workspace}>
       <nav class={styles.tree} aria-label="Arbre des chroniques">
