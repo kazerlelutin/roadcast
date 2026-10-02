@@ -1,7 +1,16 @@
 import { describe, expect, it } from "bun:test";
-import { parseChronicleLockMessage } from "../../src/features/collaboration/chronicle-lock.ctrl";
+import { createChronicleLockSessionId, parseChronicleLockMessage } from "../../src/features/collaboration/chronicle-lock.ctrl";
 
 describe("verrou de chronique", () => {
+  it("génère l’identifiant de session avec Web Crypto", () => {
+    const secureSessionId = "00000000-0000-4000-8000-000000000001";
+    expect(createChronicleLockSessionId({ randomUUID: () => secureSessionId })).toBe(secureSessionId);
+  });
+
+  it("refuse d’initialiser une session sans Web Crypto", () => {
+    expect(() => createChronicleLockSessionId(null)).toThrow("Web Crypto randomUUID is required for collaboration sessions.");
+  });
+
   it("accepte une demande de verrouillage nommée", () => {
     const message = parseChronicleLockMessage({ type: "lock", payload: { chronicleId: "welcome", ownerId: "session-1", name: "Camille" } });
     expect(message).toEqual({ type: "lock", payload: { chronicleId: "welcome", ownerId: "session-1", name: "Camille" } });

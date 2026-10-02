@@ -133,6 +133,11 @@ Feature: Préparer une chronique Roadcast
     When la première modifie une chronique pendant plus de 400 millisecondes
     Then la seconde voit son nom et ne peut pas modifier cette chronique tant que le verrou est actif
 
+  Scenario: Initialiser une session de collaboration de manière sûre
+    Given un navigateur sans API Web Crypto
+    When il initialise les verrous de chroniques
+    Then l’initialisation s’arrête avec une erreur explicite au lieu de générer un identifiant prévisible
+
   Scenario: Collaborer depuis le serveur de développement
     Given deux navigateurs ouverts sur le serveur de développement
     When l’un modifie une chronique et qu’un verrou est émis
