@@ -35,7 +35,7 @@ export async function workspaceForRoadcast(database: Database | Transaction, roa
     document: typeof chronicle.document.html === "string" ? chronicle.document.html : "<p></p>",
     versions: Array.isArray(chronicle.versions) ? chronicle.versions.filter((version): version is PersistedRoadcastWorkspace["chronicles"][number]["versions"][number] => !!version && typeof version === "object" && typeof (version as { id?: unknown }).id === "string" && typeof (version as { savedAt?: unknown }).savedAt === "string" && typeof (version as { title?: unknown }).title === "string" && typeof (version as { author?: unknown }).author === "string" && typeof (version as { document?: unknown }).document === "string") : [],
   }));
-  return { title: roadcast.title, chronicles: savedChronicles, authors: [...new Set(savedChronicles.map((chronicle) => chronicle.author))], lastActivityAt: roadcast.lastActivityAt.toISOString(), links };
+  return { title: roadcast.title, chronicles: savedChronicles, authors: [...new Set(savedChronicles.map((chronicle) => chronicle.author).filter(Boolean))], lastActivityAt: roadcast.lastActivityAt.toISOString(), links };
 }
 
 export const saveRoadcastWorkspace = action(async (raw: unknown) => {

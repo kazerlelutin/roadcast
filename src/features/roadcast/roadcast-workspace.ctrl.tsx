@@ -20,10 +20,8 @@ import { isChronicleVersionSynced } from "../chronicle/chronicle-version.ctrl";
 import { saveRoadcastWorkspace } from "./workspace-persistence.actions";
 import { loadRoadcastWorkspace } from "./workspace-persistence.queries";
 
-const seed = "Bienvenue dans la chronique. Écris librement, ajoute tes médias au fil du texte et décide ce qui part sur chaque slider.\n\nL’estimation de temps aide toute l’équipe à garder le rythme.";
 const initialChronicles: WorkspaceChronicle[] = [
-  { id: "welcome", title: "Bienvenue", document: `<p>${seed.replaceAll("\n\n", "</p><p>")}</p>`, author: "Camille", versions: [] },
-  { id: "conclusion", title: "Conclusion", document: "<p>Préparez ici la conclusion de votre roadcast.</p>", author: "Alex", versions: [] },
+  { id: "chronicle-initial", title: "Nouvelle chronique", document: "<p></p>", author: "", versions: [] },
 ];
 const maxVersions = 12;
 type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; links?: RoadcastAccessLinks; };
@@ -33,7 +31,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string }) {
   const [chronicles, setChronicles] = createSignal(initialChronicles);
   const [selectedChronicleId, setSelectedChronicleId] = createSignal(initialChronicles[0].id);
   const [chronicleFilter, setChronicleFilter] = createSignal("all");
-  const [authors, setAuthors] = createSignal(["Camille", "Alex"]);
+  const [authors, setAuthors] = createSignal<string[]>([]);
   const [authorQuery, setAuthorQuery] = createSignal(initialChronicles[0].author);
   const [authorPickerOpen, setAuthorPickerOpen] = createSignal(false);
   const [insertMenuOpen, setInsertMenuOpen] = createSignal(false);

@@ -1,4 +1,9 @@
 Feature: Préparer une chronique Roadcast
+
+  Scenario: Ouvrir un roadcast sans contenu de démonstration
+    Given un roadcast nouvellement créé
+    When j’ouvre son espace d’édition
+    Then une seule chronique vide est présente, sans texte ni chroniqueur prérempli
   En tant que chroniqueur
   Je veux écrire, diffuser et partager une chronique depuis le même espace
   Afin de garder une présentation fluide et accessible.
