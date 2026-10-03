@@ -1,7 +1,6 @@
 import { useAction } from "@solidjs/router";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Editor } from "@tiptap/core";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Youtube from "@tiptap/extension-youtube";
 import StarterKit from "@tiptap/starter-kit";
@@ -25,13 +24,13 @@ import { rememberRecentRoadcast } from "./recent-roadcasts.ctrl";
 import { importRemoteImage } from "../media/remote-image.actions";
 import { youtubeEmbedUrl } from "../media/youtube.ctrl";
 import { assertEditorImageInput, isBroadcastImageSource } from "../media/editor-image.ctrl";
+import { broadcastableImage } from "../media/broadcastable-image.ctrl";
 
 const initialChronicles: WorkspaceChronicle[] = [
   { id: "chronicle-initial", title: "Nouvelle chronique", document: "<p></p>", author: "", versions: [] },
 ];
 const maxVersions = 12;
 type PersistedWorkspace = { title: string; chronicles: WorkspaceChronicle[]; authors: string[]; lastActivityAt?: string; links?: RoadcastAccessLinks; };
-type MediaDropEvent = { preventDefault: () => void; stopImmediatePropagation: () => void; clientX?: number; clientY?: number; dataTransfer?: { files: { item: (index: number) => MediaFile | null; }; }; };
 
 export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: string }) {
   const [title, setTitle] = createSignal(props.initialTitle?.trim() || "Roadcast");
@@ -67,10 +66,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
   const saveWorkspace = useAction(saveRoadcastWorkspace);
   const importImage = useAction(importRemoteImage);
   let editor: Editor | undefined;
-  let mediaShortcutObserver: InstanceType<typeof globalThis.MutationObserver> | undefined;
-  let mediaShortcutResizeObserver: InstanceType<typeof globalThis.ResizeObserver> | undefined;
-  let mediaDropHandler: ((event: MediaDropEvent) => void) | undefined;
-  let mediaDropElement: HTMLElement | undefined;
+  let videoShortcutObserver: InstanceType<typeof globalThis.MutationObserver> | undefined;
   let editorChronicleId = "";
   let editingChronicleId: string | undefined;
   let lockStart: ReturnType<typeof setTimeout> | undefined;
@@ -395,37 +391,6 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     });
   };
 
-  const addImageBroadcastShortcuts = (element: HTMLElement) => {
-    element.querySelectorAll<HTMLElement>("img[src]").forEach((image) => {
-      const source = image.getAttribute("src");
-      if (!source || !isBroadcastImageSource(source)) return;
-      let button = image.nextElementSibling?.matches("button[data-broadcast-image]") ? image.nextElementSibling as HTMLElement : undefined;
-      if (!button) {
-        button = globalThis.document.createElement("button");
-        button.setAttribute("type", "button");
-        button.className = "roadcast-image-broadcast";
-        button.dataset.broadcastImage = "";
-        button.setAttribute("contenteditable", "false");
-        button.setAttribute("aria-label", "Diffuser cette image");
-        button.title = "Diffuser cette image";
-        button.textContent = "Diffuser";
-        image.after(button);
-      }
-      const position = () => globalThis.requestAnimationFrame(() => {
-        const width = button?.offsetWidth ?? 0;
-        button?.style.setProperty("top", `${image.offsetTop + 9}px`);
-        button?.style.setProperty("left", `${Math.max(image.offsetLeft + 9, image.offsetLeft + image.offsetWidth - width - 9)}px`);
-      });
-      position();
-      image.addEventListener("load", position, { once: true });
-    });
-  };
-
-  const addMediaBroadcastShortcuts = (element: HTMLElement) => {
-    addVideoBroadcastShortcuts(element);
-    addImageBroadcastShortcuts(element);
-  };
-
   const openBroadcast = () => {
     const draft = captureSelection();
     if (!draft) { setNotice("Sélectionnez du texte ou une image avant de diffuser."); return; }
@@ -458,18 +423,26 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
   };
 
   const editorReady = (element: ChronicleEditorElement) => {
-    const editorElement = element as HTMLElement;
-    mediaShortcutObserver?.disconnect();
-    mediaShortcutResizeObserver?.disconnect();
-    if (mediaDropHandler && mediaDropElement) mediaDropElement.removeEventListener("drop", mediaDropHandler);
+    videoShortcutObserver?.disconnect();
     editor?.destroy();
     const current = selectedChronicle();
     editorChronicleId = current.id;
     editor = new Editor({
       element,
-      extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true }), Image.configure({ allowBase64: true }), Youtube.configure({ nocookie: true })],
+      extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true }), broadcastableImage(openImageBroadcast).configure({ allowBase64: true }), Youtube.configure({ nocookie: true })],
       content: current.document,
       editable: !selectedLockByOther(),
+      editorProps: {
+        attributes: { "aria-label": "Contenu de la chronique" },
+        handleDrop: (view, event) => {
+          const file = event.dataTransfer?.files.item(0);
+          if (!file) return false;
+          event.preventDefault();
+          const position = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from;
+          void insertMedia(file, position);
+          return true;
+        },
+      },
       onUpdate: ({ editor: instance }) => { markChronicleAsEditing(); updateSelectedChronicle({ document: instance.getHTML() }); },
       onSelectionUpdate: ({ editor: instance }) => {
         const { from, to } = instance.state.selection;
@@ -479,21 +452,9 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
         setBubble({ top: position.top - 8, left: (position.left + position.right) / 2 });
       },
     });
-    addMediaBroadcastShortcuts(editorElement);
-    mediaShortcutObserver = new globalThis.MutationObserver(() => addMediaBroadcastShortcuts(editorElement));
-    mediaShortcutObserver.observe(editorElement, { childList: true, subtree: true });
-    mediaShortcutResizeObserver = new globalThis.ResizeObserver(() => addImageBroadcastShortcuts(editorElement));
-    mediaShortcutResizeObserver.observe(editorElement);
-    mediaDropHandler = (event) => {
-      const file = event.dataTransfer?.files.item(0);
-      if (!file || !editor) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      const position = editor.view.posAtCoords({ left: event.clientX ?? 0, top: event.clientY ?? 0 })?.pos ?? editor.state.selection.from;
-      void insertMedia(file, position);
-    };
-    editorElement.addEventListener("drop", mediaDropHandler);
-    mediaDropElement = editorElement;
+    addVideoBroadcastShortcuts(element as HTMLElement);
+    videoShortcutObserver = new globalThis.MutationObserver(() => addVideoBroadcastShortcuts(element as HTMLElement));
+    videoShortcutObserver.observe(element as HTMLElement, { childList: true, subtree: true });
     updateBlockMenu(editor.state.selection.from);
   };
 
@@ -595,16 +556,14 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     if (lockExpiry) globalThis.clearInterval(lockExpiry);
     collaboration?.close();
     editor?.destroy();
-    mediaShortcutObserver?.disconnect();
-    mediaShortcutResizeObserver?.disconnect();
-    if (mediaDropHandler && mediaDropElement) mediaDropElement.removeEventListener("drop", mediaDropHandler);
+    videoShortcutObserver?.disconnect();
     realtime.forEach((client) => client.close());
   });
 
   return <>
     <RoadcastWorkspaceView
       slug={props.slug} readLink={publicLink("read")} title={title()} chronicles={chronicles()} selectedChronicleId={selectedChronicleId()} minutes={estimateChronicleMinutes(selectedChronicle().document.replace(/<[^>]+>/g, " "))} usage={usage()} chronicleFilter={chronicleFilter()} authors={authors()} authorQuery={authorQuery()} authorPickerOpen={authorPickerOpen()} insertMenuOpen={insertMenuOpen()} blockMenu={blockMenu()} bubble={bubble()} slider={slider()} sliderLink={publicLink("slider")} broadcasts={broadcasts()} broadcastOpen={broadcastOpen()} broadcastDraft={broadcastDraft()} broadcastTarget={broadcastTarget()} notice={notice()} workspaceUpdateAvailable={workspaceUpdateAvailable()} theme={theme()} shareOpen={shareOpen()} shareMode={shareMode()} shareLink={publicLink()} chronicleToDelete={chronicles().find((chronicle) => chronicle.id === chronicleToDeleteId()) ?? null} versionCleanupOpen={versionCleanupOpen()} collaboratorName={collaboratorName()} chronicleLocks={chronicleLocks()} collaboratorId={collaboration?.sessionId ?? ""} lockedBy={selectedLockByOther()?.name ?? null} workspaceSynced={workspaceSynced()}
-      onTitleInput={(value) => { if (value !== title()) { setTitle(value); rememberRecentRoadcast({ slug: props.slug, title: value }); scheduleWorkspaceSave(); } }} onChronicleTitleInput={(value) => { markChronicleAsEditing(); updateSelectedChronicle({ title: value }); }} onCollaboratorNameInput={(value) => { const name = value.slice(0, 60); setCollaboratorName(name); globalThis.localStorage.setItem("roadcast-collaborator-name", name); if (!name.trim()) releaseEditingLock(); else if (editingChronicleId) collaboration?.claim(editingChronicleId, name.trim()); }} onAuthorQueryInput={(value) => { markChronicleAsEditing(); setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onRemoteImage={() => void insertRemoteImage()} onYoutube={insertYoutube} onInsertMenuOpen={setInsertMenuVisibility} onVideoBroadcast={openVideoBroadcast} onMediaBroadcast={openImageBroadcast} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onRequestChronicleDeletion={requestChronicleDeletion} onConfirmChronicleDeletion={confirmChronicleDeletion} onCloseChronicleDeletion={() => setChronicleToDeleteId(null)} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onRequestVersionCleanup={() => setVersionCleanupOpen(true)} onConfirmVersionCleanup={confirmVersionCleanup} onCloseVersionCleanup={() => setVersionCleanupOpen(false)} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onClearSlider={clearSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme} onReloadWorkspace={() => globalThis.location.reload()}
+      onTitleInput={(value) => { if (value !== title()) { setTitle(value); rememberRecentRoadcast({ slug: props.slug, title: value }); scheduleWorkspaceSave(); } }} onChronicleTitleInput={(value) => { markChronicleAsEditing(); updateSelectedChronicle({ title: value }); }} onCollaboratorNameInput={(value) => { const name = value.slice(0, 60); setCollaboratorName(name); globalThis.localStorage.setItem("roadcast-collaborator-name", name); if (!name.trim()) releaseEditingLock(); else if (editingChronicleId) collaboration?.claim(editingChronicleId, name.trim()); }} onAuthorQueryInput={(value) => { markChronicleAsEditing(); setAuthorQuery(value); setAuthorPickerOpen(true); }} onAuthorPickerOpen={setAuthorPickerOpen} onSelectAuthor={selectAuthor} onEditorReady={editorReady} onEditorPointerMove={onEditorPointerMove} onEditorPointerLeave={() => { if (!insertMenuOpen()) setBlockMenu(null); }} onFormat={format} onInsertBlock={insertBlock} onMediaInput={(file) => void insertMedia(file)} onRemoteImage={() => void insertRemoteImage()} onYoutube={insertYoutube} onInsertMenuOpen={setInsertMenuVisibility} onVideoBroadcast={openVideoBroadcast} onUndo={() => editor?.chain().focus().undo().run()} onRedo={() => editor?.chain().focus().redo().run()} onMove={moveChronicle} onAddChronicle={addChronicle} onRequestChronicleDeletion={requestChronicleDeletion} onConfirmChronicleDeletion={confirmChronicleDeletion} onCloseChronicleDeletion={() => setChronicleToDeleteId(null)} onSelectChronicle={selectChronicle} onFilterChange={setChronicleFilter} onSaveVersion={saveVersion} onRestoreVersion={restoreVersion} onRequestVersionCleanup={() => setVersionCleanupOpen(true)} onConfirmVersionCleanup={confirmVersionCleanup} onCloseVersionCleanup={() => setVersionCleanupOpen(false)} onOpenBroadcast={openBroadcast} onBroadcastTargetChange={setBroadcastTarget} onConfirmBroadcast={confirmBroadcast} onCloseBroadcast={() => setBroadcastOpen(false)} onSelectSlider={setSlider} onClearSlider={clearSlider} onPictureInPicture={pictureInPicture} onShare={() => setShareOpen(true)} onCloseShare={() => setShareOpen(false)} onShareModeChange={setShareMode} onCopyShareLink={() => void copy(publicLink())} onCopySliderLink={() => void copy(publicLink("slider"))} onThemeChange={toggleTheme} onReloadWorkspace={() => globalThis.location.reload()}
     />
   </>;
 }
