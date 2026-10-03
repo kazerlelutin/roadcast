@@ -43,6 +43,16 @@ Feature: Préparer une chronique Roadcast
     When je choisis le slider Bravo depuis sa fenêtre d'actions
     Then le slider Bravo affiche ce média en aperçu
 
+  Scenario: Ajouter une image par glisser-déposer
+    Given une chronique ouverte dans l’éditeur
+    When je dépose une image PNG, JPEG, WebP ou GIF de moins de 5 Mo dans son contenu
+    Then l’image est ajoutée à l’emplacement du dépôt sans quitter l’édition
+
+  Scenario: Diffuser rapidement une image depuis son bloc
+    Given une image intégrée à une chronique ouverte
+    When j’active le bouton Diffuser en haut à droite de cette image
+    Then la fenêtre de diffusion s’ouvre avec cette seule image sélectionnée
+
   Scenario: Diffuser une vidéo YouTube sans commandes spectateur
     Given une URL YouTube ajoutée à une chronique
     When je sélectionne cette vidéo et la diffuse vers le slider Alpha
