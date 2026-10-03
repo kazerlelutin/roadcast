@@ -23,15 +23,18 @@
 .canvas::-webkit-scrollbar { width: .65rem; }
 .canvas::-webkit-scrollbar-track { background: var(--editor-canvas, #20283f); border-radius: 99px; }
 .canvas::-webkit-scrollbar-thumb { border: 2px solid var(--editor-canvas, #20283f); border-radius: 99px; background: var(--accent, #00a6b1); }
-.canvas :global(.ProseMirror) { width: min(100%, 720px); min-height: 22rem; margin-inline: auto; outline: 0; color: inherit; font-size: 1.03rem; line-height: 1.72; }
+.canvas :global(.ProseMirror) { position: relative; width: min(100%, 720px); min-height: 22rem; margin-inline: auto; outline: 0; color: inherit; font-size: 1.03rem; line-height: 1.72; }
 .canvas :global(.ProseMirror > :first-child) { margin-top: 0; }
 .canvas :global(.ProseMirror p.is-editor-empty:first-child::before) { float: left; height: 0; color: var(--muted, #aebbd3); content: "Commencez à écrire…"; pointer-events: none; }
 .canvas :global(.ProseMirror blockquote) { margin: 1.25rem 0; padding-left: .85rem; border-left: 3px solid var(--text, #f7f8fc); }
 .canvas :global(.ProseMirror img) { display: block; max-width: 100%; margin: 1.25rem 0; border-radius: .35rem; }
+.canvas :global(.ProseMirror .roadcast-image) { position: relative; max-width: 100%; margin: 1.25rem 0; }
+.canvas :global(.ProseMirror .roadcast-image img) { margin: 0; }
 .canvas :global(.ProseMirror div[data-youtube-video]) { position: relative; max-width: 100%; margin: 1.25rem 0; }
 .canvas :global(.ProseMirror iframe) { display: block; width: min(100%, 42rem); aspect-ratio: 16 / 9; height: auto; border: 0; border-radius: .35rem; }
-.canvas :global(.ProseMirror .roadcast-video-broadcast) { position: absolute; z-index: 1; top: .55rem; right: .55rem; padding: .45rem .65rem; border: 1px solid var(--accent, #00a6b1); border-radius: .3rem; background: #07131fe8; color: #eafcff; font-weight: 750; cursor: pointer; }
-.canvas :global(.ProseMirror .roadcast-video-broadcast:hover), .canvas :global(.ProseMirror .roadcast-video-broadcast:focus-visible) { background: var(--accent, #00a6b1); color: #07131f; }
+.canvas :global(.ProseMirror .roadcast-video-broadcast), .canvas :global(.ProseMirror .roadcast-image-broadcast) { position: absolute; z-index: 1; padding: .45rem .65rem; border: 1px solid var(--accent, #00a6b1); border-radius: .3rem; background: #07131fe8; color: #eafcff; font-weight: 750; cursor: pointer; }
+.canvas :global(.ProseMirror .roadcast-video-broadcast), .canvas :global(.ProseMirror .roadcast-image-broadcast) { top: .55rem; right: .55rem; }
+.canvas :global(.ProseMirror .roadcast-video-broadcast:hover), .canvas :global(.ProseMirror .roadcast-video-broadcast:focus-visible), .canvas :global(.ProseMirror .roadcast-image-broadcast:hover), .canvas :global(.ProseMirror .roadcast-image-broadcast:focus-visible) { background: var(--accent, #00a6b1); color: #07131f; }
 .canvas :global(.ProseMirror a) { color: var(--accent, #00a6b1); text-decoration: underline; }
 .canvas :global(.ProseMirror hr) { margin: 2rem 0; border: 0; border-top: 1px solid var(--line, #3c4968); }
 .moveActions { display: flex; align-items: end; gap: .2rem; padding-bottom: .05rem; }

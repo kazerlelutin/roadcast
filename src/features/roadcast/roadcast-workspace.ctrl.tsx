@@ -1,7 +1,6 @@
 import { useAction } from "@solidjs/router";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Editor } from "@tiptap/core";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Youtube from "@tiptap/extension-youtube";
 import StarterKit from "@tiptap/starter-kit";
@@ -24,6 +23,8 @@ import { createWorkspaceSaveQueue } from "./workspace-save-queue.ctrl";
 import { rememberRecentRoadcast } from "./recent-roadcasts.ctrl";
 import { importRemoteImage } from "../media/remote-image.actions";
 import { youtubeEmbedUrl } from "../media/youtube.ctrl";
+import { assertEditorImageInput, isBroadcastImageSource } from "../media/editor-image.ctrl";
+import { broadcastableImage } from "../media/broadcastable-image.ctrl";
 
 const initialChronicles: WorkspaceChronicle[] = [
   { id: "chronicle-initial", title: "Nouvelle chronique", document: "<p></p>", author: "", versions: [] },
@@ -268,14 +269,14 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     setInsertMenuOpen(false);
   };
 
-  const insertMedia = async (file: MediaFile | undefined) => {
+  const insertMedia = async (file: MediaFile | undefined, position?: number) => {
     if (!file || !editor) return;
-    if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) { setNotice("Choisissez une image de moins de 5 Mo."); return; }
-    const position = blockMenu()?.position ?? editor.state.selection.from;
+    try { assertEditorImageInput(file.type, file.size); } catch { setNotice("Choisissez une image PNG, JPEG, WebP ou GIF de moins de 5 Mo."); return; }
+    const insertionPosition = position ?? blockMenu()?.position ?? editor.state.selection.from;
     const bytes = new Uint8Array(await file.arrayBuffer());
     let binary = "";
     bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    editor.chain().focus().insertContentAt(position, { type: "image", attrs: { src: `data:${file.type};base64,${globalThis.btoa(binary)}`, alt: "Image de la chronique" } }).run();
+    editor.chain().focus().insertContentAt(insertionPosition, { type: "image", attrs: { src: `data:${file.type};base64,${globalThis.btoa(binary)}`, alt: "Image de la chronique" } }).run();
     setNotice("Image ajoutée à la chronique.");
   };
 
@@ -365,6 +366,14 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     setBroadcastOpen(true);
   };
 
+  const openImageBroadcast = (source: string) => {
+    if (selectedLockByOther()) { setNotice("Cette chronique est verrouillée par un autre collaborateur."); return; }
+    if (!isBroadcastImageSource(source)) { setNotice("Cette image ne peut pas être diffusée."); return; }
+    setBroadcastDraft({ text: "", images: [source], videos: [] });
+    setBroadcastTarget(lastBroadcastSlider());
+    setBroadcastOpen(true);
+  };
+
   const addVideoBroadcastShortcuts = (element: HTMLElement) => {
     element.querySelectorAll<HTMLElement>("div[data-youtube-video]").forEach((container) => {
       const iframe = container.querySelector("iframe");
@@ -420,9 +429,20 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     editorChronicleId = current.id;
     editor = new Editor({
       element,
-      extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true }), Image.configure({ allowBase64: true }), Youtube.configure({ nocookie: true })],
+      extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true }), broadcastableImage(openImageBroadcast).configure({ allowBase64: true }), Youtube.configure({ nocookie: true })],
       content: current.document,
       editable: !selectedLockByOther(),
+      editorProps: {
+        attributes: { "aria-label": "Contenu de la chronique" },
+        handleDrop: (view, event) => {
+          const file = event.dataTransfer?.files.item(0);
+          if (!file) return false;
+          event.preventDefault();
+          const position = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from;
+          void insertMedia(file, position);
+          return true;
+        },
+      },
       onUpdate: ({ editor: instance }) => { markChronicleAsEditing(); updateSelectedChronicle({ document: instance.getHTML() }); },
       onSelectionUpdate: ({ editor: instance }) => {
         const { from, to } = instance.state.selection;

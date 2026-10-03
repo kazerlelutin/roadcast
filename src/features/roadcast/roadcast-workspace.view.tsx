@@ -102,9 +102,10 @@ export function RoadcastWorkspaceView(props: RoadcastWorkspaceViewProps) {
   const formatCharacters = (characters: number) => characters.toLocaleString("fr-FR");
 
   return <main classList={{ [styles.page]: true, [styles.light]: isLight() }} onClick={(event) => {
-    const target = event.target instanceof HTMLElement ? event.target.closest("button[data-broadcast-video]") : null;
-    const source = target?.getAttribute("data-broadcast-video");
-    if (source) props.onVideoBroadcast(source);
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const video = target?.closest("button[data-broadcast-video]");
+    const source = video?.getAttribute("data-broadcast-video");
+    if (source) { props.onVideoBroadcast(source); return; }
   }}>
     <header class={styles.header}>
       <a href="/" class={styles.brand} aria-label="Accueil Roadcast"><span class={styles.firstLetter}>R</span><span class={styles.logoText}>oadcast</span></a>
