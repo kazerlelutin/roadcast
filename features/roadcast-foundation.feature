@@ -68,10 +68,10 @@ Feature: Préparer une chronique Roadcast
     When j’active le bouton Diffuser en haut à droite de cette vidéo
     Then la fenêtre de diffusion s’ouvre avec cette seule vidéo sélectionnée
 
-  Scenario: Parcourir tout l’espace de travail sur un écran mobile
+  Scenario: Parcourir l’éditeur et les régions de travail sur un écran mobile
     Given un écran de largeur mobile et une chronique longue
-    When je fais défiler l’espace de travail
-    Then je peux atteindre le bas de l’éditeur, l’arbre des chroniques et l’aperçu du slider
+    When je fais défiler l’éditeur puis la page
+    Then l’en-tête reste aligné, la barre de défilement reprend la palette Roadcast et je peux atteindre le bas de l’éditeur, l’arbre des chroniques et l’aperçu du slider
 
   Scenario: Partager une lecture asynchrone
     Given le slider Alpha est interactif

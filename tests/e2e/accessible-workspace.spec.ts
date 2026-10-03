@@ -26,3 +26,35 @@ test("partage et organise les chroniques depuis l'espace de travail", async ({ p
   await expect(page.getByLabel("Titre de la chronique")).toHaveValue("Nouvelle chronique");
   await expect(page.getByRole("heading", { name: "Aucune diffusion en cours" })).toBeVisible();
 });
+
+test("permet de faire défiler l’éditeur, l’arbre et l’aperçu sur mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/demo");
+
+  const header = page.locator("main > header");
+  const headerLayout = await header.evaluate((element) => {
+    const brand = element.firstElementChild?.getBoundingClientRect();
+    const links = element.lastElementChild?.getBoundingClientRect();
+    return { brandBottom: brand?.bottom, linksTop: links?.top };
+  });
+  expect(headerLayout.brandBottom).toBeLessThanOrEqual(headerLayout.linksTop ?? 0);
+  const lecture = page.getByRole("link", { name: "Lecture" });
+  const share = page.getByRole("button", { name: "Partager" });
+  const lectureLayout = await lecture.evaluate((element) => ({ alignItems: globalThis.getComputedStyle(element).alignItems, display: globalThis.getComputedStyle(element).display, height: element.getBoundingClientRect().height }));
+  const shareLayout = await share.evaluate((element) => ({ display: globalThis.getComputedStyle(element).display, height: element.getBoundingClientRect().height }));
+  expect(lectureLayout.display).toBe("flex");
+  expect(lectureLayout.alignItems).toBe("center");
+  expect(lectureLayout.height).toBe(shareLayout.height);
+
+  const workspace = page.locator("main");
+  await expect.poll(() => workspace.evaluate((element) => element.scrollHeight)).toBeGreaterThan(844);
+  expect(await workspace.evaluate((element) => globalThis.getComputedStyle(element).scrollbarColor)).not.toBe("auto");
+  await page.getByRole("region", { name: "Éditeur de chronique" }).hover();
+  await page.mouse.wheel(0, 500);
+  await expect.poll(() => workspace.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await workspace.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+
+  await expect(page.getByRole("navigation", { name: "Arbre des chroniques" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Aperçu des sliders" })).toBeVisible();
+  await expect(page.getByLabel("Lien du slider")).toBeVisible();
+});
