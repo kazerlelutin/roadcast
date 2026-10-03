@@ -42,7 +42,7 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
   const [authorPickerOpen, setAuthorPickerOpen] = createSignal(false);
   const [insertMenuOpen, setInsertMenuOpen] = createSignal(false);
   const [blockMenu, setBlockMenu] = createSignal<{ top: number; left: number; position: number } | null>(null);
-  const [bubble, setBubble] = createSignal<{ top: number; left: number } | null>(null);
+  const [bubble, setBubble] = createSignal<{ top: number; left: number; placement: "above" | "below" } | null>(null);
   const [hydrated, setHydrated] = createSignal(false);
   const [slider, setSlider] = createSignal<Slider>("alpha");
   const [broadcasts, setBroadcasts] = createSignal<Partial<Record<Slider, BroadcastPayload>>>({});
@@ -422,6 +422,21 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
     setNotice(`Slider ${target} effacé.`);
   };
 
+  const updateSelectionBubble = (instance: Editor) => {
+    const { from, to } = instance.state.selection;
+    if (from === to || selectedLockByOther()) {
+      setBubble(null);
+      if (from === to) updateBlockMenu(to);
+      return;
+    }
+    const position = instance.view.coordsAtPos(to);
+    const horizontalMargin = 12;
+    const left = Math.min(Math.max((position.left + position.right) / 2, horizontalMargin), globalThis.innerWidth - horizontalMargin);
+    const placement = position.top < 60 ? "below" : "above";
+    setBlockMenu(null);
+    setBubble({ top: placement === "above" ? position.top - 8 : position.bottom + 8, left, placement });
+  };
+
   const editorReady = (element: ChronicleEditorElement) => {
     videoShortcutObserver?.disconnect();
     editor?.destroy();
@@ -444,13 +459,8 @@ export function RoadcastWorkspaceCtrl(props: { slug: string; initialTitle?: stri
         },
       },
       onUpdate: ({ editor: instance }) => { markChronicleAsEditing(); updateSelectedChronicle({ document: instance.getHTML() }); },
-      onSelectionUpdate: ({ editor: instance }) => {
-        const { from, to } = instance.state.selection;
-        const position = instance.view.coordsAtPos(to);
-        if (from === to) { setBubble(null); updateBlockMenu(to); return; }
-        setBlockMenu(null);
-        setBubble({ top: position.top - 8, left: (position.left + position.right) / 2 });
-      },
+      onFocus: ({ editor: instance }) => updateSelectionBubble(instance),
+      onSelectionUpdate: ({ editor: instance }) => updateSelectionBubble(instance),
     });
     addVideoBroadcastShortcuts(element as HTMLElement);
     videoShortcutObserver = new globalThis.MutationObserver(() => addVideoBroadcastShortcuts(element as HTMLElement));

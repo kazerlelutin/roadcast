@@ -26,7 +26,7 @@ export type ChronicleEditorViewProps = {
   insertMenuOpen: boolean;
   blockMenu: { top: number; left: number; position: number; } | null;
   versions: ChronicleVersion[];
-  bubble: { top: number; left: number } | null;
+  bubble: { top: number; left: number; placement: "above" | "below" } | null;
   lockedBy: string | null;
   workspaceSynced: boolean;
   onTitleInput: (value: string) => void;
@@ -99,8 +99,8 @@ export function ChronicleEditorView(props: ChronicleEditorViewProps) {
         <button type="button" role="menuitem" onMouseDown={preserveSelection} onClick={() => { props.onInsertBlock("separator"); props.onInsertMenuOpen(false); }}><Minus size={16} />Séparateur</button>
       </div>
     </div>}
-    {!locked() && props.bubble && <div class={styles.bubble} style={bubbleStyle()} role="toolbar" aria-label="Actions sur la sélection">
-      <button type="button" title="Gras" onMouseDown={preserveSelection} onClick={() => props.onFormat("bold")}><b>B</b></button><button type="button" title="Italique" onMouseDown={preserveSelection} onClick={() => props.onFormat("italic")}><i>I</i></button><button type="button" title="Titre" onMouseDown={preserveSelection} onClick={() => props.onFormat("heading")}>H</button><button type="button" title="Liste" onMouseDown={preserveSelection} onClick={() => props.onFormat("list")}>•</button><button type="button" title="Citation" onMouseDown={preserveSelection} onClick={() => props.onFormat("quote")}>❝</button><button type="button" title="Séparateur" onMouseDown={preserveSelection} onClick={() => props.onFormat("separator")}>—</button><button type="button" onMouseDown={preserveSelection} onClick={() => props.onFormat("link")}>Lien</button><button type="button" class={styles.broadcastButton} onMouseDown={preserveSelection} onClick={props.onOpenBroadcast}>Diffuser</button>
+    {!locked() && props.bubble && <div classList={{ [styles.bubble]: true, [styles.bubbleBelow]: props.bubble.placement === "below" }} style={bubbleStyle()} role="toolbar" aria-label="Actions sur la sélection">
+      <button type="button" title="Gras" aria-label="Mettre en gras" onMouseDown={preserveSelection} onClick={() => props.onFormat("bold")}><b>B</b></button><button type="button" title="Italique" aria-label="Mettre en italique" onMouseDown={preserveSelection} onClick={() => props.onFormat("italic")}><i>I</i></button><button type="button" title="Titre" aria-label="Transformer en titre" onMouseDown={preserveSelection} onClick={() => props.onFormat("heading")}>H</button><button type="button" title="Liste" aria-label="Transformer en liste" onMouseDown={preserveSelection} onClick={() => props.onFormat("list")}>•</button><button type="button" title="Citation" aria-label="Transformer en citation" onMouseDown={preserveSelection} onClick={() => props.onFormat("quote")}>❝</button><button type="button" title="Séparateur" aria-label="Insérer un séparateur" onMouseDown={preserveSelection} onClick={() => props.onFormat("separator")}>—</button><button type="button" aria-label="Ajouter un lien" onMouseDown={preserveSelection} onClick={() => props.onFormat("link")}>Lien</button><button type="button" class={styles.broadcastButton} onMouseDown={preserveSelection} onClick={props.onOpenBroadcast}>Diffuser</button>
     </div>}
   </section>;
 }

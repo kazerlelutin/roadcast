@@ -26,7 +26,7 @@ export type RoadcastWorkspaceViewProps = {
   authorPickerOpen: boolean;
   insertMenuOpen: boolean;
   blockMenu: { top: number; left: number; position: number } | null;
-  bubble: { top: number; left: number } | null;
+  bubble: { top: number; left: number; placement: "above" | "below" } | null;
   slider: Slider;
   sliderLink: string;
   broadcasts: Partial<Record<Slider, BroadcastPayload>>;

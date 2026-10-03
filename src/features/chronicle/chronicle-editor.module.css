@@ -48,7 +48,8 @@
 .insertMenu label, .insertMenu button { display: flex; align-items: center; gap: .5rem; width: 100%; padding: .48rem .55rem; border: 0; border-radius: .25rem; background: transparent; color: inherit; text-align: left; cursor: pointer; }
 .insertMenu label:hover, .insertMenu button:hover { background: var(--soft-surface, #2a3652); }
 .insertMenu input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
-.bubble { position: fixed; z-index: 15; display: flex; gap: .2rem; transform: translate(-50%, -100%); padding: .3rem; border: 1px solid var(--line, #3c4968); border-radius: .4rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 1.5rem #0007; }
+.bubble { position: fixed; z-index: 15; display: flex; gap: .2rem; max-width: calc(100vw - 1rem); overflow-x: auto; transform: translate(-50%, -100%); padding: .3rem; border: 1px solid var(--line, #3c4968); border-radius: .4rem; background: var(--surface, #1b2338); box-shadow: 0 .75rem 1.5rem #0007; }
+.bubbleBelow { transform: translate(-50%, 0); }
 .bubble button { border: 0; border-radius: .25rem; padding: .42rem .55rem; background: transparent; color: var(--text, #f7f8fc); cursor: pointer; }
 .bubble button:hover { background: var(--soft-surface, #2a3652); }
 .bubble .broadcastButton { background: var(--accent, #00a6b1); color: #08151a; font-weight: 800; }

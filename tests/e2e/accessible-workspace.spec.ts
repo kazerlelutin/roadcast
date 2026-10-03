@@ -27,6 +27,26 @@ test("partage et organise les chroniques depuis l'espace de travail", async ({ p
   await expect(page.getByRole("heading", { name: "Aucune diffusion en cours" })).toBeVisible();
 });
 
+test("affiche les actions de sélection et diffuse le texte choisi", async ({ page }) => {
+  await page.goto("/demo");
+  const editor = page.getByRole("textbox", { name: "Contenu de la chronique" });
+  await editor.fill("Texte à diffuser");
+  await editor.press("ControlOrMeta+a");
+
+  const bubble = page.getByRole("toolbar", { name: "Actions sur la sélection" });
+  await expect(bubble).toBeVisible();
+  await expect(bubble.getByRole("button", { name: "Mettre en gras" })).toBeVisible();
+  await bubble.getByRole("button", { name: "Diffuser" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Diffuser la sélection" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("Sélection à diffuser")).toContainText("Texte à diffuser");
+  await dialog.getByRole("button", { name: "bravo" }).click();
+  await dialog.getByRole("button", { name: "Diffuser" }).click();
+  await page.getByRole("tab", { name: "bravo" }).click();
+  await expect(page.getByRole("complementary", { name: "Aperçu des sliders" })).toContainText("Texte à diffuser");
+});
+
 test("affiche le chroniqueur sous un titre long dans l’arbre", async ({ page }) => {
   await page.goto("/demo");
   await page.getByLabel("Titre de la chronique").fill("Découverte du personnage Promeia");
