@@ -118,6 +118,11 @@ Feature: Préparer une chronique Roadcast
     When je crée ou sélectionne un chroniqueur et filtre les chroniques
     Then seules les chroniques correspondantes sont affichées et je peux créer une nouvelle chronique depuis l’arbre
 
+  Scenario: Lire sans collision le titre et le chroniqueur dans l’arbre
+    Given une chronique avec un titre long et un chroniqueur renseigné
+    When je consulte l’arbre des chroniques dans l’espace de travail
+    Then le titre utilise toute la largeur disponible et le nom du chroniqueur apparaît sous le titre
+
   Scenario: Conserver une version d’une chronique
     Given une chronique modifiée dans l’éditeur
     When j’enregistre une version puis choisis une version antérieure

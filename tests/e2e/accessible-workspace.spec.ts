@@ -27,6 +27,22 @@ test("partage et organise les chroniques depuis l'espace de travail", async ({ p
   await expect(page.getByRole("heading", { name: "Aucune diffusion en cours" })).toBeVisible();
 });
 
+test("affiche le chroniqueur sous un titre long dans l’arbre", async ({ page }) => {
+  await page.goto("/demo");
+  await page.getByLabel("Titre de la chronique").fill("Découverte du personnage Promeia");
+  await page.getByRole("combobox", { name: "Chroniqueur" }).fill("kazerlelutin");
+  await page.getByRole("option", { name: "Créer « kazerlelutin »" }).click();
+
+  const chronicleButton = page.getByRole("navigation", { name: "Arbre des chroniques" }).locator("ol > li").first().getByRole("button").first();
+  const layout = await chronicleButton.evaluate((button) => {
+    const [title, metadata] = Array.from(button.children).map((child) => child.getBoundingClientRect());
+    return { metadataTop: metadata?.top, titleBottom: title?.bottom, titleRight: title?.right, buttonRight: button.getBoundingClientRect().right };
+  });
+
+  expect(layout.metadataTop).toBeGreaterThanOrEqual(layout.titleBottom ?? 0);
+  expect(layout.titleRight).toBeLessThanOrEqual(layout.buttonRight);
+});
+
 test("permet de faire défiler l’éditeur, l’arbre et l’aperçu sur mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/demo");
