@@ -168,6 +168,11 @@ Feature: Préparer une chronique Roadcast
     When j’ouvre la commande Diffuser de la bubble et choisis un slider dans la fenêtre de confirmation
     Then seule ma sélection est envoyée vers le slider choisi
 
+  Scenario: Retrouver les actions de mise en forme après une sélection
+    Given une chronique déverrouillée contenant du texte
+    When je sélectionne une partie de ce texte dans l’éditeur
+    Then une bubble accessible apparaît près de ma sélection avec les actions de mise en forme et Diffuser
+
   Scenario: Insérer depuis la gouttière de l’éditeur
     Given une chronique contenant plusieurs blocs
     When je survole un bloc et choisis une insertion dans la gouttière
