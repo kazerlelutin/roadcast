@@ -1,2 +1,6 @@
 import { HomeCtrl } from "../features/home/home.ctrl";
-export default function HomeRoute() { return <HomeCtrl />; }
+import { SeoMeta } from "../features/seo/seo-meta.ctrl";
+
+export default function HomeRoute() {
+  return <><SeoMeta page="home" /><HomeCtrl /></>;
+}

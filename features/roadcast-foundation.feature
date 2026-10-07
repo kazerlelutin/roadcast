@@ -232,3 +232,13 @@ Feature: Préparer une chronique Roadcast
     Given la page d’accueil Roadcast
     When j’ouvre les mentions légales ou la page confidentialité
     Then les informations d’édition, d’hébergement et de consentement sont disponibles
+
+  Scenario: Trouver et partager une page publique Roadcast
+    Given la page d’accueil, les mentions légales ou la page confidentialité
+    When un moteur ou un service de partage lit son HTML rendu côté serveur
+    Then il reçoit un titre, une description, une canonical absolue et des métadonnées Open Graph et Twitter cohérentes
+
+  Scenario: Protéger les liens privés de l’indexation
+    Given un lien d’édition, de lecture par jeton ou de slider
+    When un robot lit ses métadonnées
+    Then la page est noindex sans canonical, aperçu social, jeton ni contenu privé dans les balises
