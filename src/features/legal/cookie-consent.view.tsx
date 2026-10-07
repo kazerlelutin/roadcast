@@ -10,7 +10,7 @@ export function CookieConsentView(props: {
   onReject: () => void;
 }) {
   return <Show when={props.open}>
-    <aside class={styles.banner} aria-label="Préférences de mesure d’audience" role="dialog" aria-modal="false">
+    <aside class={styles.banner} aria-label="Préférences de mesure d’audience">
       <div>
         <strong>Mesure d’audience</strong>
         <p>Avec votre accord, Roadcast utilise une mesure d’audience hébergée par Ben-to pour améliorer le service.</p>

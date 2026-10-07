@@ -19,7 +19,7 @@ export default defineConfig(() => ({
     ],
   },
   plugins: [
-    solidStart({ ssr: false, devOverlay: false, serialization: { mode: "json" }, middleware: "src/middleware/security.ctrl.ts" }),
+    solidStart({ devOverlay: false, serialization: { mode: "json" }, middleware: "src/middleware/security.ctrl.ts" }),
     nitro(),
     VitePWA({
       registerType: "autoUpdate",
